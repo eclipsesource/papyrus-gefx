@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+         point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="popup:org.eclipse.ui.popup.any">
+       <command
+             commandId="org.eclipse.papyrus.gef4.codegen.commands.generateCode"
+             icon="resources/papyrus16.png"
+             id="org.eclipse.papyrus.gef4.codegen.menus.generateCode"
+             label="Generate GEF4 diagram"
+             mnemonic="G"
+             style="push">
+          <visibleWhen
+                checkEnabled="false">
+                <with
+                   variable="selection">
+                <iterate
+                      ifEmpty="false"
+                      operator="and">
+                   <adapt
+                         type="org.eclipse.core.resources.IFile">
+                   </adapt>
+                </iterate>
+             </with>
+          </visibleWhen>
+       </command>
+    </menuContribution>
+	</extension>
+
+	<extension
+         point="org.eclipse.ui.commands">
+    <command
+        defaultHandler="org.eclipse.papyrus.gef4.codegen.handlers.GenerateCode"
+        id="org.eclipse.papyrus.gef4.codegen.commands.generateCode"
+        name="Generate GEF4 diagram">
+  </command>
+	</extension>
+</plugin>

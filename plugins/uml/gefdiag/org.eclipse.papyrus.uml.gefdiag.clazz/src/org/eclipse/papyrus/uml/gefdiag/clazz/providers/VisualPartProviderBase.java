@@ -37,7 +37,7 @@ import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementListItemContentP
 
 import javafx.scene.Node;
 
-public class VisualPartProvider extends AbstractVisualPartProvider {
+public class VisualPartProviderBase extends AbstractVisualPartProvider {
 
 	@Override
 	public IContentPart<Node, ? extends Node> createContentPart(View view) {

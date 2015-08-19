@@ -1,0 +1,1265 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmlns:umldi="http://www.omg.org/spec/UML/20131001/UMLDI">
+  <umldi:ClassDiagram targetUmlEdge="/0/@topUmlDiagramElement.7" sourceUmlEdge="/0/@topUmlDiagramElement.7" name="Associations">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/0/@topUmlDiagramElement.16 /0/@topUmlDiagramElement.12" sourceUmlEdge="/0/@topUmlDiagramElement.12">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_gW7NsE7kEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_gW7NsE7kEeSYq8wB-dWH0g"/>
+        <bounds x="680.0" y="322.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="647.0" y="308.0" width="100.0" height="41.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AssociationClassShape">
+      <umlModelElement xsi:type="uml:AssociationClass" href="ClassDiagrams.uml#_sTNCME7TEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:AssociationClass" href="ClassDiagrams.uml#_sTNCME7TEeSYq8wB-dWH0g"/>
+        <bounds x="144.0" y="265.0" width="97.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="88.0" y="262.0" width="209.0" height="100.0"/>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:AssociationClass" href="ClassDiagrams.uml#_sTNCME7TEeSYq8wB-dWH0g"/>
+        <bounds x="88.0" y="279.0" width="209.0" height="44.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_fB6QUAAREeWuH4RB6IXmpA"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="93.0" y="281.0" width="167.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+      <operationCompartment>
+        <umlModelElement xsi:type="uml:AssociationClass" href="ClassDiagrams.uml#_sTNCME7TEeSYq8wB-dWH0g"/>
+        <bounds x="88.0" y="324.0" width="209.0" height="37.0"/>
+      </operationCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AssociationShape" sourceUmlEdge="/0/@topUmlDiagramElement.9 /0/@topUmlDiagramElement.11 /0/@topUmlDiagramElement.16" useClassifierNotation="false">
+      <umlModelElement xsi:type="uml:Association" href="ClassDiagrams.uml#__l-1QE7lEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <bounds x="450.0" y="320.0" width="20.0" height="20.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" sourceUmlEdge="/0/@topUmlDiagramElement.8 /0/@topUmlDiagramElement.13 /0/@topUmlDiagramElement.10 /0/@topUmlDiagramElement.15">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+        <bounds x="125.0" y="90.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="92.0" y="76.0" width="100.0" height="41.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/0/@topUmlDiagramElement.9">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+        <bounds x="435.0" y="243.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="402.0" y="228.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/0/@topUmlDiagramElement.11">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+        <bounds x="381.0" y="388.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="348.0" y="374.0" width="100.0" height="42.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/0/@topUmlDiagramElement.8 /0/@topUmlDiagramElement.13 /0/@topUmlDiagramElement.10 /0/@topUmlDiagramElement.15">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+        <bounds x="569.0" y="86.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="536.0" y="72.0" width="100.0" height="41.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AttachmentEdge" sourceUmlDiagramElement="/0" targetUmlDiagramElement="/0">
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="304.0" y="208.0"/>
+      <waypoint x="246.0" y="262.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AssociationEdge" targetUmlEdge="/0/@topUmlDiagramElement.14" sourceUmlDiagramElement="/0/@topUmlDiagramElement.3" targetUmlDiagramElement="/0/@topUmlDiagramElement.6">
+      <umlModelElement xsi:type="uml:Association" href="ClassDiagrams.uml#_IYCWIE04EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Association" href="ClassDiagrams.uml#_IYCWIE04EeSKJOjVi-PKPw"/>
+        <bounds x="324.0" y="65.0" width="85.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="192.0" y="91.0"/>
+      <waypoint x="536.0" y="91.0"/>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_IYCWIU04EeSKJOjVi-PKPw"/>
+        <bounds x="233.0" y="105.0" width="22.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_IYBvEE04EeSKJOjVi-PKPw"/>
+        <bounds x="474.0" y="65.0" width="20.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_IYBvEE04EeSKJOjVi-PKPw"/>
+        <bounds x="460.0" y="105.0" width="49.0" height="13.0"/>
+      </endRoleLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_IYCWIU04EeSKJOjVi-PKPw"/>
+        <bounds x="220.0" y="65.0" width="49.0" height="13.0"/>
+      </endRoleLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PropertyEdge" sourceUmlDiagramElement="/0/@topUmlDiagramElement.2" targetUmlDiagramElement="/0/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#__l-1QU7lEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#__l-1QU7lEeSYq8wB-dWH0g"/>
+        <bounds x="394.0" y="276.0" width="49.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="460.0" y="320.0"/>
+      <waypoint x="460.0" y="271.0"/>
+      <multiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#__l-1QU7lEeSYq8wB-dWH0g"/>
+        <bounds x="470.0" y="272.0" width="20.0" height="13.0"/>
+      </multiplicityLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AssociationEdge" sourceUmlDiagramElement="/0/@topUmlDiagramElement.3" targetUmlDiagramElement="/0/@topUmlDiagramElement.6">
+      <umlModelElement xsi:type="uml:Association" href="ClassDiagrams.uml#_USiuYE06EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="142.0" y="76.0"/>
+      <waypoint x="142.0" y="26.0"/>
+      <waypoint x="586.0" y="26.0"/>
+      <waypoint x="586.0" y="72.0"/>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_USiuYU06EeSKJOjVi-PKPw"/>
+        <bounds x="105.0" y="35.0" width="22.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_USiHUE06EeSKJOjVi-PKPw"/>
+        <bounds x="557.0" y="37.0" width="22.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_USiHUE06EeSKJOjVi-PKPw"/>
+        <bounds x="600.0" y="38.0" width="49.0" height="13.0"/>
+      </endRoleLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_USiuYU06EeSKJOjVi-PKPw"/>
+        <bounds x="148.0" y="38.0" width="49.0" height="13.0"/>
+      </endRoleLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PropertyEdge" sourceUmlDiagramElement="/0/@topUmlDiagramElement.2" targetUmlDiagramElement="/0/@topUmlDiagramElement.5">
+      <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#__l-OME7lEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#__l-OME7lEeSYq8wB-dWH0g"/>
+        <bounds x="456.0" y="369.0" width="49.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="455.0" y="334.0"/>
+      <waypoint x="418.0" y="374.0"/>
+      <multiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#__l-OME7lEeSYq8wB-dWH0g"/>
+        <bounds x="380.0" y="349.0" width="34.0" height="13.0"/>
+      </multiplicityLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AssociationEdge" sourceUmlDiagramElement="/0/@topUmlDiagramElement.0" targetUmlDiagramElement="/0/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Association" href="ClassDiagrams.uml#_1iAHAFKXEeSUY9b1fML4iw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="747.0" y="338.0"/>
+      <waypoint x="809.0" y="338.0"/>
+      <waypoint x="809.0" y="411.0"/>
+      <waypoint x="722.0" y="411.0"/>
+      <waypoint x="703.0" y="349.0"/>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_1iAHAVKXEeSUY9b1fML4iw"/>
+        <bounds x="755.0" y="345.0" width="22.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_1h_f8FKXEeSUY9b1fML4iw"/>
+        <bounds x="678.0" y="376.0" width="22.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_1h_f8FKXEeSUY9b1fML4iw"/>
+        <bounds x="719.0" y="369.0" width="56.0" height="13.0"/>
+      </endRoleLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_1iAHAVKXEeSUY9b1fML4iw"/>
+        <bounds x="752.0" y="316.0" width="56.0" height="13.0"/>
+      </endRoleLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AssociationEdge" sourceUmlEdge="/0/@topUmlDiagramElement.14" sourceUmlDiagramElement="/0/@topUmlDiagramElement.3" targetUmlDiagramElement="/0/@topUmlDiagramElement.6">
+      <umlModelElement xsi:type="uml:Association" href="ClassDiagrams.uml#_uIPWg005EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Association" href="ClassDiagrams.uml#_uIPWg005EeSKJOjVi-PKPw"/>
+        <bounds x="325.0" y="175.0" width="85.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="140.0" y="117.0"/>
+      <waypoint x="140.0" y="161.0"/>
+      <waypoint x="589.0" y="161.0"/>
+      <waypoint x="589.0" y="113.0"/>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_uIPWhE05EeSKJOjVi-PKPw"/>
+        <bounds x="95.0" y="130.0" width="34.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endMultiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_uIPWgE05EeSKJOjVi-PKPw"/>
+        <bounds x="597.0" y="129.0" width="35.0" height="13.0"/>
+      </endMultiplicityLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_uIPWgE05EeSKJOjVi-PKPw"/>
+        <bounds x="527.0" y="128.0" width="49.0" height="13.0"/>
+      </endRoleLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_uIPWhE05EeSKJOjVi-PKPw"/>
+        <bounds x="149.0" y="129.0" width="49.0" height="13.0"/>
+      </endRoleLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:GeneralizationEdge" sourceUmlDiagramElement="/0/@topUmlDiagramElement.13" targetUmlDiagramElement="/0/@topUmlDiagramElement.8">
+      <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_Ezu3AE06EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_Ezu3AE06EeSKJOjVi-PKPw"/>
+        <bounds x="394.0" y="126.0" width="0.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="354.0" y="161.0"/>
+      <waypoint x="354.0" y="91.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AssociationClassEdge" sourceUmlDiagramElement="/0/@topUmlDiagramElement.3" targetUmlDiagramElement="/0/@topUmlDiagramElement.6">
+      <umlModelElement xsi:type="uml:AssociationClass" href="ClassDiagrams.uml#_sTNCME7TEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="92.0" y="96.0"/>
+      <waypoint x="72.0" y="96.0"/>
+      <waypoint x="72.0" y="208.0"/>
+      <waypoint x="666.0" y="208.0"/>
+      <waypoint x="666.0" y="92.0"/>
+      <waypoint x="636.0" y="92.0"/>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_sTIJsE7TEeSYq8wB-dWH0g"/>
+        <bounds x="670.0" y="93.0" width="55.0" height="13.0"/>
+      </endRoleLabel>
+      <endRoleLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_sTNCMU7TEeSYq8wB-dWH0g"/>
+        <bounds x="17.0" y="95.0" width="49.0" height="13.0"/>
+      </endRoleLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PropertyEdge" sourceUmlDiagramElement="/0/@topUmlDiagramElement.2" targetUmlDiagramElement="/0/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_DAsBkE7mEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_DAsBkE7mEeSYq8wB-dWH0g"/>
+        <bounds x="585.0" y="300.0" width="49.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="465.0" y="328.0"/>
+      <waypoint x="647.0" y="328.0"/>
+      <multiplicityLabel>
+        <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_DAsBkE7mEeSYq8wB-dWH0g"/>
+        <bounds x="592.0" y="341.0" width="35.0" height="13.0"/>
+      </multiplicityLabel>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+  <umldi:ClassDiagram name="Classifiers">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:EnumerationShape">
+      <umlModelElement xsi:type="uml:Enumeration" href="ClassDiagrams.uml#_TGGmgEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Enumeration" href="ClassDiagrams.uml#_TGGmgEzkEeSEML-T-SW94A"/>
+        <bounds x="542.0" y="281.0" width="79.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="505.0" y="278.0" width="153.0" height="100.0"/>
+      <literalCompartment>
+        <umlModelElement xsi:type="uml:Enumeration" href="ClassDiagrams.uml#_TGGmgEzkEeSEML-T-SW94A"/>
+        <bounds x="505.0" y="309.0" width="153.0" height="70.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:EnumerationLiteral" href="ClassDiagrams.uml#_yeODcEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="510.0" y="311.0" width="108.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:EnumerationLiteral" href="ClassDiagrams.uml#_0HqGcEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="510.0" y="324.0" width="108.0" height="13.0"/>
+        </listItemLabel>
+      </literalCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_8NBDoNo1EeSlrc9StfoLMA"/>
+      <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_8NBDoNo1EeSlrc9StfoLMA"/>
+        <bounds x="351.0" y="194.0" width="39.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="320.0" y="151.0" width="100.0" height="100.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PrimitiveTypeShape">
+      <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WX7joEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WX7joEzkEeSEML-T-SW94A"/>
+        <bounds x="517.0" y="152.0" width="84.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="439.0" y="149.0" width="241.0" height="119.0"/>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WX7joEzkEeSEML-T-SW94A"/>
+        <bounds x="439.0" y="180.0" width="241.0" height="58.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_tgQ7sEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="444.0" y="182.0" width="167.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_6jMmgEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="444.0" y="195.0" width="133.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_on4-AFK4EeSKvbpj9WPmpA"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="444.0" y="208.0" width="127.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+      <operationCompartment>
+        <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WX7joEzkEeSEML-T-SW94A"/>
+        <bounds x="439.0" y="239.0" width="241.0" height="29.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Operation" href="ClassDiagrams.uml#_TFi5IE0hEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="444.0" y="241.0" width="196.0" height="13.0"/>
+        </listItemLabel>
+      </operationCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:DataTypeShape">
+      <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_Qlyl4EzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_Qlyl4EzkEeSEML-T-SW94A"/>
+        <bounds x="299.0" y="23.0" width="62.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="220.0" y="20.0" width="221.0" height="100.0"/>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_Qlyl4EzkEeSEML-T-SW94A"/>
+        <bounds x="220.0" y="51.0" width="221.0" height="34.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_oPSKQEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="225.0" y="53.0" width="128.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+      <operationCompartment>
+        <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_Qlyl4EzkEeSEML-T-SW94A"/>
+        <bounds x="220.0" y="86.0" width="221.0" height="34.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Operation" href="ClassDiagrams.uml#_NZCCQE0hEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="225.0" y="88.0" width="148.0" height="13.0"/>
+        </listItemLabel>
+      </operationCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ComponentShape">
+      <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_HAk_IEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_HAk_IEzkEeSEML-T-SW94A"/>
+        <bounds x="515.0" y="23.0" width="74.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="463.0" y="20.0" width="178.0" height="107.0"/>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_HAk_IEzkEeSEML-T-SW94A"/>
+        <bounds x="463.0" y="51.0" width="178.0" height="26.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_ejKDMEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="468.0" y="53.0" width="146.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+      <operationCompartment>
+        <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_HAk_IEzkEeSEML-T-SW94A"/>
+        <bounds x="463.0" y="78.0" width="178.0" height="26.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Operation" href="ClassDiagrams.uml#_39P2IE0gEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="468.0" y="80.0" width="147.0" height="13.0"/>
+        </listItemLabel>
+      </operationCompartment>
+      <nestedClassifierCompartment>
+        <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_HAk_IEzkEeSEML-T-SW94A"/>
+        <bounds x="463.0" y="105.0" width="178.0" height="22.0"/>
+      </nestedClassifierCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+        <bounds x="94.0" y="24.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="22.0" y="21.0" width="181.0" height="148.0"/>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+        <bounds x="22.0" y="38.0" width="181.0" height="32.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_VB7kkEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="27.0" y="40.0" width="133.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+      <operationCompartment>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+        <bounds x="22.0" y="71.0" width="181.0" height="48.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Operation" href="ClassDiagrams.uml#_n348IE0gEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="27.0" y="73.0" width="83.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Operation" href="ClassDiagrams.uml#_pGQzwE0gEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="27.0" y="86.0" width="122.0" height="13.0"/>
+        </listItemLabel>
+      </operationCompartment>
+      <nestedClassifierCompartment>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+        <bounds x="22.0" y="120.0" width="181.0" height="48.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_ziuA8KqpEeSetoVxJlOcxg"/>
+          <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+          <bounds x="27.0" y="122.0" width="42.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_43qsYKqpEeSetoVxJlOcxg"/>
+          <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+          <bounds x="27.0" y="135.0" width="61.0" height="13.0"/>
+        </listItemLabel>
+      </nestedClassifierCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:SignalShape">
+      <umlModelElement xsi:type="uml:Signal" href="ClassDiagrams.uml#_ZCu9AEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Signal" href="ClassDiagrams.uml#_ZCu9AEzkEeSEML-T-SW94A"/>
+        <bounds x="378.0" y="282.0" width="44.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="325.0" y="279.0" width="151.0" height="100.0"/>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:Signal" href="ClassDiagrams.uml#_ZCu9AEzkEeSEML-T-SW94A"/>
+        <bounds x="325.0" y="310.0" width="151.0" height="70.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_2zJcUEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="330.0" y="312.0" width="131.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:InterfaceShape">
+      <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UBTDcEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UBTDcEzkEeSEML-T-SW94A"/>
+        <bounds x="131.0" y="187.0" width="59.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="20.0" y="184.0" width="281.0" height="157.0"/>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UBTDcEzkEeSEML-T-SW94A"/>
+        <bounds x="20.0" y="215.0" width="281.0" height="35.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_aWw7QEzlEeSEML-T-SW94A"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="25.0" y="217.0" width="133.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+      <receptionCompartment>
+        <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UBTDcEzkEeSEML-T-SW94A"/>
+        <bounds x="20.0" y="251.0" width="281.0" height="35.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Reception" href="ClassDiagrams.uml#_qpn_wE0nEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="25.0" y="253.0" width="87.0" height="13.0"/>
+        </listItemLabel>
+      </receptionCompartment>
+      <nestedClassifierCompartment>
+        <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UBTDcEzkEeSEML-T-SW94A"/>
+        <bounds x="20.0" y="287.0" width="281.0" height="53.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_HHWeMKqqEeSetoVxJlOcxg"/>
+          <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+          <bounds x="25.0" y="289.0" width="61.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_Isw80KqqEeSetoVxJlOcxg"/>
+          <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+          <bounds x="25.0" y="302.0" width="42.0" height="13.0"/>
+        </listItemLabel>
+      </nestedClassifierCompartment>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+  <umldi:ClassDiagram targetUmlEdge="/2/@topUmlDiagramElement.5 /2/@topUmlDiagramElement.6 /2/@topUmlDiagramElement.4" sourceUmlEdge="/2/@topUmlDiagramElement.5 /2/@topUmlDiagramElement.6 /2/@topUmlDiagramElement.4" name="Constraints">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:ConstraintShape">
+      <umlModelElement xsi:type="uml:Constraint" href="ClassDiagrams.uml#_Sa4bcE01EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Constraint" href="ClassDiagrams.uml#_Sa4bcE01EeSKJOjVi-PKPw"/>
+        <bounds x="252.0" y="168.0" width="196.0" height="50.0"/>
+      </mainLabel>
+      <bounds x="251.0" y="167.0" width="206.0" height="60.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ConstraintShape">
+      <umlModelElement xsi:type="uml:Constraint" href="ClassDiagrams.uml#_DjctIE01EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Constraint" href="ClassDiagrams.uml#_DjctIE01EeSKJOjVi-PKPw"/>
+        <bounds x="76.0" y="245.0" width="90.0" height="50.0"/>
+      </mainLabel>
+      <bounds x="75.0" y="244.0" width="100.0" height="60.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:CommentShape">
+      <umlModelElement xsi:type="uml:Comment" href="ClassDiagrams.uml#_wUyf4E00EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Comment" href="ClassDiagrams.uml#_wUyf4E00EeSKJOjVi-PKPw"/>
+        <bounds x="373.0" y="50.0" width="129.0" height="60.0"/>
+      </mainLabel>
+      <bounds x="373.0" y="50.0" width="129.0" height="60.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+        <bounds x="107.0" y="75.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="74.0" y="62.0" width="100.0" height="40.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AttachmentEdge" sourceUmlDiagramElement="/2" targetUmlDiagramElement="/2">
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="294.0" y="167.0"/>
+      <waypoint x="164.0" y="102.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AttachmentEdge" sourceUmlDiagramElement="/2" targetUmlDiagramElement="/2">
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="373.0" y="82.0"/>
+      <waypoint x="174.0" y="82.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AttachmentEdge" sourceUmlDiagramElement="/2" targetUmlDiagramElement="/2">
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="124.0" y="244.0"/>
+      <waypoint x="124.0" y="102.0"/>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+  <umldi:ClassDiagram name="Dependencies">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/3/@topUmlDiagramElement.15 /3/@topUmlDiagramElement.9" sourceUmlEdge="/3/@topUmlDiagramElement.12 /3/@topUmlDiagramElement.14">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+        <bounds x="285.0" y="232.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="252.0" y="217.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/3/@topUmlDiagramElement.8" sourceUmlEdge="/3/@topUmlDiagramElement.7 /3/@topUmlDiagramElement.9">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+        <bounds x="545.0" y="92.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="512.0" y="78.0" width="100.0" height="42.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/3/@topUmlDiagramElement.10" sourceUmlEdge="/3/@topUmlDiagramElement.15">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_gW7NsE7kEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_gW7NsE7kEeSYq8wB-dWH0g"/>
+        <bounds x="53.0" y="233.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="20.0" y="219.0" width="100.0" height="41.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:InterfaceShape" targetUmlEdge="/3/@topUmlDiagramElement.7 /3/@topUmlDiagramElement.14">
+      <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UBTDcEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UBTDcEzkEeSEML-T-SW94A"/>
+        <bounds x="527.0" y="225.0" width="59.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="506.0" y="214.0" width="100.0" height="48.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/3/@topUmlDiagramElement.12 /3/@topUmlDiagramElement.13" sourceUmlEdge="/3/@topUmlDiagramElement.8">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+        <bounds x="293.0" y="95.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="260.0" y="80.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" sourceUmlEdge="/3/@topUmlDiagramElement.11">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+        <bounds x="53.0" y="95.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="20.0" y="80.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:DependencyShape" targetUmlEdge="/3/@topUmlDiagramElement.11" sourceUmlEdge="/3/@topUmlDiagramElement.13 /3/@topUmlDiagramElement.10">
+      <umlModelElement xsi:type="uml:Dependency" href="ClassDiagrams.uml#_F9KWkE7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Dependency" href="ClassDiagrams.uml#_F9KWkE7iEeSYq8wB-dWH0g"/>
+        <bounds x="169.0" y="67.0" width="73.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="189.0" y="100.0" width="4.0" height="4.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AbstractionEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.1" targetUmlDiagramElement="/3/@topUmlDiagramElement.3">
+      <umlModelElement xsi:type="uml:Abstraction" href="ClassDiagrams.uml#_QWtkUE7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Abstraction" href="ClassDiagrams.uml#_QWtkUE7iEeSYq8wB-dWH0g"/>
+        <bounds x="573.0" y="147.0" width="72.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="556.0" y="120.0"/>
+      <waypoint x="556.0" y="214.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:UsageEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.4" targetUmlDiagramElement="/3/@topUmlDiagramElement.1">
+      <umlModelElement xsi:type="uml:Usage" href="ClassDiagrams.uml#_KWlN4E7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Usage" href="ClassDiagrams.uml#_KWlN4E7iEeSYq8wB-dWH0g"/>
+        <bounds x="413.0" y="58.0" width="31.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="360.0" y="99.0"/>
+      <waypoint x="512.0" y="99.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:SubstitutionEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.1" targetUmlDiagramElement="/3/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Substitution" href="ClassDiagrams.uml#_GC6AsJPXEeSUCa_mgXTt1Q"/>
+      <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Substitution" href="ClassDiagrams.uml#_GC6AsJPXEeSUCa_mgXTt1Q"/>
+        <bounds x="433.0" y="187.0" width="72.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="523.0" y="120.0"/>
+      <waypoint x="347.0" y="217.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:DependencyEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.6" targetUmlDiagramElement="/3/@topUmlDiagramElement.2">
+      <umlModelElement xsi:type="uml:Dependency" href="ClassDiagrams.uml#_F9KWkE7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="190.0" y="110.0"/>
+      <waypoint x="190.0" y="161.0"/>
+      <waypoint x="84.0" y="161.0"/>
+      <waypoint x="84.0" y="219.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:DependencyEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.5" targetUmlDiagramElement="/3/@topUmlDiagramElement.6">
+      <umlModelElement xsi:type="uml:Dependency" href="ClassDiagrams.uml#_F9KWkE7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="120.0" y="100.0"/>
+      <waypoint x="189.0" y="100.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:RealizationEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.0" targetUmlDiagramElement="/3/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Realization" href="ClassDiagrams.uml#_cA4FYE7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="310.0" y="217.0"/>
+      <waypoint x="310.0" y="123.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:DependencyEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.6" targetUmlDiagramElement="/3/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Dependency" href="ClassDiagrams.uml#_F9KWkE7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="199.0" y="100.0"/>
+      <waypoint x="260.0" y="100.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:InterfaceRealizationEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.0" targetUmlDiagramElement="/3/@topUmlDiagramElement.3">
+      <umlModelElement xsi:type="uml:InterfaceRealization" href="ClassDiagrams.uml#_ftgvME7iEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="352.0" y="238.0"/>
+      <waypoint x="506.0" y="238.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:DependencyEdge" sourceUmlDiagramElement="/3/@topUmlDiagramElement.2" targetUmlDiagramElement="/3/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Dependency" href="ClassDiagrams.uml#_k9BZoE7lEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="120.0" y="238.0"/>
+      <waypoint x="252.0" y="238.0"/>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+  <umldi:ClassDiagram name="Generalizations">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/4/@topUmlDiagramElement.7 /4/@topUmlDiagramElement.6 /4/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_APUtwEzkEeSEML-T-SW94A"/>
+        <bounds x="233.0" y="56.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="200.0" y="41.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" sourceUmlEdge="/4/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+        <bounds x="413.0" y="206.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="380.0" y="192.0" width="100.0" height="42.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" sourceUmlEdge="/4/@topUmlDiagramElement.7">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+        <bounds x="61.0" y="208.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="28.0" y="193.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" sourceUmlEdge="/4/@topUmlDiagramElement.6">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+        <bounds x="241.0" y="207.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="208.0" y="192.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:GeneralizationEdge" targetUmlEdge="/4/@topUmlDiagramElement.5" sourceUmlDiagramElement="/4/@topUmlDiagramElement.1" targetUmlDiagramElement="/4/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_59RosE7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_59RosE7XEeSYq8wB-dWH0g"/>
+        <bounds x="385.0" y="109.0" width="0.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="416.0" y="192.0"/>
+      <waypoint x="300.0" y="84.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:GeneralizationSetEdge" sourceUmlDiagramElement="/4/@topUmlDiagramElement.7" targetUmlDiagramElement="/4/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:GeneralizationSet" href="ClassDiagrams.uml#__VPL4E7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="154.0" y="146.0"/>
+      <waypoint x="366.0" y="146.0"/>
+      <constraintLabel>
+        <umlModelElement xsi:type="uml:GeneralizationSet" href="ClassDiagrams.uml#__VPL4E7XEeSYq8wB-dWH0g"/>
+        <bounds x="180.0" y="163.0" width="137.0" height="13.0"/>
+      </constraintLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:GeneralizationEdge" sourceUmlDiagramElement="/4/@topUmlDiagramElement.3" targetUmlDiagramElement="/4/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_YzpVYE7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_YzpVYE7XEeSYq8wB-dWH0g"/>
+        <bounds x="290.0" y="138.0" width="0.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="250.0" y="192.0"/>
+      <waypoint x="250.0" y="84.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:GeneralizationEdge" sourceUmlEdge="/4/@topUmlDiagramElement.5" sourceUmlDiagramElement="/4/@topUmlDiagramElement.2" targetUmlDiagramElement="/4/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_PyA80E7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Generalization" href="ClassDiagrams.uml#_PyA80E7XEeSYq8wB-dWH0g"/>
+        <bounds x="189.0" y="168.0" width="0.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="102.0" y="193.0"/>
+      <waypoint x="225.0" y="84.0"/>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+  <umldi:ClassDiagram targetUmlEdge="/5/@topUmlDiagramElement.7 /5/@topUmlDiagramElement.9" sourceUmlEdge="/5/@topUmlDiagramElement.7 /5/@topUmlDiagramElement.9" name="InformationFlows">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:DurationObservationShape" showStereotypeAttributes="false">
+      <umlModelElement xsi:type="uml:DurationObservation" href="ClassDiagrams.uml#__sCvEE7nEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:DurationObservation" href="ClassDiagrams.uml#__sCvEE7nEeSYq8wB-dWH0g"/>
+        <bounds x="493.0" y="212.0" width="122.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="494.0" y="227.0" width="20.0" height="20.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" sourceUmlEdge="/5/@topUmlDiagramElement.10">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_rHBagE00EeSKJOjVi-PKPw"/>
+        <bounds x="74.0" y="81.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="41.0" y="66.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:InformationItemShape">
+      <umlModelElement xsi:type="uml:InformationItem" href="ClassDiagrams.uml#_NDbA4E7dEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:InformationItem" href="ClassDiagrams.uml#_NDbA4E7dEeSYq8wB-dWH0g"/>
+        <bounds x="47.0" y="161.0" width="94.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="35.0" y="154.0" width="117.0" height="40.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/5/@topUmlDiagramElement.8">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+        <bounds x="298.0" y="225.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="265.0" y="211.0" width="100.0" height="42.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:InformationItemShape">
+      <umlModelElement xsi:type="uml:InformationItem" href="ClassDiagrams.uml#_M3uRwE7eEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:InformationItem" href="ClassDiagrams.uml#_M3uRwE7eEeSYq8wB-dWH0g"/>
+        <bounds x="46.0" y="261.0" width="94.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="35.0" y="254.0" width="114.0" height="40.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/5/@topUmlDiagramElement.10" sourceUmlEdge="/5/@topUmlDiagramElement.8">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+        <bounds x="300.0" y="85.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="267.0" y="70.0" width="100.0" height="43.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:TimeObservationShape">
+      <umlModelElement xsi:type="uml:TimeObservation" href="ClassDiagrams.uml#_BeKM8E7oEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:TimeObservation" href="ClassDiagrams.uml#_BeKM8E7oEeSYq8wB-dWH0g"/>
+        <bounds x="433.0" y="69.0" width="102.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="433.0" y="69.0" width="102.0" height="13.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AttachmentEdge" sourceUmlDiagramElement="/5" targetUmlDiagramElement="/5">
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="434.0" y="94.0"/>
+      <waypoint x="367.0" y="94.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:InformationFlowEdge" sourceUmlDiagramElement="/5/@topUmlDiagramElement.5" targetUmlDiagramElement="/5/@topUmlDiagramElement.3">
+      <umlModelElement xsi:type="uml:InformationFlow" href="ClassDiagrams.uml#_M15XsE7cEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:InformationFlow" href="ClassDiagrams.uml#_M15XsE7cEeSYq8wB-dWH0g"/>
+        <bounds x="257.0" y="168.0" width="0.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="315.0" y="113.0"/>
+      <waypoint x="315.0" y="211.0"/>
+      <conveyedLabel>
+        <umlModelElement xsi:type="uml:InformationFlow" href="ClassDiagrams.uml#_M15XsE7cEeSYq8wB-dWH0g"/>
+        <bounds x="321.0" y="163.0" width="158.0" height="13.0"/>
+      </conveyedLabel>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AttachmentEdge" sourceUmlDiagramElement="/5" targetUmlDiagramElement="/5">
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="494.0" y="232.0"/>
+      <waypoint x="365.0" y="232.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:InformationFlowEdge" sourceUmlDiagramElement="/5/@topUmlDiagramElement.1" targetUmlDiagramElement="/5/@topUmlDiagramElement.5">
+      <umlModelElement xsi:type="uml:InformationFlow" href="ClassDiagrams.uml#_JQYpkE7cEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:InformationFlow" href="ClassDiagrams.uml#_JQYpkE7cEeSYq8wB-dWH0g"/>
+        <bounds x="202.0" y="71.0" width="0.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="141.0" y="91.0"/>
+      <waypoint x="267.0" y="91.0"/>
+      <conveyedLabel>
+        <umlModelElement xsi:type="uml:InformationFlow" href="ClassDiagrams.uml#_JQYpkE7cEeSYq8wB-dWH0g"/>
+        <bounds x="170.0" y="102.0" width="58.0" height="13.0"/>
+      </conveyedLabel>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+  <umldi:ClassDiagram sourceUmlEdge="/6/@topUmlDiagramElement.10 /6/@topUmlDiagramElement.7" name="Packages">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/6/@topUmlDiagramElement.12 /6/@topUmlDiagramElement.4 /6/@topUmlDiagramElement.10" sourceUmlEdge="/6/@topUmlDiagramElement.8">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_WU2CkE7VEeSYq8wB-dWH0g"/>
+        <bounds x="466.0" y="357.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="433.0" y="339.0" width="100.0" height="50.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PackageShape" sourceUmlEdge="/6/@topUmlDiagramElement.12 /6/@topUmlDiagramElement.9 /6/@topUmlDiagramElement.6 /6/@topUmlDiagramElement.13 /6/@topUmlDiagramElement.11">
+      <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_b92jUE0xEeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_b92jUE0xEeSKJOjVi-PKPw"/>
+        <bounds x="28.0" y="17.0" width="51.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="23.0" y="14.0" width="783.0" height="253.0"/>
+      <packagedElementCompartment>
+        <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_b92jUE0xEeSKJOjVi-PKPw"/>
+        <bounds x="23.0" y="33.0" width="783.0" height="234.0"/>
+        <topUmlDiagramElement xsi:type="umldi:ClassShape">
+          <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_4gDYgE0xEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_4gDYgE0xEeSKJOjVi-PKPw"/>
+            <bounds x="82.0" y="55.0" width="36.0" height="13.0"/>
+          </mainLabel>
+          <bounds x="50.0" y="52.0" width="100.0" height="100.0"/>
+          <attributeCompartment>
+            <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_4gDYgE0xEeSKJOjVi-PKPw"/>
+            <bounds x="50.0" y="69.0" width="100.0" height="41.0"/>
+          </attributeCompartment>
+          <operationCompartment>
+            <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_4gDYgE0xEeSKJOjVi-PKPw"/>
+            <bounds x="50.0" y="111.0" width="100.0" height="41.0"/>
+          </operationCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:ComponentShape">
+          <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_XgtNIE0yEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_XgtNIE0yEeSKJOjVi-PKPw"/>
+            <bounds x="175.0" y="53.0" width="74.0" height="27.0"/>
+          </mainLabel>
+          <bounds x="162.0" y="50.0" width="100.0" height="100.0"/>
+          <attributeCompartment>
+            <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_XgtNIE0yEeSKJOjVi-PKPw"/>
+            <bounds x="162.0" y="81.0" width="100.0" height="34.0"/>
+          </attributeCompartment>
+          <operationCompartment>
+            <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_XgtNIE0yEeSKJOjVi-PKPw"/>
+            <bounds x="162.0" y="116.0" width="100.0" height="34.0"/>
+          </operationCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:DataTypeShape">
+          <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_RA40kE0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_RA40kE0zEeSKJOjVi-PKPw"/>
+            <bounds x="298.0" y="53.0" width="62.0" height="27.0"/>
+          </mainLabel>
+          <bounds x="279.0" y="50.0" width="100.0" height="100.0"/>
+          <attributeCompartment>
+            <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_RA40kE0zEeSKJOjVi-PKPw"/>
+            <bounds x="279.0" y="81.0" width="100.0" height="34.0"/>
+          </attributeCompartment>
+          <operationCompartment>
+            <umlModelElement xsi:type="uml:DataType" href="ClassDiagrams.uml#_RA40kE0zEeSKJOjVi-PKPw"/>
+            <bounds x="279.0" y="116.0" width="100.0" height="34.0"/>
+          </operationCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:EnumerationShape">
+          <umlModelElement xsi:type="uml:Enumeration" href="ClassDiagrams.uml#_SqblQE0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:Enumeration" href="ClassDiagrams.uml#_SqblQE0zEeSKJOjVi-PKPw"/>
+            <bounds x="405.0" y="54.0" width="79.0" height="27.0"/>
+          </mainLabel>
+          <bounds x="395.0" y="51.0" width="100.0" height="100.0"/>
+          <literalCompartment>
+            <umlModelElement xsi:type="uml:Enumeration" href="ClassDiagrams.uml#_SqblQE0zEeSKJOjVi-PKPw"/>
+            <bounds x="395.0" y="82.0" width="100.0" height="70.0"/>
+          </literalCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:InterfaceShape" targetUmlEdge="/6/@topUmlDiagramElement.5">
+          <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UFDJIE0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UFDJIE0zEeSKJOjVi-PKPw"/>
+            <bounds x="537.0" y="60.0" width="59.0" height="27.0"/>
+          </mainLabel>
+          <bounds x="517.0" y="57.0" width="100.0" height="100.0"/>
+          <attributeCompartment>
+            <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UFDJIE0zEeSKJOjVi-PKPw"/>
+            <bounds x="517.0" y="88.0" width="100.0" height="34.0"/>
+          </attributeCompartment>
+          <operationCompartment>
+            <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_UFDJIE0zEeSKJOjVi-PKPw"/>
+            <bounds x="517.0" y="123.0" width="100.0" height="34.0"/>
+          </operationCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:InstanceSpecificationShape">
+          <umlModelElement xsi:type="uml:InstanceSpecification" href="ClassDiagrams.uml#_VLfMwE0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:InstanceSpecification" href="ClassDiagrams.uml#_VLfMwE0zEeSKJOjVi-PKPw"/>
+            <bounds x="647.0" y="59.0" width="119.0" height="13.0"/>
+          </mainLabel>
+          <bounds x="640.0" y="56.0" width="134.0" height="100.0"/>
+          <slotCompartment>
+            <umlModelElement xsi:type="uml:InstanceSpecification" href="ClassDiagrams.uml#_VLfMwE0zEeSKJOjVi-PKPw"/>
+            <bounds x="640.0" y="73.0" width="134.0" height="83.0"/>
+          </slotCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:PrimitiveTypeShape" targetUmlEdge="/6/@topUmlDiagramElement.8">
+          <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WVb3YE0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WVb3YE0zEeSKJOjVi-PKPw"/>
+            <bounds x="229.0" y="167.0" width="84.0" height="27.0"/>
+          </mainLabel>
+          <bounds x="221.0" y="164.0" width="100.0" height="77.0"/>
+          <attributeCompartment>
+            <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WVb3YE0zEeSKJOjVi-PKPw"/>
+            <bounds x="221.0" y="195.0" width="100.0" height="23.0"/>
+          </attributeCompartment>
+          <operationCompartment>
+            <umlModelElement xsi:type="uml:PrimitiveType" href="ClassDiagrams.uml#_WVb3YE0zEeSKJOjVi-PKPw"/>
+            <bounds x="221.0" y="219.0" width="100.0" height="23.0"/>
+          </operationCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:ModelShape">
+          <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_X9DVcE0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_X9DVcE0zEeSKJOjVi-PKPw"/>
+            <bounds x="42.0" y="190.0" width="40.0" height="13.0"/>
+          </mainLabel>
+          <bounds x="37.0" y="187.0" width="149.0" height="65.0"/>
+          <packagedElementCompartment>
+            <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_X9DVcE0zEeSKJOjVi-PKPw"/>
+            <bounds x="37.0" y="206.0" width="149.0" height="46.0"/>
+          </packagedElementCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:PackageShape">
+          <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_ZojN8E0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_ZojN8E0zEeSKJOjVi-PKPw"/>
+            <bounds x="363.0" y="192.0" width="51.0" height="13.0"/>
+          </mainLabel>
+          <bounds x="358.0" y="189.0" width="181.0" height="62.0"/>
+          <packagedElementCompartment>
+            <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_ZojN8E0zEeSKJOjVi-PKPw"/>
+            <bounds x="358.0" y="208.0" width="181.0" height="43.0"/>
+          </packagedElementCompartment>
+        </topUmlDiagramElement>
+        <topUmlDiagramElement xsi:type="umldi:SignalShape" sourceUmlEdge="/6/@topUmlDiagramElement.5 /6/@topUmlDiagramElement.4">
+          <umlModelElement xsi:type="uml:Signal" href="ClassDiagrams.uml#_cSnAcE0zEeSKJOjVi-PKPw"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <mainLabel>
+            <umlModelElement xsi:type="uml:Signal" href="ClassDiagrams.uml#_cSnAcE0zEeSKJOjVi-PKPw"/>
+            <bounds x="700.0" y="182.0" width="44.0" height="27.0"/>
+          </mainLabel>
+          <bounds x="666.0" y="179.0" width="112.0" height="69.0"/>
+          <attributeCompartment>
+            <umlModelElement xsi:type="uml:Signal" href="ClassDiagrams.uml#_cSnAcE0zEeSKJOjVi-PKPw"/>
+            <bounds x="666.0" y="210.0" width="112.0" height="39.0"/>
+          </attributeCompartment>
+        </topUmlDiagramElement>
+      </packagedElementCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ModelShape" targetUmlEdge="/6/@topUmlDiagramElement.9 /6/@topUmlDiagramElement.6 /6/@topUmlDiagramElement.11">
+      <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_dqUFIE0xEeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_dqUFIE0xEeSKJOjVi-PKPw"/>
+        <bounds x="29.0" y="340.0" width="40.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="24.0" y="337.0" width="256.0" height="83.0"/>
+      <packagedElementCompartment>
+        <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_dqUFIE0xEeSKJOjVi-PKPw"/>
+        <bounds x="24.0" y="356.0" width="256.0" height="64.0"/>
+      </packagedElementCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape" targetUmlEdge="/6/@topUmlDiagramElement.13 /6/@topUmlDiagramElement.7">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_1O3Y0E7XEeSYq8wB-dWH0g"/>
+        <bounds x="468.0" y="418.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="435.0" y="400.0" width="100.0" height="50.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:RealizationEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.1/@packagedElementCompartment/@topUmlDiagramElement.9" targetUmlDiagramElement="/6/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:Realization" href="ClassDiagrams.uml#_eXkhkFK0EeSKvbpj9WPmpA"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="690.0" y="248.0"/>
+      <waypoint x="533.0" y="352.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:DependencyEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.1/@packagedElementCompartment/@topUmlDiagramElement.9" targetUmlDiagramElement="/6/@topUmlDiagramElement.1/@packagedElementCompartment/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Dependency" href="ClassDiagrams.uml#_u9RlAFKzEeSKvbpj9WPmpA"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <waypoint x="666.0" y="218.0"/>
+      <waypoint x="567.0" y="218.0"/>
+      <waypoint x="567.0" y="157.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PackageMergeEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.1" targetUmlDiagramElement="/6/@topUmlDiagramElement.2">
+      <umlModelElement xsi:type="uml:PackageMerge" href="ClassDiagrams.uml#_C2EgQE7WEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:PackageMerge" href="ClassDiagrams.uml#_C2EgQE7WEeSYq8wB-dWH0g"/>
+        <bounds x="243.0" y="297.0" width="46.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="234.0" y="267.0"/>
+      <waypoint x="234.0" y="356.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ContainmentEdge" sourceUmlDiagramElement="/6" targetUmlDiagramElement="/6/@topUmlDiagramElement.3">
+      <localUmlStyle fontName="Segoe UI" fontSize="9.0"/>
+      <waypoint x="280.0" y="401.0"/>
+      <waypoint x="435.0" y="416.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:AbstractionEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.0" targetUmlDiagramElement="/6/@topUmlDiagramElement.1/@packagedElementCompartment/@topUmlDiagramElement.6">
+      <umlModelElement xsi:type="uml:Abstraction" href="ClassDiagrams.uml#_JqB7gFK0EeSKvbpj9WPmpA"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Abstraction" href="ClassDiagrams.uml#_JqB7gFK0EeSKvbpj9WPmpA"/>
+        <bounds x="305.0" y="295.0" width="72.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="442.0" y="339.0"/>
+      <waypoint x="285.0" y="241.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PackageImportEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.1" targetUmlDiagramElement="/6/@topUmlDiagramElement.2">
+      <umlModelElement xsi:type="uml:PackageImport" href="ClassDiagrams.uml#_BL-V8E7WEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:PackageImport" href="ClassDiagrams.uml#_BL-V8E7WEeSYq8wB-dWH0g"/>
+        <bounds x="43.0" y="309.0" width="0.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="59.0" y="267.0"/>
+      <waypoint x="84.0" y="336.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ContainmentEdge" sourceUmlDiagramElement="/6" targetUmlDiagramElement="/6/@topUmlDiagramElement.0">
+      <localUmlStyle fontName="Segoe UI" fontSize="9.0"/>
+      <waypoint x="280.0" y="372.0"/>
+      <waypoint x="433.0" y="362.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ElementImportEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.1" targetUmlDiagramElement="/6/@topUmlDiagramElement.2">
+      <umlModelElement xsi:type="uml:ElementImport" href="ClassDiagrams.uml#_w6uiwE7aEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:ElementImport" href="ClassDiagrams.uml#_w6uiwE7aEeSYq8wB-dWH0g"/>
+        <bounds x="162.0" y="295.0" width="48.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="152.0" y="267.0"/>
+      <waypoint x="152.0" y="356.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ElementImportEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.1" targetUmlDiagramElement="/6/@topUmlDiagramElement.0">
+      <umlModelElement xsi:type="uml:ElementImport" href="ClassDiagrams.uml#_632FcE7VEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:ElementImport" href="ClassDiagrams.uml#_632FcE7VEeSYq8wB-dWH0g"/>
+        <bounds x="481.0" y="294.0" width="48.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="461.0" y="267.0"/>
+      <waypoint x="477.0" y="339.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ElementImportEdge" sourceUmlDiagramElement="/6/@topUmlDiagramElement.1" targetUmlDiagramElement="/6/@topUmlDiagramElement.3">
+      <umlModelElement xsi:type="uml:ElementImport" href="ClassDiagrams.uml#_MshgoE7ZEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:ElementImport" href="ClassDiagrams.uml#_MshgoE7ZEeSYq8wB-dWH0g"/>
+        <bounds x="614.0" y="380.0" width="48.0" height="13.0"/>
+      </mainLabel>
+      <waypoint x="692.0" y="267.0"/>
+      <waypoint x="692.0" y="424.0"/>
+      <waypoint x="535.0" y="424.0"/>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+  <umldi:ClassDiagram name="Templates">
+    <umlModelElement xsi:type="uml:Model" href="ClassDiagrams.uml#_tTShkEzjEeSEML-T-SW94A"/>
+    <topUmlDiagramElement xsi:type="umldi:InterfaceShape" sourceUmlEdge="/7/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_pnhyYJ-hEeSgQLADBQzcMQ"/>
+      <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Interface" href="ClassDiagrams.uml#_pnhyYJ-hEeSgQLADBQzcMQ"/>
+        <bounds x="450.0" y="294.0" width="59.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="429.0" y="284.0" width="100.0" height="47.0"/>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ClassShape">
+      <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_MNbPME7sEeSYq8wB-dWH0g"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_MNbPME7sEeSYq8wB-dWH0g"/>
+        <bounds x="122.0" y="58.0" width="36.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="49.0" y="55.0" width="183.0" height="100.0"/>
+      <templateParameterCompartment>
+        <umlModelElement xsi:type="uml:RedefinableTemplateSignature" href="ClassDiagrams.uml#_QTuEQE7uEeSYq8wB-dWH0g"/>
+        <bounds x="159.0" y="27.0" width="123.0" height="48.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:TemplateParameter" href="ClassDiagrams.uml#_BbUkQE78EeSYq8wB-dWH0g"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="164.0" y="29.0" width="85.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:OperationTemplateParameter" href="ClassDiagrams.uml#_ahiawE78EeSYq8wB-dWH0g"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="164.0" y="42.0" width="68.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:ConnectableElementTemplateParameter" href="ClassDiagrams.uml#_UHy1AE79EeSYq8wB-dWH0g"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="164.0" y="55.0" width="107.0" height="13.0"/>
+        </listItemLabel>
+      </templateParameterCompartment>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_MNbPME7sEeSYq8wB-dWH0g"/>
+        <bounds x="49.0" y="72.0" width="183.0" height="32.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_7cqjkE7yEeSYq8wB-dWH0g"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="54.0" y="74.0" width="133.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+      <operationCompartment>
+        <umlModelElement xsi:type="uml:Class" href="ClassDiagrams.uml#_MNbPME7sEeSYq8wB-dWH0g"/>
+        <bounds x="49.0" y="105.0" width="183.0" height="49.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Operation" href="ClassDiagrams.uml#__4iR8E7yEeSYq8wB-dWH0g"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="54.0" y="107.0" width="83.0" height="13.0"/>
+        </listItemLabel>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Operation" href="ClassDiagrams.uml#_TfkHkE_SEeSSpbKlQxARew"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="54.0" y="120.0" width="111.0" height="13.0"/>
+        </listItemLabel>
+      </operationCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:PackageShape" targetUmlEdge="/7/@topUmlDiagramElement.4">
+      <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_b92jUE0xEeSKJOjVi-PKPw"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_b92jUE0xEeSKJOjVi-PKPw"/>
+        <bounds x="51.0" y="208.0" width="51.0" height="13.0"/>
+      </mainLabel>
+      <bounds x="46.0" y="205.0" width="200.0" height="100.0"/>
+      <packagedElementCompartment>
+        <umlModelElement xsi:type="uml:Package" href="ClassDiagrams.uml#_b92jUE0xEeSKJOjVi-PKPw"/>
+        <bounds x="46.0" y="224.0" width="200.0" height="81.0"/>
+      </packagedElementCompartment>
+      <templateParameterCompartment>
+        <umlModelElement xsi:type="uml:TemplateSignature" href="ClassDiagrams.uml#_dFtTkE7vEeSYq8wB-dWH0g"/>
+        <bounds x="172.0" y="198.0" width="124.0" height="36.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:ClassifierTemplateParameter" href="ClassDiagrams.uml#_O80k8E79EeSYq8wB-dWH0g"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="177.0" y="200.0" width="108.0" height="13.0"/>
+        </listItemLabel>
+      </templateParameterCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:ComponentShape">
+      <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_gOlREFK1EeSKvbpj9WPmpA"/>
+      <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_gOlREFK1EeSKvbpj9WPmpA"/>
+        <bounds x="441.0" y="78.0" width="74.0" height="27.0"/>
+      </mainLabel>
+      <bounds x="385.0" y="75.0" width="187.0" height="100.0"/>
+      <templateParameterCompartment>
+        <umlModelElement xsi:type="uml:RedefinableTemplateSignature" href="ClassDiagrams.uml#_jfSM0FK1EeSKvbpj9WPmpA"/>
+        <bounds x="471.0" y="45.0" width="170.0" height="36.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:TemplateParameter" href="ClassDiagrams.uml#_SyLO8FK4EeSKvbpj9WPmpA"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="476.0" y="47.0" width="154.0" height="13.0"/>
+        </listItemLabel>
+      </templateParameterCompartment>
+      <attributeCompartment>
+        <umlModelElement xsi:type="uml:Component" href="ClassDiagrams.uml#_gOlREFK1EeSKvbpj9WPmpA"/>
+        <bounds x="385.0" y="106.0" width="187.0" height="70.0"/>
+        <listItemLabel>
+          <umlModelElement xsi:type="uml:Property" href="ClassDiagrams.uml#_4vT04FK1EeSKvbpj9WPmpA"/>
+          <localUmlStyle fontName="Lucida Grande" fontSize="11.0"/>
+          <bounds x="390.0" y="108.0" width="147.0" height="13.0"/>
+        </listItemLabel>
+      </attributeCompartment>
+    </topUmlDiagramElement>
+    <topUmlDiagramElement xsi:type="umldi:TemplateBindingEdge" sourceUmlDiagramElement="/7/@topUmlDiagramElement.0" targetUmlDiagramElement="/7/@topUmlDiagramElement.2">
+      <umlModelElement xsi:type="uml:TemplateBinding" href="ClassDiagrams.uml#_wP5NgJ-hEeSgQLADBQzcMQ"/>
+      <localUmlStyle fontName="Segoe UI" fontSize="11.0"/>
+      <mainLabel>
+        <umlModelElement xsi:type="uml:TemplateBinding" href="ClassDiagrams.uml#_wP5NgJ-hEeSgQLADBQzcMQ"/>
+        <bounds x="272.0" y="301.0" width="130.0" height="26.0"/>
+      </mainLabel>
+      <waypoint x="429.0" y="301.0"/>
+      <waypoint x="246.0" y="279.0"/>
+    </topUmlDiagramElement>
+  </umldi:ClassDiagram>
+</xmi:XMI>
