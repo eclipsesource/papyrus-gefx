@@ -5,9 +5,9 @@ import org.eclipse.papyrus.infra.core.sasheditor.contentprovider.IPageModel;
 import org.eclipse.papyrus.infra.gefdiag.common.editor.GEFEditorFactory;
 
 public class ClassDiagramEditorFactory extends GEFEditorFactory {
-
+	
 	public ClassDiagramEditorFactory() {
-		super(ClassDiagramEditor.class, "PapyrusGEF4ClassDiagram");
+		super(ClassDiagramEditor.class, ClassDiagramEditor.DIAGRAM_TYPE);
 	}
 
 	@Override

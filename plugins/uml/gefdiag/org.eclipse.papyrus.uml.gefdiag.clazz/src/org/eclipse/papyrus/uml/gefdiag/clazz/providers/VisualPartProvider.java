@@ -21,18 +21,19 @@ import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.util.NotationSwitch;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
-import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart;
-import org.eclipse.papyrus.gef4.parts.ListItemContentPart;
 import org.eclipse.papyrus.gef4.parts.NodeContentPart;
 import org.eclipse.papyrus.gef4.parts.XYCompartmentContentPart;
 import org.eclipse.papyrus.gef4.provider.AbstractVisualPartProvider;
+import org.eclipse.papyrus.uml.gefdiag.clazz.editor.ClassDiagramEditor;
 import org.eclipse.papyrus.uml.gefdiag.clazz.parts.AssociationContentPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.parts.ClassContentPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.parts.InterfaceContentPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.parts.PackageContentPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.parts.PackageLabelContentPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.parts.PropertyLabelContentPart;
+import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart;
+import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementListItemContentPart;
 
 import javafx.scene.Node;
 
@@ -41,16 +42,16 @@ public class VisualPartProvider extends AbstractVisualPartProvider {
 	@Override
 	public IContentPart<Node, ? extends Node> createContentPart(View view) {
 		switch (view.getType()) {
-		case "GEF4Example":
+		case ClassDiagramEditor.DIAGRAM_TYPE:
 			return new DiagramContentPart(getDiagram(view));
 		case "2008": // Class
 		case "3010": // Class
 			return new ClassContentPart(getShape(view));
 		case "5029": // Class#Name
-			return new LabelContentPart(getDecorationNode(view));
+			return new NamedElementLabelContentPart(getDecorationNode(view));
 		case "3014": // Inner Class
 		case "3013": // Inner Operation
-			return new ListItemContentPart(getShape(view));
+			return new NamedElementListItemContentPart(getShape(view));
 		case "2007": // Package
 			return new PackageContentPart(getShape(view));
 		case "5026": // Package#name
@@ -73,7 +74,7 @@ public class VisualPartProvider extends AbstractVisualPartProvider {
 			return (IContentPart<Node, ? extends Node>) new NotationSwitch() {
 				@Override
 				public Object caseDecorationNode(DecorationNode object) {
-					return new LabelContentPart(object);
+					return new NamedElementLabelContentPart(object);
 				}
 
 				@Override

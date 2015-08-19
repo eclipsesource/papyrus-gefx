@@ -13,13 +13,13 @@
 package org.eclipse.papyrus.uml.gefdiag.clazz.parts;
 
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.LabelContentPart;
+import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 
-public class PackageLabelContentPart extends LabelContentPart {
+public class PackageLabelContentPart extends NamedElementLabelContentPart {
 
 	public PackageLabelContentPart(View view) {
 		super(view);

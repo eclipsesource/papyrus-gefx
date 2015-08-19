@@ -17,15 +17,15 @@ import java.util.HashSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.Shape;
-import org.eclipse.papyrus.gef4.parts.ListItemContentPart;
 import org.eclipse.papyrus.gef4.utils.EffectsUtil;
+import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementListItemContentPart;
 import org.eclipse.papyrus.uml.tools.utils.ICustomAppearance;
 import org.eclipse.papyrus.uml.tools.utils.PropertyUtil;
 import org.eclipse.uml2.uml.Property;
 
 import javafx.scene.control.Label;
 
-public class PropertyLabelContentPart extends ListItemContentPart {
+public class PropertyLabelContentPart extends NamedElementListItemContentPart {
 
 	public PropertyLabelContentPart(Shape view) {
 		super(view);
