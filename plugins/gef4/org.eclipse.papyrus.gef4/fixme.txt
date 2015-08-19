@@ -1,0 +1,5 @@
+All dependencies to Papyrus should be removed.
+
+Papyrus provides some useful helpers (EMFHelper, NotationHelper, ...) that should be (at least partially) copied here
+
+For now, explicit dependencies to Papyrus have been added

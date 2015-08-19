@@ -10,31 +10,27 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.infra.gefdiag.common.part;
+package org.eclipse.papyrus.uml.gefdiag.clazz.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.LabelContentPart;
+import org.eclipse.gmf.runtime.notation.Shape;
+import org.eclipse.papyrus.gef4.parts.NodeContentPart;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
-public class PackageLabelContentPart extends LabelContentPart {
+public class PackageContentPart extends NodeContentPart {
 
-	public PackageLabelContentPart(View view) {
+	public PackageContentPart(Shape view) {
 		super(view);
 	}
 
 	@Override
-	protected void refreshTextAlignment() {
-		Label label = getVisual();
-
-		double paddingWidth = 5;
-		double paddingHeight = 2;
-
-		label.setPadding(new Insets(paddingHeight, paddingWidth, paddingHeight, paddingWidth));
-
-		label.setAlignment(Pos.CENTER);
+	protected void doRefreshVisual(VBox visual) {
+		super.doRefreshVisual(visual);
+		// visual.setRotate(0);
 	}
 
+	@Override
+	protected String getStyleClass() {
+		return "package";
+	}
 }

@@ -10,7 +10,7 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.infra.gefdiag.common.part;
+package org.eclipse.papyrus.uml.gefdiag.clazz.parts;
 
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
@@ -35,6 +35,11 @@ public class PackageLabelContentPart extends LabelContentPart {
 		label.setPadding(new Insets(paddingHeight, paddingWidth, paddingHeight, paddingWidth));
 
 		label.setAlignment(Pos.CENTER);
+	}
+
+	@Override
+	protected String getStyleClass() {
+		return "packageLabel";
 	}
 
 }

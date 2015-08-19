@@ -10,31 +10,22 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.infra.gefdiag.common.part;
+package org.eclipse.papyrus.gef4.provider;
 
+import org.eclipse.gef4.mvc.parts.IContentPart;
+import org.eclipse.gef4.mvc.parts.IFeedbackPart;
+import org.eclipse.gef4.mvc.parts.IHandlePart;
+import org.eclipse.gef4.mvc.parts.IRootPart;
+import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+public interface IVisualPartProvider<VR> {
+	IRootPart<VR, ? extends VR> createRootPart(Diagram diagram);
 
-public class PackageLabelContentPart extends LabelContentPart {
+	IContentPart<VR, ? extends VR> createContentPart(View view);
 
-	public PackageLabelContentPart(View view) {
-		super(view);
-	}
+	IFeedbackPart<VR, ? extends VR> createFeedbackPart();
 
-	@Override
-	protected void refreshTextAlignment() {
-		Label label = getVisual();
-
-		double paddingWidth = 5;
-		double paddingHeight = 2;
-
-		label.setPadding(new Insets(paddingHeight, paddingWidth, paddingHeight, paddingWidth));
-
-		label.setAlignment(Pos.CENTER);
-	}
+	IHandlePart<VR, ? extends VR> createHandlePart();
 
 }

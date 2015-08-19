@@ -17,8 +17,8 @@ import java.util.List;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.papyrus.infra.gefdiag.common.part.DiagramContentPart;
-import org.eclipse.papyrus.infra.gefdiag.common.part.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
+import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;

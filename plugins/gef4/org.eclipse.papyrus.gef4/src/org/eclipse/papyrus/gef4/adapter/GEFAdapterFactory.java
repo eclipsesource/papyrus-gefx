@@ -10,31 +10,25 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.infra.gefdiag.common.part;
+package org.eclipse.papyrus.gef4.adapter;
 
+import org.eclipse.core.runtime.IAdapterFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+public class GEFAdapterFactory implements IAdapterFactory {
 
-public class PackageLabelContentPart extends LabelContentPart {
-
-	public PackageLabelContentPart(View view) {
-		super(view);
+	@Override
+	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
+		if (adaptableObject instanceof org.eclipse.gef4.common.adapt.IAdaptable) {
+			return ((org.eclipse.gef4.common.adapt.IAdaptable) adaptableObject).getAdapter(adapterType);
+		}
+		return null;
 	}
 
 	@Override
-	protected void refreshTextAlignment() {
-		Label label = getVisual();
-
-		double paddingWidth = 5;
-		double paddingHeight = 2;
-
-		label.setPadding(new Insets(paddingHeight, paddingWidth, paddingHeight, paddingWidth));
-
-		label.setAlignment(Pos.CENTER);
+	public Class<?>[] getAdapterList() {
+		return new Class[] { EObject.class, View.class };
 	}
 
 }
