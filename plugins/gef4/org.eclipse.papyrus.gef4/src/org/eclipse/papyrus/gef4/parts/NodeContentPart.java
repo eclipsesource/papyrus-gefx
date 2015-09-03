@@ -12,11 +12,14 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.fx.nodes.FXGeometryNode;
 import org.eclipse.gef4.geometry.planar.Ellipse;
 import org.eclipse.gef4.geometry.planar.IGeometry;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Shape;
+import org.eclipse.papyrus.gef4.fx.anchors.PositionalAnchorProvider;
+import org.eclipse.papyrus.gef4.fx.anchors.SlidableAnchorProvider;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
 import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
 import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
@@ -42,7 +45,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 
-public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements IPrimaryContentPart {
+public class NodeContentPart extends ContainerContentPart<Shape, VBox> implements IPrimaryContentPart {
 
 	/** indicate if The corner bend decoration is instantiate. */
 	private boolean cornerBend;
@@ -52,6 +55,9 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 	public NodeContentPart(final Shape view) {
 		super(view);
+
+		// FIXME: not sure we want to instantiate SlidableAnchorProvider for all the nodes, revisit
+		setAdapter(AdapterKey.get(PositionalAnchorProvider.class), new SlidableAnchorProvider());
 	}
 
 	@Override
@@ -264,21 +270,21 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 			final BorderStrokeStyles borderStyles = getBorderStyles();
 			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.TOP)) {
-					top = getDoubleBorderWidths().getTop();
-				}
-				// Right
-			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.RIGHT)) {
-					right = getDoubleBorderWidths().getRight();
-				}
-				// Bottom
-			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.BOTTOM)) {
-					bottom = getDoubleBorderWidths().getBottom();
-				}
-				// Left
-			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.LEFT)) {
-					left = getDoubleBorderWidths().getLeft();
-				}
+				top = getDoubleBorderWidths().getTop();
 			}
+			// Right
+			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.RIGHT)) {
+				right = getDoubleBorderWidths().getRight();
+			}
+			// Bottom
+			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.BOTTOM)) {
+				bottom = getDoubleBorderWidths().getBottom();
+			}
+			// Left
+			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.LEFT)) {
+				left = getDoubleBorderWidths().getLeft();
+			}
+		}
 		// }
 		return new Insets(padding.getTop() + top, padding.getRight() + right, padding.getBottom() + bottom, padding.getLeft() + left);
 	}
@@ -289,7 +295,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 		BorderStroke stroke = null;
 		stroke = new BorderStroke(getBorderColors().getTop(), getBorderColors().getRight(), getBorderColors().getBottom(), getBorderColors().getLeft(), getBorderStyles().getTop(), getBorderStyles().getRight(), getBorderStyles().getBottom(),
 				getBorderStyles().getLeft(),
-					getCornerRadii(), getBorderWidths(), null);
+				getCornerRadii(), getBorderWidths(), null);
 		final Border border = new Border(stroke);
 
 		getVisual().setBorder(border);

@@ -18,7 +18,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.common.inject.AdaptableScopes;
 import org.eclipse.gef4.common.inject.AdapterMaps;
-import org.eclipse.gef4.fx.anchors.IFXAnchor;
 import org.eclipse.gef4.geometry.planar.IGeometry;
 import org.eclipse.gef4.mvc.behaviors.ContentBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
@@ -26,7 +25,6 @@ import org.eclipse.gef4.mvc.fx.MvcFxModule;
 import org.eclipse.gef4.mvc.fx.behaviors.FXGridBehavior;
 import org.eclipse.gef4.mvc.fx.behaviors.FXViewportBehavior;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
-import org.eclipse.gef4.mvc.fx.parts.ChopBoxAnchorProvider;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
@@ -168,10 +166,6 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		adapterMapBinder.addBinding(
 				AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY)).to(MoveOnDragPolicy.class);
-
-		adapterMapBinder.addBinding(
-				AdapterKey.get(new TypeToken<Provider<IFXAnchor>>() {
-				})).to(ChopBoxAnchorProvider.class);
 
 		adapterMapBinder
 				.addBinding(

@@ -12,17 +12,19 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.fx.anchors.IFXAnchor;
 import org.eclipse.gef4.fx.nodes.FXConnection;
+import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.fx.anchors.SlidableFxAnchor;
+import org.eclipse.papyrus.gef4.policies.ConnectionBendPolicy;
+import org.eclipse.papyrus.gef4.policies.ConnectionReconnectNotationPolicy;
+import org.eclipse.papyrus.gef4.policies.ConnectionReconnectSemanticPolicy;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
-import com.google.common.reflect.TypeToken;
-import com.google.inject.Provider;
 
 import javafx.scene.Node;
 
@@ -37,6 +39,10 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	protected ConnectionContentPart(E view) {
 		super(view);
 
+		setAdapter(FXBendPolicy.class, new ConnectionBendPolicy());
+		// FIXME: works only for element-based links now
+		setAdapter(ConnectionReconnectSemanticPolicy.class, new ConnectionReconnectSemanticPolicy());
+		setAdapter(ConnectionReconnectNotationPolicy.class, new ConnectionReconnectNotationPolicy());
 	}
 
 	@Override
@@ -89,16 +95,18 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 
 	@Override
 	protected void attachToAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
-		IFXAnchor anchor = anchorage.getAdapter(
-				new TypeToken<Provider<? extends IFXAnchor>>() {
-				}).get();
-		if (SOURCE.equals(role)) {
-			getVisual().setStartAnchor(anchor);
-		} else if (TARGET.equals(role)) {
-			getVisual().setEndAnchor(anchor);
-		} else {
-			throw new IllegalStateException(
-					"Cannot attach to anchor with role <" + role + ">.");
+		Edge notation = getView();
+		switch (role) {
+		case SOURCE:
+			getVisual().setStartAnchor(
+					new SlidableFxAnchor(anchorage.getVisual(), notation.getSourceAnchor()));
+			break;
+		case TARGET:
+			getVisual().setEndAnchor(
+					new SlidableFxAnchor(anchorage.getVisual(), notation.getTargetAnchor()));
+			break;
+		default:
+			throw new IllegalStateException("Cannot attach to anchor with role <" + role + ">.");
 		}
 	}
 
@@ -113,6 +121,16 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 			throw new IllegalStateException(
 					"Cannot detach from anchor with role <" + role + ">.");
 		}
+	}
+
+	@Override
+	public void attachToContentAnchorage(Object contentAnchorage, String role) {
+		// FIXME: NOOP for now
+	}
+
+	@Override
+	public void detachFromContentAnchorage(Object contentAnchorage, String role) {
+		// FIXME: NOOP for now
 	}
 
 	@Override

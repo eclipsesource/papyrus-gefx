@@ -17,10 +17,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.gef4.common.adapt.AdapterKey;
+import org.eclipse.gef4.geometry.planar.BezierCurve;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
+import org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy;
+import org.eclipse.gef4.mvc.fx.policies.FXBendOnSegmentHandleDragPolicy;
+import org.eclipse.gef4.mvc.operations.ITransactional;
+import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IHandlePart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef4.mvc.policies.IPolicy;
+import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.commands.wrappers.GEFtoEMFCommandWrapper;
+import org.eclipse.papyrus.commands.wrappers.OperationToGEFCommandWrapper;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
+
+import com.google.inject.Provider;
 
 import javafx.scene.Node;
 
@@ -40,5 +54,36 @@ public class HandlePartFactory extends FXDefaultHandlePartFactory {
 			return Collections.emptyList();
 		}
 		return super.createSingleSelectionHandleParts(target, contextMap);
+	}
+
+	@Override
+	protected IHandlePart<Node, ? extends Node> createCurveSelectionHandlePart(final IVisualPart<Node, ? extends Node> targetPart,
+			Provider<BezierCurve[]> segmentsProvider, int segmentCount, int segmentIndex, double segmentParameter) {
+
+		IHandlePart<Node, ? extends Node> result = super.createCurveSelectionHandlePart(targetPart, segmentsProvider,
+				segmentCount, segmentIndex, segmentParameter);
+
+		// injector.injectMembers(part);
+
+		result.setAdapter(AdapterKey.get(AbstractFXOnDragPolicy.class),
+				new FXBendOnSegmentHandleDragPolicy() {
+
+					// FIXME: discuss and revisit
+					@Override
+					protected void commit(IPolicy<Node> policy) {
+						if (policy != null && policy instanceof ITransactional) {
+							IUndoableOperation o = ((ITransactional) policy).commit();
+							if (o != null && o.canExecute()) {
+								IContentPart<Node, ? extends Node> targetPartImpl = (IContentPart<Node, ? extends Node>) targetPart;
+								View hostView = (View) targetPartImpl.getContent();
+								OperationToGEFCommandWrapper gefWrapper = new OperationToGEFCommandWrapper(o);
+								GEFtoEMFCommandWrapper emfWrapper = new GEFtoEMFCommandWrapper(gefWrapper);
+								AdapterFactoryEditingDomain.getEditingDomainFor(hostView).getCommandStack().execute(emfWrapper);
+							}
+						}
+					}
+				});
+
+		return result;
 	}
 }
