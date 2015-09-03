@@ -16,19 +16,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class LabelContentPart extends NotationContentPart<View, Label> {
+public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
 	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
 
@@ -48,40 +45,22 @@ public class LabelContentPart extends NotationContentPart<View, Label> {
 	}
 
 	@Override
-	protected Label doCreateVisual() {
+	protected StackPane doCreateVisual() {
+		StackPane content = new StackPane();
 		Label label = new Label();
 		refreshLabel(label);
 		refreshIcon(label);
-		return label;
+		content.getChildren().add(label);
+		return content;
 	}
 
 	@Override
-	protected void doRefreshVisual(Label visual) {
+	protected void doRefreshVisual(StackPane visual) {
 		super.doRefreshVisual(visual);
-		refreshLabel(visual);
+		refreshLabel((Label) visual.getChildren().get(0));
 		refreshTextAlignment();
 		refreshFont();
-		refreshIcon(visual);
-
-
-		// final Timeline timeline = new Timeline();
-		// visual.setOpacity(1);
-		// timeline.setCycleCount(10);
-		// timeline.setAutoReverse(true);
-		//
-		// final KeyValue kv = new KeyValue(visual.scaleXProperty(), 2);
-		// final KeyValue kv2 = new KeyValue(visual.scaleYProperty(), 2);
-		// final KeyFrame kf = new KeyFrame(Duration.millis(500), kv, kv2);
-		// timeline.getKeyFrames().add(kf);
-		// timeline.play();
-		// timeline.setOnFinished(new EventHandler<ActionEvent>() {
-		//
-		// @Override
-		// public void handle(ActionEvent event) {
-		// visual.setScaleX(1);
-		// visual.setScaleY(1);
-		// }
-		// });
+		refreshIcon((Label) visual.getChildren().get(0));
 	}
 
 	protected void refreshIcon(Label label) {
@@ -123,34 +102,13 @@ public class LabelContentPart extends NotationContentPart<View, Label> {
 	}
 
 	protected void refreshTextAlignment() {
-		Label label = getVisual();
-
-		// FIXME what is the best way to specify that the label should expand horizontally? VBox only seems to support vertical expansion. Use a different Container?
-		NotationContentPart<? extends View, ? extends Node> parentPart = getParentContentPart();
-		double minWidth = 0;
-		if (parentPart != null) {
-			minWidth = parentPart.getWidth();
-			BorderWidths parentWidths = parentPart.getBorderWidths();
-			if (parentWidths != null) {
-				minWidth -= parentWidths.getLeft() + parentWidths.getRight();
-			}
-		}
-
-		double paddingWidth = 5;
-		double paddingHeight = 2;
-
-		label.setMinWidth(minWidth);
-
-		label.setCenterShape(true);
-
-		label.setPadding(new Insets(paddingHeight, paddingWidth, paddingHeight, paddingWidth));
-
-		label.setAlignment(Pos.CENTER);
+		getVisual().setAlignment(getTextAlignment());
 	}
+
 
 	@Override
 	protected void refreshVisibility() {
-		// FIXME workaround for unsupported elements (Specific to Papyrus ClassD)
+		// FIXME workaround for unsupported elements
 		switch (getView().getType()) {
 		case "8510": // StereotypeDisplay for Class
 		case "8518":
@@ -162,8 +120,8 @@ public class LabelContentPart extends NotationContentPart<View, Label> {
 	}
 
 	protected void refreshFont() {
-		getVisual().setTextFill(Color.BLACK);
-		getVisual().setFont(Font.font("Segoe UI", FontWeight.NORMAL, scale(9)));
+		((Label) getVisual().getChildren().get(0)).setTextFill(Color.BLACK);
+		((Label) getVisual().getChildren().get(0)).setFont(Font.font("Segoe UI", FontWeight.NORMAL, scale(9)));
 	}
 
 	protected String getText() {

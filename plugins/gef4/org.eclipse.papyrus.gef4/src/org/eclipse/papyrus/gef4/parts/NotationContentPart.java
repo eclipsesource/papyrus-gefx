@@ -8,6 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - shape customization
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
@@ -27,17 +28,27 @@ import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
+import org.eclipse.gmf.runtime.notation.FillStyle;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.utils.BorderColors;
+import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
+import org.eclipse.papyrus.gef4.utils.NotationUtil;
+import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
 import com.google.common.reflect.TypeToken;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public abstract class NotationContentPart<V extends View, N extends Node> extends AbstractFXContentPart<N> {
 
@@ -47,7 +58,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 	protected List<View> lastKnownChildren;
 
-	public NotationContentPart(V view) {
+	public NotationContentPart(final V view) {
 		Assert.isNotNull(view);
 		this.view = view;
 		setContent(view);
@@ -65,7 +76,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 	@Override
 	protected final N createVisual() {
-		N visual = doCreateVisual();
+		final N visual = doCreateVisual();
 		if (visual != null) {
 			visual.getStyleClass().add(getStyleClass());
 		}
@@ -95,7 +106,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 			return this;
 		}
 
-		NotationContentPart<?, ?> parentPart = getParentContentPart();
+		final NotationContentPart<?, ?> parentPart = getParentContentPart();
 		if (parentPart != null) {
 			return parentPart.getPrimaryContentPart();
 		}
@@ -105,17 +116,17 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 	protected void installListeners() {
 		getView().eAdapters().add(changeListener);
-		EObject element = getElement();
+		final EObject element = getElement();
 		if (element != null) {
 			element.eAdapters().add(changeListener);
 		}
-		LayoutConstraint layout = getLayout();
+		final LayoutConstraint layout = getLayout();
 		if (layout != null) {
 			layout.eAdapters().add(changeListener);
 		}
 	}
 
-	protected IContentPart<Node, ? extends Node> getContentPart(View forView) {
+	protected IContentPart<Node, ? extends Node> getContentPart(final View forView) {
 		if (forView == null) {
 			return null;
 		}
@@ -125,23 +136,38 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	@Override
 	protected void doDeactivate() {
 		getView().eAdapters().remove(changeListener);
-		EObject element = getElement();
+		final EObject element = getElement();
 		if (element != null) {
 			element.eAdapters().remove(changeListener);
 		}
-		LayoutConstraint layout = getLayout();
+		final LayoutConstraint layout = getLayout();
 		if (layout != null) {
 			layout.eAdapters().remove(changeListener);
 		}
 		super.doDeactivate();
 	}
 
+	/** flag to indicate that the refresh have been triggered with a resize of the element. */
+	protected boolean resizing;
+
 	protected Adapter createAdapter() {
 		return new AdapterImpl() {
+
 			@Override
-			public void notifyChanged(Notification msg) {
+			public void notifyChanged(final Notification msg) {
 				if (!isActive()) {
 					return;
+				}
+
+				// Resize case
+				if (msg.getFeature() == NotationPackage.Literals.SIZE__WIDTH || msg.getFeature() == NotationPackage.Literals.SIZE__HEIGHT) {
+					if (msg.getOldValue() != msg.getNewValue()) {
+						resizing = true;
+					} else {
+						resizing = false;
+					}
+				} else {
+					resizing = false;
 				}
 
 				if (!(msg.isTouch())) {
@@ -149,9 +175,21 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 						notifyChildrenChanged();
 					}
 					refreshVisual();
+					// reset resizing
+
 				}
+				resizing = false;
 			}
 		};
+	}
+
+	@Override
+	protected void doRefreshVisual(final N visual) {
+		refreshVisibility();
+	}
+
+	protected void refreshVisibility() {
+		getVisual().setVisible(getView().isVisible());
 	}
 
 	protected void notifyChildrenChanged() {
@@ -159,7 +197,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		updateLastKnownChildren();
 	}
 
-	protected boolean childrenChanged(Notification msg) {
+	protected boolean childrenChanged(final Notification msg) {
 		if (msg.getNotifier() != getView()) {
 			return false;
 		}
@@ -167,9 +205,9 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	public EObject getElement() {
-		EObject element = getView().getElement();
+		final EObject element = getView().getElement();
 		if (element == null) {
-			NotationContentPart<? extends View, ? extends Node> parent = getParentContentPart();
+			final NotationContentPart<? extends View, ? extends Node> parent = getParentContentPart();
 			if (parent != null) {
 				return parent.getElement();
 			}
@@ -178,7 +216,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	protected NotationContentPart<? extends View, ? extends Node> getParentContentPart() {
-		IVisualPart<Node, ? extends Node> parent = getParent();
+		final IVisualPart<Node, ? extends Node> parent = getParent();
 		if (parent instanceof NotationContentPart) {
 			return (NotationContentPart<?, ?>) parent;
 		}
@@ -195,7 +233,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 	// May be null
 	protected Bounds getBounds() {
-		LayoutConstraint constraint = getLayout();
+		final LayoutConstraint constraint = getLayout();
 		if (constraint instanceof Bounds) {
 			return (Bounds) constraint;
 		}
@@ -203,22 +241,22 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	protected double getX() {
-		Bounds bounds = getBounds();
+		final Bounds bounds = getBounds();
 		return bounds == null ? 0 : bounds.getX();
 	}
 
 	protected double getY() {
-		Bounds bounds = getBounds();
+		final Bounds bounds = getBounds();
 		return bounds == null ? 0 : bounds.getY();
 	}
 
 	protected double getHeight() {
-		Bounds bounds = getBounds();
+		final Bounds bounds = getBounds();
 		return bounds == null ? 0 : bounds.getHeight();
 	}
 
 	protected double getWidth() {
-		Bounds bounds = getBounds();
+		final Bounds bounds = getBounds();
 		return bounds == null ? 0 : bounds.getWidth();
 	}
 
@@ -230,37 +268,210 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	@Override
 	protected void doActivate() {
 		installDefaultPolicies();
-		// refreshChildren();
+		refreshChildren();
 		super.doActivate();
+		refreshChildren();
 	}
 
-	protected Color getBorderColor() {
-		return Color.BLACK;
+	protected void refreshChildren() {
+		// refresh children
+		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
+		for (final IVisualPart<Node, ? extends Node> child : children) {
+			child.refreshVisual();
+		}
 	}
 
-	protected BorderStrokeStyle getBorderStyle() {
-		return BorderStrokeStyle.SOLID;
+	protected BorderColors getBorderColors() {
+		return NotationUtil.getBorderColor(view);
 	}
 
+	protected int getTransparency() {
+		int transparency = 0;
+		final FillStyle style = (FillStyle) view.getStyle(NotationPackage.Literals.FILL_STYLE);
+		if (null != style) {
+			transparency = style.getTransparency();
+		}
+		return transparency;
+	}
+
+	protected Color getBackgroundColor1() {
+		return NotationUtil.getFillColor(view);
+	}
+
+	protected Color getBackgroundColor2() {
+		return NotationUtil.getGradientColor(view);
+	}
+
+	/**
+	 * Gets the background Paint.
+	 *
+	 * @return the background color
+	 */
+	protected Paint getBackgroundPaint() {
+		return NotationUtil.getBackgroundPaint(view);
+	}
+
+	protected Point2D getBackgroundGradientStartPosition() {
+		return NotationUtil.getBackgroundGradientStartPosition(view);
+	}
+
+	protected Point2D getBackgroundGradientEndPosition() {
+		return NotationUtil.getBackgroundGradientEndPosition(view);
+	}
+
+	protected BorderStrokeStyles getBorderStyles() {
+		return NotationUtil.getBorderStyle(view);
+	}
+
+	/**
+	 * Gets the corner radii.
+	 *
+	 * @return the corner radii
+	 */
 	protected CornerRadii getCornerRadii() {
-		return new CornerRadii(5);
+		return NotationUtil.getCornerRadii(view);
 	}
 
+	/**
+	 * Gets the margin.
+	 *
+	 * @return the margin
+	 */
+	protected Insets getMargin() {
+		return NotationUtil.getMargin(view);
+	}
+
+
+	/**
+	 * Gets the padding.
+	 *
+	 * @return the padding
+	 */
+	protected Insets getPadding() {
+		return NotationUtil.getPadding(view);
+	}
+
+	/**
+	 * Gets the spacing.
+	 *
+	 * @return the spacing
+	 */
+	protected double getSpacing() {
+		return NotationUtil.getSpacing(view);
+	}
+
+	/**
+	 * Gets the shape type.
+	 *
+	 * @return the shape type
+	 */
+	protected ShapeTypeEnum getShapeType() {
+		return NotationUtil.getShapeType(view);
+	}
+
+	/**
+	 * Gets the border widths.
+	 *
+	 * @return the border widths
+	 */
 	protected BorderWidths getBorderWidths() {
-		return new BorderWidths(1);
+		return NotationUtil.getBorderWidths(view);
 	}
 
-	@Override
-	protected void doRefreshVisual(N visual) {
-		refreshVisibility();
+	/**
+	 * Checks for double border.
+	 *
+	 * @return true, if successful
+	 */
+	protected boolean hasDoubleBorder() {
+		return NotationUtil.hasDoubleBorder(view);
 	}
 
-	protected void refreshVisibility() {
-		getVisual().setVisible(getView().isVisible());
+
+	/**
+	 * Gets the double border widths.
+	 *
+	 * @return the double border widths
+	 */
+	protected Insets getDoubleBorderWidths() {
+		return NotationUtil.getDoubleBorderWidths(view);
 	}
+
+	/**
+	 * Gets the text alignment.
+	 *
+	 * @return the text alignment
+	 */
+	public Pos getTextAlignment() {
+		return NotationUtil.getTextAlignment(view);
+	}
+
+	/**
+	 * Gets the shadow.
+	 *
+	 * @return the shadow
+	 */
+	protected DropShadow getShadow() {
+		return NotationUtil.getShadow(view);
+	}
+
+	/**
+	 * Gets the shadow color.
+	 *
+	 * @return the shadow color
+	 */
+	protected Color getShadowColor() {
+		return NotationUtil.getShadowColor(view);
+	}
+
+	/**
+	 * Gets the shadow width.
+	 *
+	 * @return the shadow width
+	 */
+	protected int getShadowWidth() {
+		return NotationUtil.getShadowWidth(view);
+	}
+
+	/**
+	 * Gets the effect.
+	 *
+	 * @return the effect
+	 */
+	protected Effect getEffect() {
+		return NotationUtil.getEffect(view);
+	}
+
+	/**
+	 * Gets the corner bend color.
+	 *
+	 * @return the corner bend color
+	 */
+	protected Paint getCornerBendColor() {
+		return NotationUtil.getCornerBendColor(view);
+	}
+
+	/**
+	 * Gets the corner bend width.
+	 *
+	 * @return the corner bend width
+	 */
+	protected double getCornerBendWidth() {
+		return NotationUtil.getCornerBendWidth(view);
+	}
+
+	/**
+	 * Gets the rotate.
+	 *
+	 * @return the rotate
+	 */
+	protected double getRotate() {
+		return NotationUtil.getRotate(view);
+	}
+
 
 	protected IContentPartFactory<Node> getFactory() {
-		IContentPartFactory<Node> factory = getViewer().getAdapter(new TypeToken<IContentPartFactory<Node>>() {
+		final IContentPartFactory<Node> factory = getViewer().getAdapter(new TypeToken<IContentPartFactory<Node>>() {
 		});
 
 		if (factory == null) {

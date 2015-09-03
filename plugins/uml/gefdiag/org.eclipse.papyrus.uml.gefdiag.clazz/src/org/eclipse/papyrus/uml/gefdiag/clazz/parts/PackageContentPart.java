@@ -15,18 +15,11 @@ package org.eclipse.papyrus.uml.gefdiag.clazz.parts;
 import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.papyrus.gef4.parts.NodeContentPart;
 
-import javafx.scene.layout.VBox;
-
+@Deprecated
 public class PackageContentPart extends NodeContentPart {
 
 	public PackageContentPart(Shape view) {
 		super(view);
-	}
-
-	@Override
-	protected void doRefreshVisual(VBox visual) {
-		super.doRefreshVisual(visual);
-		// visual.setRotate(0);
 	}
 
 	@Override

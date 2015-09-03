@@ -1,0 +1,25 @@
+/* ==== Default values ==== */
+Compartment{
+	borderWidth: 1 0 0 0;
+	borderColor: black;
+	padding : 3 5 3 5;
+}
+
+Package{
+	isPackage:true;
+	textAlignment:left;
+}
+
+/*==== TODO put on a umlBase.css ====*/
+[isActive=true]{
+	borderStyle: solid double solid double;
+	doubleBorderWidth: 5 10 5 10;
+}
+
+Compartment>Property{
+	textAlignment:left;
+}
+
+Compartment>Operation{
+	textAlignment:left;
+}

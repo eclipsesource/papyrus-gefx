@@ -15,9 +15,9 @@ package org.eclipse.papyrus.gef4.parts;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.View;
 
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 
 public abstract class ContainerContentPart<V extends View, R extends Region> extends NotationContentPart<V, R> {
@@ -29,13 +29,57 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 	@Override
 	protected void doRefreshVisual(R visual) {
 		super.doRefreshVisual(visual);
+
+		// resetStyle();
+
+		// Layout refresh
 		refreshBounds();
-		refreshBorder();
+		refreshLayout();
+
+		// Visual refresh
+		refreshShape();
 		refreshBackground();
+		refreshBorder();
+		refreshShadow();
+		refreshEffect();
+		refreshDecoration();
+
+		refreshChildren();
+
+		// refreshFXCSSStyle();
 	}
 
-	protected void refreshBackground() {
-		// Nothing
+	/*
+	 * private void refreshFXCSSStyle() {
+	 * // addStyle("-fx-background-insets: 10;");
+	 * }
+	 * 
+	 * protected void resetStyle() {
+	 * getVisual().setStyle("");//$NON-NLS-1$
+	 * getVisual().applyCss();
+	 * }
+	 * 
+	 * protected void setStyle(String style) {
+	 * getVisual().setStyle(style);
+	 * getVisual().applyCss();
+	 * }
+	 * 
+	 * protected void addStyle(String style) {
+	 * getVisual().setStyle(getVisual().getStyle() + style);
+	 * getVisual().applyCss();
+	 * }
+	 */
+
+	protected void refreshLayout() {
+		// Refresh Padding
+		getVisual().setPadding(getPadding());
+
+		// Refresh Spacing for VBox and Hbox
+		if (getVisual() instanceof VBox) {
+			((VBox) getVisual()).setSpacing(getSpacing());
+		} else if (getVisual() instanceof HBox) {
+			((HBox) getVisual()).setSpacing(getSpacing());
+		}
 	}
 
 	protected void refreshBounds() {
@@ -45,16 +89,34 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 		region.setLayoutY(getY());
 
 		region.setMinHeight(getHeight());
+
 		region.setMinWidth(getWidth());
 	}
 
+
+
+	protected void refreshBackground() {
+		// Do nothing, the implementation is in charge to manage that.
+	}
+
+	protected void refreshShadow() {
+		// Do nothing, the implementation is in charge to manage that.
+	}
+
 	protected void refreshBorder() {
-		R region = getVisual();
+		// Do nothing, the implementation is in charge to manage that.
+	}
 
-		BorderStroke stroke = new BorderStroke(getBorderColor(), getBorderStyle(), getCornerRadii(), getBorderWidths());
-		Border border = new Border(stroke);
+	protected void refreshEffect() {
+		// Do nothing, the implementation is in charge to manage that.
+	}
 
-		region.setBorder(border);
+	protected void refreshShape() {
+		// Do nothing, the implementation is in charge to manage that.
+	}
+
+	protected void refreshDecoration() {
+		// Do nothing, the implementation is in charge to manage that.
 	}
 
 	@Override

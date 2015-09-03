@@ -16,10 +16,9 @@ package org.eclipse.papyrus.uml.gefdiag.clazz.parts;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.papyrus.gef4.parts.NodeContentPart;
-import org.eclipse.papyrus.gef4.utils.EffectsUtil;
 
-import javafx.scene.layout.VBox;
-
+//TODO is active - abstract(with CSS)
+@Deprecated
 public class ClassContentPart extends NodeContentPart {
 
 	public ClassContentPart(Shape view) {
@@ -33,46 +32,6 @@ public class ClassContentPart extends NodeContentPart {
 			return (org.eclipse.uml2.uml.Class) element;
 		}
 		return null;
-	}
-
-	@Override
-	protected void doRefreshVisual(VBox visual) {
-		super.doRefreshVisual(visual);
-
-		visual.setEffect(EffectsUtil.createShadowEffect());
-
-		// if (Math.random() > 0.9) {
-
-		// final Timeline timeline = new Timeline();
-		// visual.setOpacity(1);
-		// timeline.setCycleCount(10);
-		// timeline.setAutoReverse(true);
-		//
-		// // BackgroundFill fill = new BackgroundFill(new LinearGradient(0, 0, 0, 1.0, true, CycleMethod.NO_CYCLE, new Stop(0, Color.WHITE), new Stop(1, Color.RED)), null, null);
-		// // Background bg = new Background(fill);
-		//
-		// final KeyValue kv = new KeyValue(visual.opacityProperty(), 0.1);
-		// final KeyFrame kf = new KeyFrame(Duration.millis(500), kv);
-		// timeline.getKeyFrames().add(kf);
-		// timeline.play();
-		//
-		// timeline.setOnFinished(new EventHandler<ActionEvent>() {
-		//
-		// @Override
-		// public void handle(ActionEvent event) {
-		// visual.setOpacity(1);
-		// }
-		// });
-	}
-
-	@Override
-	protected void refreshBackground() {
-		super.refreshBackground();
-		if (Math.random() > 0.9) {
-			// getVisual().setRotate(-15);
-		} else {
-			getVisual().setRotate(0);
-		}
 	}
 
 	@Override

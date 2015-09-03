@@ -14,28 +14,10 @@ package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.gmf.runtime.notation.View;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-
 public class ListItemContentPart extends LabelContentPart implements IPrimaryContentPart {
 
 	public ListItemContentPart(View view) {
 		super(view);
-	}
-
-
-	@Override
-	protected void refreshTextAlignment() {
-		super.refreshTextAlignment();
-
-		Label label = getVisual();
-
-		double paddingHeight = 0;
-		double paddingWidth = 4;
-
-		label.setRotate(0);
-
-		label.setPadding(new Insets(paddingHeight, paddingWidth, paddingHeight, paddingWidth));
 	}
 
 }

@@ -37,6 +37,7 @@ import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementListItemContentP
 
 import javafx.scene.Node;
 
+@Deprecated
 public class VisualPartProviderBase extends AbstractVisualPartProvider {
 
 	@Override

@@ -12,15 +12,11 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.DecorationNode;
 
-import javafx.scene.Node;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class ListCompartmentContentPart<V extends DecorationNode> extends ContainerContentPart<V, VBox> {
+public class ListCompartmentContentPart<V extends DecorationNode> extends CompartmentContentPart<V, VBox> {
 
 	public ListCompartmentContentPart(V view) {
 		super(view);
@@ -32,45 +28,9 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Contai
 	}
 
 	@Override
-	protected void addChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
-		if (child.getVisual() != null) {
-			getVisual().getChildren().add(child.getVisual());
-		}
-	}
-
-	@Override
-	protected void removeChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
-		Node childVisual = child.getVisual();
-		if (childVisual == null) {
-			return;
-		}
-
-		getVisual().getChildren().remove(childVisual);
-	}
-
-	@Override
-	protected void refreshBounds() {
-		super.refreshBounds();
-
-		VBox visual = getVisual();
-
-		VBox.setVgrow(visual, Priority.ALWAYS);
-	}
-
-	@Override
-	protected BorderWidths getBorderWidths() {
-		// Only draw the top-line
-		return new BorderWidths(1, 0, 0, 0);
-	}
-
-	@Override
-	protected double getMinHeight() {
-		return 7;
-	}
-
-	@Override
 	protected String getStyleClass() {
 		return "genericListCompartment";
 	}
 
 }
+

@@ -15,26 +15,11 @@ package org.eclipse.papyrus.uml.gefdiag.clazz.parts;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-
+@Deprecated
 public class PackageLabelContentPart extends NamedElementLabelContentPart {
 
 	public PackageLabelContentPart(View view) {
 		super(view);
-	}
-
-	@Override
-	protected void refreshTextAlignment() {
-		Label label = getVisual();
-
-		double paddingWidth = 5;
-		double paddingHeight = 2;
-
-		label.setPadding(new Insets(paddingHeight, paddingWidth, paddingHeight, paddingWidth));
-
-		label.setAlignment(Pos.CENTER);
 	}
 
 	@Override
