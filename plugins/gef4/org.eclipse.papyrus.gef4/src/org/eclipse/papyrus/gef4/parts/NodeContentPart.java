@@ -12,14 +12,11 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.fx.nodes.FXGeometryNode;
 import org.eclipse.gef4.geometry.planar.Ellipse;
 import org.eclipse.gef4.geometry.planar.IGeometry;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Shape;
-import org.eclipse.papyrus.gef4.fx.anchors.PositionalAnchorProvider;
-import org.eclipse.papyrus.gef4.fx.anchors.SlidableAnchorProvider;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
 import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
 import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
@@ -38,6 +35,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.CycleMethod;
@@ -45,7 +43,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 
-public class NodeContentPart extends ContainerContentPart<Shape, VBox> implements IPrimaryContentPart {
+public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements IPrimaryContentPart {
 
 	/** indicate if The corner bend decoration is instantiate. */
 	private boolean cornerBend;
@@ -53,18 +51,28 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	/** indicate if the double line decoration is set. */
 	private boolean doubleLine;
 
+	/* not managed Child nodes needs its own region to be correctly displayed(TOFIX) */
+	// TODO Affixed node on a XY pane: Change bounds behaviors must be in charge to do the right placement ??
+	private final Pane affichedNodeRegion = new Pane();
+
 	public NodeContentPart(final Shape view) {
 		super(view);
-
-		// FIXME: not sure we want to instantiate SlidableAnchorProvider for all the nodes, revisit
-		setAdapter(AdapterKey.get(PositionalAnchorProvider.class), new SlidableAnchorProvider());
 	}
 
 	@Override
 	protected VBox doCreateVisual() {
 		final VBox vBox = new VBox();
-		refreshVisual();
+
+		affichedNodeRegion.setManaged(false);
+		vBox.getChildren().add(affichedNodeRegion);
+
 		return vBox;
+	}
+
+	@Override
+	protected void doRefreshVisual(final VBox visual) {
+		super.doRefreshVisual(visual);
+		affichedNodeRegion.toFront();
 	}
 
 	@Override
@@ -82,14 +90,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		final Background background = new Background(backgroundFill);
 		// set the Background
 		region.setBackground(background);
-	}
-
-	@Override
-	protected void refreshBounds() {
-		super.refreshBounds();
-		final Region region = getVisual();
-		region.setPrefHeight(getHeight());
-		region.setPrefWidth(getWidth());
 	}
 
 	@Override
@@ -112,8 +112,8 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	@Override
 	protected void refreshShape() {
 		final VBox region = getVisual();
-		final double width = region.getMinWidth();
-		final double height = region.getMinHeight();
+		final double width = getWidth();
+		final double height = getHeight();
 
 		final ShapeTypeEnum shapeType = getShapeType();
 		switch (shapeType) {
@@ -135,10 +135,9 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 			// create package shape
 			final PackagePath packageShape = new PackagePath(width, height, tabWidth, tabHeight);
-
 			region.setScaleShape(false);
-
 			region.setShape(packageShape);
+
 			break;
 
 		case CORNER_BEND_RECTANGLE:
@@ -175,6 +174,10 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 		// Rotate the figure.
 		region.setRotate(getRotate());
+
+		if (null != region.getShape()) {
+			region.getShape().toFront();
+		}
 	}
 
 	@Override
@@ -285,7 +288,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 				left = getDoubleBorderWidths().getLeft();
 			}
 		}
-		// }
 		return new Insets(padding.getTop() + top, padding.getRight() + right, padding.getBottom() + bottom, padding.getLeft() + left);
 	}
 
@@ -322,7 +324,11 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	@Override
 	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
-			getVisual().getChildren().add(child.getVisual());
+			if (child instanceof AffixedNodeContentPart) {
+				affichedNodeRegion.getChildren().add(child.getVisual());
+			} else {
+				getVisual().getChildren().add(child.getVisual());
+			}
 		}
 	}
 
@@ -332,8 +338,11 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		if (childVisual == null) {
 			return;
 		}
-
-		getVisual().getChildren().remove(childVisual);
+		if (child instanceof AffixedNodeContentPart) {
+			affichedNodeRegion.getChildren().remove(child.getVisual());
+		} else {
+			getVisual().getChildren().remove(childVisual);
+		}
 	}
 
 	@Override

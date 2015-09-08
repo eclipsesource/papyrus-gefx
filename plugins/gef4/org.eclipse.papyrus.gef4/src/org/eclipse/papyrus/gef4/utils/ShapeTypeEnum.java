@@ -19,7 +19,7 @@ public enum ShapeTypeEnum {
 	NONE("none"), //$NON-NLS-1$
 	PACKAGE("package"), //$NON-NLS-1$
 	OVAL("oval"), //$NON-NLS-1$
-	CORNER_BEND_RECTANGLE("cornerBndRectangle");//$NON-NLS-1$
+	CORNER_BEND_RECTANGLE("cornerBendRectangle");//$NON-NLS-1$
 
 
 	/** The literal. */

@@ -21,3 +21,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.papyrus.infra.gefdiag.common
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.papyrus.uml.gefdiag.clazz,
+ org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts,
+ org.eclipse.papyrus.uml.gefdiag.clazz.editor,
+ org.eclipse.papyrus.uml.gefdiag.clazz.module,
+ org.eclipse.papyrus.uml.gefdiag.clazz.parts,
+ org.eclipse.papyrus.uml.gefdiag.clazz.providers

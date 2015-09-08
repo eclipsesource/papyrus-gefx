@@ -5,21 +5,29 @@ Compartment{
 	padding : 3 5 3 5;
 }
 
-Package{
+Package,
+Model{
 	isPackage:true;
 	textAlignment:left;
 }
 
+Constraint,
+Comment{
+	shapeType:cornerBendRectangle;
+}
+
 /*==== TODO put on a umlBase.css ====*/
-[isActive=true]{
+ClassDiagram [isActive=true]{
 	borderStyle: solid double solid double;
 	doubleBorderWidth: 5 10 5 10;
 }
 
-Compartment>Property{
+ClassDiagram Compartment>Property{
 	textAlignment:left;
 }
 
-Compartment>Operation{
+ClassDiagram Compartment>Operation{
 	textAlignment:left;
+}
+
 }

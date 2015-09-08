@@ -30,7 +30,7 @@ class AffixedNodeEditPartEmitter extends AbstractEditPartEmitter {
 	'''
 	
 	override getExtended(List<Object> arguments) '''
-	 extends org.eclipse.papyrus.gef4.parts.NodeContentPart
+	 extends org.eclipse.papyrus.gef4.parts.AffixedNodeContentPart
 	'''
 	
 	
