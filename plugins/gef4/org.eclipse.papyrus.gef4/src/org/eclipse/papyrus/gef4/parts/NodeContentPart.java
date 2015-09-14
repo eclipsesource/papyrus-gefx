@@ -8,9 +8,12 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Layout and visualization API and Implementation
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
+
+import java.util.List;
 
 import org.eclipse.gef4.fx.nodes.FXGeometryNode;
 import org.eclipse.gef4.geometry.planar.Ellipse;
@@ -53,7 +56,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 	/* not managed Child nodes needs its own region to be correctly displayed(TOFIX) */
 	// TODO Affixed node on a XY pane: Change bounds behaviors must be in charge to do the right placement ??
-	private final Pane affichedNodeRegion = new Pane();
+	private final Pane affixNodeRegion = new Pane();
 
 	public NodeContentPart(final Shape view) {
 		super(view);
@@ -62,17 +65,19 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	@Override
 	protected VBox doCreateVisual() {
 		final VBox vBox = new VBox();
+		// Affixed node
+		affixNodeRegion.setManaged(false);
+		vBox.getChildren().add(affixNodeRegion);
 
-		affichedNodeRegion.setManaged(false);
-		vBox.getChildren().add(affichedNodeRegion);
-
+		// add listener
+		vBox.boundsInParentProperty().addListener(boundsListener);
 		return vBox;
 	}
 
 	@Override
 	protected void doRefreshVisual(final VBox visual) {
 		super.doRefreshVisual(visual);
-		affichedNodeRegion.toFront();
+		affixNodeRegion.toFront();
 	}
 
 	@Override
@@ -129,7 +134,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 					// get the Label child
 					final Region label = (Region) ((Region) child.getVisual()).getChildrenUnmodifiable().get(0);
 					tabWidth = Math.max(label.getWidth() + childMargin.getLeft() + childMargin.getRight(), tabWidth);
-					tabHeight += ((Region) child.getVisual()).getHeight();
+					tabHeight += label.getHeight() + childMargin.getBottom() + childMargin.getTop();
 				}
 			}
 
@@ -188,7 +193,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 		// CornerBend
 		if (ShapeTypeEnum.CORNER_BEND_RECTANGLE.equals(getShapeType())) {
-			if (!cornerBend || resizing) {
+			if (!cornerBend || decorationToRefresh) {
 
 				for (int i = 0; i < region.getChildren().size(); i++) {
 					if (region.getChildren().get(i) instanceof CornerBendPath) {
@@ -202,13 +207,8 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 				cornerBendPath.setFill(getCornerBendColor());
 				// add it to children of region
 				region.getChildren().add(cornerBendPath);
+				cornerBendPath.toBack();// To back to permits the selection of childs(ie Labels..)
 				cornerBend = true;
-			} else {
-				for (int i = 0; i < region.getChildren().size(); i++) {
-					if (region.getChildren().get(i) instanceof CornerBendPath) {
-						region.getChildren().get(i).autosize();
-					}
-				}
 			}
 		} else if (cornerBend) {
 			// Delete cornerBend if exist
@@ -222,7 +222,8 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 		// If have double Line. For active Class for example
 		if (hasDoubleBorder() && null == region.getShape()) {
-			if (!doubleLine || resizing) {
+			// If double line are not already drawn
+			if (!doubleLine || decorationToRefresh) {
 
 				for (int i = 0; i < region.getChildren().size(); i++) {
 					if (region.getChildren().get(i) instanceof DoubleBorderPane) {
@@ -233,14 +234,8 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 				// Create the decoration
 				final DoubleBorderPane pane = new DoubleBorderPane(region, width, height, getBorderWidths(), getBorderStyles(), getBorderColors(), getDoubleBorderWidths());
 				region.getChildren().add(pane);
+				pane.toBack();// To back to permits the selection of childs(ie Labels..)
 				doubleLine = true; // TODO passe to true: needs to pass to false in case of resize.
-			} else {
-				// If resize
-				for (int i = 0; i < region.getChildren().size(); i++) {
-					if (region.getChildren().get(i) instanceof DoubleBorderPane) {
-						region.getChildren().get(i).autosize();
-					}
-				}
 			}
 		} else if (doubleLine) {
 			// Delete ActiveLine if exist
@@ -313,19 +308,49 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 	@Override
 	protected double getMinHeight() {
-		return 100;
+		// Add margin and padding
+		final Insets padding = getPadding();
+		double minHeight = padding.getTop() + padding.getBottom();
+
+		// gets for the minWidth of children
+		final double spacing = getSpacing();
+		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
+
+		for (final IVisualPart<Node, ? extends Node> visualPart : children) {
+			final Node childVisual = visualPart.getVisual();
+			if (childVisual.isVisible() && childVisual.isManaged() && childVisual instanceof Region) {
+				// add the minHeight of each child
+				minHeight += ((ContainerContentPart<?, ?>) visualPart).getMinHeight() + spacing;
+			}
+		}
+
+		return minHeight - spacing; // nbChild-1 of spacing
 	}
 
 	@Override
 	protected double getMinWidth() {
-		return 100;
+		double minWidth = 100;
+
+		// gets for the minWidth of children
+		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
+		for (final IVisualPart<Node, ? extends Node> visualPart : children) {
+			final Node childVisual = visualPart.getVisual();
+			if (childVisual.isManaged()) {
+				final Insets padding = getPadding();
+				// Get the maximum minWidth
+				minWidth = Math.max(minWidth, ((ContainerContentPart<?, ?>) visualPart).getMinWidth()
+						+ padding.getLeft() + padding.getRight()); // No margin for nodes
+			}
+		}
+
+		return minWidth;
 	}
 
 	@Override
 	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
 			if (child instanceof AffixedNodeContentPart) {
-				affichedNodeRegion.getChildren().add(child.getVisual());
+				affixNodeRegion.getChildren().add(child.getVisual());
 			} else {
 				getVisual().getChildren().add(child.getVisual());
 			}
@@ -339,7 +364,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 			return;
 		}
 		if (child instanceof AffixedNodeContentPart) {
-			affichedNodeRegion.getChildren().remove(child.getVisual());
+			affixNodeRegion.getChildren().remove(child.getVisual());
 		} else {
 			getVisual().getChildren().remove(childVisual);
 		}

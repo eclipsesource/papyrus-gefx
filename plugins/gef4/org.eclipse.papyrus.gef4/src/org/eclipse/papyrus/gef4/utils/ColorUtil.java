@@ -28,42 +28,43 @@ public class ColorUtil {
 	 *            the color
 	 * @return the hsl
 	 */
+	// TODO a hsl enum
 	public static List<Integer> getHsl(final Color color) {
 
-		final double r = color.getRed();
-		final double g = color.getGreen();
-		final double b = color.getBlue();
-		final double max = Math.max(Math.max(r, g), b);
-		final double min = Math.min(Math.min(r, g), b);
-		final double c = max - min;
+		final double red = color.getRed();
+		final double green = color.getGreen();
+		final double blue = color.getBlue();
+		final double max = Math.max(Math.max(red, green), blue);
+		final double min = Math.min(Math.min(red, green), blue);
+		final double delta = max - min;
 
 		double h_ = 0.f;
-		if (c == 0) {
+		if (delta == 0) {
 			h_ = 0;
-		} else if (max == r) {
-			h_ = (float) (g - b) / c;
+		} else if (max == red) {
+			h_ = (float) (green - blue) / delta;
 			if (h_ < 0)
 				h_ += 6.f;
-		} else if (max == g) {
-			h_ = (float) (b - r) / c + 2.f;
-		} else if (max == b) {
-			h_ = (float) (r - g) / c + 4.f;
+		} else if (max == green) {
+			h_ = (float) (blue - red) / delta + 2.f;
+		} else if (max == blue) {
+			h_ = (float) (red - green) / delta + 4.f;
 		}
-		final double h = 60.f * h_;
+		final double hue = 60.f * h_;
 
-		final double l = (max + min) * 0.5f;
+		final double lightness = (max + min) * 0.5f;
 
-		double s;
-		if (c == 0) {
-			s = 0.f;
+		double saturation;
+		if (delta == 0) {
+			saturation = 0.f;
 		} else {
-			s = c / (1 - Math.abs(2.f * l - 1.f));
+			saturation = delta / (1 - Math.abs(2.f * lightness - 1.f));
 		}
 
 		final List<Integer> hsl = new ArrayList<Integer>();
-		hsl.add((int) h);
-		hsl.add((int) (s * 100));
-		hsl.add((int) (l * 100));
+		hsl.add((int) hue);
+		hsl.add((int) (saturation * 100));
+		hsl.add((int) (lightness * 100));
 
 		return hsl;
 	}
@@ -126,7 +127,7 @@ public class ColorUtil {
 		final int r = (int) ((r_ + m) * (255.f) + 0.5f);
 		final int g = (int) ((g_ + m) * (255.f) + 0.5f);
 		final int b = (int) ((b_ + m) * (255.f) + 0.5f);
-		// return b << 16 | g << 8 | r;
+		
 		return getColor(b << 16 | g << 8 | r, opacity);
 
 	}

@@ -8,6 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Layout and visualization API and Implementation
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
@@ -15,15 +16,24 @@ package org.eclipse.papyrus.gef4.parts;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
+import org.eclipse.papyrus.gef4.utils.BoundsUtil;
+import org.eclipse.papyrus.gef4.utils.NotationUtil;
+import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
@@ -31,7 +41,7 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
 	private static double REM;
 
-	public static final double scale(int pixelSize) {
+	public static final double scale(final int pixelSize) {
 		if (REM < 0.01) {
 			REM = Math.rint(new Text("").getLayoutBounds().getHeight());
 		}
@@ -40,31 +50,73 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
 	private String currentImagePath;
 
-	public LabelContentPart(View view) {
+	private Label label;
+
+	public LabelContentPart(final View view) {
 		super(view);
 	}
 
 	@Override
 	protected StackPane doCreateVisual() {
-		StackPane content = new StackPane();
-		Label label = new Label();
-		refreshLabel(label);
-		refreshIcon(label);
+		final StackPane content = new StackPane();
+		content.boundsInParentProperty().addListener(boundsListener);// TODO remove listener
+		VBox.setVgrow(content, Priority.NEVER);
+		label = new Label();
 		content.getChildren().add(label);
+		label.setAlignment(Pos.TOP_CENTER);
+		refreshLabel();
+		refreshIcon();
+
 		return content;
 	}
 
 	@Override
-	protected void doRefreshVisual(StackPane visual) {
+	protected void doRefreshVisual(final StackPane visual) {
 		super.doRefreshVisual(visual);
-		refreshLabel((Label) visual.getChildren().get(0));
+		refreshLabel();
 		refreshTextAlignment();
 		refreshFont();
-		refreshIcon((Label) visual.getChildren().get(0));
+		refreshIcon();
 	}
 
-	protected void refreshIcon(Label label) {
-		String imagePath = getImagePath();
+	@Override
+	protected double getMinHeight() {
+		final Insets margin = getMargin();
+		final Insets padding = getPadding();
+
+		double minHeight = margin.getTop() + margin.getBottom() + padding.getTop() + padding.getBottom();
+
+		for (final Node child : label.getChildrenUnmodifiable()) {
+			if (child instanceof Text) {
+				minHeight += ((Text) child).getBoundsInParent().getHeight();
+			}
+		}
+		return minHeight;
+	}
+
+	@Override
+	protected double getMinWidth() {
+		final Insets margin = getMargin();
+		final Insets padding = getPadding();
+
+		double minWidth = margin.getLeft() + margin.getRight() + padding.getLeft() + padding.getRight();
+
+		// add text width if text overflow type is visible
+		if (TextOverflowEnum.VISIBLE.equals(getTextOverflow())) {
+			minWidth += BoundsUtil.getWidth(label);
+		}
+
+		return minWidth;
+	}
+
+	protected TextOverflowEnum getTextOverflow() {
+		// It the parent text overflow property which is take.
+		// TODO find how to select label from Label
+		return NotationUtil.getTextOverflow(((NotationContentPart<View, StackPane>) getParent()).getView());
+	}
+
+	protected void refreshIcon() {
+		final String imagePath = getImagePath();
 		if (imagePath == currentImagePath) {
 			return;
 		}
@@ -77,9 +129,9 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 		if (imagePath == null) {
 			label.setGraphic(null);
 		} else {
-			Image image = ImageRegistry.INSTANCE.getImage(imagePath);
+			final Image image = ImageRegistry.INSTANCE.getImage(imagePath);
 			if (image != null && !image.isError()) {
-				ImageView imageView = new ImageView(image);
+				final ImageView imageView = new ImageView(image);
 				label.setGraphic(imageView);
 			} else {
 				label.setGraphic(null);
@@ -88,21 +140,51 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 	}
 
 	protected String getImagePath() {
-		EObject semanticElement = getElement();
+		final EObject semanticElement = getElement();
 		if (semanticElement == null) {
 			return null;
 		}
-		return imagePath + "/" + semanticElement.eClass().getName() + ".gif";
+		return imagePath + "/" + semanticElement.eClass().getName() + ".gif";//$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	protected void refreshLabel(Label label) {
-		String text = getText();
-
+	protected void refreshLabel() {
+		final String text = getText();
 		label.setText(text == null ? "" : text.trim());
+		label.toFront();
+
+		// Refresh the Wrap property
+		if (TextOverflowEnum.WRAP.equals(getTextOverflow())) {
+			label.setWrapText(true);
+		} else {
+			label.setWrapText(false);
+		}
 	}
 
+
+	/**
+	 * Refresh text alignment.
+	 * //TODO: getText alignment of the parents if compartment ??
+	 */
 	protected void refreshTextAlignment() {
-		getVisual().setAlignment(getTextAlignment());
+		final Pos textAlignment = getTextAlignment();
+		getVisual().setAlignment(textAlignment);
+
+		// Set the text alignment in case of multi-line
+		switch (textAlignment) {
+		case CENTER_LEFT:
+			label.setTextAlignment(TextAlignment.LEFT);
+			break;
+		case TOP_CENTER:
+			label.setTextAlignment(TextAlignment.CENTER);
+			break;
+		case TOP_RIGHT:
+			label.setTextAlignment(TextAlignment.RIGHT);
+			break;
+
+		default:
+			label.setTextAlignment(TextAlignment.LEFT);
+			break;
+		}
 	}
 
 
@@ -120,12 +202,12 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 	}
 
 	protected void refreshFont() {
-		((Label) getVisual().getChildren().get(0)).setTextFill(Color.BLACK);
-		((Label) getVisual().getChildren().get(0)).setFont(Font.font("Segoe UI", FontWeight.NORMAL, scale(9)));
+		label.setTextFill(Color.BLACK);
+		label.setFont(Font.font("Segoe UI", FontWeight.NORMAL, scale(9)));
 	}
 
 	protected String getText() {
-		EObject element = getElement();
+		final EObject element = getElement();
 
 		return element.toString(); // TODO GMF-like label providers
 	}
@@ -134,5 +216,4 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 	protected String getStyleClass() {
 		return "genericLabel";
 	}
-
 }

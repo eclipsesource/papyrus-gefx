@@ -8,6 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Layout and visualization API and Implementation
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
@@ -15,6 +16,8 @@ package org.eclipse.papyrus.gef4.parts;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.View;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -22,19 +25,35 @@ import javafx.scene.layout.VBox;
 
 public abstract class ContainerContentPart<V extends View, R extends Region> extends NotationContentPart<V, R> {
 
-	protected ContainerContentPart(V view) {
+	protected ContainerContentPart(final V view) {
 		super(view);
 	}
 
+
+	protected final ChangeListener<? super javafx.geometry.Bounds> boundsListener = new ChangeListener<javafx.geometry.Bounds>() {
+
+		@Override
+		public void changed(final ObservableValue<? extends javafx.geometry.Bounds> observable, final javafx.geometry.Bounds oldValue, final javafx.geometry.Bounds newValue) {
+			if (!decorationToRefresh && (getHeight() != newValue.getHeight() || getWidth() != newValue.getWidth())) {
+				refreshShape();
+				decorationToRefresh = true;
+				refreshDecoration();
+				decorationToRefresh = false;
+			}
+		}
+
+	};
+
 	@Override
-	protected void doRefreshVisual(R visual) {
+	protected void doRefreshVisual(final R visual) {
+
 		super.doRefreshVisual(visual);
 
 		// resetStyle();
 
 		// Layout refresh
-		refreshBounds();
 		refreshLayout();
+		refreshBounds();
 
 		// Visual refresh
 		refreshShape();
@@ -83,17 +102,20 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 	}
 
 	protected void refreshBounds() {
-		R region = getVisual();
+		final R region = getVisual();
 
 		region.setLayoutX(getX());
 		region.setLayoutY(getY());
+		region.setMinWidth(getMinWidth());
+		region.setMinHeight(getMinHeight());
 
-		region.setMinHeight(getHeight());
-
-		region.setMinWidth(getWidth());
+		final Bounds bounds = getBounds();
+		if (null != bounds) {
+			region.setPrefWidth(bounds.getWidth());
+			region.setPrefHeight(bounds.getHeight());
+		}
+		region.autosize();
 	}
-
-
 
 	protected void refreshBackground() {
 		// Do nothing, the implementation is in charge to manage that.
@@ -121,16 +143,12 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 
 	@Override
 	protected double getHeight() {
-		Bounds bounds = getBounds();
-		double height = bounds == null ? 0 : bounds.getHeight();
-		return Math.max(height, getMinHeight());
+		return getVisual().getHeight();
 	}
 
 	@Override
 	protected double getWidth() {
-		Bounds bounds = getBounds();
-		double width = bounds == null ? 0 : bounds.getWidth();
-		return Math.max(width, getMinWidth());
+		return getVisual().getWidth();
 	}
 
 	protected double getMinHeight() {

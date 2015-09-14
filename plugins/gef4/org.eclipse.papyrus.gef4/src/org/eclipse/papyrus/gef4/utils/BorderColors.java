@@ -21,22 +21,23 @@ public final class BorderColors {
 
 
 	/** The top color. */
-	Color top;
+	private final Color top;
 
 	/** The right color. */
-	Color right;
+	private final Color right;
 
 	/** The bottom color. */
-	Color bottom;
+	private final Color bottom;
 
 	/** The left color. */
-	Color left;
+	private final Color left;
 
 	/** A BorderColors with all border set to {@link Color#BLACK}. */
 	public static final BorderColors BLACK = new BorderColors(Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK);
 
 	/** A BorderColors with all border set to {@link Color#TRANSPARENT}. */
 	public static final BorderColors TRANSPARENT = new BorderColors(Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT);
+
 	/**
 	 * Creates a new BorderColors using the given color for all four borders.
 	 *

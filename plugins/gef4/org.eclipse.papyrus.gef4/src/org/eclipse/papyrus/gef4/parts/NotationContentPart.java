@@ -8,7 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
- *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - shape customization
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Layout and visualization API and Implementation
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
@@ -43,6 +43,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.layout.BorderWidths;
@@ -148,7 +149,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	/** flag to indicate that the refresh have been triggered with a resize of the element. */
-	protected boolean resizing;
+	protected boolean decorationToRefresh;
 
 	protected Adapter createAdapter() {
 		return new AdapterImpl() {
@@ -162,12 +163,12 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 				// Resize case
 				if (msg.getFeature() == NotationPackage.Literals.SIZE__WIDTH || msg.getFeature() == NotationPackage.Literals.SIZE__HEIGHT) {
 					if (msg.getOldValue() != msg.getNewValue()) {
-						resizing = true;
+						decorationToRefresh = true;
 					} else {
-						resizing = false;
+						decorationToRefresh = false;
 					}
 				} else {
-					resizing = false;
+					decorationToRefresh = false;
 				}
 
 				if (!(msg.isTouch())) {
@@ -175,10 +176,8 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 						notifyChildrenChanged();
 					}
 					refreshVisual();
-					// reset resizing
-
 				}
-				resizing = false;
+				decorationToRefresh = false;
 			}
 		};
 	}
@@ -268,11 +267,11 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	@Override
 	protected void doActivate() {
 		installDefaultPolicies();
-		refreshChildren();
 		super.doActivate();
-		refreshChildren();
+		refreshChildren();// TODO
 	}
 
+	// TODO to remove if possible
 	protected void refreshChildren() {
 		// refresh children
 		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
@@ -469,6 +468,14 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return NotationUtil.getRotate(view);
 	}
 
+	protected ScrollBarPolicy getVerticalBarPolicy() {
+		return NotationUtil.getVerticalBarPolicy(view);
+	}
+
+	protected ScrollBarPolicy getHorizontalBarPolicy() {
+		return NotationUtil.getHorizontalBarPolicy(view);
+	}
+
 
 	protected IContentPartFactory<Node> getFactory() {
 		final IContentPartFactory<Node> factory = getViewer().getAdapter(new TypeToken<IContentPartFactory<Node>>() {
@@ -486,7 +493,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return getView().getChildren();
 	}
 
-	protected abstract String getStyleClass();
+	protected abstract String getStyleClass();// TODO support mutli styleClass named label should match on .genericLabel and .namedLabel
 
 }
 

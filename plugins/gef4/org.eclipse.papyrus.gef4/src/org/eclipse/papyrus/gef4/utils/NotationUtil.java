@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * @
+ * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *   
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
@@ -20,7 +20,6 @@ import org.eclipse.gmf.runtime.notation.FillStyle;
 import org.eclipse.gmf.runtime.notation.GradientStyle;
 import org.eclipse.gmf.runtime.notation.LineStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
-import org.eclipse.gmf.runtime.notation.StringValueStyle;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.infra.emf.appearance.helper.AppearanceHelper;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
@@ -30,6 +29,7 @@ import org.eclipse.papyrus.infra.gmfdiag.common.utils.PositionEnum;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.GaussianBlur;
@@ -51,11 +51,15 @@ import javafx.scene.paint.Paint;
 public class NotationUtil {
 
 
-	private static final String GRADIENT_COLOR = "gradientColor";
+	public static final String TEXT_OVERFLOW = "textOverflow";
 
 
 
-	private static final String SPACING = "spacing";
+	public static final String GRADIENT_COLOR = "gradientColor";
+
+
+
+	public static final String SPACING = "spacing";
 
 
 
@@ -63,27 +67,27 @@ public class NotationUtil {
 
 
 
-	private static final String SHAPE_TYPE = "shapeType";
+	public static final String SHAPE_TYPE = "shapeType";
 
 
 
-	private static final String ROTATE = "rotate";
+	public static final String ROTATE = "rotate";
 
 
 
-	private static final String PADDING = "padding";
+	public static final String PADDING = "padding";
 
 
 
-	private static final String MARGIN = "margin";
+	public static final String MARGIN = "margin";
 
 
 
-	private static final String BACKGROUND_COLOR = "backgroundColor";
+	public static final String BACKGROUND_COLOR = "backgroundColor";
 
 
 
-	private static final String EFFECT = "effect";
+	public static final String EFFECT = "effect";
 
 
 
@@ -91,39 +95,41 @@ public class NotationUtil {
 
 
 
-	private static final String CORNER_RADIUS = "cornerRadius";
+	public static final String CORNER_RADIUS = "cornerRadius";
 
 
 
-	private static final String CORNER_BEND_WIDTH = "cornerBendWidth";
+	public static final String CORNER_BEND_WIDTH = "cornerBendWidth";
 
 
 
-	private static final String CORNER_BEND_COLOR = "cornerBendColor";
+	public static final String CORNER_BEND_COLOR = "cornerBendColor";
 
 
 
-	private static final String BORDER_WIDTH = "borderWidth";
+	public static final String BORDER_WIDTH = "borderWidth";
 
 
 
-	private static final String LINE_DASH_GAP = "lineDashGap";
+	public static final String LINE_DASH_GAP = "lineDashGap";
 
 
 
-	private static final String LINE_DASH_LENGTH = "lineDashLength";
+	public static final String LINE_DASH_LENGTH = "lineDashLength";
 
 
 
-	private static final String BORDER_COLOR = "borderColor";
+	public static final String BORDER_COLOR = "borderColor";
 
 
 
-	private static final int[] DEFAULT_CUSTOM_DASH = new int[] { 5, 5 };
+	protected static final int[] DEFAULT_CUSTOM_DASH = new int[] { 5, 5 };
 
 
 
-	private static final String LIGHTNESS = "lightness";
+	public static final String LIGHTNESS = "lightness";
+
+
 	/**
 	 * The NamedStyle property to set the background paint.
 	 */
@@ -783,17 +789,17 @@ public class NotationUtil {
 	 */
 	public static Pos getTextAlignment(final View view) {
 		// get the value of the CSS property
-		final StringValueStyle labelAlignment = (StringValueStyle) view.getNamedStyle(NotationPackage.eINSTANCE.getStringValueStyle(), NamedStyleProperties.TEXT_ALIGNMENT);
+		final String labelAlignment = NotationUtils.getStringValue(view, NamedStyleProperties.TEXT_ALIGNMENT, null);
 
-		Pos textAlignment = Pos.BASELINE_CENTER;
+		Pos textAlignment = Pos.TOP_CENTER;
 		if (labelAlignment != null) {
-			if (PositionEnum.LEFT.toString().equals(labelAlignment.getStringValue())) {
-				textAlignment = Pos.BASELINE_LEFT;
-			}
-			if (PositionEnum.RIGHT.toString().equals(labelAlignment.getStringValue())) {
-				textAlignment = Pos.BASELINE_RIGHT;
-			}
-			if (PositionEnum.CENTER.toString().equals(labelAlignment.getStringValue())) {
+			if (PositionEnum.LEFT.toString().equals(labelAlignment)) {
+				textAlignment = Pos.TOP_LEFT;
+			} else
+				if (PositionEnum.RIGHT.toString().equals(labelAlignment)) {
+				textAlignment = Pos.TOP_RIGHT;
+			} else
+					if (PositionEnum.CENTER.toString().equals(labelAlignment)) {
 				textAlignment = Pos.BASELINE_CENTER;
 			}
 		}
@@ -813,4 +819,54 @@ public class NotationUtil {
 		return null != borderStyleList ? borderStyleList.contains(BorderStrokeStyleEnum.DOUBLE.getLiteral()) : false;
 	}
 
+	public static TextOverflowEnum getTextOverflow(final View view) {
+		TextOverflowEnum textOverflowEnum = null;
+
+		final String shapetype = NotationUtils.getStringValue(view, TEXT_OVERFLOW, null);
+		if (null != shapetype) {
+			textOverflowEnum = TextOverflowEnum.getByLiteral(shapetype);
+		}
+		return null != textOverflowEnum ? textOverflowEnum : TextOverflowEnum.HIDDEN;
+	}
+
+
+	public static ScrollBarPolicy getVerticalBarPolicy(final View view) {
+
+		final String verticalPolicy = NotationUtils.getStringValue(view, "verticalScrollBar", null);
+
+		ScrollBarPolicy scrollBarPolicy = ScrollBarPolicy.NEVER;
+		if (verticalPolicy != null) {
+			if ("always".equals(verticalPolicy)) {
+				scrollBarPolicy = ScrollBarPolicy.ALWAYS;
+			} else
+				if ("asNeeded".equals(verticalPolicy)) {
+				scrollBarPolicy = ScrollBarPolicy.AS_NEEDED;
+			} else
+					if ("never".equals(verticalPolicy)) {
+				scrollBarPolicy = ScrollBarPolicy.NEVER;
+			}
+		}
+		return scrollBarPolicy;
+
+	}
+
+
+	public static ScrollBarPolicy getHorizontalBarPolicy(final View view) {
+		final String verticalPolicy = NotationUtils.getStringValue(view, "horizontalScrollBar", null);
+
+		ScrollBarPolicy scrollBarPolicy = ScrollBarPolicy.NEVER;
+		if (verticalPolicy != null) {
+			if ("always".equals(verticalPolicy)) {
+				scrollBarPolicy = ScrollBarPolicy.ALWAYS;
+			} else
+				if ("asNeeded".equals(verticalPolicy)) {
+				scrollBarPolicy = ScrollBarPolicy.AS_NEEDED;
+			} else
+					if ("never".equals(verticalPolicy)) {
+				scrollBarPolicy = ScrollBarPolicy.NEVER;
+			}
+		}
+		return scrollBarPolicy;
+
+	}
 }

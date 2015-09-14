@@ -1,0 +1,4 @@
+/*the only way to set the background of the internal viewPort of scrollpane */
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}

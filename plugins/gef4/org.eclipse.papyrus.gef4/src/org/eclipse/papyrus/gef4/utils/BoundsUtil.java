@@ -20,11 +20,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class BoundsUtil {
-	public static final int getWidth(Node visual) {
+	public static final int getWidth(final Node visual) {
 		return (int) Math.round(visual.getLayoutBounds().getWidth());
 	}
 
-	public static final int getHeight(Node visual) {
+	public static final int getHeight(final Node visual) {
 		return (int) Math.round(visual.getLayoutBounds().getHeight());
 	}
 
@@ -35,13 +35,13 @@ public class BoundsUtil {
 	 *            the child node
 	 * @return the relative y position
 	 */
-	public static final int getRelativeY(Node visual) {
+	public static final int getRelativeY(final Node visual) {
 		int y = 0;
-		Parent parent = visual.getParent();
+		final Parent parent = visual.getParent();
 		if (parent instanceof VBox) {
-			ObservableList<Node> children = parent.getChildrenUnmodifiable();
-			Insets padding = ((VBox) parent).getPadding();
-			double spacing = ((VBox) parent).getSpacing();
+			final ObservableList<Node> children = parent.getChildrenUnmodifiable();
+			final Insets padding = ((VBox) parent).getPadding();
+			final double spacing = ((VBox) parent).getSpacing();
 
 			int i = 0;
 			Node child = children.get(i);
@@ -65,13 +65,13 @@ public class BoundsUtil {
 	 *            the child node
 	 * @return the relative x position
 	 */
-	public static final int getRelativeX(Node visual) {
+	public static final int getRelativeX(final Node visual) {
 		int x = 0;
-		Parent parent = visual.getParent();
+		final Parent parent = visual.getParent();
 		if (parent instanceof HBox) {
-			ObservableList<Node> children = parent.getChildrenUnmodifiable();
-			Insets padding = ((VBox) parent).getPadding();
-			double spacing = ((VBox) parent).getSpacing();
+			final ObservableList<Node> children = parent.getChildrenUnmodifiable();
+			final Insets padding = ((HBox) parent).getPadding();
+			final double spacing = ((HBox) parent).getSpacing();
 
 			int i = 0;
 			Node child = children.get(i);

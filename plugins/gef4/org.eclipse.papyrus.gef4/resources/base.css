@@ -11,6 +11,15 @@ Model{
 	textAlignment:left;
 }
 
+Package > Compartment,
+Model > Compartment{
+	borderWidth: 1 1 1 1;
+	borderColor: black;
+	padding : 0;
+	horizontalScrollBar:asNeeded;
+	verticalScrollBar:asNeeded;
+}
+
 Constraint,
 Comment{
 	shapeType:cornerBendRectangle;
@@ -19,7 +28,7 @@ Comment{
 /*==== TODO put on a umlBase.css ====*/
 ClassDiagram [isActive=true]{
 	borderStyle: solid double solid double;
-	doubleBorderWidth: 5 10 5 10;
+	doubleBorderWidth: 5;
 }
 
 ClassDiagram Compartment>Property{
@@ -28,6 +37,4 @@ ClassDiagram Compartment>Property{
 
 ClassDiagram Compartment>Operation{
 	textAlignment:left;
-}
-
 }
