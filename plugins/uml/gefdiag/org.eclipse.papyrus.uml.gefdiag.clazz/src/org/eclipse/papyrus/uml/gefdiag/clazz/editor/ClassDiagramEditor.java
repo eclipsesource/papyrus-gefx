@@ -7,8 +7,8 @@ import org.eclipse.papyrus.uml.gefdiag.clazz.module.ClassDiagramModule;
 import com.google.inject.Module;
 
 public class ClassDiagramEditor extends GEF4DiagramEditor {
-	
-	public static final String DIAGRAM_TYPE = "PapyrusGEF4ClassDiagram"; //$NON-NLS-1$
+
+	public static final String DIAGRAM_TYPE = "PapyrusUMLClassDiagram"; //$NON-NLS-1$
 
 	public ClassDiagramEditor(Diagram diagram) {
 		super(diagram);
