@@ -7,7 +7,7 @@ public class VisualPartProvider extends org.eclipse.papyrus.gef4.provider.Abstra
 		switch(view.getType()) {
 		case "5020":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ModelNameEditPartTN((org.eclipse.gmf.runtime.notation.View)view);
-		case "PapyrusGEF4ClassDiagram":
+		case "PapyrusUMLClassDiagram":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ModelEditPart((org.eclipse.gmf.runtime.notation.Diagram)view);
 		case "5023":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.EnumerationNameEditPart((org.eclipse.gmf.runtime.notation.View)view);
