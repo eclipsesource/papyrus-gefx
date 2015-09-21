@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.gef4.fx.ui.canvas.FXCanvasEx;
+import org.eclipse.gef4.fx.swt.canvas.FXCanvasEx;
 import org.eclipse.gef4.mvc.domain.IDomain;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.models.ContentModel;
@@ -48,7 +48,7 @@ import javafx.scene.Scene;
 
 public abstract class GEFEditor extends EditorPart implements PropertyChangeListener {
 
-	private Diagram diagram;
+	private final Diagram diagram;
 
 	private IRootPart<Node, ? extends Node> rootPart;
 
@@ -67,14 +67,14 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 
 	private Scene scene;
 
-	public GEFEditor(Diagram diagram) {
+	public GEFEditor(final Diagram diagram) {
 		this.diagram = diagram;
-		Injector injector = Guice.createInjector(createModule());
+		final Injector injector = Guice.createInjector(createModule());
 		injector.injectMembers(this);
 	}
 
 	@Override
-	public void doSave(IProgressMonitor monitor) {
+	public void doSave(final IProgressMonitor monitor) {
 		// Nothing (Handled by the MultiDiagramEditor)
 	}
 
@@ -84,7 +84,7 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		this.setSite(site);
 		this.setInput(input);
 	}
@@ -107,7 +107,7 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		viewer = getDomain().getAdapter(IViewer.class);
 		rootPart = viewer.getRootPart();
 		if (rootPart instanceof DiagramRootPart) {
@@ -134,7 +134,7 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 
 		// viewer.getScene().setFill(Color.ALICEBLUE);
 
-		GridModel gridModel = viewer.getAdapter(GridModel.class);
+		final GridModel gridModel = viewer.getAdapter(GridModel.class);
 		gridModel.setShowGrid(false);
 		gridModel.setSnapToGrid(false);
 
@@ -174,11 +174,11 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
 		case SelectionModel.SELECTION_PROPERTY:
-			List<?> oldSelection = (List<?>) evt.getOldValue();
-			List<?> selectedElements = (List<?>) evt.getNewValue();
+			final List<?> oldSelection = (List<?>) evt.getOldValue();
+			final List<?> selectedElements = (List<?>) evt.getNewValue();
 
 			IStructuredSelection selection;
 			if (selectedElements.size() > 0) {

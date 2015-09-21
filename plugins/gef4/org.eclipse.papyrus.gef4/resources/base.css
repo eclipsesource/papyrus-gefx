@@ -25,6 +25,11 @@ Comment{
 	shapeType:cornerBendRectangle;
 }
 
+[kind=FloatingLabel]{
+    visible:false;
+    textOverflow:visible;
+}
+
 /*==== TODO put on a umlBase.css ====*/
 ClassDiagram [isActive=true]{
 	borderStyle: solid double solid double;
@@ -38,3 +43,14 @@ ClassDiagram Compartment>Property{
 ClassDiagram Compartment>Operation{
 	textAlignment:left;
 }
+
+ClassDiagram DurationObservation>Label{
+	visible:true;
+}
+
+ClassDiagram DurationObservation > [kind=FloatingLabel],
+ClassDiagram TimeObservation > [kind=FloatingLabel]{
+    visible:true;
+    textAlignment:left;
+}
+

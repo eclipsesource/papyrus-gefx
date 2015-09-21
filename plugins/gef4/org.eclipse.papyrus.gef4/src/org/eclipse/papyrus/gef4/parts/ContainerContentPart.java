@@ -151,11 +151,11 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 		return getVisual().getWidth();
 	}
 
-	protected double getMinHeight() {
+	public double getMinHeight() {
 		return 0;
 	}
 
-	protected double getMinWidth() {
+	public double getMinWidth() {
 		return 0;
 	}
 

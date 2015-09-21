@@ -8,6 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - add Affixed Label Move On Drag Policy
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.module;
@@ -46,9 +47,11 @@ import org.eclipse.papyrus.gef4.editor.Palette;
 import org.eclipse.papyrus.gef4.editor.ViewerSelectionProvider;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
+import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.policies.AffixedLabelMoveOnDragPolicy;
 import org.eclipse.papyrus.gef4.policies.FocusAndSelectOnClickPolicy;
 import org.eclipse.papyrus.gef4.policies.MarqueeOnDragPolicy;
 import org.eclipse.papyrus.gef4.policies.MoveOnDragPolicy;
@@ -67,7 +70,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 	protected final Diagram diagram;
 
-	public GEFFxModule(Diagram diagram) {
+	public GEFFxModule(final Diagram diagram) {
 		this.diagram = diagram;
 	}
 
@@ -79,7 +82,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 	// }
 
 	@Override
-	protected void bindFXViewerAdapters(com.google.inject.multibindings.MapBinder<org.eclipse.gef4.common.adapt.AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindFXViewerAdapters(final com.google.inject.multibindings.MapBinder<org.eclipse.gef4.common.adapt.AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindFXViewerAdapters(adapterMapBinder);
 
 		adapterMapBinder.addBinding(AdapterKey.get(ChangeBoundsModel.class))
@@ -87,7 +90,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	@Override
-	protected void bindAbstractFXContentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindAbstractFXContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindAbstractFXContentPartAdapters(adapterMapBinder);
 
 		adapterMapBinder.addBinding(AdapterKey.get(ChangeBoundsBehavior.class))
@@ -95,7 +98,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	@Override
-	protected void bindFXRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindFXRootPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
 				.addBinding(
 						AdapterKey.get(FXClickDragTool.CLICK_TOOL_POLICY_KEY))
@@ -131,7 +134,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.to(FXViewportBehavior.class);
 	}
 
-	protected void bindFXHandlePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
 				.addBinding(AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY)).to(ResizeOnDragPolicy.class);
 	}
@@ -150,7 +153,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.in(AdaptableScopes.typed(FXViewer.class));
 	}
 
-	protected void bindContentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
 				.addBinding(
 						AdapterKey.get(FXClickDragTool.CLICK_TOOL_POLICY_KEY))
@@ -176,8 +179,13 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.to(VisualBoundsGeometryProvider.class);
 	}
 
+	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 
-	protected void bindDiagramPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(
+				AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY, "AffixedLabel")).to(AffixedLabelMoveOnDragPolicy.class);//$NON-NLS-1$
+	}
+
+	protected void bindDiagramPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		// adapterMapBinder
 		// .addBinding(
 		// AdapterKey
@@ -221,7 +229,11 @@ public abstract class GEFFxModule extends MvcFxModule {
 		// bind selection provider
 		bindSelectionProvider();
 
+
 		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), NotationContentPart.class));
+
+		// define specific policy for affixed Label
+		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
 
 		bindDiagramPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class));
 

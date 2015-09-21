@@ -12,10 +12,11 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.parts;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
+import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
+import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
-import org.eclipse.uml2.uml.NamedElement;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
@@ -24,6 +25,8 @@ import javafx.scene.layout.StackPane;
  * The Class NamedElementLabelContentPart.
  */
 public class NamedElementLabelContentPart extends LabelContentPart {
+
+	private IParser parser;
 
 	/**
 	 * Instantiates a new named element label content part.
@@ -35,7 +38,6 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 		super(view);
 	}
 
-
 	/**
 	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#getText()
 	 *
@@ -43,12 +45,9 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 	 */
 	@Override
 	protected String getText() {
-		final EObject element = getElement();
-		if (element instanceof NamedElement) {
-			return ((NamedElement) element).getName();
-		}
-		return super.getText();
+		return getParser().getEditString(new EObjectAdapter(view.getElement() != null ? view.getElement() : view), ParserOptions.NONE.intValue());
 	}
+
 
 	/**
 	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#doRefreshVisual(javafx.scene.layout.StackPane)
@@ -86,7 +85,7 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 	 * @return
 	 */
 	@Override
-	protected double getMinHeight() {
+	public double getMinHeight() {
 		return getHeight() + getMargin().getTop() + getMargin().getBottom();
 	}
 

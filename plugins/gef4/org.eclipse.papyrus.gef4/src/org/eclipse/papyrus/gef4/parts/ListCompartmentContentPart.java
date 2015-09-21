@@ -138,7 +138,7 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Compar
 	 * @see org.eclipse.papyrus.gef4.parts.ContainerContentPart#getMinWidth()
 	 */
 	@Override
-	protected double getMinWidth() {
+	public double getMinWidth() {
 		double minWidth = -1;
 
 		// gets for the minWidth of children
@@ -164,7 +164,7 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Compar
 	 * @see org.eclipse.papyrus.gef4.parts.CompartmentContentPart#getMinHeight()
 	 */
 	@Override
-	protected double getMinHeight() {
+	public double getMinHeight() {
 		double minheight = 10;
 
 		// If there is no scroll bar

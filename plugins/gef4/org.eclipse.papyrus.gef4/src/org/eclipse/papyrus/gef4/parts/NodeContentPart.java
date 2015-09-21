@@ -38,7 +38,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.CycleMethod;
@@ -54,10 +53,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	/** indicate if the double line decoration is set. */
 	private boolean doubleLine;
 
-	/* not managed Child nodes needs its own region to be correctly displayed(TOFIX) */
-	// TODO Affixed node on a XY pane: Change bounds behaviors must be in charge to do the right placement ??
-	private final Pane affixNodeRegion = new Pane();
-
 	public NodeContentPart(final Shape view) {
 		super(view);
 	}
@@ -65,9 +60,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	@Override
 	protected VBox doCreateVisual() {
 		final VBox vBox = new VBox();
-		// Affixed node
-		affixNodeRegion.setManaged(false);
-		vBox.getChildren().add(affixNodeRegion);
 
 		// add listener
 		vBox.boundsInParentProperty().addListener(boundsListener);
@@ -77,7 +69,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	@Override
 	protected void doRefreshVisual(final VBox visual) {
 		super.doRefreshVisual(visual);
-		affixNodeRegion.toFront();
 	}
 
 	@Override
@@ -255,7 +246,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	 * @return the padding
 	 * @see org.eclipse.papyrus.gef4.parts.NotationContentPart#getPadding()
 	 */
-	// TODO TEST
 	@Override
 	protected Insets getPadding() {
 		final Insets padding = super.getPadding();
@@ -307,7 +297,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	}
 
 	@Override
-	protected double getMinHeight() {
+	public double getMinHeight() {
 		// Add margin and padding
 		final Insets padding = getPadding();
 		double minHeight = padding.getTop() + padding.getBottom();
@@ -324,12 +314,13 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 			}
 		}
 
-		return minHeight - spacing; // nbChild-1 of spacing
+		return Math.max(20, minHeight - spacing); // nbChild-1 of spacing
 	}
 
 	@Override
-	protected double getMinWidth() {
-		double minWidth = 100;
+	public double getMinWidth() {
+		//20 is the port size.
+		double minWidth = 20; // TODO find an other way to define 100: port are nodeContent and is 20 min width, set it throw CSS??
 
 		// gets for the minWidth of children
 		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
@@ -349,11 +340,11 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	@Override
 	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
-			if (child instanceof AffixedNodeContentPart) {
-				affixNodeRegion.getChildren().add(child.getVisual());
-			} else {
-				getVisual().getChildren().add(child.getVisual());
+			if (child instanceof AffixedNodeContentPart || child instanceof AffixedLabelContentPart) {
+				child.getVisual().setManaged(false);
+				child.getVisual().toFront();
 			}
+			getVisual().getChildren().add(child.getVisual());
 		}
 	}
 
@@ -363,11 +354,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 		if (childVisual == null) {
 			return;
 		}
-		if (child instanceof AffixedNodeContentPart) {
-			affixNodeRegion.getChildren().remove(child.getVisual());
-		} else {
-			getVisual().getChildren().remove(childVisual);
-		}
+		getVisual().getChildren().remove(childVisual);
 	}
 
 	@Override

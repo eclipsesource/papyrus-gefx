@@ -30,7 +30,7 @@ class AffixedLabelEditPartEmitter extends AbstractEditPartEmitter {
 	'''
 	
 	override getExtended(List<Object> arguments) '''
-	 extends org.eclipse.papyrus.gef4.parts.LabelContentPart
+	 extends org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart
 	'''
 	
 

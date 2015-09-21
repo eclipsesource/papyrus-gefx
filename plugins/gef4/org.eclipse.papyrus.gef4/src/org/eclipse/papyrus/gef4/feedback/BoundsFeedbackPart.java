@@ -8,17 +8,21 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - add absolute bounds.
+ *  
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.feedback;
 
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXFeedbackPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
+import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.EffectsUtil;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -26,17 +30,42 @@ public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
 
 	private final IVisualPart<Node, ? extends Node> host;
 
-	private Bounds newBounds;
+	private Bounds newBounds;// Absolute bounds
 
-	public BoundsFeedbackPart(IVisualPart<Node, ? extends Node> host, Bounds newBounds) {
+	/**
+	 * Instantiates a new bounds feedback part.
+	 *
+	 * @param host
+	 *            the host
+	 * @param newBounds
+	 *            the new bounds in relative.
+	 */
+	public BoundsFeedbackPart(final IVisualPart<Node, ? extends Node> host, final Bounds newBounds) {
 		this.host = host;
+
+		newBounds.setX(BoundsUtil.getAbsoluteX(host) + getDeltaX(newBounds));
+		newBounds.setY(BoundsUtil.getAbsoluteY(host) + getDeltaY(newBounds));
+
 		this.newBounds = newBounds;
 	}
 
 	// Update feedback while resizing or moving
-	public void updateBounds(Bounds newBounds) {
+	public void updateBounds(final Bounds newBounds) {
+
+		newBounds.setX(BoundsUtil.getAbsoluteX(host) + getDeltaX(newBounds));
+		newBounds.setY(BoundsUtil.getAbsoluteY(host) + getDeltaY(newBounds));
+
 		this.newBounds = newBounds;
+
 		refreshVisual();
+	}
+
+	protected int getDeltaY(final Bounds newBounds) {
+		return (int) (newBounds.getY() - host.getVisual().getLayoutY());
+	}
+
+	protected int getDeltaX(final Bounds newBounds) {
+		return (int) (newBounds.getX() - host.getVisual().getLayoutX());
 	}
 
 	@Override
@@ -49,7 +78,7 @@ public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
 	}
 
 	@Override
-	protected void doRefreshVisual(Rectangle visual) {
+	protected void doRefreshVisual(final Rectangle visual) {
 		visual.setManaged(false);
 		visual.setFill(Color.TRANSPARENT);
 		visual.setStroke(Color.BLACK);
@@ -61,22 +90,15 @@ public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
 		visual.setEffect(EffectsUtil.BOUNDS_FEEDBACK_EFFECT);
 
 		if (newBounds.getHeight() > 0) {
-			visual.setHeight(newBounds.getHeight());
+			visual.setHeight(Math.max(newBounds.getHeight(), ((Region) host.getVisual()).getMinHeight()));
 		}
 
 		if (newBounds.getWidth() > 0) {
-			visual.setWidth(newBounds.getWidth());
-		} else {
-			visual.setWidth(100); // FIXME use host bounds
+			visual.setWidth(Math.max(newBounds.getWidth(), ((Region) host.getVisual()).getMinWidth()));
 		}
 
-		if (newBounds.getHeight() > 0) {
-			visual.setHeight(newBounds.getHeight());
-		} else {
-			visual.setHeight(100); // FIXME use host bounds
-		}
-
-		// Bounds
+		// refresh rotate
+		visual.setRotate(host.getVisual().getRotate());
 
 	}
 
@@ -84,7 +106,7 @@ public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
 	protected void doDeactivate() {
 		// FIXME we shouldn't need to "deactivate" the effect manually to remove the visual.
 		// Where should this be done? AbstractFeedback seems to work with Anchorage/Anchored. Does it make sense for this case?
-		Parent p = getVisual().getParent();
+		final Parent p = getVisual().getParent();
 		if (p instanceof Group) {
 			((Group) p).getChildren().remove(getVisual());
 		}

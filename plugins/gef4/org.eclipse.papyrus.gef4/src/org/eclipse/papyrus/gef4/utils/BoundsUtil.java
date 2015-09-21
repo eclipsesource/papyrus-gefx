@@ -12,6 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
+import org.eclipse.gef4.mvc.parts.IRootPart;
+import org.eclipse.gef4.mvc.parts.IVisualPart;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -26,6 +29,48 @@ public class BoundsUtil {
 
 	public static final int getHeight(final Node visual) {
 		return (int) Math.round(visual.getLayoutBounds().getHeight());
+	}
+
+	/**
+	 * Gets the absolute x.
+	 *
+	 * @param host
+	 *            the host
+	 * @return the absolute x
+	 */
+	public static final int getAbsoluteX(final IVisualPart<?, ?> host) {
+
+		int x = (int) ((Node) host.getVisual()).getLayoutX();
+		final IRootPart<?, ?> root = host.getRoot();
+
+		IVisualPart<?, ?> parent = host.getParent();
+		while (!root.equals(parent)) {
+			x += ((Node) parent.getVisual()).getLayoutX();
+			parent = parent.getParent();
+		}
+
+		return x;
+	}
+
+	/**
+	 * Gets the absolute y.
+	 *
+	 * @param host
+	 *            the host
+	 * @return the absolute y
+	 */
+	public static final int getAbsoluteY(final IVisualPart<?, ?> host) {
+
+		int y = (int) ((Node) host.getVisual()).getLayoutY();
+		final IRootPart<?, ?> root = host.getRoot();
+
+		IVisualPart<?, ?> parent = host.getParent();
+		while (!root.equals(parent)) {
+			y += ((Node) parent.getVisual()).getLayoutY();
+			parent = parent.getParent();
+		}
+
+		return y;
 	}
 
 	/**

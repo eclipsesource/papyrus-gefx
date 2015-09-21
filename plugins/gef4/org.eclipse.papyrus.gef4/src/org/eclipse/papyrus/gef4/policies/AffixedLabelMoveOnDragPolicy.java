@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
@@ -25,6 +25,7 @@ import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
+import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
@@ -40,33 +41,90 @@ import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
-public class MoveOnDragPolicy extends AbstractFXOnDragPolicy {
+/**
+ * The Class AffixedLabelMoveOnDragPolicy.
+ */
+public class AffixedLabelMoveOnDragPolicy extends AbstractFXOnDragPolicy {
 
+	/**
+	 * Called on Drag.
+	 *
+	 * @param e
+	 *            the e
+	 * @param delta
+	 *            the delta
+	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#drag(javafx.scene.input.MouseEvent, org.eclipse.gef4.geometry.planar.Dimension)
+	 */
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
+
 
 		propagate(e, delta, policy -> policy.drag(e, delta));
 
 		// Nothing
 		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
-		final Bounds newBounds = computeNewBounds(getBounds(), delta);
+
+		//
+		final Bounds bounds = NotationFactory.eINSTANCE.createBounds();
+		final Location location = getLocation();
+		if (null != location) {
+			bounds.setX(location.getX());
+			bounds.setY(location.getY());
+		}
+
+		final Location newLocation = computeNewLocation(bounds, delta);
+
+		final Node visual = getPrimaryHost().getVisual();
+
+		final Bounds newBounds = NotationFactory.eINSTANCE.createBounds();
+
+		newBounds.setX(newLocation.getX());
+		newBounds.setY(newLocation.getY());
+
+		newBounds.setWidth(BoundsUtil.getWidth(visual));
+		newBounds.setHeight(BoundsUtil.getHeight(visual));
 
 		if (null != newBounds) {
 			boundsModel.addManagedElement(getPrimaryHost(), newBounds);
 		}
+
 	}
 
 
 
+	/**
+	 * Called on Press.
+	 *
+	 * @param e
+	 *            the e
+	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#press(javafx.scene.input.MouseEvent)
+	 */
 	@Override
 	public void press(final MouseEvent e) {
 		// Nothing
 	}
 
+	/**
+	 * coverte the position from double to pixels.
+	 *
+	 * @param pos
+	 *            the pos
+	 * @return the int
+	 */
 	protected final int toPixels(final double pos) {
 		return (int) Math.round(pos);
 	}
 
+	/**
+	 * Propagate the event. //TODO to verify
+	 *
+	 * @param e
+	 *            the e
+	 * @param delta
+	 *            the delta
+	 * @param actionToPropagate
+	 *            the action to propagate
+	 */
 	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<AbstractFXOnDragPolicy> actionToPropagate) {
 		final SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(SelectionModel.class);
 
@@ -88,6 +146,15 @@ public class MoveOnDragPolicy extends AbstractFXOnDragPolicy {
 		}
 	}
 
+	/**
+	 * Called on Release.
+	 *
+	 * @param e
+	 *            the e
+	 * @param delta
+	 *            the delta
+	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#release(javafx.scene.input.MouseEvent, org.eclipse.gef4.geometry.planar.Dimension)
+	 */
 	@Override
 	public void release(final MouseEvent e, final Dimension delta) {
 
@@ -96,27 +163,42 @@ public class MoveOnDragPolicy extends AbstractFXOnDragPolicy {
 		propagate(e, delta, policy -> policy.release(e, delta));
 
 		// Own behavior
-
 		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
 
-		final Bounds bounds = getBounds();
+		Location location = getLocation();
+		if (null == location) {
+			//If Constraint doesn't exit create it.
+			location = NotationFactory.eINSTANCE.createLocation();
+			final View hostView = NotationHelper.findView(getHost());
+			if (hostView instanceof org.eclipse.gmf.runtime.notation.Node) {
+				final SetRequest setRequest = new SetRequest(hostView, NotationPackage.Literals.NODE__LAYOUT_CONSTRAINT, location);
 
-		final Bounds newBounds = computeNewBounds(bounds, delta);
-		if (bounds == null || newBounds == null) {
+				final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(hostView);
+				if (provider != null) {
+					final CompositeCommand command = new CompositeCommand("Create Constraint");
+					command.add(provider.getEditCommand(setRequest));
+					AdapterFactoryEditingDomain.getEditingDomainFor(hostView).getCommandStack().execute(new GMFtoEMFCommandWrapper(command));
+				}
+
+			}
+		}
+		final Location newLocation = computeNewLocation(location, delta);
+
+		if (location == null || newLocation == null) {
 			boundsModel.removeManagedElement(getPrimaryHost());
 			return;
 		}
 
-		final SetRequest setXRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__X, newBounds.getX());
-		final SetRequest setYRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__Y, newBounds.getY());
+		final SetRequest setXRequest = new SetRequest(location, NotationPackage.Literals.LOCATION__X, newLocation.getX());
+		final SetRequest setYRequest = new SetRequest(location, NotationPackage.Literals.LOCATION__Y, newLocation.getY());
 
-		final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(bounds);
+		final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(location);
 		if (provider != null) {
 			final CompositeCommand moveCommand = new CompositeCommand("Move element");
 			moveCommand.add(provider.getEditCommand(setXRequest));
 			moveCommand.add(provider.getEditCommand(setYRequest));
 
-			AdapterFactoryEditingDomain.getEditingDomainFor(bounds).getCommandStack().execute(new GMFtoEMFCommandWrapper(moveCommand));
+			AdapterFactoryEditingDomain.getEditingDomainFor(location).getCommandStack().execute(new GMFtoEMFCommandWrapper(moveCommand));
 		}
 
 		try {
@@ -126,12 +208,21 @@ public class MoveOnDragPolicy extends AbstractFXOnDragPolicy {
 		}
 	}
 
-	protected Bounds computeNewBounds(final Bounds currentBounds, final Dimension delta) {
-		if (currentBounds == null || delta == null) {
+	/**
+	 * Compute new location.
+	 *
+	 * @param currentLocation
+	 *            the current location
+	 * @param delta
+	 *            the delta
+	 * @return the location
+	 */
+	protected Location computeNewLocation(final Location currentLocation, final Dimension delta) {
+		if (currentLocation == null || delta == null) {
 			return null;
 		}
 
-		final Bounds newBounds = NotationFactory.eINSTANCE.createBounds();
+		final Location newLocation = NotationFactory.eINSTANCE.createLocation();
 
 		final int xOffset = toPixels(delta.getWidth());
 		final int yOffset = toPixels(delta.getHeight());
@@ -140,17 +231,18 @@ public class MoveOnDragPolicy extends AbstractFXOnDragPolicy {
 			return null;
 		}
 
-		newBounds.setX(currentBounds.getX() + xOffset);
-		newBounds.setY(currentBounds.getY() + yOffset);
+		newLocation.setX(currentLocation.getX() + xOffset);
+		newLocation.setY(currentLocation.getY() + yOffset);
 
-		final Node visual = getPrimaryHost().getVisual();
 
-		newBounds.setWidth(BoundsUtil.getWidth(visual));
-		newBounds.setHeight(BoundsUtil.getHeight(visual));
-
-		return newBounds;
+		return newLocation;
 	}
 
+	/**
+	 * Gets the primary host.
+	 *
+	 * @return the primary host
+	 */
 	protected IVisualPart<Node, ? extends Node> getPrimaryHost() {
 		IVisualPart<Node, ? extends Node> host = getHost();
 		if (host instanceof NotationContentPart) {
@@ -159,7 +251,26 @@ public class MoveOnDragPolicy extends AbstractFXOnDragPolicy {
 		return host;
 	}
 
-	protected Bounds getBounds() {
+	/**
+	 * Gets the location.
+	 *
+	 * @return the location
+	 */
+	protected Location getLocation() {
+		// For label case which return location
+		final LayoutConstraint layout = getLayoutConstraint();
+		if (layout instanceof Location) {
+			return (Location) layout;
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the layout constraint.
+	 *
+	 * @return the layout constraint
+	 */
+	protected LayoutConstraint getLayoutConstraint() {
 		final IVisualPart<?, ?> host = getPrimaryHost();
 
 		if (host == null) {
@@ -168,13 +279,10 @@ public class MoveOnDragPolicy extends AbstractFXOnDragPolicy {
 
 		final View hostView = NotationHelper.findView(host);
 		if (hostView instanceof org.eclipse.gmf.runtime.notation.Node) {
-			final LayoutConstraint layout = ((org.eclipse.gmf.runtime.notation.Node) hostView).getLayoutConstraint();
-			if (layout instanceof Bounds) {
-				return (Bounds) layout;
-			}
+			return ((org.eclipse.gmf.runtime.notation.Node) hostView).getLayoutConstraint();
 		}
-
 		return null;
+
 	}
 
 }

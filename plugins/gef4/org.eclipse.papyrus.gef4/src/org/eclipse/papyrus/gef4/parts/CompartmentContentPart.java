@@ -34,6 +34,8 @@ import javafx.scene.shape.Shape;
 
 abstract public class CompartmentContentPart<V extends DecorationNode, R extends Region> extends ContainerContentPart<V, Region> {
 
+	protected static final int MINIMUM_COMPARTMENT_HEIGHT = 15;
+
 	public CompartmentContentPart(final V view) {
 		super(view);
 	}
@@ -110,8 +112,8 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 	}
 
 	@Override
-	protected double getMinHeight() {
-		return 10;
+	public double getMinHeight() {
+		return MINIMUM_COMPARTMENT_HEIGHT;
 	}
 
 	@Override

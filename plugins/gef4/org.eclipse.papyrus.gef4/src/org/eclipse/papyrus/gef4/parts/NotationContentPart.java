@@ -30,6 +30,8 @@ import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.FillStyle;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
+import org.eclipse.gmf.runtime.notation.Location;
+import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
@@ -235,7 +237,16 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		final LayoutConstraint constraint = getLayout();
 		if (constraint instanceof Bounds) {
 			return (Bounds) constraint;
+		} else if (constraint instanceof Location) {
+			final Bounds bounds = NotationFactory.eINSTANCE.createBounds();
+			bounds.setX(((Location) constraint).getX());
+			bounds.setY(((Location) constraint).getY());
+			bounds.setWidth(-1);
+			bounds.setHeight(-1);
+
+			return bounds;
 		}
+
 		return null;
 	}
 

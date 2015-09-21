@@ -24,7 +24,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.papyrus.infra.emf;bundle-version="1.1.0",
  org.eclipse.papyrus.infra.gmfdiag.commands;bundle-version="1.1.0",
  org.eclipse.papyrus.infra.emf.appearance;bundle-version="1.1.0",
- org.eclipse.papyrus.infra.gmfdiag.css;bundle-version="1.1.0"
+ org.eclipse.papyrus.infra.gmfdiag.css;bundle-version="1.1.0",
+ org.eclipse.gef4.fx.swt
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.papyrus.gef4.behavior,
@@ -38,3 +39,4 @@ Export-Package: org.eclipse.papyrus.gef4.behavior,
  org.eclipse.papyrus.gef4.provider,
  org.eclipse.papyrus.gef4.shapes,
  org.eclipse.papyrus.gef4.utils
+Import-Package: org.eclipse.papyrus.uml.diagram.common.parser

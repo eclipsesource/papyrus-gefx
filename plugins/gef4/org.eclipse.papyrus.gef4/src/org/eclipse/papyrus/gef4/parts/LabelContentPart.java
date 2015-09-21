@@ -14,15 +14,17 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
+import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
-import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;
+import org.eclipse.papyrus.infra.gmfdiag.common.commands.SemanticAdapter;
+import org.eclipse.papyrus.uml.diagram.common.parser.NamedElementLabelParser;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,6 +39,8 @@ import javafx.scene.text.TextAlignment;
 
 public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
+	protected IParser parser;
+
 	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
 
 	private static double REM;
@@ -50,7 +54,7 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
 	private String currentImagePath;
 
-	private Label label;
+	protected Label label;
 
 	public LabelContentPart(final View view) {
 		super(view);
@@ -62,12 +66,25 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 		content.boundsInParentProperty().addListener(boundsListener);// TODO remove listener
 		VBox.setVgrow(content, Priority.NEVER);
 		label = new Label();
+		VBox.setVgrow(label, Priority.NEVER);
 		content.getChildren().add(label);
-		label.setAlignment(Pos.TOP_CENTER);
 		refreshLabel();
 		refreshIcon();
-
+		content.toFront();
 		return content;
+	}
+
+	/**
+	 *
+	 * @see org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart#getParser()
+	 *
+	 */
+	// TODO to be override at generation to set the good parser or get it directly on gmfgen model
+	public IParser getParser() {
+		if (parser == null) {
+			parser = new NamedElementLabelParser();
+		}
+		return parser;
 	}
 
 	@Override
@@ -80,22 +97,17 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 	}
 
 	@Override
-	protected double getMinHeight() {
+	public double getMinHeight() {
 		final Insets margin = getMargin();
 		final Insets padding = getPadding();
 
 		double minHeight = margin.getTop() + margin.getBottom() + padding.getTop() + padding.getBottom();
-
-		for (final Node child : label.getChildrenUnmodifiable()) {
-			if (child instanceof Text) {
-				minHeight += ((Text) child).getBoundsInParent().getHeight();
-			}
-		}
+		minHeight += label.getLayoutBounds().getHeight();
 		return minHeight;
 	}
 
 	@Override
-	protected double getMinWidth() {
+	public double getMinWidth() {
 		final Insets margin = getMargin();
 		final Insets padding = getPadding();
 
@@ -103,16 +115,20 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
 		// add text width if text overflow type is visible
 		if (TextOverflowEnum.VISIBLE.equals(getTextOverflow())) {
-			minWidth += BoundsUtil.getWidth(label);
+			//Create a temporary text to kno the full with of the label
+			final Text text = new Text(label.getText());
+			text.setFont(label.getFont());
+			minWidth += text.getLayoutBounds().getWidth();
+			
+			minWidth += label.getGraphicTextGap();
+			minWidth += label.getGraphic().getLayoutBounds().getWidth();
 		}
 
 		return minWidth;
 	}
 
 	protected TextOverflowEnum getTextOverflow() {
-		// It the parent text overflow property which is take.
-		// TODO find how to select label from Label
-		return NotationUtil.getTextOverflow(((NotationContentPart<View, StackPane>) getParent()).getView());
+		return NotationUtil.getTextOverflow(getView());
 	}
 
 	protected void refreshIcon() {
@@ -163,7 +179,7 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
 	/**
 	 * Refresh text alignment.
-	 * //TODO: getText alignment of the parents if compartment ??
+	 * //TODO: getText alignment of the parents if in compartment ??
 	 */
 	protected void refreshTextAlignment() {
 		final Pos textAlignment = getTextAlignment();
@@ -187,29 +203,13 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 		}
 	}
 
-
-	@Override
-	protected void refreshVisibility() {
-		// FIXME workaround for unsupported elements
-		switch (getView().getType()) {
-		case "8510": // StereotypeDisplay for Class
-		case "8518":
-			getVisual().setVisible(false);
-			getVisual().setManaged(false);
-			return;
-		}
-		super.refreshVisibility();
-	}
-
 	protected void refreshFont() {
 		label.setTextFill(Color.BLACK);
 		label.setFont(Font.font("Segoe UI", FontWeight.NORMAL, scale(9)));
 	}
 
 	protected String getText() {
-		final EObject element = getElement();
-
-		return element.toString(); // TODO GMF-like label providers
+		return getParser().getPrintString(new SemanticAdapter(getElement(), getView()), ParserOptions.NONE.intValue());
 	}
 
 	@Override

@@ -21,12 +21,12 @@ public class AffixedNodeContentPart extends NodeContentPart implements IPrimaryC
 	}
 
 	@Override
-	protected double getMinHeight() {
+	public double getMinHeight() {
 		return 20;
 	}
 
 	@Override
-	protected double getMinWidth() {
+	public double getMinWidth() {
 		return 20;
 	}
 
@@ -34,5 +34,6 @@ public class AffixedNodeContentPart extends NodeContentPart implements IPrimaryC
 	protected String getStyleClass() {
 		return "genericAffixedNode";
 	}
+
 
 }
