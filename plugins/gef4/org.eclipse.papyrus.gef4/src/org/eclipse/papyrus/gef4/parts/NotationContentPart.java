@@ -487,6 +487,13 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return NotationUtil.getHorizontalBarPolicy(view);
 	}
 
+	protected int getNotationMinWidth() {
+		return NotationUtil.getNotationMinWidth(view);
+	}
+
+	protected int getNotationMinHeight() {
+		return NotationUtil.getNotationMinHeight(view);
+	}
 
 	protected IContentPartFactory<Node> getFactory() {
 		final IContentPartFactory<Node> factory = getViewer().getAdapter(new TypeToken<IContentPartFactory<Node>>() {

@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.DecorationNode;
+import org.eclipse.papyrus.gef4.utils.VisualPartUtil;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -44,41 +45,6 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Compar
 		super(view);
 	}
 
-	/**
-	 * Adds the child visual.
-	 *
-	 * @param child
-	 *            the child
-	 * @param index
-	 *            the index
-	 * @see org.eclipse.gef4.mvc.parts.AbstractVisualPart#addChildVisual(org.eclipse.gef4.mvc.parts.IVisualPart, int)
-	 */
-	@Override
-	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
-		if (null != child.getVisual()) {
-			// ((VBox) getVisual()).getChildren().add(child.getVisual());
-			((VBox) ((ScrollPane) getVisual()).getContent()).getChildren().add(child.getVisual());
-		}
-	}
-
-	/**
-	 * Removes the child visual.
-	 *
-	 * @param child
-	 *            the child
-	 * @param index
-	 *            the index
-	 * @see org.eclipse.gef4.mvc.parts.AbstractVisualPart#removeChildVisual(org.eclipse.gef4.mvc.parts.IVisualPart, int)
-	 */
-	@Override
-	protected void removeChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
-		final Node childVisual = child.getVisual();
-		if (childVisual == null) {
-			return;
-		}
-		// ((VBox) getVisual()).getChildren().remove(childVisual);
-		((VBox) ((ScrollPane) getVisual()).getContent()).getChildren().remove(child.getVisual());
-	}
 
 	/**
 	 * Do create visual.
@@ -94,7 +60,7 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Compar
 
 		// Set stylesheet to hide viewport child which can't
 		scrollPane.getStylesheets().clear();
-		scrollPane.getStylesheets().add(URI.createPlatformPluginURI("resources/scrollPane.css", false).toPlatformString(false));//$NON-NLS-1$
+		scrollPane.getStylesheets().add(URI.createPlatformPluginURI(VisualPartUtil.VIEWPORT_SCROLL_PANE_STYLE, false).toPlatformString(false));
 
 		return scrollPane;
 	}
@@ -111,24 +77,8 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Compar
 	}
 
 	@Override
-	protected void doRefreshVisual(final Region visual) {
+	protected void doRefreshVisual(final ScrollPane visual) {
 		super.doRefreshVisual(visual);
-
-		refreshScrollBar();
-		if (ScrollBarPolicy.NEVER.equals(getVerticalBarPolicy())) {
-			((VBox) ((ScrollPane) getVisual()).getContent()).setPrefWidth(((ScrollPane) getVisual()).getViewportBounds().getWidth());
-		}
-
-		if (ScrollBarPolicy.NEVER.equals(getHorizontalBarPolicy())) {
-			((VBox) ((ScrollPane) getVisual()).getContent()).setPrefHeight(((ScrollPane) getVisual()).getViewportBounds().getHeight());
-		}
-
-
-	}
-
-	protected void refreshScrollBar() {
-		((ScrollPane) getVisual()).setHbarPolicy(getHorizontalBarPolicy());
-		((ScrollPane) getVisual()).setVbarPolicy(getVerticalBarPolicy());
 	}
 
 	/**
@@ -165,10 +115,10 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Compar
 	 */
 	@Override
 	public double getMinHeight() {
-		double minheight = 10;
+		double minheight = Math.max(getNotationMinHeight(), MINIMUM_COMPARTMENT_HEIGHT);
 
 		// If there is no scroll bar
-		if (ScrollBarPolicy.NEVER.equals(getVerticalBarPolicy())) {
+		if (ScrollBarPolicy.NEVER.equals(getVerticalBarPolicy()) && !isCollapsed()) {
 			final Insets padding = getPadding();
 			final Insets margin = getMargin();
 			minheight = padding.getTop() + padding.getBottom() + margin.getTop() + margin.getBottom();
@@ -189,5 +139,6 @@ public class ListCompartmentContentPart<V extends DecorationNode> extends Compar
 		}
 		return minheight;
 	}
+
 }
 

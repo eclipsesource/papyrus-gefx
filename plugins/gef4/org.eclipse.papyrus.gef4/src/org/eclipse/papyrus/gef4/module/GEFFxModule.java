@@ -31,9 +31,11 @@ import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
 import org.eclipse.gef4.mvc.fx.parts.VisualBoundsGeometryProvider;
 import org.eclipse.gef4.mvc.fx.policies.FXChangeViewportPolicy;
+import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXPanOnScrollPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXZoomOnScrollPolicy;
 import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
+import org.eclipse.gef4.mvc.fx.tools.FXHoverTool;
 import org.eclipse.gef4.mvc.fx.tools.FXScrollTool;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
@@ -95,6 +97,9 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		adapterMapBinder.addBinding(AdapterKey.get(ChangeBoundsBehavior.class))
 				.to(ChangeBoundsBehavior.class);
+
+		adapterMapBinder.addBinding(AdapterKey.get(FXHoverTool.TOOL_POLICY_KEY))
+				.to(FXHoverOnHoverPolicy.class);
 	}
 
 	@Override
@@ -182,7 +187,8 @@ public abstract class GEFFxModule extends MvcFxModule {
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 
 		adapterMapBinder.addBinding(
-				AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY, "AffixedLabel")).to(AffixedLabelMoveOnDragPolicy.class);//$NON-NLS-1$
+				AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY, "AffixedLabel"))// $NON-NLS-1$
+				.to(AffixedLabelMoveOnDragPolicy.class);
 	}
 
 	protected void bindDiagramPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {

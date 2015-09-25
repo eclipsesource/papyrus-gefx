@@ -16,8 +16,8 @@ Model > Compartment{
 	borderWidth: 1 1 1 1;
 	borderColor: black;
 	padding : 0;
-	horizontalScrollBar:asNeeded;
-	verticalScrollBar:asNeeded;
+	horizontalScrollBar:auto;
+	verticalScrollBar:auto;
 }
 
 Constraint,
@@ -28,6 +28,11 @@ Comment{
 [kind=FloatingLabel]{
     visible:false;
     textOverflow:visible;
+}
+
+Port{
+	minWidth:20;
+	minHeight:20;
 }
 
 /*==== TODO put on a umlBase.css ====*/
@@ -52,5 +57,13 @@ ClassDiagram DurationObservation > [kind=FloatingLabel],
 ClassDiagram TimeObservation > [kind=FloatingLabel]{
     visible:true;
     textAlignment:left;
+}
+
+ClassDiagram DurationObservation,
+ClassDiagram TimeObservation,
+ClassDiagram TemplateSignature,
+ClassDiagram RedefinableTemplateSignature{
+   minWidth:20;
+   minHeight:20;
 }
 

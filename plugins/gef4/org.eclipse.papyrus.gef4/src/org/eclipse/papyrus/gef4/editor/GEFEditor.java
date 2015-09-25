@@ -160,9 +160,9 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 
 	@Override
 	public void setFocus() {
-		if (canvas != null && !canvas.isDisposed()) {
-			canvas.setFocus();
-		}
+		// if (canvas != null && !canvas.isDisposed()) {
+		// canvas.setFocus();
+		// }
 	}
 
 	@Override

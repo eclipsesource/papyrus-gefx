@@ -51,6 +51,26 @@ import javafx.scene.paint.Paint;
 public class NotationUtil {
 
 
+	public static final String VERTICAL_SCROLL_BAR = "verticalScrollBar";
+
+
+
+	public static final String HORIZONTAL_SCROLL_BAR = "horizontalScrollBar";
+
+
+
+	public static final String SCROLL_BAR_NEVER = "never";
+
+
+
+	public static final String SCROLL_BAR_ALWAYS = "always";
+
+
+
+	public static final String SCROLL_BAR_AUTO = "auto";
+
+
+
 	public static final String TEXT_OVERFLOW = "textOverflow";
 
 
@@ -123,7 +143,7 @@ public class NotationUtil {
 
 
 
-	protected static final int[] DEFAULT_CUSTOM_DASH = new int[] { 5, 5 };
+	public static final int[] DEFAULT_CUSTOM_DASH = new int[] { 5, 5 };
 
 
 
@@ -133,7 +153,7 @@ public class NotationUtil {
 	/**
 	 * The NamedStyle property to set the background paint.
 	 */
-	private static final String BACKGROUND_PAINT = "backgroundPaint";
+	public static final String BACKGROUND_PAINT = "backgroundPaint";
 
 
 	/**
@@ -781,7 +801,7 @@ public class NotationUtil {
 
 
 	/**
-	 * Gets the text alignment.
+	 * Gets the text alignment. TOP_CENTER, TOP_LEFT and TOP_RIGHT are return for center, left and right.
 	 *
 	 * @param view
 	 *            the view
@@ -800,7 +820,7 @@ public class NotationUtil {
 				textAlignment = Pos.TOP_RIGHT;
 			} else
 					if (PositionEnum.CENTER.toString().equals(labelAlignment)) {
-				textAlignment = Pos.BASELINE_CENTER;
+				textAlignment = Pos.TOP_CENTER;
 			}
 		}
 		return textAlignment;
@@ -832,17 +852,17 @@ public class NotationUtil {
 
 	public static ScrollBarPolicy getVerticalBarPolicy(final View view) {
 
-		final String verticalPolicy = NotationUtils.getStringValue(view, "verticalScrollBar", null);
+		final String verticalPolicy = NotationUtils.getStringValue(view, VERTICAL_SCROLL_BAR, null);
 
-		ScrollBarPolicy scrollBarPolicy = ScrollBarPolicy.NEVER;
+		ScrollBarPolicy scrollBarPolicy = ScrollBarPolicy.AS_NEEDED;
 		if (verticalPolicy != null) {
-			if ("always".equals(verticalPolicy)) {
+			if (SCROLL_BAR_ALWAYS.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.ALWAYS;
 			} else
-				if ("asNeeded".equals(verticalPolicy)) {
+				if (SCROLL_BAR_AUTO.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.AS_NEEDED;
 			} else
-					if ("never".equals(verticalPolicy)) {
+					if (SCROLL_BAR_NEVER.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.NEVER;
 			}
 		}
@@ -852,21 +872,31 @@ public class NotationUtil {
 
 
 	public static ScrollBarPolicy getHorizontalBarPolicy(final View view) {
-		final String verticalPolicy = NotationUtils.getStringValue(view, "horizontalScrollBar", null);
+		final String verticalPolicy = NotationUtils.getStringValue(view, HORIZONTAL_SCROLL_BAR, null);
 
 		ScrollBarPolicy scrollBarPolicy = ScrollBarPolicy.NEVER;
 		if (verticalPolicy != null) {
-			if ("always".equals(verticalPolicy)) {
+			if (SCROLL_BAR_ALWAYS.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.ALWAYS;
 			} else
-				if ("asNeeded".equals(verticalPolicy)) {
+				if (SCROLL_BAR_AUTO.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.AS_NEEDED;
 			} else
-					if ("never".equals(verticalPolicy)) {
+					if (SCROLL_BAR_NEVER.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.NEVER;
 			}
 		}
 		return scrollBarPolicy;
 
+	}
+
+
+	public static int getNotationMinHeight(final View view) {
+		return NotationUtils.getIntValue(view, "minHeight", -1);// TODO MIA DEFAULT_VALUE;
+	}
+
+
+	public static int getNotationMinWidth(final View view) {
+		return NotationUtils.getIntValue(view, "minWidth", -1);// TODO MIA DEFAULT_VALUE;
 	}
 }

@@ -47,6 +47,9 @@ import javafx.scene.paint.Stop;
 
 public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements IPrimaryContentPart {
 
+	private static final int DEFAUT_MIN_WIDTH = 100;
+	private static final int DEFAUT_MIN_HEIGHT = 100;
+
 	/** indicate if The corner bend decoration is instantiate. */
 	private boolean cornerBend;
 
@@ -237,7 +240,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 			}
 			doubleLine = false;
 		}
-
 	}
 
 	/**
@@ -314,13 +316,14 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 			}
 		}
 
-		return Math.max(20, minHeight - spacing); // nbChild-1 of spacing
+		final int notationMinHeight = getNotationMinHeight();
+		return Math.max(notationMinHeight < 0 ? DEFAUT_MIN_HEIGHT : notationMinHeight, minHeight - spacing); // nbChild-1 of spacing
 	}
 
 	@Override
 	public double getMinWidth() {
-		//20 is the port size.
-		double minWidth = 20; // TODO find an other way to define 100: port are nodeContent and is 20 min width, set it throw CSS??
+		final int notationMinWidth = getNotationMinWidth();
+		double minWidth = notationMinWidth < 0 ? DEFAUT_MIN_WIDTH : notationMinWidth;
 
 		// gets for the minWidth of children
 		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
@@ -359,7 +362,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 	@Override
 	protected String getStyleClass() {
-		return "genericNode";
+		return "genericNode";//$NON-NLS-1$
 	}
 
 }

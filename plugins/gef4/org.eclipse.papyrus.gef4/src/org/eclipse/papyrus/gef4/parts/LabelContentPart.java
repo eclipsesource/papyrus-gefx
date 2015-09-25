@@ -115,11 +115,11 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 
 		// add text width if text overflow type is visible
 		if (TextOverflowEnum.VISIBLE.equals(getTextOverflow())) {
-			//Create a temporary text to kno the full with of the label
+			// Create a temporary text to kno the full with of the label
 			final Text text = new Text(label.getText());
 			text.setFont(label.getFont());
 			minWidth += text.getLayoutBounds().getWidth();
-			
+
 			minWidth += label.getGraphicTextGap();
 			minWidth += label.getGraphic().getLayoutBounds().getWidth();
 		}
@@ -204,8 +204,8 @@ public class LabelContentPart extends ContainerContentPart<View, StackPane> {
 	}
 
 	protected void refreshFont() {
-		label.setTextFill(Color.BLACK);
-		label.setFont(Font.font("Segoe UI", FontWeight.NORMAL, scale(9)));
+		label.setTextFill(Color.BLACK);// TODO get value from notation/css
+		label.setFont(Font.font("Segoe UI", FontWeight.NORMAL, scale(9)));// TODO get value from notation/css
 	}
 
 	protected String getText() {
