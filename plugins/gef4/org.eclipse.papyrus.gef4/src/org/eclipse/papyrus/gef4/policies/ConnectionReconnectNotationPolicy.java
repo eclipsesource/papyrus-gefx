@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.gef4.fx.anchors.IFXAnchor;
+import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
 import org.eclipse.gmf.runtime.common.core.command.UnexecutableCommand;
 import org.eclipse.gmf.runtime.common.core.util.StringStatics;
 import org.eclipse.gmf.runtime.diagram.core.commands.SetConnectionAnchorsCommand;
@@ -29,18 +30,18 @@ import org.eclipse.papyrus.gef4.utils.OperationBuilder;
 
 /**
  * Policy for handling notation model changes as part of the composite link operation.
- * 
+ *
  * @see ConnectionBendPolicy
  */
 public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconnectPolicy {
 
 	@Override
-	public IUndoableOperation commit() {
+	public ITransactionalOperation commit() {
 		return createNotationReconnectOperation();
 	}
 
-	protected IUndoableOperation createNotationReconnectOperation() {
-		IUndoableOperation result = OperationBuilder.withForwardUndo("Update notation model")
+	protected ITransactionalOperation createNotationReconnectOperation() {
+		ITransactionalOperation result = OperationBuilder.withForwardUndo("Update notation model")
 				.add(createSetConnectionEndsOperation())
 				.add(createSetConnectionAnchorsOperation())
 				.add(createSetConnectionBendpointsOperation())
@@ -74,10 +75,10 @@ public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconne
 		}
 
 		/*
-		System.out.println("ConnectionReconnectNotationPolicy.createSetConnectionEndsOperation(): " +
-				result + ", can execute :" +
-				Optional.ofNullable(result).map(IUndoableOperation::canExecute));
-		*/
+		 * System.out.println("ConnectionReconnectNotationPolicy.createSetConnectionEndsOperation(): " +
+		 * result + ", can execute :" +
+		 * Optional.ofNullable(result).map(IUndoableOperation::canExecute));
+		 */
 
 		return result;
 	}

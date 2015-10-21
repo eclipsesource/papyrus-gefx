@@ -17,8 +17,9 @@ import java.util.Optional;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.gef4.mvc.operations.ITransactional;
+import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
 import org.eclipse.gef4.mvc.policies.ContentPolicy;
-import org.eclipse.gmf.runtime.common.core.command.UnexecutableCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRequest;
 import org.eclipse.gmf.runtime.notation.View;
@@ -31,17 +32,17 @@ import javafx.scene.Node;
 
 /**
  * Policy for handling notation model changes as part of the composite link operation.
- * 
+ *
  * @see ConnectionBendPolicy
  */
 public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconnectPolicy {
 
 	@Override
-	public IUndoableOperation commit() {
+	public ITransactionalOperation commit() {
 		return createSemanticReconnectOperation();
 	}
 
-	protected IUndoableOperation createSemanticReconnectOperation() {
+	protected ITransactionalOperation createSemanticReconnectOperation() {
 		// System.out.println("ConnectionReconnectSemanticPolicy.createSemanticReconnectOperation()");
 		// FIXME: what about reference-based links?
 		assert resolveSemanticElement() != null : "Reference-based links are not supported yet: " + getHost().getContent();
@@ -50,7 +51,7 @@ public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconne
 		View newTarget = getAnchorageView(getConnection().getEndAnchor());
 
 		if (newSource == null || newTarget == null) {
-			return UnexecutableCommand.INSTANCE;
+			return ITransactional.UNEXECUTABLE;
 		}
 
 		Optional<ReorientRelationshipRequest> targetRequest = requestForEnd(newTarget, ConnectionContentPart.TARGET, ReorientRequest.REORIENT_TARGET);
@@ -61,7 +62,7 @@ public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconne
 
 		IElementEditService service = ElementEditServiceUtils.getCommandProvider(resolveSemanticElement());
 
-		IUndoableOperation result = OperationBuilder.withForwardUndo() //
+		ITransactionalOperation result = OperationBuilder.withForwardUndo() //
 				.add(sourceRequest.map(service::getEditCommand)) //
 				.add(targetRequest.map(service::getEditCommand)) //
 				.getResult();
@@ -82,7 +83,7 @@ public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconne
 						semanticConnection, newEnd.getElement(), actualSource, endRelation));
 	}
 
-	private IUndoableOperation createSemanticReconnectOperation_old() {
+	private ITransactionalOperation createSemanticReconnectOperation_old() {
 		// create anchorage operations, start with detaching all anchorages
 		ContentPolicy<Node> contentPolicy = getAdaptable()
 				.<ContentPolicy<Node>> getAdapter(ContentPolicy.class);

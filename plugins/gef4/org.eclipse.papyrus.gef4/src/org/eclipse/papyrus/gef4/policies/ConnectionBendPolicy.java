@@ -20,9 +20,12 @@ import java.util.Map;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.gef4.fx.anchors.IFXAnchor;
 import org.eclipse.gef4.fx.nodes.FXUtils;
+import org.eclipse.gef4.geometry.convert.fx.Geometry2JavaFX;
+import org.eclipse.gef4.geometry.convert.fx.JavaFX2Geometry;
 import org.eclipse.gef4.geometry.planar.Point;
 import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
 import org.eclipse.gef4.mvc.operations.ITransactional;
+import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gef4.mvc.policies.IPolicy;
@@ -51,7 +54,7 @@ import javafx.scene.Node;
 public class ConnectionBendPolicy extends FXBendPolicy {
 
 	@Override
-	public IUndoableOperation commit() {
+	public ITransactionalOperation commit() {
 		IUndoableOperation visualUpdate = super.commit();
 		if (visualUpdate == null) {
 			return null;
@@ -74,15 +77,19 @@ public class ConnectionBendPolicy extends FXBendPolicy {
 
 	@SuppressWarnings("serial")
 	@Override
-	protected IFXAnchor findAnchor(Point currentReferencePositionInScene,
-			boolean canAttach) {
+	protected IFXAnchor findOrCreateAnchor(Point positionInLocal,
+			boolean canConnect) {
 
 		IFXAnchor anchor = null;
 		// try to find an anchor that is provided from an underlying node
-		if (canAttach) {
+		if (canConnect) {
+			Point selectedPointCurrentPositionInScene = JavaFX2Geometry
+					.toPoint(getConnection().localToScene(
+							Geometry2JavaFX.toFXPoint(positionInLocal)));
+
 			List<Node> pickedNodes = FXUtils.getNodesAt(getHost().getRoot()
-					.getVisual(), currentReferencePositionInScene.x,
-					currentReferencePositionInScene.y);
+					.getVisual(), selectedPointCurrentPositionInScene.x,
+					selectedPointCurrentPositionInScene.y);
 			IVisualPart<Node, ? extends Node> anchorPart = getAnchorPart(getParts(pickedNodes));
 			if (anchorPart != null) {
 				Provider<? extends IFXAnchor> anchorProvider = anchorPart.getAdapter(
@@ -91,14 +98,14 @@ public class ConnectionBendPolicy extends FXBendPolicy {
 
 				if (anchorProvider instanceof PositionalAnchorProvider) {
 					IVisualPart<Node, ? extends Node> connectionPart = getHost();
-					return ((PositionalAnchorProvider) anchorProvider).getForContext(currentReferencePositionInScene, connectionPart);
+					return ((PositionalAnchorProvider) anchorProvider).getForContext(selectedPointCurrentPositionInScene, connectionPart);
 				} else {
 					return anchorProvider.get();
 				}
 			}
 		}
 		if (anchor == null) {
-			anchor = generateStaticAnchor(currentReferencePositionInScene);
+			anchor = createUnconnectedAnchor(positionInLocal);
 		}
 		return anchor;
 	}
