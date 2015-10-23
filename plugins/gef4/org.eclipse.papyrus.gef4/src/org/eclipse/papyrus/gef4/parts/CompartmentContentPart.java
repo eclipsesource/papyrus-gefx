@@ -37,6 +37,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -253,7 +254,8 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		final Node childVisual = child.getVisual();
 		if (null != childVisual) {
-			((VBox) getVisual().getContent()).getChildren().add(childVisual);
+
+			((Pane) getVisual().getContent()).getChildren().add(childVisual);
 		}
 	}
 
@@ -272,7 +274,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 		if (childVisual == null) {
 			return;
 		}
-		((VBox) getVisual().getContent()).getChildren().remove(childVisual);
+		((Pane) getVisual().getContent()).getChildren().remove(childVisual);
 	}
 
 }
