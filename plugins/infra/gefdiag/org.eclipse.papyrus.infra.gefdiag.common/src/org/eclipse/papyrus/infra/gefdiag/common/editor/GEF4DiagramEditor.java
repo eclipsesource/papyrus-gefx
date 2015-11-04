@@ -40,7 +40,7 @@ public abstract class GEF4DiagramEditor extends GEFEditor implements IRevealSema
 		}
 
 		SelectionModel<Node> selectionModel = getSelectionModel();
-		selectionModel.updateSelection(partsToReveal);
+		selectionModel.setSelection(partsToReveal);
 	}
 
 }

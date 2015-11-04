@@ -70,7 +70,7 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 		IContentPart<Node, ? extends Node> firstChild = (IContentPart<Node, ? extends Node>) target.getChildren().get(0);
 
 		focusModel.setFocused(firstChild);
-		selectionModel.updateSelection(Collections.singletonList(firstChild));
+		selectionModel.setSelection(firstChild);
 	}
 
 	protected void select(IContentPart<Node, ? extends Node> target, MouseEvent e) {
@@ -93,16 +93,16 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 			if (append) {
 				// deselect the target edit part (ensure we get a new
 				// primary selection)
-				selectionModel.deselect(Collections.singleton((IContentPart<Node, ? extends Node>) target));
+				selectionModel.removeFromSelection((IContentPart<Node, ? extends Node>) target);
 			}
 		} else {
 			if (append) {
 				// append to current selection (as new primary)
-				selectionModel.select(Collections.singletonList((IContentPart<Node, ? extends Node>) target));
+				selectionModel.appendToSelection((IContentPart<Node, ? extends Node>) target);
 			} else {
 				// clear old selection, target should become the only
 				// selected
-				selectionModel.updateSelection(Collections.singletonList((IContentPart<Node, ? extends Node>) target));
+				selectionModel.setSelection((IContentPart<Node, ? extends Node>) target);
 			}
 		}
 	}

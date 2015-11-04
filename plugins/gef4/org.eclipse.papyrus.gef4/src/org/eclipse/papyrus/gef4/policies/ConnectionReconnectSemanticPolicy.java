@@ -83,37 +83,6 @@ public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconne
 						semanticConnection, newEnd.getElement(), actualSource, endRelation));
 	}
 
-	private ITransactionalOperation createSemanticReconnectOperation_old() {
-		// create anchorage operations, start with detaching all anchorages
-		ContentPolicy<Node> contentPolicy = getAdaptable()
-				.<ContentPolicy<Node>> getAdapter(ContentPolicy.class);
-		contentPolicy.init();
-		contentPolicy.detachFromAllContentAnchorages();
-		final IUndoableOperation detachOperation = contentPolicy.commit();
-
-		// then attach source and target (if available)
-		contentPolicy.init();
-		Object sourceContentAnchorage = getAnchorageContent(getConnection().getStartAnchor());
-		if (sourceContentAnchorage != null) {
-			contentPolicy.attachToContentAnchorage(sourceContentAnchorage,
-					"START");
-		}
-		Object targetContentAnchorage = getAnchorageContent(
-				getConnection().getEndAnchor());
-		if (targetContentAnchorage != null) {
-			contentPolicy.attachToContentAnchorage(targetContentAnchorage,
-					"END");
-		}
-		final IUndoableOperation attachOperation = contentPolicy.commit();
-
-		return OperationBuilder //
-				.withReverseUndo("Change Anchorages") //
-				.add(detachOperation) //
-				.add(attachOperation) //
-				.getResult();
-
-	}
-
 	protected EObject resolveSemanticElement() {
 		return ((View) getHost().getContent()).getElement();
 	}

@@ -220,13 +220,13 @@ public class ResizeOnDragPolicy extends AbstractFXOnDragPolicy {
 	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<AbstractFXOnDragPolicy> actionToPropagate) {
 		final SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(SelectionModel.class);
 
-		if (selectionModel.getSelected().size() > 1) {
+		if (selectionModel.getSelection().size() > 1) {
 
 			// If I'm the main receiver of the event, I propagate it to other selected elements
 			// If I'm not the main receiver, do nothing; someone else will do the propagation
 			if (e.getTarget() == getHost().getVisual()) {
 
-				for (final IContentPart<Node, ? extends Node> selectedPart : selectionModel.getSelected()) {
+				for (final IContentPart<Node, ? extends Node> selectedPart : selectionModel.getSelection()) {
 					if (selectedPart != getPrimaryHost()) {
 						for (final AbstractFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.DRAG_TOOL_POLICY_KEY).values()) {
 							actionToPropagate.accept(dragPolicy);
