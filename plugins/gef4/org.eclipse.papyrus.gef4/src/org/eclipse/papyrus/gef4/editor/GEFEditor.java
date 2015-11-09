@@ -121,7 +121,7 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 		// splitPane.getItems().addAll(viewer.getScrollPane(), palette.getVisual());
 		// splitPane.setDividerPositions(0.3f);
 
-		scene = new Scene(viewer.getScrollPane());
+		scene = new Scene(viewer.getCanvas());
 		canvas.setScene(scene);
 
 		// Activate
