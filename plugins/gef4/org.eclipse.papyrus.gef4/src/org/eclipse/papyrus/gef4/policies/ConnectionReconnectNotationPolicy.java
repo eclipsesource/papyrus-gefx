@@ -16,7 +16,7 @@ package org.eclipse.papyrus.gef4.policies;
 import java.util.Optional;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.gef4.fx.anchors.IFXAnchor;
+import org.eclipse.gef4.fx.anchors.IAnchor;
 import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
 import org.eclipse.gmf.runtime.common.core.command.UnexecutableCommand;
 import org.eclipse.gmf.runtime.common.core.util.StringStatics;
@@ -97,7 +97,7 @@ public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconne
 		return result;
 	}
 
-	protected String composeTerminalString(IFXAnchor anchor) {
+	protected String composeTerminalString(IAnchor anchor) {
 		String result = Optional.ofNullable(anchor)
 				.filter(a -> a instanceof SlidableFxAnchor)
 				.map(a -> ((SlidableFxAnchor) a).composeTerminalString())

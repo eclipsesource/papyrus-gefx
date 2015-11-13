@@ -39,6 +39,8 @@ import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 import com.google.common.reflect.TypeToken;
 
 import javafx.geometry.Insets;
@@ -513,6 +515,10 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 	protected abstract String getStyleClass();// TODO support mutli styleClass named label should match on .genericLabel and .namedLabel
 
+	@Override
+	public SetMultimap<? extends Object, String> getContentAnchorages() {
+		return HashMultimap.create();
+	}
 }
 
 

@@ -15,7 +15,7 @@ package org.eclipse.papyrus.gef4.fx.anchors;
 
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
-import org.eclipse.gef4.fx.anchors.FXChopBoxAnchor;
+import org.eclipse.gef4.fx.anchors.ChopBoxAnchor;
 import org.eclipse.gef4.geometry.planar.IGeometry;
 import org.eclipse.gef4.geometry.planar.Point;
 import org.eclipse.gef4.geometry.planar.Rectangle;
@@ -37,7 +37,7 @@ import javafx.scene.Node;
  * position at the creation time and is not recomputed on the host resize. To handle resize,
  * some external code should replace an anchor instance.
  */
-public class SlidableFxAnchor extends FXChopBoxAnchor {
+public class SlidableFxAnchor extends ChopBoxAnchor {
 
 	private final RatioBasedAnchorStrategy myStrategy;
 
@@ -61,7 +61,7 @@ public class SlidableFxAnchor extends FXChopBoxAnchor {
 	/**
 	 * Creates a terminal string for any reference point passed in the format understandable by
 	 * slidable anchors, namely as <code>"(ratioX,ratioY)"</code>
-	 * 
+	 *
 	 * @see BaseSlidableAnchor#getTerminal()
 	 */
 	public static String composeTerminalString(double ratioX, double ratioY) {
@@ -100,7 +100,7 @@ public class SlidableFxAnchor extends FXChopBoxAnchor {
 	 * Overrides default {@link FXChopBoxAnchor.ComputationStrategy.Impl} with customization of
 	 * the position of the anchor in the host bounds, which is set as a ratio.
 	 */
-	public static class RatioBasedAnchorStrategy extends FXChopBoxAnchor.ComputationStrategy.Impl {
+	public static class RatioBasedAnchorStrategy extends ChopBoxAnchor.IComputationStrategy.Impl {
 
 		private final double myRatioX;
 		private final double myRatioY;

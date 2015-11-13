@@ -13,7 +13,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.fx.anchors;
 
-import org.eclipse.gef4.fx.anchors.IFXAnchor;
+import org.eclipse.gef4.fx.anchors.IAnchor;
 import org.eclipse.gef4.geometry.planar.Point;
 import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
@@ -21,17 +21,17 @@ import org.eclipse.gef4.mvc.parts.IVisualPart;
 import com.google.inject.Provider;
 
 /**
- * Extension for standard {@link Provider<IFXAnchor>} uses the contextual information
+ * Extension for standard {@link Provider<IAnchor>} uses the contextual information
  * about mouse position and the subject connection at the time of requesting the creation
- * of {@link IFXAnchor}.
+ * of {@link IAnchor}.
  * <p/>
- * Every {@link PositionalAnchorProvider} can be used as a non-contextual {@link Provider<IFXAnchor>},
+ * Every {@link PositionalAnchorProvider} can be used as a non-contextual {@link Provider<IAnchor>},
  * so the same provider implementation should not fail e,g with standard {@link FXBendPolicy} which
  * does not pass any context.
  */
-public interface PositionalAnchorProvider extends Provider<IFXAnchor> {
+public interface PositionalAnchorProvider extends Provider<IAnchor> {
 
-	public IFXAnchor getForContext(Point scenePoint, IVisualPart<?, ?> connection);
+	public IAnchor getForContext(Point scenePoint, IVisualPart<?, ?> connection);
 
 
 }

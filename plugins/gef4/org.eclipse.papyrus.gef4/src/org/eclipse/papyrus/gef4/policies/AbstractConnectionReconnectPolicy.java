@@ -18,8 +18,8 @@ import java.util.Optional;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
-import org.eclipse.gef4.fx.anchors.IFXAnchor;
-import org.eclipse.gef4.fx.nodes.FXConnection;
+import org.eclipse.gef4.fx.anchors.IAnchor;
+import org.eclipse.gef4.fx.nodes.Connection;
 import org.eclipse.gef4.mvc.operations.ITransactional;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
@@ -37,11 +37,11 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy<N
 
 
 	/**
-	 * FIXME: It would be better to use IPolicy<FXConnection> but we cannot do
+	 * FIXME: It would be better to use IPolicy<Connection> but we cannot do
 	 * it, because IPolicy must be <V, VR> and not <VR>
 	 */
-	protected FXConnection getConnection() {
-		return (FXConnection) getHost().getVisual();
+	protected Connection getConnection() {
+		return (Connection) getHost().getVisual();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy<N
 	 * @return model of the node which given anchor is connected to,
 	 *         which is expected to be a {@link View} for all notation-based connections
 	 */
-	protected View getAnchorageView(IFXAnchor anchor) {
+	protected View getAnchorageView(IAnchor anchor) {
 		return (View) getAnchorageContent(anchor);
 	}
 
@@ -57,7 +57,7 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy<N
 	 * @param anchor
 	 * @return model of the node which given anchor is connected to
 	 */
-	protected Object getAnchorageContent(IFXAnchor anchor) {
+	protected Object getAnchorageContent(IAnchor anchor) {
 		Node anchorageNode = anchor.getAnchorage();
 		if (anchorageNode != getConnection()) {
 			IVisualPart<Node, ? extends Node> part = getHost().getRoot()

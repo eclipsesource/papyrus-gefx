@@ -12,7 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.fx.nodes.FXConnection;
+import org.eclipse.gef4.fx.nodes.Connection;
 import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
@@ -28,7 +28,7 @@ import com.google.common.collect.SetMultimap;
 
 import javafx.scene.Node;
 
-public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E, FXConnection> {
+public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E, Connection> {
 
 	/** Role for Connection source anchorage */
 	public static final String SOURCE = "source";
@@ -71,12 +71,12 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	}
 
 	@Override
-	protected FXConnection doCreateVisual() {
-		return new FXConnection();
+	protected Connection doCreateVisual() {
+		return new Connection();
 	}
 
 	@Override
-	protected void doRefreshVisual(FXConnection connection) {
+	protected void doRefreshVisual(Connection connection) {
 		super.doRefreshVisual(connection);
 
 		connection.getCurveNode().setStrokeWidth(2);
@@ -124,12 +124,12 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	}
 
 	@Override
-	public void attachToContentAnchorage(Object contentAnchorage, String role) {
+	public void doAttachToContentAnchorage(Object contentAnchorage, String role) {
 		// FIXME: NOOP for now
 	}
 
 	@Override
-	public void detachFromContentAnchorage(Object contentAnchorage, String role) {
+	public void doDetachFromContentAnchorage(Object contentAnchorage, String role) {
 		// FIXME: NOOP for now
 	}
 

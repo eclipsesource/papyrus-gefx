@@ -15,7 +15,7 @@ package org.eclipse.papyrus.gef4.parts;
 
 import java.util.List;
 
-import org.eclipse.gef4.fx.nodes.FXGeometryNode;
+import org.eclipse.gef4.fx.nodes.GeometryNode;
 import org.eclipse.gef4.geometry.planar.Ellipse;
 import org.eclipse.gef4.geometry.planar.IGeometry;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
@@ -148,14 +148,14 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 		case OVAL:
 			// Check if ellipse is aldready instanciate.
 			boolean ellipseInstatiate = false;
-			if (region.getShape() instanceof FXGeometryNode<?>) {
-				final IGeometry geometry = ((FXGeometryNode<?>) region.getShape()).getGeometry();
+			if (region.getShape() instanceof GeometryNode<?>) {
+				final IGeometry geometry = ((GeometryNode<?>) region.getShape()).getGeometry();
 				if ((geometry instanceof Ellipse)) {
 					ellipseInstatiate = false;
 				}
 			}
 			if (!ellipseInstatiate) {
-				final FXGeometryNode<Ellipse> ellipseShape = new FXGeometryNode<Ellipse>();
+				final GeometryNode<Ellipse> ellipseShape = new GeometryNode<Ellipse>();
 				ellipseShape.setGeometry(new Ellipse(0, 0, width, height));
 				region.setShape(ellipseShape);
 			}

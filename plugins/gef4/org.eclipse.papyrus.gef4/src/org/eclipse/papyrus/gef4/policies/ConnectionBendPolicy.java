@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.gef4.fx.anchors.IFXAnchor;
-import org.eclipse.gef4.fx.nodes.FXUtils;
+import org.eclipse.gef4.fx.anchors.IAnchor;
+import org.eclipse.gef4.fx.utils.NodeUtils;
 import org.eclipse.gef4.geometry.convert.fx.Geometry2JavaFX;
 import org.eclipse.gef4.geometry.convert.fx.JavaFX2Geometry;
 import org.eclipse.gef4.geometry.planar.Point;
@@ -77,23 +77,23 @@ public class ConnectionBendPolicy extends FXBendPolicy {
 
 	@SuppressWarnings("serial")
 	@Override
-	protected IFXAnchor findOrCreateAnchor(Point positionInLocal,
+	protected IAnchor findOrCreateAnchor(Point positionInLocal,
 			boolean canConnect) {
 
-		IFXAnchor anchor = null;
+		IAnchor anchor = null;
 		// try to find an anchor that is provided from an underlying node
 		if (canConnect) {
 			Point selectedPointCurrentPositionInScene = JavaFX2Geometry
 					.toPoint(getConnection().localToScene(
 							Geometry2JavaFX.toFXPoint(positionInLocal)));
 
-			List<Node> pickedNodes = FXUtils.getNodesAt(getHost().getRoot()
+			List<Node> pickedNodes = NodeUtils.getNodesAt(getHost().getRoot()
 					.getVisual(), selectedPointCurrentPositionInScene.x,
 					selectedPointCurrentPositionInScene.y);
 			IVisualPart<Node, ? extends Node> anchorPart = getAnchorPart(getParts(pickedNodes));
 			if (anchorPart != null) {
-				Provider<? extends IFXAnchor> anchorProvider = anchorPart.getAdapter(
-						new TypeToken<Provider<? extends IFXAnchor>>() {
+				Provider<? extends IAnchor> anchorProvider = anchorPart.getAdapter(
+						new TypeToken<Provider<? extends IAnchor>>() {
 						});
 
 				if (anchorProvider instanceof PositionalAnchorProvider) {
@@ -118,8 +118,8 @@ public class ConnectionBendPolicy extends FXBendPolicy {
 
 		for (IContentPart<Node, ? extends Node> cp : partsUnderMouse) {
 			IContentPart<Node, ? extends Node> part = cp;
-			Provider<? extends IFXAnchor> anchorProvider = part
-					.getAdapter(new TypeToken<Provider<? extends IFXAnchor>>() {
+			Provider<? extends IAnchor> anchorProvider = part
+					.getAdapter(new TypeToken<Provider<? extends IAnchor>>() {
 					});
 
 			if (anchorProvider != null && anchorProvider.get() != null) {

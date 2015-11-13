@@ -13,7 +13,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.fx.nodes.FXGeometryNode;
+import org.eclipse.gef4.fx.nodes.GeometryNode;
 import org.eclipse.gef4.geometry.planar.Ellipse;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -142,7 +142,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 		final int height = BoundsUtil.getHeight(region);
 
 		if (ShapeTypeEnum.OVAL.equals(getShapeType())) {
-			final FXGeometryNode<Ellipse> ellipseShape = new FXGeometryNode<Ellipse>();
+			final GeometryNode<Ellipse> ellipseShape = new GeometryNode<Ellipse>();
 			ellipseShape.setGeometry(new Ellipse(relativeX, relativeY, width, height));
 			region.setShape(ellipseShape);
 		} else {
@@ -154,7 +154,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 		Shape clip = null;
 
 		// set the clip in case of Ellipse/Oval
-		if (null != parentShape && (parentShape instanceof FXGeometryNode<?> && ((FXGeometryNode<?>) parentShape).getGeometry() instanceof Ellipse)) {
+		if (null != parentShape && (parentShape instanceof GeometryNode<?> && ((GeometryNode<?>) parentShape).getGeometry() instanceof Ellipse)) {
 			parentShape.setFill(Color.BLACK);
 			clip = Shape.union(parentShape, parentShape);// Create a copy of parent shape
 			clip.setFill(Color.BLACK);

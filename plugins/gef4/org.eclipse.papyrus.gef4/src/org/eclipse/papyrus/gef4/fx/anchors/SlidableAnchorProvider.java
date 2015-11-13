@@ -14,7 +14,7 @@
 package org.eclipse.papyrus.gef4.fx.anchors;
 
 import org.eclipse.gef4.common.adapt.IAdaptable;
-import org.eclipse.gef4.fx.anchors.IFXAnchor;
+import org.eclipse.gef4.fx.anchors.IAnchor;
 import org.eclipse.gef4.geometry.planar.Point;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 
@@ -30,12 +30,12 @@ public class SlidableAnchorProvider implements PositionalAnchorProvider, IAdapta
 	private IVisualPart<Node, ? extends Node> myHost;
 
 	@Override
-	public IFXAnchor get() {
+	public IAnchor get() {
 		return new SlidableFxAnchor(getVisual(), 0.5, 0.5);
 	}
 
 	@Override
-	public IFXAnchor getForContext(Point scenePoint, IVisualPart<?, ?> connection) {
+	public IAnchor getForContext(Point scenePoint, IVisualPart<?, ?> connection) {
 		if (scenePoint == null || connection == null) {
 			return get();
 		}
