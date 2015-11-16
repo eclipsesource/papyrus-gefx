@@ -24,7 +24,6 @@ import org.eclipse.gef4.mvc.behaviors.ContentBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef4.mvc.fx.MvcFxModule;
 import org.eclipse.gef4.mvc.fx.behaviors.FXGridBehavior;
-import org.eclipse.gef4.mvc.fx.behaviors.FXViewportBehavior;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
@@ -135,8 +134,6 @@ public abstract class GEFFxModule extends MvcFxModule {
 				});
 		adapterMapBinder.addBinding(AdapterKey.get(FXGridBehavior.class))
 				.to(FXGridBehavior.class);
-		adapterMapBinder.addBinding(AdapterKey.get(FXViewportBehavior.class))
-				.to(FXViewportBehavior.class);
 	}
 
 	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
