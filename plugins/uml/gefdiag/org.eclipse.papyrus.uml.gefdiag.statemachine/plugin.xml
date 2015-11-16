@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.papyrus.infra.core.papyrusDiagram">
+      <editorDiagram
+            factoryClass="org.eclipse.papyrus.uml.gefdiag.statemachine.editor.StateMachineDiagramEditorFactory"
+            icon="/icons/Diagram_StateMachine.gif"
+            order="50">
+      </editorDiagram>
+   </extension>
+
+</plugin>
