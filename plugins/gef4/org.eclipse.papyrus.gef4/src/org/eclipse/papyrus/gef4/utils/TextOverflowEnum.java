@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
@@ -45,9 +45,6 @@ public enum TextOverflowEnum {
 		return literal;
 	}
 
-	/** The Constant LINE_STYLE_ARRAY. */
-	private static final TextOverflowEnum[] TEXT_OVERFLOW_ARRAY = new TextOverflowEnum[] { WRAP, HIDDEN, VISIBLE };
-
 	/**
 	 * Gets the by literal.
 	 *
@@ -56,12 +53,16 @@ public enum TextOverflowEnum {
 	 * @return the by literal
 	 */
 	public static TextOverflowEnum getByLiteral(final String literal) {
-		for (int i = 0; i < TEXT_OVERFLOW_ARRAY.length; ++i) {
-			final TextOverflowEnum result = TEXT_OVERFLOW_ARRAY[i];
-			if (result.getLiteral().equals(literal)) {
-				return result;
+		if (literal == null) {
+			return null;
+		}
+
+		for (TextOverflowEnum overflow : TextOverflowEnum.values()) {
+			if (literal.equalsIgnoreCase(overflow.getLiteral())) {
+				return overflow;
 			}
 		}
+
 		return null;
 	}
 

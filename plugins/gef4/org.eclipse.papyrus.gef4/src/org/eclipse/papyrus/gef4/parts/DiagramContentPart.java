@@ -37,11 +37,6 @@ public class DiagramContentPart extends NotationContentPart<Diagram, Group> {
 	}
 
 	@Override
-	protected void doRefreshVisual(Group visual) {
-		super.doRefreshVisual(visual);
-	}
-
-	@Override
 	protected boolean childrenChanged(Notification msg) {
 		if (msg.getNotifier() != getView()) {
 			return false;

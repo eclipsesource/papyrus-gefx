@@ -31,7 +31,6 @@ import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.commands.wrappers.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.parts.ContainerContentPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
@@ -120,17 +119,18 @@ public class ResizeOnDragPolicy extends AbstractFXOnDragPolicy {
 		return newBounds;
 	}
 
+	// FIXME Improve specification of MinWidth/MinHeight before implementing
 	private int getHostMinWidth() {
-		if (getPrimaryHost() instanceof ContainerContentPart) {
-			return (int) ((ContainerContentPart<?, ?>) getPrimaryHost()).getMinWidth();
-		}
+		// if (getPrimaryHost() instanceof ContainerContentPart) {
+		// return ((ContainerContentPart<?, ?>) getPrimaryHost()).getMinWidth();
+		// }
 		return -1;
 	}
 
 	private int getHostMinHeight() {
-		if (getPrimaryHost() instanceof ContainerContentPart) {
-			return (int) ((ContainerContentPart<?, ?>) getPrimaryHost()).getMinHeight();
-		}
+		// if (getPrimaryHost() instanceof ContainerContentPart) {
+		// return ((ContainerContentPart<?, ?>) getPrimaryHost()).getMinHeight();
+		// }
 		return -1;
 	}
 

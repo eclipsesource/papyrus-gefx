@@ -5,4 +5,9 @@ public class ClassNestedClassifierCompartmentEditPart extends org.eclipse.papyru
 	public ClassNestedClassifierCompartmentEditPart(org.eclipse.gmf.runtime.notation.DecorationNode view) {
 		super(view);
 	}
+
+	@Override
+	protected String getTitle() {
+		return "nested classifiers";
+	}
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_yjg3cJTtEeW-RYrP1TUFTA" name="GEF4 Connector Model">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_ynq-sJTtEeW-RYrP1TUFTA">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_zDNEIJTtEeW-RYrP1TUFTA" name="NotationContentPart" isAbstract="true"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_z6GP4JTtEeW-RYrP1TUFTA" name="Container" isAbstract="true">
+    <generalization xmi:type="uml:Generalization" xmi:id="_JE-5QJTuEeW-RYrP1TUFTA" general="_zDNEIJTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_0K6TEJTtEeW-RYrP1TUFTA" name="Node">
+    <generalization xmi:type="uml:Generalization" xmi:id="_-05JgJTtEeW-RYrP1TUFTA" general="_z6GP4JTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_0QtZEJTtEeW-RYrP1TUFTA" name="Compartment" isAbstract="true">
+    <generalization xmi:type="uml:Generalization" xmi:id="_--290JTtEeW-RYrP1TUFTA" general="_z6GP4JTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_0pjW4JTtEeW-RYrP1TUFTA" name="XYCompartment">
+    <generalization xmi:type="uml:Generalization" xmi:id="__OLzQJTtEeW-RYrP1TUFTA" general="_0QtZEJTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_01KJ8JTtEeW-RYrP1TUFTA" name="ListCompartment">
+    <generalization xmi:type="uml:Generalization" xmi:id="__HLzYJTtEeW-RYrP1TUFTA" general="_0QtZEJTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_1HwV0JTtEeW-RYrP1TUFTA" name="Diagram">
+    <generalization xmi:type="uml:Generalization" xmi:id="_KkzGMJTuEeW-RYrP1TUFTA" general="_zDNEIJTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_4CBukJTtEeW-RYrP1TUFTA" name="Empty">
+    <generalization xmi:type="uml:Generalization" xmi:id="_KuUOkJTuEeW-RYrP1TUFTA" general="_zDNEIJTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_emVh4JTuEeW-RYrP1TUFTA" name="Label">
+    <generalization xmi:type="uml:Generalization" xmi:id="_hvedEJTuEeW-RYrP1TUFTA" general="_zDNEIJTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_fyzVAJTuEeW-RYrP1TUFTA" name="Connection">
+    <generalization xmi:type="uml:Generalization" xmi:id="_iRZeYJTuEeW-RYrP1TUFTA" general="_zDNEIJTtEeW-RYrP1TUFTA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_iqiXIJTuEeW-RYrP1TUFTA" name="ListItem"/>
+</uml:Model>

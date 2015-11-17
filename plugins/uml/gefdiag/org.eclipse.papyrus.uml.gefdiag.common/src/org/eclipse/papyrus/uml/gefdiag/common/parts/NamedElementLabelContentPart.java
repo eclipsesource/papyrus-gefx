@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,25 +8,22 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Layout and visualiastion
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.parts;
 
-import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
 import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 
 import javafx.geometry.Insets;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
 
 /**
  * The Class NamedElementLabelContentPart.
  */
 public class NamedElementLabelContentPart extends LabelContentPart {
-
-	private IParser parser;
 
 	/**
 	 * Instantiates a new named element label content part.
@@ -55,18 +52,8 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 	 * @param visual
 	 */
 	@Override
-	protected void doRefreshVisual(final StackPane visual) {
-		super.doRefreshVisual(visual);
-		refreshBackground();
-	}
-
-	/**
-	 * @see org.eclipse.papyrus.gef4.parts.ContainerContentPart#refreshBackground()
-	 *
-	 */
-	@Override
-	protected void refreshBackground() {
-		// TODO create border with nameBackgroundColor namedStyle
+	protected void refreshVisualInTransaction(final Label visual) {
+		super.refreshVisualInTransaction(visual);
 	}
 
 	/**
@@ -76,17 +63,7 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 	 */
 	@Override
 	protected Insets getPadding() {
-		return new Insets(5); // TODO : fix this. margin of nameLabel shall be set with Class>Label[kind=name]{margin:5;}
-	}
-
-	/**
-	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#getMinHeight()
-	 *
-	 * @return
-	 */
-	@Override
-	public double getMinHeight() {
-		return getHeight() + getMargin().getTop() + getMargin().getBottom();
+		return super.getPadding(); // return new Insets(5); // TODO : fix this. margin of nameLabel shall be set with Class>Label[kind=name]{margin:5;}
 	}
 
 

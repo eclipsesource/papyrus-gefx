@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
@@ -52,9 +52,6 @@ public enum EffectEnum {
 		return literal;
 	}
 
-	/** The Constant LINE_STYLE_ARRAY. */
-	private static final EffectEnum[] LINE_STYLE_ARRAY = new EffectEnum[] { NONE, REFLECTION, BLUR, LIGHTING, INNER_SHADOW, GLOW };
-
 	/**
 	 * Gets the by literal.
 	 *
@@ -63,12 +60,16 @@ public enum EffectEnum {
 	 * @return the by literal
 	 */
 	public static EffectEnum getByLiteral(final String literal) {
-		for (int i = 0; i < LINE_STYLE_ARRAY.length; ++i) {
-			final EffectEnum result = LINE_STYLE_ARRAY[i];
-			if (result.getLiteral().equals(literal)) {
-				return result;
+		if (literal == null) {
+			return null;
+		}
+
+		for (EffectEnum effect : EffectEnum.values()) {
+			if (literal.equalsIgnoreCase(effect.getLiteral())) {
+				return effect;
 			}
 		}
+
 		return null;
 	}
 

@@ -5,4 +5,9 @@ public class ClassAttributeCompartmentEditPart extends org.eclipse.papyrus.gef4.
 	public ClassAttributeCompartmentEditPart(org.eclipse.gmf.runtime.notation.DecorationNode view) {
 		super(view);
 	}
+
+	@Override
+	protected String getTitle() {
+		return "attributes";
+	}
 }

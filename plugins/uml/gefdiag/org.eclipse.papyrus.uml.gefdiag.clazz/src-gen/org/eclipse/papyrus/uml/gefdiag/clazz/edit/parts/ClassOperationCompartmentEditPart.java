@@ -5,4 +5,9 @@ public class ClassOperationCompartmentEditPart extends org.eclipse.papyrus.gef4.
 	public ClassOperationCompartmentEditPart(org.eclipse.gmf.runtime.notation.DecorationNode view) {
 		super(view);
 	}
+
+	@Override
+	protected String getTitle() {
+		return "operations";
+	}
 }

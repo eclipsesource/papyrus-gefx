@@ -13,11 +13,31 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.utils.FXUtils;
+
+import javafx.scene.control.Label;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 public class ListItemContentPart extends LabelContentPart implements IPrimaryContentPart {
 
 	public ListItemContentPart(View view) {
 		super(view);
+	}
+
+	@Override
+	protected Label doCreateVisual() {
+		Label thisLabel = super.doCreateVisual();
+
+		VBox.setVgrow(thisLabel, Priority.SOMETIMES); // For line wrap
+		thisLabel.setWrapText(true);
+
+		return thisLabel;
+	}
+
+	@Override
+	protected void refreshPadding() {
+		FXUtils.setPadding(label, 0, 0); // Avoid padding for list items. Better use the parent VBox's spacing & padding
 	}
 
 }

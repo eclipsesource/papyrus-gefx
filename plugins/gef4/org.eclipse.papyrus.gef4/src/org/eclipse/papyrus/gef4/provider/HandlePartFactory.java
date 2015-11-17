@@ -19,32 +19,26 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.geometry.planar.BezierCurve;
 import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
-import org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy;
-import org.eclipse.gef4.mvc.fx.policies.FXBendOnSegmentHandleDragPolicy;
-import org.eclipse.gef4.mvc.operations.ITransactional;
-import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IHandlePart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.IPolicy;
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.commands.wrappers.GEFtoEMFCommandWrapper;
-import org.eclipse.papyrus.commands.wrappers.OperationToGEFCommandWrapper;
-import org.eclipse.papyrus.gef4.parts.CollapseHandlePart;
-import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
+import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
-import org.eclipse.papyrus.gef4.utils.VisualPartUtil;
+import org.eclipse.papyrus.gef4.utils.CompartmentUtils;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 
 import javafx.scene.Node;
 
 public class HandlePartFactory extends FXDefaultHandlePartFactory {
+
+	@Inject
+	private Injector injector;
+
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createMultiSelectionHandleParts(final List<? extends IVisualPart<Node, ? extends Node>> targets, final Map<Object, Object> contextMap) {
 		final List<IHandlePart<Node, ? extends Node>> allHandles = new LinkedList<>();
@@ -71,46 +65,44 @@ public class HandlePartFactory extends FXDefaultHandlePartFactory {
 
 		// injector.injectMembers(part);
 
-		result.setAdapter(AdapterKey.get(AbstractFXOnDragPolicy.class),
-				new FXBendOnSegmentHandleDragPolicy() {
-
-					// FIXME: discuss and revisit
-					@Override
-					protected void commit(final IPolicy<Node> policy) {
-						if (policy != null && policy instanceof ITransactional) {
-							final IUndoableOperation o = ((ITransactional) policy).commit();
-							if (o != null && o.canExecute()) {
-								final IContentPart<Node, ? extends Node> targetPartImpl = (IContentPart<Node, ? extends Node>) targetPart;
-								final View hostView = (View) targetPartImpl.getContent();
-								final OperationToGEFCommandWrapper gefWrapper = new OperationToGEFCommandWrapper(o);
-								final GEFtoEMFCommandWrapper emfWrapper = new GEFtoEMFCommandWrapper(gefWrapper);
-								AdapterFactoryEditingDomain.getEditingDomainFor(hostView).getCommandStack().execute(emfWrapper);
-							}
-						}
-					}
-				});
+		// result.setAdapter(AdapterKey.get(AbstractFXOnDragPolicy.class),
+		// new FXBendOnSegmentHandleDragPolicy() {
+		//
+		// // FIXME: discuss and revisit
+		// @Override
+		// protected void commit(final IPolicy<Node> policy) {
+		// if (policy != null && policy instanceof ITransactional) {
+		// final IUndoableOperation o = ((ITransactional) policy).commit();
+		// if (o != null && o.canExecute()) {
+		// final IContentPart<Node, ? extends Node> targetPartImpl = (IContentPart<Node, ? extends Node>) targetPart;
+		// final View hostView = (View) targetPartImpl.getContent();
+		// final OperationToGEFCommandWrapper gefWrapper = new OperationToGEFCommandWrapper(o);
+		// final GEFtoEMFCommandWrapper emfWrapper = new GEFtoEMFCommandWrapper(gefWrapper);
+		// AdapterFactoryEditingDomain.getEditingDomainFor(hostView).getCommandStack().execute(emfWrapper);
+		// }
+		// }
+		// }
+		// });
 
 		return result;
 	}
 
-	//
-	// @Inject
-	// private Injector injector;
-
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createHoverHandleParts(final IVisualPart<Node, ? extends Node> target, final HoverBehavior<Node> contextBehavior, final Map<Object, Object> contextMap) {
-
 		// Check if the target or one of its parents are a compartment
-		final CompartmentContentPart<?, ?> compartment = VisualPartUtil.findParentVisualPartInstance(target, CompartmentContentPart.class);
-		if (null != compartment && compartment.isCanCollapse() && compartment.getVisual().isVisible()) {
+		final IVisualPart<Node, ? extends Node> compartment = CompartmentUtils.getCollapsablePart(target);
+
+		// FIXME/TODO: We need a policy to trigger this hover. Children of a Compartment may have a different Hover policy that is not related to collapse
+		// contextBehavior and/or contextMap should be checked to determine which kind of Hover we need to handle
+		if (null != compartment) {
 			final List<IHandlePart<Node, ? extends Node>> handles = new ArrayList<IHandlePart<Node, ? extends Node>>();
 			// create handle part
 			final CollapseHandlePart collapseHandlePart = new CollapseHandlePart();
-			// injector.injectMembers(collapseHandlePart);//???
+			injector.injectMembers(collapseHandlePart);
 			handles.add(collapseHandlePart);
 			return handles;
 		}
-		return super.createHoverHandleParts(target, contextBehavior, contextMap);
 
+		return super.createHoverHandleParts(target, contextBehavior, contextMap);
 	}
 }

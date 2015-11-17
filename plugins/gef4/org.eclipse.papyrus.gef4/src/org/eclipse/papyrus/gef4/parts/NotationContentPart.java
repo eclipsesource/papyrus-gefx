@@ -15,33 +15,39 @@ package org.eclipse.papyrus.gef4.parts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXContentPart;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.FillStyle;
+import org.eclipse.gmf.runtime.notation.FontStyle;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
+import org.eclipse.papyrus.gef4.utils.FXUtils;
 import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
-import com.google.common.reflect.TypeToken;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -54,14 +60,25 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 
+/**
+ * Parent class for all GEF4 ContentParts based on GMF Runtime/Notation. The Content is a {@link View}
+ *
+ * @author Camille Letavernier
+ *
+ * @param <V>
+ *            The {@link View} represented by this ContentPart
+ * @param <N>
+ *            The FX {@link Node} used to display this ContentPart
+ */
 public abstract class NotationContentPart<V extends View, N extends Node> extends AbstractFXContentPart<N> {
 
 	protected final Adapter changeListener;
 
 	protected final V view;
 
-	protected List<View> lastKnownChildren;
+	protected final List<View> lastKnownChildren = new ArrayList<>();
 
 	public NotationContentPart(final V view) {
 		Assert.isNotNull(view);
@@ -73,12 +90,13 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		setAdapter(AdapterKey.get(View.class, "notation"), view);
 
 		changeListener = createAdapter();
-
-		updateLastKnownChildren();
-
-		installListeners();
 	}
 
+	/**
+	 * Delegates to {@link #doCreateVisual()} for creating the actual FX {@link Node}, and registers a style class
+	 *
+	 * @see {@link #getStyleClass()}
+	 */
 	@Override
 	protected final N createVisual() {
 		final N visual = doCreateVisual();
@@ -91,21 +109,30 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	protected abstract N doCreateVisual();
 
 	private void updateLastKnownChildren() {
-		lastKnownChildren = new ArrayList<View>(getContentChildren());
+		lastKnownChildren.clear();
+		lastKnownChildren.addAll(getContentChildren());
 	}
 
 	protected void installDefaultPolicies() {
 		// It is recommended to use dependency injection instead of hard-coding
 	}
 
-	public boolean isPrimary() {
-		return this instanceof IPrimaryContentPart;
-	}
-
 	public V getView() {
 		return view;
 	}
 
+	/**
+	 * Returns the Primary ContentPart containing this part
+	 *
+	 * The Primary content part is the top-most part representing a given semantic element
+	 *
+	 * For example, Compartments are usually not primary content parts, because
+	 * they are owned by a Node content part representing the same semantic element
+	 *
+	 * This method may return the current part (If it is a Primary part)
+	 *
+	 * @return
+	 */
 	public NotationContentPart<? extends View, ? extends Node> getPrimaryContentPart() {
 		if (this instanceof IPrimaryContentPart) {
 			return this;
@@ -119,18 +146,6 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return null;
 	}
 
-	protected void installListeners() {
-		getView().eAdapters().add(changeListener);
-		final EObject element = getElement();
-		if (element != null) {
-			element.eAdapters().add(changeListener);
-		}
-		final LayoutConstraint layout = getLayout();
-		if (layout != null) {
-			layout.eAdapters().add(changeListener);
-		}
-	}
-
 	protected IContentPart<Node, ? extends Node> getContentPart(final View forView) {
 		if (forView == null) {
 			return null;
@@ -138,23 +153,13 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return getViewer().getContentPartMap().get(forView);
 	}
 
-	@Override
-	protected void doDeactivate() {
-		getView().eAdapters().remove(changeListener);
-		final EObject element = getElement();
-		if (element != null) {
-			element.eAdapters().remove(changeListener);
-		}
-		final LayoutConstraint layout = getLayout();
-		if (layout != null) {
-			layout.eAdapters().remove(changeListener);
-		}
-		super.doDeactivate();
-	}
-
-	/** flag to indicate that the refresh have been triggered with a resize of the element. */
-	protected boolean decorationToRefresh;
-
+	/**
+	 * The Adapter used to listen to changes on View/Model
+	 *
+	 * It should call {@link #notifyChildrenChanged()} and {@link #refreshVisual()} as necessary
+	 *
+	 * @return
+	 */
 	protected Adapter createAdapter() {
 		return new AdapterImpl() {
 
@@ -164,35 +169,36 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 					return;
 				}
 
-				// Resize case
-				if (msg.getFeature() == NotationPackage.Literals.SIZE__WIDTH || msg.getFeature() == NotationPackage.Literals.SIZE__HEIGHT) {
-					if (msg.getOldValue() != msg.getNewValue()) {
-						decorationToRefresh = true;
-					} else {
-						decorationToRefresh = false;
-					}
-				} else {
-					decorationToRefresh = false;
-				}
-
 				if (!(msg.isTouch())) {
 					if (childrenChanged(msg)) {
 						notifyChildrenChanged();
 					}
 					refreshVisual();
 				}
-				decorationToRefresh = false;
 			}
 		};
 	}
 
+	/**
+	 * Do not invoke this method. Subclasses should invoke (and implement) {@link #refreshVisualInTransaction(Node)}
+	 *
+	 * Clients of the public API should invoke {@link #refreshVisual()}
+	 */
 	@Override
-	protected void doRefreshVisual(final N visual) {
-		refreshVisibility();
+	protected final void doRefreshVisual(final N visual) {
+		try {
+			getDomain().runExclusive(() -> refreshVisualInTransaction(visual));
+		} catch (InterruptedException ex) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred while refreshing the content part", ex));
+		}
 	}
 
-	protected void refreshVisibility() {
-		getVisual().setVisible(getView().isVisible());
+	protected TransactionalEditingDomain getDomain() {
+		return TransactionUtil.getEditingDomain(getView());
+	}
+
+	protected void refreshVisualInTransaction(final N visual) {
+		// Nothing
 	}
 
 	protected void notifyChildrenChanged() {
@@ -207,7 +213,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return msg.getFeature() == NotationPackage.Literals.VIEW__PERSISTED_CHILDREN || msg.getFeature() == NotationPackage.Literals.VIEW__TRANSIENT_CHILDREN;
 	}
 
-	public EObject getElement() {
+	protected EObject getElement() {
 		final EObject element = getView().getElement();
 		if (element == null) {
 			final NotationContentPart<? extends View, ? extends Node> parent = getParentContentPart();
@@ -240,6 +246,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		if (constraint instanceof Bounds) {
 			return (Bounds) constraint;
 		} else if (constraint instanceof Location) {
+			// TODO Check this for floating labels
 			final Bounds bounds = NotationFactory.eINSTANCE.createBounds();
 			bounds.setX(((Location) constraint).getX());
 			bounds.setY(((Location) constraint).getY());
@@ -277,20 +284,42 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return (FXViewer) super.getViewer();
 	}
 
+	// FIXME Use DiagramEventBroker instead of simple listeners, to avoid reacting to changes during a transaction
+	protected void installListeners() {
+		getView().eAdapters().add(changeListener);
+		final EObject element = getElement();
+		if (element != null) {
+			element.eAdapters().add(changeListener);
+		}
+		final LayoutConstraint layout = getLayout();
+		if (layout != null) {
+			layout.eAdapters().add(changeListener);
+		}
+	}
+
 	@Override
 	protected void doActivate() {
 		installDefaultPolicies();
+
 		super.doActivate();
-		refreshChildren();// TODO
+
+		updateLastKnownChildren();
+
+		installListeners();
 	}
 
-	// TODO to remove if possible
-	protected void refreshChildren() {
-		// refresh children
-		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
-		for (final IVisualPart<Node, ? extends Node> child : children) {
-			child.refreshVisual();
+	@Override
+	protected void doDeactivate() {
+		getView().eAdapters().remove(changeListener);
+		final EObject element = getElement();
+		if (element != null) {
+			element.eAdapters().remove(changeListener);
 		}
+		final LayoutConstraint layout = getLayout();
+		if (layout != null) {
+			layout.eAdapters().remove(changeListener);
+		}
+		super.doDeactivate();
 	}
 
 	protected BorderColors getBorderColors() {
@@ -414,7 +443,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	 *
 	 * @return the text alignment
 	 */
-	public Pos getTextAlignment() {
+	protected Pos getTextAlignment() {
 		return NotationUtil.getTextAlignment(view);
 	}
 
@@ -473,6 +502,82 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	/**
+	 * @return
+	 * 		The FX Font, corresponding to the View's fontName and fontSize
+	 */
+	protected Font getFont() {
+		return getFont(getFontSize());
+	}
+
+	/**
+	 *
+	 * @param fontSize
+	 *            The font size (In pixels)
+	 * @return
+	 * 		The FX Font, corresponding to this View's fontName and specified fontSize (in pixels)
+	 */
+	protected Font getFont(int fontSize) {
+		return new Font(getFontName(), FXUtils.scaleFont(fontSize));
+	}
+
+	/**
+	 *
+	 * @return
+	 * 		The name of the font to use to render this part
+	 */
+	protected String getFontName() {
+		View view = getView();
+		FontStyle fontStyle = (FontStyle) view.getStyle(NotationPackage.eINSTANCE.getFontStyle());
+		if (fontStyle == null) {
+			return "Segoe UI"; //$NON-NLS-1$ //Default
+		}
+
+		return fontStyle.getFontName();
+	}
+
+	/**
+	 *
+	 * @return
+	 * 		The size of the font to use to render this part
+	 */
+	protected int getFontSize() {
+		View view = getView();
+		FontStyle fontStyle = (FontStyle) view.getStyle(NotationPackage.eINSTANCE.getFontStyle());
+		if (fontStyle == null) {
+			return 9; // Default
+		}
+
+		return fontStyle.getFontHeight();
+	}
+
+	/**
+	 *
+	 * @return
+	 * 		The font color, as a 24-bits integer (#00BBGGRR)
+	 */
+	protected int getNotationFontColor() {
+		View view = getView();
+
+		FontStyle fontStyle = (FontStyle) view.getStyle(NotationPackage.eINSTANCE.getFontStyle());
+		if (fontStyle == null) {
+			return 0; // Black, default
+		}
+
+		return fontStyle.getFontColor();
+	}
+
+	/**
+	 *
+	 * @return
+	 * 		The font color, as a JavaFX Color
+	 */
+	protected Color getFontColor() {
+		int color = getNotationFontColor();
+
+		return Color.rgb(color & 255, (color >> 8) & 255, color >> 16 & 255); // & 255 to retain only the last 8-bits
+	}
+
+	/**
 	 * Gets the rotate.
 	 *
 	 * @return the rotate
@@ -482,35 +587,24 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	protected ScrollBarPolicy getVerticalBarPolicy() {
-		return NotationUtil.getVerticalBarPolicy(view);
+		return ScrollBarPolicy.AS_NEEDED;
 	}
 
 	protected ScrollBarPolicy getHorizontalBarPolicy() {
-		return NotationUtil.getHorizontalBarPolicy(view);
+		return ScrollBarPolicy.AS_NEEDED;
 	}
 
-	protected int getNotationMinWidth() {
-		return NotationUtil.getNotationMinWidth(view);
-	}
-
-	protected int getNotationMinHeight() {
-		return NotationUtil.getNotationMinHeight(view);
-	}
-
-	protected IContentPartFactory<Node> getFactory() {
-		final IContentPartFactory<Node> factory = getViewer().getAdapter(new TypeToken<IContentPartFactory<Node>>() {
-		});
-
-		if (factory == null) {
-			System.err.println("FIXME: no content part factory found");
-		}
-
-		return factory;
-	}
+	// protected int getNotationMinWidth() {
+	// return NotationUtil.getNotationMinWidth(view);
+	// }
+	//
+	// protected int getNotationMinHeight() {
+	// return NotationUtil.getNotationMinHeight(view);
+	// }
 
 	@Override
 	public List<View> getContentChildren() {
-		return getView().getChildren();
+		return ((List<View>) getView().getChildren()).stream().filter(c -> c.isVisible()).collect(Collectors.toList());
 	}
 
 	protected abstract String getStyleClass();// TODO support mutli styleClass named label should match on .genericLabel and .namedLabel
@@ -519,6 +613,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	public SetMultimap<? extends Object, String> getContentAnchorages() {
 		return HashMultimap.create();
 	}
+
 }
 
 

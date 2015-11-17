@@ -104,6 +104,7 @@ public class VisualPartProvider extends org.eclipse.papyrus.gef4.provider.Abstra
 		case "5067":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ConstraintLabelEditPart(view);
 		case "7003":
+		case "7012": // Generated NOT (Child Node Compartment)
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ComponentOperationCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "6035":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationBranchMutliplicityEditPart(view);
@@ -122,6 +123,7 @@ public class VisualPartProvider extends org.eclipse.papyrus.gef4.provider.Abstra
 		case "7014":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.RedefinableTemplateSignatureTemplateParameterCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "7017":
+		case "7011": // Generated NOT (Child Node Compartment)
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ClassAttributeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "7016":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.PackagePackageableElementCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
@@ -166,6 +168,7 @@ public class VisualPartProvider extends org.eclipse.papyrus.gef4.provider.Abstra
 		case "2002":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ComponentEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
 		case "7019":
+		case "7013": // Generated NOT (Child Node Compartment)
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ClassNestedClassifierCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "7018":
 			return new org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ClassOperationCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);

@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
@@ -46,9 +46,6 @@ public enum ShapeTypeEnum {
 		return literal;
 	}
 
-	/** The Constant LINE_STYLE_ARRAY. */
-	private static final ShapeTypeEnum[] LINE_STYLE_ARRAY = new ShapeTypeEnum[] { NONE, PACKAGE, OVAL, CORNER_BEND_RECTANGLE };
-
 	/**
 	 * Gets the by literal.
 	 *
@@ -57,12 +54,16 @@ public enum ShapeTypeEnum {
 	 * @return the by literal
 	 */
 	public static ShapeTypeEnum getByLiteral(final String literal) {
-		for (int i = 0; i < LINE_STYLE_ARRAY.length; ++i) {
-			final ShapeTypeEnum result = LINE_STYLE_ARRAY[i];
-			if (result.getLiteral().equals(literal)) {
-				return result;
+		if (literal == null) {
+			return null;
+		}
+
+		for (ShapeTypeEnum shapeType : ShapeTypeEnum.values()) {
+			if (literal.equalsIgnoreCase(shapeType.getLiteral())) {
+				return shapeType;
 			}
 		}
+
 		return null;
 	}
 

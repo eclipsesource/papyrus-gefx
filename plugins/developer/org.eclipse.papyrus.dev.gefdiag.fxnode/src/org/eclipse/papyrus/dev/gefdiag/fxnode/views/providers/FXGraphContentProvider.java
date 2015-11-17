@@ -11,6 +11,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.dev.gefdiag.fxnode.views.providers;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 
 public class FXGraphContentProvider implements ITreeContentProvider {
 
@@ -62,7 +64,15 @@ public class FXGraphContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof Parent) {
-			return ((Parent) parentElement).getChildrenUnmodifiable().toArray();
+			Parent parent = (Parent) parentElement;
+			List<Node> children = new ArrayList<Node>(parent.getChildrenUnmodifiable());
+			if (parent instanceof Pane) {
+				Pane pane = (Pane) parent;
+				if (pane.getShape() != null) {
+					children.add(pane.getShape());
+				}
+			}
+			return children.toArray();
 		}
 		if (parentElement instanceof Scene) {
 			return new Object[] { ((Scene) parentElement).getRoot() };

@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,28 +8,57 @@
  *
  * Contributors:
  *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
+import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.image.ImageRegistry;
 import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;
+import org.eclipse.papyrus.infra.gmfdiag.common.commands.SemanticAdapter;
+import org.eclipse.papyrus.uml.diagram.common.parser.NamedElementLabelParser;
 
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.Text;
 
 /**
  * The Class AffixedLabelContentPart.
  */
-public class AffixedLabelContentPart extends org.eclipse.papyrus.gef4.parts.LabelContentPart implements IPrimaryContentPart {
+public class AffixedLabelContentPart extends ContainerContentPart<View, StackPane> implements IPrimaryContentPart {
+
+	protected Label label;
+
+	private String currentImagePath;
+
+	protected IParser parser;
+
+	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
+
+	private static double REM;
+
+	public static final double scale(final int pixelSize) {
+		if (REM < 0.01) {
+			REM = Math.rint(new Text("").getLayoutBounds().getHeight());
+		}
+		return REM * pixelSize / 12;
+	}
 
 	/**
 	 * Instantiates a new affixed label content part.
@@ -52,6 +81,61 @@ public class AffixedLabelContentPart extends org.eclipse.papyrus.gef4.parts.Labe
 		return "genericAffixedLabel";
 	}
 
+	@Override
+	protected StackPane doCreateVisual() {
+		final StackPane content = new StackPane();
+		VBox.setVgrow(content, Priority.NEVER);
+		label = new Label();
+		VBox.setVgrow(label, Priority.NEVER);
+		content.getChildren().add(label);
+		refreshLabel();
+		refreshIcon();
+		return content;
+	}
+
+	protected void refreshIcon() {
+		final String imagePath = getImagePath();
+		if (imagePath == currentImagePath) {
+			return;
+		}
+		if (imagePath != null && imagePath.equals(currentImagePath)) {
+			return;
+		}
+
+		currentImagePath = imagePath;
+
+		if (imagePath == null) {
+			label.setGraphic(null);
+		} else {
+			final Image image = ImageRegistry.INSTANCE.getImage(imagePath);
+			if (image != null && !image.isError()) {
+				final ImageView imageView = new ImageView(image);
+				label.setGraphic(imageView);
+			} else {
+				label.setGraphic(null);
+			}
+		}
+	}
+
+	protected String getImagePath() {
+		final EObject semanticElement = getElement();
+		if (semanticElement == null) {
+			return null;
+		}
+		return imagePath + "/" + semanticElement.eClass().getName() + ".gif";//$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	protected void refreshLabel() {
+		final String text = getText();
+		label.setText(text == null ? "" : text.trim());
+
+		// Refresh the Wrap property
+		if (TextOverflowEnum.WRAP.equals(getTextOverflow())) {
+			label.setWrapText(true);
+		} else {
+			label.setWrapText(false);
+		}
+	}
 
 	/**
 	 * Do refresh visual.
@@ -61,9 +145,8 @@ public class AffixedLabelContentPart extends org.eclipse.papyrus.gef4.parts.Labe
 	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#doRefreshVisual(javafx.scene.layout.StackPane)
 	 */
 	@Override
-	protected void doRefreshVisual(final StackPane visual) {
-		super.doRefreshVisual(visual);
-		visual.toFront();
+	protected void refreshVisualInTransaction(final StackPane visual) {
+		super.refreshVisualInTransaction(visual);
 		// Set rotate
 		visual.setRotate(getRotate());
 	}
@@ -125,9 +208,25 @@ public class AffixedLabelContentPart extends org.eclipse.papyrus.gef4.parts.Labe
 	 * @return the text overflow
 	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#getTextOverflow()
 	 */
-	@Override
 	protected TextOverflowEnum getTextOverflow() {
 		return TextOverflowEnum.VISIBLE;
+	}
+
+	protected String getText() {
+		return getParser().getPrintString(new SemanticAdapter(getElement(), getView()), ParserOptions.NONE.intValue());
+	}
+
+	/**
+	 *
+	 * @see org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart#getParser()
+	 *
+	 */
+	// TODO to be override at generation to set the good parser or get it directly on gmfgen model
+	public IParser getParser() {
+		if (parser == null) {
+			parser = new NamedElementLabelParser();
+		}
+		return parser;
 	}
 
 }

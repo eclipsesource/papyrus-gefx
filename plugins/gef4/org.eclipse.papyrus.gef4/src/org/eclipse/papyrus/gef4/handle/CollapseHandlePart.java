@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,17 +8,21 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 
-package org.eclipse.papyrus.gef4.parts;
+package org.eclipse.papyrus.gef4.handle;
 
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
 import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gmf.runtime.notation.DrawerStyle;
+import org.eclipse.gmf.runtime.notation.NotationPackage;
+import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.policies.CollapseOnClickPolicy;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
-import org.eclipse.papyrus.gef4.utils.VisualPartUtil;
+import org.eclipse.papyrus.gef4.utils.CompartmentUtils;
+import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 
 import com.google.common.collect.SetMultimap;
 
@@ -90,17 +94,26 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 				.iterator().next();
 
 		// Get the parent compartment
-		final CompartmentContentPart<?, ?> compartment = VisualPartUtil.findParentVisualPartInstance(anchorage, CompartmentContentPart.class);
-		if (null != compartment && compartment.canCollapse) {
-			final CompartmentContentPart<?, ?> compartmentContentPart = compartment;
-			if (compartmentContentPart.isCollapsed()) {
-				text.setText("+");//$NON-NLS-1$
-			} else {
-				text.setText("-");//$NON-NLS-1$
+		final IVisualPart<Node, ? extends Node> compartment = CompartmentUtils.getCollapsablePart(anchorage);
+
+		// FIXME: Use the notation model rather than the ContentPart
+		if (null != compartment) {
+			View view = NotationHelper.findView(compartment);
+			DrawerStyle style = (DrawerStyle) view.getStyle(NotationPackage.eINSTANCE.getDrawerStyle());
+
+			if (style == null) {
+				text.setVisible(false);
+				return;
 			}
+
+			text.setVisible(true);
+			text.setText(style.isCollapsed() ? "+" : "-"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (style.isCollapsed()) {
+
+			}
+
 			refreshHandleLocation(compartment);
 			getVisual().setPrefSize(WIDTH, HEIGHT);
-			getVisual().toFront();
 		}
 	}
 
@@ -110,9 +123,9 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 	 * @param compartment
 	 *            the host visual
 	 */
-	protected void refreshHandleLocation(final CompartmentContentPart<?, ?> compartment) {
-		getVisual().setLayoutX(BoundsUtil.getAbsoluteX(compartment) + compartment.getMargin().getLeft());
-		getVisual().setLayoutY(BoundsUtil.getAbsoluteY(compartment) + compartment.getMargin().getTop());
+	protected void refreshHandleLocation(final IVisualPart<Node, ? extends Node> compartment) {
+		getVisual().setLayoutX(BoundsUtil.getAbsoluteX(compartment));
+		getVisual().setLayoutY(BoundsUtil.getAbsoluteY(compartment));
 	}
 
 }

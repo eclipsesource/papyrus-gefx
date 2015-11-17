@@ -13,11 +13,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import java.util.List;
-
-import org.eclipse.gef4.fx.nodes.GeometryNode;
-import org.eclipse.gef4.geometry.planar.Ellipse;
-import org.eclipse.gef4.geometry.planar.IGeometry;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
@@ -30,6 +25,7 @@ import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Reflection;
@@ -44,17 +40,12 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.Ellipse;
 
-public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements IPrimaryContentPart {
+public class NodeContentPart extends ContainerContentPart<Shape, VBox> implements IPrimaryContentPart {
 
-	private static final int DEFAUT_MIN_WIDTH = 100;
-	private static final int DEFAUT_MIN_HEIGHT = 100;
-
-	/** indicate if The corner bend decoration is instantiate. */
-	private boolean cornerBend;
-
-	/** indicate if the double line decoration is set. */
-	private boolean doubleLine;
+	public static final int DEFAULT_MIN_WIDTH = 100;
+	public static final int DEFAULT_MIN_HEIGHT = 100;
 
 	public NodeContentPart(final Shape view) {
 		super(view);
@@ -62,16 +53,33 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 	@Override
 	protected VBox doCreateVisual() {
-		final VBox vBox = new VBox();
-
-		// add listener
-		vBox.boundsInParentProperty().addListener(boundsListener);
-		return vBox;
+		return new VBox();
 	}
 
 	@Override
-	protected void doRefreshVisual(final VBox visual) {
-		super.doRefreshVisual(visual);
+	protected void refreshVisualInTransaction(final VBox visual) {
+		super.refreshVisualInTransaction(visual);
+		refreshBounds();
+	}
+
+	protected void refreshBounds() {
+		final VBox region = getVisual();
+
+		region.setLayoutX(getX());
+		region.setLayoutY(getY());
+
+		boolean autoSize = true; // FIXME configure (autoHeight + autoWidth)
+		if (autoSize) {
+			region.setMinWidth(getWidth());
+			region.setMinHeight(getHeight());
+			region.setPrefHeight(Region.USE_COMPUTED_SIZE);
+			region.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		} else {
+			region.setMinHeight(Region.USE_COMPUTED_SIZE);
+			region.setMinWidth(Region.USE_COMPUTED_SIZE);
+			region.setPrefHeight(getHeight());
+			region.setPrefWidth(getWidth());
+		}
 	}
 
 	@Override
@@ -123,10 +131,12 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 			// get the tab dimension of the package
 			for (final IVisualPart<Node, ? extends Node> child : getChildren()) {
 				if (child instanceof LabelContentPart) {
+					LabelContentPart childPart = (LabelContentPart) child;
+
 					// get the margin
-					final Insets childMargin = ((NotationContentPart<Shape, ?>) child).getPadding();
+					final Insets childMargin = childPart.getPadding();
 					// get the Label child
-					final Region label = (Region) ((Region) child.getVisual()).getChildrenUnmodifiable().get(0);
+					final Label label = childPart.getVisual();
 					tabWidth = Math.max(label.getWidth() + childMargin.getLeft() + childMargin.getRight(), tabWidth);
 					tabHeight += label.getHeight() + childMargin.getBottom() + childMargin.getTop();
 				}
@@ -147,17 +157,11 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 		case OVAL:
 			// Check if ellipse is aldready instanciate.
-			boolean ellipseInstatiate = false;
-			if (region.getShape() instanceof GeometryNode<?>) {
-				final IGeometry geometry = ((GeometryNode<?>) region.getShape()).getGeometry();
-				if ((geometry instanceof Ellipse)) {
-					ellipseInstatiate = false;
-				}
-			}
-			if (!ellipseInstatiate) {
-				final GeometryNode<Ellipse> ellipseShape = new GeometryNode<Ellipse>();
-				ellipseShape.setGeometry(new Ellipse(0, 0, width, height));
-				region.setShape(ellipseShape);
+			if (!(region.getShape() instanceof Ellipse)) {
+				Ellipse ellipse = new Ellipse(10, 10); // Size doesn't matter, it will be resized to match the region's. We still need a size, otherwise the Ellipse is not drawn at all
+				ellipse.setFill(region.getBackground().getFills().get(0).getFill());
+				ellipse.setStroke(region.getBorder().getStrokes().get(0).getBottomStroke());
+				region.setShape(ellipse);
 			}
 			break;
 
@@ -173,72 +177,56 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 
 		// Rotate the figure.
 		region.setRotate(getRotate());
-
-		if (null != region.getShape()) {
-			region.getShape().toFront();
-		}
 	}
 
+	// TODO: Store figures directly rather than re-creating them
 	@Override
 	protected void refreshDecoration() {
 		final VBox region = getVisual();
 		final double width = getWidth();
 		final double height = getHeight();
 
+
+		// Delete cornerBend if exist
+		for (int i = 0; i < region.getChildren().size(); i++) {
+			if (region.getChildren().get(i) instanceof CornerBendPath) {
+				region.getChildren().remove(i);
+			}
+		}
 		// CornerBend
 		if (ShapeTypeEnum.CORNER_BEND_RECTANGLE.equals(getShapeType())) {
-			if (!cornerBend || decorationToRefresh) {
-
-				for (int i = 0; i < region.getChildren().size(); i++) {
-					if (region.getChildren().get(i) instanceof CornerBendPath) {
-						region.getChildren().remove(i);
-					}
-				}
-
-				// Create the decoration
-				final CornerBendPath cornerBendPath = new CornerBendPath(width, getCornerBendWidth());
-				// Set the Color
-				cornerBendPath.setFill(getCornerBendColor());
-				// add it to children of region
-				region.getChildren().add(cornerBendPath);
-				cornerBendPath.toBack();// To back to permits the selection of childs(ie Labels..)
-				cornerBend = true;
-			}
-		} else if (cornerBend) {
-			// Delete cornerBend if exist
 			for (int i = 0; i < region.getChildren().size(); i++) {
 				if (region.getChildren().get(i) instanceof CornerBendPath) {
 					region.getChildren().remove(i);
 				}
 			}
-			cornerBend = false;
+
+			// Create the decoration
+			final CornerBendPath cornerBendPath = new CornerBendPath(width, getCornerBendWidth());
+			// Set the Color
+			cornerBendPath.setFill(getCornerBendColor());
+			// add it to children of region
+			region.getChildren().add(cornerBendPath);
 		}
 
+		// Delete ActiveLine if exist
+		for (int i = 0; i < region.getChildren().size(); i++) {
+			if (region.getChildren().get(i) instanceof DoubleBorderPane) {
+				region.getChildren().remove(i);
+			}
+		}
 		// If have double Line. For active Class for example
 		if (hasDoubleBorder() && null == region.getShape()) {
 			// If double line are not already drawn
-			if (!doubleLine || decorationToRefresh) {
-
-				for (int i = 0; i < region.getChildren().size(); i++) {
-					if (region.getChildren().get(i) instanceof DoubleBorderPane) {
-						region.getChildren().remove(i);
-					}
-				}
-
-				// Create the decoration
-				final DoubleBorderPane pane = new DoubleBorderPane(region, width, height, getBorderWidths(), getBorderStyles(), getBorderColors(), getDoubleBorderWidths());
-				region.getChildren().add(pane);
-				pane.toBack();// To back to permits the selection of childs(ie Labels..)
-				doubleLine = true; // TODO passe to true: needs to pass to false in case of resize.
-			}
-		} else if (doubleLine) {
-			// Delete ActiveLine if exist
 			for (int i = 0; i < region.getChildren().size(); i++) {
 				if (region.getChildren().get(i) instanceof DoubleBorderPane) {
 					region.getChildren().remove(i);
 				}
 			}
-			doubleLine = false;
+
+			// Create the decoration
+			final DoubleBorderPane pane = new DoubleBorderPane(region, width, height, getBorderWidths(), getBorderStyles(), getBorderColors(), getDoubleBorderWidths());
+			region.getChildren().add(pane);
 		}
 	}
 
@@ -299,53 +287,10 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox>implements
 	}
 
 	@Override
-	public double getMinHeight() {
-		// Add margin and padding
-		final Insets padding = getPadding();
-		double minHeight = padding.getTop() + padding.getBottom();
-
-		// gets for the minWidth of children
-		final double spacing = getSpacing();
-		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
-
-		for (final IVisualPart<Node, ? extends Node> visualPart : children) {
-			final Node childVisual = visualPart.getVisual();
-			if (childVisual.isVisible() && childVisual.isManaged() && childVisual instanceof Region) {
-				// add the minHeight of each child
-				minHeight += ((ContainerContentPart<?, ?>) visualPart).getMinHeight() + spacing;
-			}
-		}
-
-		final int notationMinHeight = getNotationMinHeight();
-		return Math.max(notationMinHeight < 0 ? DEFAUT_MIN_HEIGHT : notationMinHeight, minHeight - spacing); // nbChild-1 of spacing
-	}
-
-	@Override
-	public double getMinWidth() {
-		final int notationMinWidth = getNotationMinWidth();
-		double minWidth = notationMinWidth < 0 ? DEFAUT_MIN_WIDTH : notationMinWidth;
-
-		// gets for the minWidth of children
-		final List<IVisualPart<Node, ? extends Node>> children = getChildren();
-		for (final IVisualPart<Node, ? extends Node> visualPart : children) {
-			final Node childVisual = visualPart.getVisual();
-			if (childVisual.isManaged()) {
-				final Insets padding = getPadding();
-				// Get the maximum minWidth
-				minWidth = Math.max(minWidth, ((ContainerContentPart<?, ?>) visualPart).getMinWidth()
-						+ padding.getLeft() + padding.getRight()); // No margin for nodes
-			}
-		}
-
-		return minWidth;
-	}
-
-	@Override
 	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
 			if (child instanceof AffixedNodeContentPart || child instanceof AffixedLabelContentPart) {
 				child.getVisual().setManaged(false);
-				child.getVisual().toFront();
 			}
 			getVisual().getChildren().add(child.getVisual());
 		}

@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  *
  * Contributors:
  *   Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 
 /**
  * Enumeration to define line style as String related to the Open Declaration {@link BorderStrokeStyle}
- * 
+ *
  * @author Mickael ADAM
  *
  */
@@ -83,9 +83,6 @@ public enum BorderStrokeStyleEnum {
 		return literal;
 	}
 
-	/** The Constant LINE_STYLE_ARRAY. */
-	private static final BorderStrokeStyleEnum[] LINE_STYLE_ARRAY = new BorderStrokeStyleEnum[] { DASH, DASH_DOT, DASH_DOT_DOT, DOT, SOLID, CUSTOM, DOUBLE };
-
 	/**
 	 * Gets the by literal.
 	 *
@@ -94,12 +91,16 @@ public enum BorderStrokeStyleEnum {
 	 * @return the by literal
 	 */
 	public static BorderStrokeStyleEnum getByLiteral(String literal) {
-		for (int i = 0; i < LINE_STYLE_ARRAY.length; ++i) {
-			BorderStrokeStyleEnum result = LINE_STYLE_ARRAY[i];
-			if (result.getLiteral().equals(literal)) {
-				return result;
+		if (literal == null) {
+			return null;
+		}
+
+		for (BorderStrokeStyleEnum strokeStyle : BorderStrokeStyleEnum.values()) {
+			if (literal.equalsIgnoreCase(strokeStyle.getLiteral())) {
+				return strokeStyle;
 			}
 		}
+
 		return null;
 	}
 

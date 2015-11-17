@@ -76,8 +76,8 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	}
 
 	@Override
-	protected void doRefreshVisual(Connection connection) {
-		super.doRefreshVisual(connection);
+	protected void refreshVisualInTransaction(Connection connection) {
+		super.refreshVisualInTransaction(connection);
 
 		connection.getCurveNode().setStrokeWidth(2);
 		// TODO parse bendpoints and corner radius and jumps and...

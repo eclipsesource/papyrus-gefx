@@ -13,15 +13,11 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.View;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
 
 public abstract class ContainerContentPart<V extends View, R extends Region> extends NotationContentPart<V, R> {
 
@@ -29,65 +25,23 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 		super(view);
 	}
 
-
-	protected final ChangeListener<? super javafx.geometry.Bounds> boundsListener = new ChangeListener<javafx.geometry.Bounds>() {
-
-		@Override
-		public void changed(final ObservableValue<? extends javafx.geometry.Bounds> observable, final javafx.geometry.Bounds oldValue, final javafx.geometry.Bounds newValue) {
-			if (!decorationToRefresh && (getHeight() != newValue.getHeight() || getWidth() != newValue.getWidth())) {
-				refreshShape();
-				decorationToRefresh = true;
-				refreshDecoration();
-				decorationToRefresh = false;
-			}
-		}
-
-	};
-
 	@Override
-	protected void doRefreshVisual(final R visual) {
-
-		super.doRefreshVisual(visual);
+	protected void refreshVisualInTransaction(final R visual) {
+		super.refreshVisualInTransaction(visual);
 
 		// resetStyle();
 
 		// Layout refresh
 		refreshLayout();
-		refreshBounds();
 
 		// Visual refresh
-		refreshShape();
 		refreshBackground();
 		refreshBorder();
+		refreshShape();
 		refreshShadow();
 		refreshEffect();
 		refreshDecoration();
-
-		refreshChildren();
-
-		// refreshFXCSSStyle();
 	}
-
-	/*
-	 * private void refreshFXCSSStyle() {
-	 * // addStyle("-fx-background-insets: 10;");
-	 * }
-	 * 
-	 * protected void resetStyle() {
-	 * getVisual().setStyle("");//$NON-NLS-1$
-	 * getVisual().applyCss();
-	 * }
-	 * 
-	 * protected void setStyle(String style) {
-	 * getVisual().setStyle(style);
-	 * getVisual().applyCss();
-	 * }
-	 * 
-	 * protected void addStyle(String style) {
-	 * getVisual().setStyle(getVisual().getStyle() + style);
-	 * getVisual().applyCss();
-	 * }
-	 */
 
 	protected void refreshLayout() {
 		// Refresh Padding
@@ -99,22 +53,6 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 		} else if (getVisual() instanceof HBox) {
 			((HBox) getVisual()).setSpacing(getSpacing());
 		}
-	}
-
-	protected void refreshBounds() {
-		final R region = getVisual();
-
-		region.setLayoutX(getX());
-		region.setLayoutY(getY());
-		region.setMinWidth(getMinWidth());
-		region.setMinHeight(getMinHeight());
-
-		final Bounds bounds = getBounds();
-		if (null != bounds) {
-			region.setPrefWidth(bounds.getWidth());
-			region.setPrefHeight(bounds.getHeight());
-		}
-		region.autosize();
 	}
 
 	protected void refreshBackground() {
@@ -139,24 +77,6 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 
 	protected void refreshDecoration() {
 		// Do nothing, the implementation is in charge to manage that.
-	}
-
-	@Override
-	protected double getHeight() {
-		return getVisual().getHeight();
-	}
-
-	@Override
-	protected double getWidth() {
-		return getVisual().getWidth();
-	}
-
-	public double getMinHeight() {
-		return 0;
-	}
-
-	public double getMinWidth() {
-		return 0;
 	}
 
 }

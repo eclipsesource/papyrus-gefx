@@ -1,0 +1,12 @@
+Compartment[kind=nestedclassifiers]{
+	visible: false;
+}
+
+* {
+	routing: Rectilinear;
+}
+
+[isAbstract=true]{
+	fillColor: lightgray;
+}
+

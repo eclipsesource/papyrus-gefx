@@ -13,95 +13,201 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.fx.nodes.GeometryNode;
-import org.eclipse.gef4.geometry.planar.Ellipse;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.DecorationNode;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
-import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.gmf.runtime.notation.TitleStyle;
+import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
-import org.eclipse.papyrus.gef4.utils.BoundsUtil;
-import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
+import org.eclipse.papyrus.gef4.utils.FXUtils;
+import org.eclipse.papyrus.gef4.utils.VisualPartUtil;
 
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.value.WritableValue;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.When;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
-abstract public class CompartmentContentPart<V extends DecorationNode, R extends ScrollPane> extends ContainerContentPart<V, ScrollPane> {
+/**
+ * Structure:
+ *
+ * <pre>
+ * VBox
+ * -- Label(Title)
+ * -- ScrollPane
+ * ---- ConcretePane(Subclass-dependent)
+ * ------ Contents(Subclass-dependent)
+ * </pre>
+ *
+ * @author Camille Letavernier
+ *
+ * @param <V>The
+ *            kind of notation::View (Extending DecorationNode)
+ * @param
+ * 			<P>
+ *            The concrete Pane type
+ */
+abstract public class CompartmentContentPart<V extends DecorationNode, P extends Pane> extends ContainerContentPart<V, VBox> {
 
-	boolean collapsed = false;
+	// A value smaller than 18 will prevent the scrollbars from working properly (Size of the scrollbar arrows)
+	// TODO: The min width should depend on whether the title is displayed or not; and on whether there are contents to display or not.
+	// Empty compartments with no title should have a very small minimum height (No need for scrollbars).
+	// Compartments with at least 1 item should be able to display at least 1 item and the scrollbars
+	protected static final int MINIMUM_COMPARTMENT_HEIGHT = 20;
 
-	boolean canCollapse = true; // TODO set it throw CSS
+	protected VBox wrapper;
 
-	protected static final int MINIMUM_COMPARTMENT_HEIGHT = 15;
+	protected P compartment;
+
+	protected Label titleLabel;
+
+	protected ScrollPane scrollPane;
 
 	public CompartmentContentPart(final V view) {
 		super(view);
 	}
 
 	@Override
-	protected void doRefreshVisual(final ScrollPane visual) {
-		super.doRefreshVisual(visual);
-		refreshCollapsed();
-		refreshScrollBar();
+	protected final VBox doCreateVisual() {
+		wrapper = new VBox();
+		titleLabel = new Label(); // Do not add it to the contents yet. This will be managed by #refreshTitle()
+
+		compartment = doCreatePane();
+
+		if (compartment == null) {
+			String message = String.format("The class %s did not properly implement the #doCreatePane() method. This method should never return null", getClass().getName());
+			Activator.getDefault().getLog().log(new Status(IStatus.WARNING, Activator.PLUGIN_ID, message));
+			scrollPane = new ScrollPane();
+		} else {
+			scrollPane = new ScrollPane(compartment);
+		}
+
+		scrollPane.setFitToWidth(true);
+		scrollPane.setFitToHeight(true);
+
+		// The isEmpty() property is not directly observable. We need to manually create an observable boolean property
+		BooleanBinding isCompartmentEmpty = Bindings.createBooleanBinding(() -> compartment.getChildren().isEmpty(), compartment.getChildren());
+
+		// If the title is visible, we can hide the scroll pane entirely. Otherwise, give a non-null min size to the scroll pane
+		DoubleBinding conditionalMinSize = (new When(titleLabel.visibleProperty())).then(0.).otherwise(3.);
+
+		// If the compartment is empty, then set a small minHeight. Otherwise, leave enough room to display at least one item
+		scrollPane.minHeightProperty().bind(new When(isCompartmentEmpty).then(conditionalMinSize).otherwise(MINIMUM_COMPARTMENT_HEIGHT));
+
+		VBox.setVgrow(scrollPane, Priority.ALWAYS);
+		VBox.setVgrow(titleLabel, Priority.NEVER);
+		VBox.setVgrow(wrapper, Priority.ALWAYS);
+
+		// Set stylesheet to hide viewport child which can't
+		scrollPane.getStylesheets().add(URI.createPlatformPluginURI(VisualPartUtil.VIEWPORT_SCROLL_PANE_STYLE, false).toPlatformString(false));
+
+		wrapper.getChildren().addAll(titleLabel, scrollPane);
+
+		refreshCollapsed(false); // FIXME the animation should be off by default, and only enabled when we receive an event from the Notation model
+
+		return wrapper;
 	}
 
+	/**
+	 * Create the pane that will actually contain this part's children
+	 *
+	 * Specific to subclasses (e.g. VBox for a ListCompartment, Pane for a XYCompartment, ...)
+	 *
+	 * @return
+	 */
+	protected abstract P doCreatePane();
+
+	@Override
+	protected void refreshVisualInTransaction(final VBox visual) {
+		super.refreshVisualInTransaction(visual);
+		refreshCollapsed(true);
+		refreshScrollBar();
+		refreshTitle();
+	}
+
+	protected void refreshTitle() {
+		// Add or remove the Title label
+		if (isShowTitle()) {
+			titleLabel.setVisible(true);
+			titleLabel.setManaged(true);
+
+			titleLabel.setMaxWidth(Double.MAX_VALUE);
+			titleLabel.setAlignment(Pos.BASELINE_CENTER);
+			titleLabel.setFont(getFont(7));
+			FXUtils.setPadding(titleLabel, 1, 1);
+
+			// Update the Title text
+			titleLabel.setText(getTitle());
+		} else {
+			titleLabel.setVisible(false);
+			titleLabel.setManaged(false);
+			return;
+		}
+	}
+
+	/**
+	 * Whether the title of the compartment should be displayed
+	 *
+	 * Defaults to false
+	 *
+	 * @see {@link #getTitle()}
+	 *
+	 * @return
+	 */
+	protected boolean isShowTitle() {
+		TitleStyle titleStyle = (TitleStyle) view.getStyle(NotationPackage.eINSTANCE.getTitleStyle());
+		if (titleStyle == null) {
+			return false;
+		}
+
+		return titleStyle.isShowTitle();
+	}
+
+	/**
+	 * Returns the title of this compartment
+	 *
+	 * Subclasses should override
+	 *
+	 * @return
+	 */
+	// FIXME This should be configurable (Using parsers, ...?)
+	protected String getTitle() {
+		return "compartment"; // Default title
+	}
+
+	// The primary part is responsible for the general layout. Especially, if the primary part specifies that the node should
+	// extend automatically based on the size of its contents, this scroll bar policy will most likely not be useful
 	protected void refreshScrollBar() {
-		final ScrollPane visual = getVisual();
-		final ScrollBarPolicy horizontalBarPolicy = collapsed ? ScrollBarPolicy.NEVER : getHorizontalBarPolicy();
-		final ScrollBarPolicy verticalBarPolicy = collapsed ? ScrollBarPolicy.NEVER : getVerticalBarPolicy();
-
-		visual.setHbarPolicy(horizontalBarPolicy);
-		visual.setVbarPolicy(verticalBarPolicy);
-
-		if (ScrollBarPolicy.NEVER.equals(verticalBarPolicy)) {
-			((Region) visual.getContent()).setPrefWidth(visual.getViewportBounds().getWidth());
-		}
-
-		if (ScrollBarPolicy.NEVER.equals(horizontalBarPolicy)) {
-			((Region) visual.getContent()).setPrefHeight(visual.getViewportBounds().getHeight());
-		}
+		scrollPane.setHbarPolicy(getHorizontalBarPolicy());
+		scrollPane.setVbarPolicy(getVerticalBarPolicy());
 	}
 
 	/**
 	 * Refreshes the compartment's collapsed state
 	 */
-	protected void refreshCollapsed() {
-		if (isCanCollapse()) {
-			final DrawerStyle style = (DrawerStyle) ((View) getView()).getStyle(NotationPackage.eINSTANCE.getDrawerStyle());
-			if (style != null) {
-				setCollapsed(style.isCollapsed());
-			}
-		} else {
-			setCollapsed(false);
-		}
-	}
-
-	@Override
-	protected void refreshBounds() {
-		super.refreshBounds();
-		VBox.setVgrow(getVisual(), Priority.ALWAYS);
+	protected void refreshCollapsed(boolean animate) {
+		final DrawerStyle style = (DrawerStyle) getView().getStyle(NotationPackage.eINSTANCE.getDrawerStyle());
+		setCollapsed(style == null ? false : style.isCollapsed(), animate);
 	}
 
 	@Override
@@ -115,130 +221,136 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 				getCornerRadii(), getBorderWidths(),
 				getMargin());
 		final Border border = new Border(stroke);
-		getVisual().setBorder(border);
+		wrapper.setBorder(border);
 	}
 
-	@Override
-	protected void refreshBackground() {
-		final Region region = getVisual();
-		// Background to fill a simple gradient
-		final LinearGradient gradiant = new LinearGradient(getBackgroundGradientStartPosition().getX(), getBackgroundGradientStartPosition().getY(), getBackgroundGradientEndPosition().getX(), getBackgroundGradientEndPosition().getY(),
-				true, CycleMethod.NO_CYCLE, new Stop(0, getBackgroundColor2()), new Stop(1, getBackgroundColor1()));
-		final BackgroundFill fill = new BackgroundFill(gradiant, getCornerRadii(), getMargin());
-		final Background background = new Background(fill);
-
-		// set the Background
-		region.setBackground(background);
-	}
-
-	@Override
-	protected void refreshShape() {
-		final ScrollPane region = getVisual();
-
-		// Set the shape
-		final int relativeX = BoundsUtil.getRelativeX(region);
-		final int relativeY = BoundsUtil.getRelativeY(region);
-		final int width = BoundsUtil.getWidth(region);
-		final int height = BoundsUtil.getHeight(region);
-
-		if (ShapeTypeEnum.OVAL.equals(getShapeType())) {
-			final GeometryNode<Ellipse> ellipseShape = new GeometryNode<Ellipse>();
-			ellipseShape.setGeometry(new Ellipse(relativeX, relativeY, width, height));
-			region.setShape(ellipseShape);
-		} else {
-			region.setShape(null);
-		}
-
-		// Set the clip to avoid the compartment to be outside of the parent
-		final Shape parentShape = ((Region) getParent().getVisual()).getShape();
-		Shape clip = null;
-
-		// set the clip in case of Ellipse/Oval
-		if (null != parentShape && (parentShape instanceof GeometryNode<?> && ((GeometryNode<?>) parentShape).getGeometry() instanceof Ellipse)) {
-			parentShape.setFill(Color.BLACK);
-			clip = Shape.union(parentShape, parentShape);// Create a copy of parent shape
-			clip.setFill(Color.BLACK);
-			clip.setTranslateX(-relativeX);
-			clip.setTranslateY(-relativeY);
-		}
-		region.setClip(clip);
-	}
-
-	@Override
-	protected void refreshEffect() {
-		getVisual().setEffect(getEffect());
-	}
-
-	@Override
-	public double getMinHeight() {
-		return MINIMUM_COMPARTMENT_HEIGHT;
-	}
+	// @Override
+	// protected void refreshShape() {
+	// final ScrollPane pane = getVisual();
+	//
+	// // Set the shape
+	// final int relativeX = BoundsUtil.getRelativeX(pane);
+	// final int relativeY = BoundsUtil.getRelativeY(pane);
+	// final int width = BoundsUtil.getWidth(pane);
+	// final int height = BoundsUtil.getHeight(pane);
+	//
+	// // if (ShapeTypeEnum.OVAL.equals(getShapeType())) {
+	// // pane.setShape(new Ellipse(relativeX, relativeY, width, height));
+	// // } else {
+	// // pane.setShape(null);
+	// // }
+	//
+	// // Set the clip to avoid the compartment to be outside of the parent
+	// final Shape parentShape = ((Region) getParent().getVisual()).getShape();
+	// Shape clip = null;
+	//
+	// // set the clip in case of Ellipse/Oval
+	// if (parentShape instanceof Ellipse) {
+	// parentShape.setFill(Color.BLACK);
+	// clip = Shape.union(parentShape, parentShape);// Create a copy of parent shape
+	// clip.setFill(Color.BLACK);
+	// clip.setTranslateX(-relativeX);
+	// clip.setTranslateY(-relativeY);
+	// }
+	// pane.setClip(clip);
+	// }
 
 	@Override
 	protected String getStyleClass() {
 		return "genericListCompartment";
 	}
 
+	private boolean collapsed = false;
 
-	public boolean isCollapsed() {
-		return collapsed;
-	}
+	private Timeline collapseAnimation;
 
-	public void setCollapsed(final boolean collapsed) {
-
-		// Set the child visibility
-		for (final Node child : getVisual().getChildrenUnmodifiable()) {
-			child.setVisible(!collapsed);
-		}
-
+	protected void setCollapsed(final boolean collapsed, boolean animate) {
+		// TODO different behavior if the title is visible or not
+		// Size -> 0 when collapsed with title visible
+		// Size -> 3 when collapsed with title hidden (Avoid 0px compartment)
 		if (this.collapsed != collapsed) {
 			this.collapsed = collapsed;
-			// refresh Collapse
-			// Set the Height with animation
-			final Bounds bounds = getBounds();
-			if (collapsed) {
-				getVisual().setMinHeight(getMinHeight());
-				getVisual().setPrefHeight(bounds.getHeight());
-				animateHeightTo(MINIMUM_COMPARTMENT_HEIGHT);
-			} else {
-				getVisual().setMinHeight(MINIMUM_COMPARTMENT_HEIGHT);
-				getVisual().setPrefHeight(MINIMUM_COMPARTMENT_HEIGHT);
 
-				animateHeightTo(bounds.getHeight());
+
+			// TODO Experimental animation. Several graphical artifacts remain (Especially because the ScrollPane has a min size that depends on other compartments in the same parent)
+			// Artifacts are currently slightly hidden by the transparency animation
+			if (animate) {
+
+				// Animate the compartment (Appearing or disappearing)
+				if (collapsed) {// Shrink to size 0, then hide and remove from layout
+					final Timeline timeline = getCollapseTimeline();
+
+					if (timeline.getStatus() == Animation.Status.RUNNING) {
+						// TODO
+					}
+
+					scrollPane.setVisible(true);
+					scrollPane.setManaged(true);
+
+					scrollPane.setPrefHeight(scrollPane.prefHeight(scrollPane.getWidth()));
+
+					KeyFrame[] targetFrame = createCollapseKeyFrames(0);
+					timeline.getKeyFrames().setAll(targetFrame);
+
+					timeline.setOnFinished(e -> {
+						scrollPane.setVisible(false);
+						scrollPane.setManaged(false);
+						scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+					});
+
+					timeline.play();
+				} else { // Set visible, then expand to standard size
+					final Timeline timeline = getCollapseTimeline();
+
+					if (timeline.getStatus() == Animation.Status.RUNNING) {
+						// TODO
+					}
+
+					scrollPane.setVisible(true);
+					scrollPane.setManaged(true);
+
+					KeyFrame[] targetFrame = createCollapseKeyFrames(scrollPane.prefHeight(scrollPane.getWidth()));
+					scrollPane.setPrefHeight(0);
+					timeline.getKeyFrames().setAll(targetFrame);
+
+					timeline.setOnFinished(e -> {
+						scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+					});
+					timeline.play();
+				}
+			} else {
+				if (collapsed) {
+					scrollPane.setVisible(false);
+					scrollPane.setManaged(false);
+				} else {
+					scrollPane.setVisible(true);
+					scrollPane.setManaged(true);
+				}
+				scrollPane.setOpacity(1.0); // In case it has been previously animated with an opacity change
 			}
 		}
 	}
 
-	protected void animateHeightTo(final double minHeight) {
-		final WritableValue<Double> writableHeight = new WritableValue<Double>() {
-			@Override
-			public Double getValue() {
-				return getVisual().getPrefHeight();
-			}
+	protected Timeline getCollapseTimeline() {
+		if (collapseAnimation == null) {
+			collapseAnimation = new Timeline();
+			collapseAnimation.setCycleCount(1);
+			collapseAnimation.setAutoReverse(false);
+		}
+		return collapseAnimation;
+	}
 
-			@Override
-			public void setValue(final Double value) {
-				getVisual().setMinHeight(value);
-				getVisual().setPrefHeight(value);
-			}
+	protected KeyFrame[] createCollapseKeyFrames(double targetValue) {
+		KeyValue collapseTargetValue = new KeyValue(scrollPane.prefHeightProperty(), targetValue, Interpolator.EASE_BOTH);
+
+		KeyValue opacity = new KeyValue(scrollPane.opacityProperty(), targetValue < 0.0001 ? 0 : 1.0, Interpolator.EASE_BOTH); // Compartments do not have their own transparency, so it is always 1.0
+
+		double time = 1000;
+
+		return new KeyFrame[] {
+				new KeyFrame(Duration.millis(time * 0.8), opacity), // Opacity slightly faster than size to reduce artifacts during animation
+				new KeyFrame(Duration.millis(time), collapseTargetValue)
 		};
-
-		final Timeline timeline = new Timeline();
-		timeline.setCycleCount(1);
-		timeline.setAutoReverse(false);
-		final KeyValue kv = new KeyValue(writableHeight, minHeight);
-		final KeyFrame kf = new KeyFrame(Duration.millis(500), kv);
-		timeline.getKeyFrames().add(kf);
-		timeline.play();
-	}
-
-
-	public boolean isCanCollapse() {
-		return canCollapse;
-	}
-
-	public void setCanCollapse(final boolean canCollapse) {
-		this.canCollapse = canCollapse;
 	}
 
 	/**
@@ -253,10 +365,14 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 	@Override
 	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		final Node childVisual = child.getVisual();
-		if (null != childVisual) {
-
-			((Pane) getVisual().getContent()).getChildren().add(childVisual);
+		if (null != childVisual && null != compartment) {
+			compartment.getChildren().add(childVisual);
 		}
+	}
+
+	@Override
+	protected void refreshLayout() {
+		// Do nothing
 	}
 
 	/**
@@ -271,10 +387,10 @@ abstract public class CompartmentContentPart<V extends DecorationNode, R extends
 	@Override
 	protected void removeChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		final Node childVisual = child.getVisual();
-		if (childVisual == null) {
+		if (childVisual == null || compartment == null) {
 			return;
 		}
-		((Pane) getVisual().getContent()).getChildren().remove(childVisual);
+		compartment.getChildren().remove(childVisual);
 	}
 
 }

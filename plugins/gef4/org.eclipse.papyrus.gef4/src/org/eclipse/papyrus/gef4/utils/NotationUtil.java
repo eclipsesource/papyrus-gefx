@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
@@ -633,8 +633,7 @@ public class NotationUtil {
 
 		if (null != margin && 1 == margin.length) {
 			insets = new Insets(margin[0]);
-		} else
-			if (null != margin && 4 == margin.length) {
+		} else if (null != margin && 4 == margin.length) {
 			insets = new Insets(margin[0], margin[1], margin[2], margin[3]);
 		} else {
 			insets = new Insets(0);
@@ -678,8 +677,7 @@ public class NotationUtil {
 
 		if (null != padding && 1 == padding.length) {
 			insets = new Insets(padding[0]);
-		} else
-			if (null != padding && 4 == padding.length) {
+		} else if (null != padding && 4 == padding.length) {
 			insets = new Insets(padding[0], padding[1], padding[2], padding[3]);
 		} else {
 			// old Label margin which actually are padding
@@ -815,11 +813,9 @@ public class NotationUtil {
 		if (labelAlignment != null) {
 			if (PositionEnum.LEFT.toString().equals(labelAlignment)) {
 				textAlignment = Pos.TOP_LEFT;
-			} else
-				if (PositionEnum.RIGHT.toString().equals(labelAlignment)) {
+			} else if (PositionEnum.RIGHT.toString().equals(labelAlignment)) {
 				textAlignment = Pos.TOP_RIGHT;
-			} else
-					if (PositionEnum.CENTER.toString().equals(labelAlignment)) {
+			} else if (PositionEnum.CENTER.toString().equals(labelAlignment)) {
 				textAlignment = Pos.TOP_CENTER;
 			}
 		}
@@ -858,11 +854,9 @@ public class NotationUtil {
 		if (verticalPolicy != null) {
 			if (SCROLL_BAR_ALWAYS.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.ALWAYS;
-			} else
-				if (SCROLL_BAR_AUTO.equals(verticalPolicy)) {
+			} else if (SCROLL_BAR_AUTO.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.AS_NEEDED;
-			} else
-					if (SCROLL_BAR_NEVER.equals(verticalPolicy)) {
+			} else if (SCROLL_BAR_NEVER.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.NEVER;
 			}
 		}
@@ -878,25 +872,23 @@ public class NotationUtil {
 		if (verticalPolicy != null) {
 			if (SCROLL_BAR_ALWAYS.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.ALWAYS;
-			} else
-				if (SCROLL_BAR_AUTO.equals(verticalPolicy)) {
+			} else if (SCROLL_BAR_AUTO.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.AS_NEEDED;
-			} else
-					if (SCROLL_BAR_NEVER.equals(verticalPolicy)) {
+			} else if (SCROLL_BAR_NEVER.equals(verticalPolicy)) {
 				scrollBarPolicy = ScrollBarPolicy.NEVER;
 			}
 		}
 		return scrollBarPolicy;
 
 	}
-
-
-	public static int getNotationMinHeight(final View view) {
-		return NotationUtils.getIntValue(view, "minHeight", -1);// TODO MIA DEFAULT_VALUE;
-	}
-
-
-	public static int getNotationMinWidth(final View view) {
-		return NotationUtils.getIntValue(view, "minWidth", -1);// TODO MIA DEFAULT_VALUE;
-	}
+	//
+	//
+	// public static int getNotationMinHeight(final View view) {
+	// return NotationUtils.getIntValue(view, "minHeight", -1);// TODO MIA DEFAULT_VALUE;
+	// }
+	//
+	//
+	// public static int getNotationMinWidth(final View view) {
+	// return NotationUtils.getIntValue(view, "minWidth", -1);// TODO MIA DEFAULT_VALUE;
+	// }
 }

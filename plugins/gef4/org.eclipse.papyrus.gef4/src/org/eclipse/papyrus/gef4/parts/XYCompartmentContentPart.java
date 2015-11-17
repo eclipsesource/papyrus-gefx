@@ -13,31 +13,33 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.gmf.runtime.notation.DecorationNode;
-import org.eclipse.papyrus.gef4.utils.VisualPartUtil;
+import org.eclipse.papyrus.gef4.utils.FXUtils;
 
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
-public class XYCompartmentContentPart<V extends DecorationNode> extends CompartmentContentPart<V, ScrollPane> {
+//FIXME: Doesn't properly handle negative coordinates
+public class XYCompartmentContentPart<V extends DecorationNode> extends CompartmentContentPart<V, Pane> {
 
 	public XYCompartmentContentPart(final V view) {
 		super(view);
 	}
 
 	@Override
-	protected ScrollPane doCreateVisual() {
-		final Pane pane = new Pane();
-		pane.boundsInParentProperty().addListener(boundsListener);
+	protected Pane doCreatePane() {
+		return new Pane();
+	}
 
-		final ScrollPane scrollPane = new ScrollPane(pane);
+	@Override
+	protected void refreshVisualInTransaction(VBox visual) {
+		super.refreshVisualInTransaction(visual);
 
-		// Set stylesheet to hide viewport child which can't
-		scrollPane.getStylesheets().clear();
-		scrollPane.getStylesheets().add(URI.createPlatformPluginURI(VisualPartUtil.VIEWPORT_SCROLL_PANE_STYLE, false).toPlatformString(false));
+		// Must be false for X/Y-based layout
+		scrollPane.setFitToHeight(false);
+		scrollPane.setFitToWidth(false);
 
-		return scrollPane;
+		FXUtils.setPadding(compartment, 2, 2);
 	}
 
 	@Override
