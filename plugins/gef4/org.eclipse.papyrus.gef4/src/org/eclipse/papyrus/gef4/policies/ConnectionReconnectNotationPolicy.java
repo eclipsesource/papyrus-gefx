@@ -35,11 +35,6 @@ import org.eclipse.papyrus.gef4.utils.OperationBuilder;
  */
 public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconnectPolicy {
 
-	@Override
-	public ITransactionalOperation commit() {
-		return createNotationReconnectOperation();
-	}
-
 	protected ITransactionalOperation createNotationReconnectOperation() {
 		ITransactionalOperation result = OperationBuilder.withForwardUndo("Update notation model")
 				.add(createSetConnectionEndsOperation())
@@ -111,8 +106,8 @@ public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconne
 	}
 
 	@Override
-	public void init() {
-		//
+	protected ITransactionalOperation createOperation() {
+		return createNotationReconnectOperation();
 	}
 
 }

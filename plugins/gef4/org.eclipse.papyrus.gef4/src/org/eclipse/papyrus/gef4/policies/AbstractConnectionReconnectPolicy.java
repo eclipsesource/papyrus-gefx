@@ -15,16 +15,13 @@ package org.eclipse.papyrus.gef4.policies;
 
 import java.util.Optional;
 
-import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gef4.fx.anchors.IAnchor;
 import org.eclipse.gef4.fx.nodes.Connection;
-import org.eclipse.gef4.mvc.operations.ITransactional;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.AbstractPolicy;
-import org.eclipse.gmf.runtime.common.core.command.ICommand;
+import org.eclipse.gef4.mvc.policies.AbstractTransactionPolicy;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
@@ -32,8 +29,7 @@ import com.google.common.collect.SetMultimap;
 
 import javafx.scene.Node;
 
-public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy<Node>
-		implements ITransactional {
+public abstract class AbstractConnectionReconnectPolicy extends AbstractTransactionPolicy<Node> {
 
 
 	/**
@@ -109,6 +105,6 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy<N
 	protected static View asView(Object eobject) {
 		return eobject instanceof View ? (View) eobject : null;
 	}
-	
+
 
 }

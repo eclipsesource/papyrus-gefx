@@ -24,11 +24,10 @@ import org.eclipse.gef4.geometry.convert.fx.Geometry2JavaFX;
 import org.eclipse.gef4.geometry.convert.fx.JavaFX2Geometry;
 import org.eclipse.gef4.geometry.planar.Point;
 import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
-import org.eclipse.gef4.mvc.operations.ITransactional;
 import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.IPolicy;
+import org.eclipse.gef4.mvc.policies.AbstractTransactionPolicy;
 import org.eclipse.gmf.runtime.common.core.command.UnexecutableCommand;
 import org.eclipse.papyrus.gef4.fx.anchors.PositionalAnchorProvider;
 import org.eclipse.papyrus.gef4.utils.OperationBuilder;
@@ -146,7 +145,7 @@ public class ConnectionBendPolicy extends FXBendPolicy {
 		return parts;
 	}
 
-	protected <P extends IPolicy<? extends Node> & ITransactional> IUndoableOperation requestFromTransactionalPolicy(Class<P> policyClass) {
+	protected <P extends AbstractTransactionPolicy<? extends Node>> IUndoableOperation requestFromTransactionalPolicy(Class<P> policyClass) {
 		P policy = getAdaptable().getAdapter(policyClass);
 		if (policy == null) {
 			return null;

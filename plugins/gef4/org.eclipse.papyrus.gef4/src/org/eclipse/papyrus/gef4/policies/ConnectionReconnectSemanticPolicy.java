@@ -15,11 +15,8 @@ package org.eclipse.papyrus.gef4.policies;
 
 import java.util.Optional;
 
-import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.gef4.mvc.operations.ITransactional;
 import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
-import org.eclipse.gef4.mvc.policies.ContentPolicy;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRequest;
 import org.eclipse.gmf.runtime.notation.View;
@@ -28,19 +25,12 @@ import org.eclipse.papyrus.gef4.utils.OperationBuilder;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
 
-import javafx.scene.Node;
-
 /**
  * Policy for handling notation model changes as part of the composite link operation.
  *
  * @see ConnectionBendPolicy
  */
 public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconnectPolicy {
-
-	@Override
-	public ITransactionalOperation commit() {
-		return createSemanticReconnectOperation();
-	}
 
 	protected ITransactionalOperation createSemanticReconnectOperation() {
 		// System.out.println("ConnectionReconnectSemanticPolicy.createSemanticReconnectOperation()");
@@ -51,7 +41,7 @@ public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconne
 		View newTarget = getAnchorageView(getConnection().getEndAnchor());
 
 		if (newSource == null || newTarget == null) {
-			return ITransactional.UNEXECUTABLE;
+			return null;
 		}
 
 		Optional<ReorientRelationshipRequest> targetRequest = requestForEnd(newTarget, ConnectionContentPart.TARGET, ReorientRequest.REORIENT_TARGET);
@@ -88,8 +78,8 @@ public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconne
 	}
 
 	@Override
-	public void init() {
-		// FIXME: should we be ITransactional then?
+	protected ITransactionalOperation createOperation() {
+		return createSemanticReconnectOperation();
 	}
 
 
