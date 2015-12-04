@@ -14,12 +14,10 @@
 package org.eclipse.papyrus.gef4.handle;
 
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
-import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.policies.CollapseOnClickPolicy;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.CompartmentUtils;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
@@ -41,18 +39,6 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 
 	/** The text. */
 	private Text text;
-
-	/**
-	 * Instantiates a new collapse handle part.
-	 */
-	public CollapseHandlePart() {
-	}
-
-	@Override
-	protected void doActivate() {
-		super.doActivate();
-		setAdapter(FXClickDragTool.CLICK_TOOL_POLICY_KEY, new CollapseOnClickPolicy());
-	}
 
 	/**
 	 * @see org.eclipse.gef4.mvc.parts.AbstractVisualPart#createVisual()
@@ -108,9 +94,6 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 
 			text.setVisible(true);
 			text.setText(style.isCollapsed() ? "+" : "-"); //$NON-NLS-1$ //$NON-NLS-2$
-			if (style.isCollapsed()) {
-
-			}
 
 			refreshHandleLocation(compartment);
 			getVisual().setPrefSize(WIDTH, HEIGHT);

@@ -12,8 +12,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
 
-import java.util.Collections;
-
 import org.eclipse.gef4.mvc.fx.policies.AbstractFXOnClickPolicy;
 import org.eclipse.gef4.mvc.models.FocusModel;
 import org.eclipse.gef4.mvc.models.SelectionModel;
@@ -23,9 +21,12 @@ import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.parts.EmptyContentPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
+import com.google.common.reflect.TypeToken;
+
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
+@SuppressWarnings("serial")
 public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 	@Override
 	public void click(MouseEvent e) {
@@ -64,8 +65,10 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 	}
 
 	protected void select(IRootPart<Node, ? extends Node> target, MouseEvent e) {
-		FocusModel<Node> focusModel = target.getRoot().getViewer().<FocusModel<Node>> getAdapter(FocusModel.class);
-		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().<SelectionModel<Node>> getAdapter(SelectionModel.class);
+		FocusModel<Node> focusModel = target.getRoot().getViewer().getAdapter(new TypeToken<FocusModel<Node>>() {
+		});
+		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
+		});
 
 		IContentPart<Node, ? extends Node> firstChild = (IContentPart<Node, ? extends Node>) target.getChildren().get(0);
 
@@ -83,8 +86,10 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 			}
 		}
 
-		FocusModel<Node> focusModel = target.getRoot().getViewer().<FocusModel<Node>> getAdapter(FocusModel.class);
-		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().<SelectionModel<Node>> getAdapter(SelectionModel.class);
+		FocusModel<Node> focusModel = target.getRoot().getViewer().getAdapter(new TypeToken<FocusModel<Node>>() {
+		});
+		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
+		});
 
 		focusModel.setFocused(target);
 
@@ -93,16 +98,16 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 			if (append) {
 				// deselect the target edit part (ensure we get a new
 				// primary selection)
-				selectionModel.removeFromSelection((IContentPart<Node, ? extends Node>) target);
+				selectionModel.removeFromSelection(target);
 			}
 		} else {
 			if (append) {
 				// append to current selection (as new primary)
-				selectionModel.appendToSelection((IContentPart<Node, ? extends Node>) target);
+				selectionModel.appendToSelection(target);
 			} else {
 				// clear old selection, target should become the only
 				// selected
-				selectionModel.setSelection((IContentPart<Node, ? extends Node>) target);
+				selectionModel.setSelection(target);
 			}
 		}
 	}

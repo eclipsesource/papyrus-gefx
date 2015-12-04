@@ -22,6 +22,7 @@ import java.util.Map;
 import org.eclipse.gef4.geometry.planar.BezierCurve;
 import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
+import org.eclipse.gef4.mvc.fx.policies.FXBendOnSegmentHandleDragPolicy;
 import org.eclipse.gef4.mvc.parts.IHandlePart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
@@ -63,12 +64,9 @@ public class HandlePartFactory extends FXDefaultHandlePartFactory {
 		final IHandlePart<Node, ? extends Node> result = super.createCurveSelectionHandlePart(targetPart, segmentsProvider,
 				segmentCount, segmentIndex, segmentParameter);
 
-		// injector.injectMembers(part);
-
-		// result.setAdapter(AdapterKey.get(AbstractFXOnDragPolicy.class),
-		// new FXBendOnSegmentHandleDragPolicy() {
-		//
-		// // FIXME: discuss and revisit
+		result.setAdapter(new FXBendOnSegmentHandleDragPolicy()
+		// {
+		// FIXME: discuss and revisit
 		// @Override
 		// protected void commit(final IPolicy<Node> policy) {
 		// if (policy != null && policy instanceof ITransactional) {
@@ -82,7 +80,8 @@ public class HandlePartFactory extends FXDefaultHandlePartFactory {
 		// }
 		// }
 		// }
-		// });
+		// }
+		);
 
 		return result;
 	}

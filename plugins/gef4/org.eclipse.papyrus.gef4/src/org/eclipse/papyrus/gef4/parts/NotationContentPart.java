@@ -85,9 +85,9 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		this.view = view;
 		setContent(view);
 
-		setAdapter(AdapterKey.get(EObject.class, "semantic"), getElement());
-		setAdapter(AdapterKey.get(EObject.class, AdapterKey.DEFAULT_ROLE), getElement());
-		setAdapter(AdapterKey.get(View.class, "notation"), view);
+		setAdapter(getElement(), "semantic");
+		setAdapter(getElement(), AdapterKey.DEFAULT_ROLE);
+		setAdapter(view, "notation");
 
 		changeListener = createAdapter();
 	}

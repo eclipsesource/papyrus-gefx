@@ -25,7 +25,6 @@ import org.eclipse.gef4.mvc.models.ContentModel;
 import org.eclipse.gef4.mvc.models.GridModel;
 import org.eclipse.gef4.mvc.models.SelectionModel;
 import org.eclipse.gef4.mvc.parts.IRootPart;
-import org.eclipse.gef4.mvc.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,6 +37,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
+import com.google.common.reflect.TypeToken;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -46,6 +46,7 @@ import com.google.inject.Module;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 
+@SuppressWarnings("serial")
 public abstract class GEFEditor extends EditorPart implements PropertyChangeListener {
 
 	private final Diagram diagram;
@@ -108,7 +109,7 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = getDomain().getAdapter(IViewer.class);
+		viewer = getDomain().getAdapter(FXViewer.class);
 		rootPart = viewer.getRootPart();
 		if (rootPart instanceof DiagramRootPart) {
 			((DiagramRootPart) rootPart).setDiagram(diagram);
@@ -143,6 +144,10 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 
 		// Manual change listener and synchronization with SelectionModel
 		getSelectionModel().addPropertyChangeListener(this);
+
+		if (viewer.getRootPart() == null || viewer.getRootPart().getChildren().isEmpty()) {
+			System.out.println("Break");
+		}
 
 		selectionProvider.setSelection(new StructuredSelection(viewer.getRootPart().getChildren().get(0)));
 		getSite().setSelectionProvider(selectionProvider);
@@ -192,7 +197,8 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 	}
 
 	protected SelectionModel<Node> getSelectionModel() {
-		return viewer.getAdapter(SelectionModel.class);
+		return viewer.getAdapter(new TypeToken<SelectionModel<Node>>() {
+		});
 	}
 
 	public Diagram getDiagram() {

@@ -29,7 +29,7 @@ import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 
 import javafx.scene.Node;
 
-public class ChangeBoundsBehavior extends AbstractBehavior<Node>implements PropertyChangeListener {
+public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements PropertyChangeListener {
 
 	protected final Map<IVisualPart<Node, ? extends Node>, IFeedbackPart<Node, ? extends Node>> currentFeedbackParts = new HashMap<>();
 

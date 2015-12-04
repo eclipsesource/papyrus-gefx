@@ -114,8 +114,8 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 		// If the compartment is empty, then set a small minHeight. Otherwise, leave enough room to display at least one item
 		scrollPane.minHeightProperty().bind(new When(isCompartmentEmpty).then(conditionalMinSize).otherwise(MINIMUM_COMPARTMENT_HEIGHT));
 
-		VBox.setVgrow(scrollPane, Priority.ALWAYS);
 		VBox.setVgrow(titleLabel, Priority.NEVER);
+		VBox.setVgrow(scrollPane, Priority.ALWAYS);
 		VBox.setVgrow(wrapper, Priority.ALWAYS);
 
 		// Set stylesheet to hide viewport child which can't
@@ -296,6 +296,8 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 						scrollPane.setVisible(false);
 						scrollPane.setManaged(false);
 						scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+						VBox.setVgrow(scrollPane, Priority.NEVER);
+						VBox.setVgrow(wrapper, Priority.NEVER);
 					});
 
 					timeline.play();
@@ -315,6 +317,9 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 
 					timeline.setOnFinished(e -> {
 						scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+						VBox.setVgrow(scrollPane, Priority.ALWAYS);
+						VBox.setVgrow(wrapper, Priority.ALWAYS);
+
 					});
 					timeline.play();
 				}
@@ -322,9 +327,13 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 				if (collapsed) {
 					scrollPane.setVisible(false);
 					scrollPane.setManaged(false);
+					VBox.setVgrow(scrollPane, Priority.NEVER);
+					VBox.setVgrow(wrapper, Priority.NEVER);
 				} else {
 					scrollPane.setVisible(true);
 					scrollPane.setManaged(true);
+					VBox.setVgrow(scrollPane, Priority.ALWAYS);
+					VBox.setVgrow(wrapper, Priority.ALWAYS);
 				}
 				scrollPane.setOpacity(1.0); // In case it has been previously animated with an opacity change
 			}

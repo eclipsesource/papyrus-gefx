@@ -19,7 +19,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.common.inject.AdaptableScopes;
 import org.eclipse.gef4.common.inject.AdapterMaps;
-import org.eclipse.gef4.geometry.planar.IGeometry;
 import org.eclipse.gef4.mvc.behaviors.ContentBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef4.mvc.fx.MvcFxModule;
@@ -33,9 +32,6 @@ import org.eclipse.gef4.mvc.fx.policies.FXChangeViewportPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXPanOnScrollPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXZoomOnScrollPolicy;
-import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
-import org.eclipse.gef4.mvc.fx.tools.FXHoverTool;
-import org.eclipse.gef4.mvc.fx.tools.FXScrollTool;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
 import org.eclipse.gef4.mvc.parts.IHandlePartFactory;
@@ -46,6 +42,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.editor.Palette;
 import org.eclipse.papyrus.gef4.editor.ViewerSelectionProvider;
+import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
@@ -53,6 +50,7 @@ import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.policies.AffixedLabelMoveOnDragPolicy;
+import org.eclipse.papyrus.gef4.policies.CollapseOnClickPolicy;
 import org.eclipse.papyrus.gef4.policies.FocusAndSelectOnClickPolicy;
 import org.eclipse.papyrus.gef4.policies.MarqueeOnDragPolicy;
 import org.eclipse.papyrus.gef4.policies.MoveOnDragPolicy;
@@ -60,13 +58,13 @@ import org.eclipse.papyrus.gef4.policies.ResizeOnDragPolicy;
 import org.eclipse.papyrus.gef4.provider.FeedbackPartFactory;
 import org.eclipse.papyrus.gef4.provider.HandlePartFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 
 import javafx.scene.Node;
 
+@SuppressWarnings("serial")
 public abstract class GEFFxModule extends MvcFxModule {
 
 	protected final Diagram diagram;
@@ -86,7 +84,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 	protected void bindFXViewerAdapters(final com.google.inject.multibindings.MapBinder<org.eclipse.gef4.common.adapt.AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindFXViewerAdapters(adapterMapBinder);
 
-		adapterMapBinder.addBinding(AdapterKey.get(ChangeBoundsModel.class))
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(ChangeBoundsModel.class);
 	}
 
@@ -94,10 +92,10 @@ public abstract class GEFFxModule extends MvcFxModule {
 	protected void bindAbstractFXContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindAbstractFXContentPartAdapters(adapterMapBinder);
 
-		adapterMapBinder.addBinding(AdapterKey.get(ChangeBoundsBehavior.class))
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(ChangeBoundsBehavior.class);
 
-		adapterMapBinder.addBinding(AdapterKey.get(FXHoverTool.TOOL_POLICY_KEY))
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(FXHoverOnHoverPolicy.class);
 	}
 
@@ -105,40 +103,40 @@ public abstract class GEFFxModule extends MvcFxModule {
 	protected void bindFXRootPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
 				.addBinding(
-						AdapterKey.get(FXClickDragTool.CLICK_TOOL_POLICY_KEY))
+						AdapterKey.defaultRole())
 				.to(FocusAndSelectOnClickPolicy.class);
 
 		adapterMapBinder
 				.addBinding(
-						AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY))
+						AdapterKey.defaultRole())
 				.to(MarqueeOnDragPolicy.class);
 
 		adapterMapBinder.addBinding(
-				AdapterKey.get(FXScrollTool.TOOL_POLICY_KEY, "zoomOnScroll"))
+				AdapterKey.role("zoomOnScroll"))
 				.to(FXZoomOnScrollPolicy.class);
 		adapterMapBinder.addBinding(
-				AdapterKey.get(FXScrollTool.TOOL_POLICY_KEY, "panOnScroll"))
+				AdapterKey.role("panOnScroll"))
 				.to(FXPanOnScrollPolicy.class);
 
 
 		adapterMapBinder
-				.addBinding(AdapterKey.get(FXChangeViewportPolicy.class))
+				.addBinding(AdapterKey.defaultRole())
 				.to(FXChangeViewportPolicy.class);
 
 		// register default behaviors
-		adapterMapBinder.addBinding(AdapterKey.get(ContentBehavior.class))
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(new TypeLiteral<ContentBehavior<Node>>() {
 				});
-		adapterMapBinder.addBinding(AdapterKey.get(SelectionBehavior.class))
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(new TypeLiteral<SelectionBehavior<Node>>() {
 				});
-		adapterMapBinder.addBinding(AdapterKey.get(FXGridBehavior.class))
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(FXGridBehavior.class);
 	}
 
 	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
-				.addBinding(AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY)).to(ResizeOnDragPolicy.class);
+				.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragPolicy.class);
 	}
 
 	@Override
@@ -158,33 +156,33 @@ public abstract class GEFFxModule extends MvcFxModule {
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
 				.addBinding(
-						AdapterKey.get(FXClickDragTool.CLICK_TOOL_POLICY_KEY))
+						AdapterKey.defaultRole())
 				.to(FocusAndSelectOnClickPolicy.class);
 
 		adapterMapBinder
 				.addBinding(
-						AdapterKey
-								.get(new TypeToken<Provider<IGeometry>>() {
-								},
-										FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
+						AdapterKey.role(FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
 				.to(VisualBoundsGeometryProvider.class);
 
 		adapterMapBinder.addBinding(
-				AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY)).to(MoveOnDragPolicy.class);
+				AdapterKey.defaultRole()).to(MoveOnDragPolicy.class);
 
 		adapterMapBinder
 				.addBinding(
-						AdapterKey
-								.get(new TypeToken<Provider<IGeometry>>() {
-								},
-										FXDefaultHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
+						AdapterKey.role(FXDefaultHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
 				.to(VisualBoundsGeometryProvider.class);
+	}
+
+	protected void bindCollapseHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey.defaultRole())
+				.to(CollapseOnClickPolicy.class);
 	}
 
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 
 		adapterMapBinder.addBinding(
-				AdapterKey.get(FXClickDragTool.DRAG_TOOL_POLICY_KEY, "AffixedLabel"))// $NON-NLS-1$
+				AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
 				.to(AffixedLabelMoveOnDragPolicy.class);
 	}
 
@@ -241,6 +239,8 @@ public abstract class GEFFxModule extends MvcFxModule {
 		bindDiagramPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class));
 
 		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractFXHandlePart.class));
+
+		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
 
 		bindBoundsBehavior();
 

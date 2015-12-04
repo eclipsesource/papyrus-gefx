@@ -13,7 +13,6 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.gef4.fx.nodes.Connection;
-import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Edge;
@@ -39,10 +38,10 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	protected ConnectionContentPart(E view) {
 		super(view);
 
-		setAdapter(FXBendPolicy.class, new ConnectionBendPolicy());
+		setAdapter(new ConnectionBendPolicy());
 		// FIXME: works only for element-based links now
-		setAdapter(ConnectionReconnectSemanticPolicy.class, new ConnectionReconnectSemanticPolicy());
-		setAdapter(ConnectionReconnectNotationPolicy.class, new ConnectionReconnectNotationPolicy());
+		setAdapter(new ConnectionReconnectSemanticPolicy());
+		setAdapter(new ConnectionReconnectNotationPolicy());
 	}
 
 	@Override
