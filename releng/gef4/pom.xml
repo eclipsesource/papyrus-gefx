@@ -30,6 +30,7 @@
 		<module>../../plugins/infra/gefdiag/org.eclipse.papyrus.infra.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.clazz</module>
+		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.statemachine</module>
 		<module>site</module>
 	</modules>
 
