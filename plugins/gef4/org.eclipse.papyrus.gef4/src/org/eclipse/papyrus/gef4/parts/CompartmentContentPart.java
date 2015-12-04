@@ -36,6 +36,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.When;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -52,7 +53,7 @@ import javafx.util.Duration;
  * Structure:
  *
  * <pre>
- * VBox
+ * VBox (Wrapper)
  * -- Label(Title)
  * -- ScrollPane
  * ---- ConcretePane(Subclass-dependent)
@@ -70,9 +71,6 @@ import javafx.util.Duration;
 abstract public class CompartmentContentPart<V extends DecorationNode, P extends Pane> extends ContainerContentPart<V, VBox> {
 
 	// A value smaller than 18 will prevent the scrollbars from working properly (Size of the scrollbar arrows)
-	// TODO: The min width should depend on whether the title is displayed or not; and on whether there are contents to display or not.
-	// Empty compartments with no title should have a very small minimum height (No need for scrollbars).
-	// Compartments with at least 1 item should be able to display at least 1 item and the scrollbars
 	protected static final int MINIMUM_COMPARTMENT_HEIGHT = 20;
 
 	protected VBox wrapper;
@@ -82,6 +80,9 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	protected Label titleLabel;
 
 	protected ScrollPane scrollPane;
+
+	// Current state of the "collapsed" property
+	protected SimpleBooleanProperty collapsed = new SimpleBooleanProperty(false);
 
 	public CompartmentContentPart(final V view) {
 		super(view);
@@ -105,14 +106,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 		scrollPane.setFitToWidth(true);
 		scrollPane.setFitToHeight(true);
 
-		// The isEmpty() property is not directly observable. We need to manually create an observable boolean property
-		BooleanBinding isCompartmentEmpty = Bindings.createBooleanBinding(() -> compartment.getChildren().isEmpty(), compartment.getChildren());
-
-		// If the title is visible, we can hide the scroll pane entirely. Otherwise, give a non-null min size to the scroll pane
-		DoubleBinding conditionalMinSize = (new When(titleLabel.visibleProperty())).then(0.).otherwise(3.);
-
-		// If the compartment is empty, then set a small minHeight. Otherwise, leave enough room to display at least one item
-		scrollPane.minHeightProperty().bind(new When(isCompartmentEmpty).then(conditionalMinSize).otherwise(MINIMUM_COMPARTMENT_HEIGHT));
+		bindMinHeight();
 
 		VBox.setVgrow(titleLabel, Priority.NEVER);
 		VBox.setVgrow(scrollPane, Priority.ALWAYS);
@@ -126,6 +120,20 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 		refreshCollapsed(false); // FIXME the animation should be off by default, and only enabled when we receive an event from the Notation model
 
 		return wrapper;
+	}
+
+	protected void bindMinHeight() {
+		// The isEmpty() property is not directly observable. We need to manually create an observable boolean property
+		BooleanBinding isCompartmentEmpty = Bindings.createBooleanBinding(() -> compartment.getChildren().isEmpty(), compartment.getChildren()).or(collapsed);
+
+		// If the title is visible, we can hide the scroll pane entirely. Otherwise, give a non-null min size to the scroll pane
+		DoubleBinding conditionalMinSize = (new When(titleLabel.visibleProperty())).then(0.).otherwise(3.);
+
+		// If the collapse animation is running, always use the minimal min size, to get a fluid transition
+		BooleanBinding useMinSize = isCompartmentEmpty.or(getCollapseTimeline().statusProperty().isEqualTo(Timeline.Status.RUNNING));
+
+		// If the compartment is empty, then set a small minHeight. Otherwise, leave enough room to display at least one item
+		scrollPane.minHeightProperty().bind(new When(useMinSize).then(conditionalMinSize).otherwise(MINIMUM_COMPARTMENT_HEIGHT));
 	}
 
 	/**
@@ -260,83 +268,87 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 		return "genericListCompartment";
 	}
 
-	private boolean collapsed = false;
-
 	private Timeline collapseAnimation;
 
 	protected void setCollapsed(final boolean collapsed, boolean animate) {
-		// TODO different behavior if the title is visible or not
-		// Size -> 0 when collapsed with title visible
-		// Size -> 3 when collapsed with title hidden (Avoid 0px compartment)
-		if (this.collapsed != collapsed) {
-			this.collapsed = collapsed;
+		if (this.collapsed.get() == collapsed) {
+			return;
+		}
 
+		this.collapsed.set(collapsed);
 
-			// TODO Experimental animation. Several graphical artifacts remain (Especially because the ScrollPane has a min size that depends on other compartments in the same parent)
-			// Artifacts are currently slightly hidden by the transparency animation
-			if (animate) {
+		if (animate) {
+			// TODO Several graphical artifacts remain (Especially because the ScrollPane has a min size that depends on other compartments in the same parent, due to VBox.setVGrow())
+			// TODO improve the animation:
+			// - If the scrollbars are initially hidden, they appear during animation, then disappear at the end. Use a scrollbar policy to avoid this?
+			// - Animate the width as well (Currently, width is set at the end of the animation when collapsing, and at the beginning when expanding)
+			// - Handle the case when we are already animating the compartment (Animation is running) and the collapse state changes at the same time.
 
-				// Animate the compartment (Appearing or disappearing)
-				if (collapsed) {// Shrink to size 0, then hide and remove from layout
-					final Timeline timeline = getCollapseTimeline();
+			// Animate the compartment (Appearing or disappearing)
+			if (collapsed) {// Shrink to size 0, then hide and remove from layout
+				final Timeline timeline = getCollapseTimeline();
 
-					if (timeline.getStatus() == Animation.Status.RUNNING) {
-						// TODO
-					}
-
-					scrollPane.setVisible(true);
-					scrollPane.setManaged(true);
-
-					scrollPane.setPrefHeight(scrollPane.prefHeight(scrollPane.getWidth()));
-
-					KeyFrame[] targetFrame = createCollapseKeyFrames(0);
-					timeline.getKeyFrames().setAll(targetFrame);
-
-					timeline.setOnFinished(e -> {
-						scrollPane.setVisible(false);
-						scrollPane.setManaged(false);
-						scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
-						VBox.setVgrow(scrollPane, Priority.NEVER);
-						VBox.setVgrow(wrapper, Priority.NEVER);
-					});
-
-					timeline.play();
-				} else { // Set visible, then expand to standard size
-					final Timeline timeline = getCollapseTimeline();
-
-					if (timeline.getStatus() == Animation.Status.RUNNING) {
-						// TODO
-					}
-
-					scrollPane.setVisible(true);
-					scrollPane.setManaged(true);
-
-					KeyFrame[] targetFrame = createCollapseKeyFrames(scrollPane.prefHeight(scrollPane.getWidth()));
-					scrollPane.setPrefHeight(0);
-					timeline.getKeyFrames().setAll(targetFrame);
-
-					timeline.setOnFinished(e -> {
-						scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
-						VBox.setVgrow(scrollPane, Priority.ALWAYS);
-						VBox.setVgrow(wrapper, Priority.ALWAYS);
-
-					});
-					timeline.play();
+				if (timeline.getStatus() == Animation.Status.RUNNING) {
+					// TODO improve this
+					timeline.stop();
 				}
-			} else {
-				if (collapsed) {
+
+				scrollPane.setVisible(true);
+				scrollPane.setManaged(true);
+
+				scrollPane.setPrefHeight(scrollPane.prefHeight(scrollPane.getWidth()));
+				scrollPane.setMaxHeight(Region.USE_PREF_SIZE);
+
+				KeyFrame[] targetFrame = createCollapseKeyFrames(0);
+				timeline.getKeyFrames().setAll(targetFrame);
+
+				timeline.setOnFinished(e -> {
 					scrollPane.setVisible(false);
 					scrollPane.setManaged(false);
+					scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+					scrollPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
 					VBox.setVgrow(scrollPane, Priority.NEVER);
 					VBox.setVgrow(wrapper, Priority.NEVER);
-				} else {
-					scrollPane.setVisible(true);
-					scrollPane.setManaged(true);
+				});
+
+				timeline.play();
+			} else { // Set visible, then expand to standard size
+				final Timeline timeline = getCollapseTimeline();
+
+				if (timeline.getStatus() == Animation.Status.RUNNING) {
+					// TODO improve this
+					timeline.stop();
+				}
+
+				scrollPane.setVisible(true);
+				scrollPane.setManaged(true);
+
+				KeyFrame[] targetFrame = createCollapseKeyFrames(scrollPane.prefHeight(scrollPane.getWidth()));
+				scrollPane.setPrefHeight(0);
+				scrollPane.setMaxHeight(Region.USE_PREF_SIZE);
+				timeline.getKeyFrames().setAll(targetFrame);
+
+				timeline.setOnFinished(e -> {
+					scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+					scrollPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
 					VBox.setVgrow(scrollPane, Priority.ALWAYS);
 					VBox.setVgrow(wrapper, Priority.ALWAYS);
-				}
-				scrollPane.setOpacity(1.0); // In case it has been previously animated with an opacity change
+				});
+				timeline.play();
 			}
+		} else {
+			if (collapsed) {
+				scrollPane.setVisible(false);
+				scrollPane.setManaged(false);
+				VBox.setVgrow(scrollPane, Priority.NEVER);
+				VBox.setVgrow(wrapper, Priority.NEVER);
+			} else {
+				scrollPane.setVisible(true);
+				scrollPane.setManaged(true);
+				VBox.setVgrow(scrollPane, Priority.ALWAYS);
+				VBox.setVgrow(wrapper, Priority.ALWAYS);
+			}
+			scrollPane.setOpacity(1.0); // In case it has been previously animated with an opacity change
 		}
 	}
 
@@ -354,7 +366,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 
 		KeyValue opacity = new KeyValue(scrollPane.opacityProperty(), targetValue < 0.0001 ? 0 : 1.0, Interpolator.EASE_BOTH); // Compartments do not have their own transparency, so it is always 1.0
 
-		double time = 1000;
+		double time = 750;
 
 		return new KeyFrame[] {
 				new KeyFrame(Duration.millis(time * 0.8), opacity), // Opacity slightly faster than size to reduce artifacts during animation
