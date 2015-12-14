@@ -3,23 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.papyrus</groupId>
 	<artifactId>org.eclipse.papyrus.gef4.releng</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<parent>
+		<groupId>org.eclipse.papyrus</groupId>
+		<artifactId>org.eclipse.papyrus.all.releng</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 
 	<properties>
-		<tycho-version>0.23.1</tycho-version>
-		<tychoExtrasVersion>0.23.1</tychoExtrasVersion>
 		<jarSignerVersion>1.1.2</jarSignerVersion>
-		<findbugs.version>2.5.3</findbugs.version>
-		<xtext.version>2.7.3</xtext.version>
 		<java.source.version>1.8</java.source.version>
 		<java.target.version>1.8</java.target.version>
-		<papyrus.eclipse.target>mars</papyrus.eclipse.target>
-		<mylyn.wikitext.version>2.4.0-SNAPSHOT</mylyn.wikitext.version>
-		<skipAllTests>false</skipAllTests>
-		<skipInnerTests>true</skipInnerTests>
-		
-		<papyrus.repo.main>${eclipse.download}/modeling/mdt/papyrus/updates/nightly/neon/main</papyrus.repo.main>
 		<gef4.repo>https://hudson.eclipse.org/gef/job/gef4-master/lastSuccessfulBuild/artifact/update-site/</gef4.repo>
 		<efxclipse.repo>${eclipse.download}/efxclipse/updates-released/2.0.0/site</efxclipse.repo>
 	</properties>
@@ -84,11 +79,6 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.6</version>
-				</plugin>
-				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
 					<version>1.9.1</version>
@@ -97,19 +87,6 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
 					<version>1.2.1</version>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.xtend</groupId>
-					<artifactId>xtend-maven-plugin</artifactId>
-					<version>${xtext.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-					<configuration>
-						<encoding>UTF-8</encoding>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
@@ -441,37 +418,6 @@
 					<name>SIGN</name>
 					<value>false</value>
 				</property>
-			</activation>
-		</profile>
-
-		<!-- nightly profile is useful for developers that want to link to nightly 
-			build -->
-		<profile>
-			<id>nightly</id>
-			<repositories>
-				<repository>
-					<id>papyrus-nightly</id>
-					<layout>p2</layout>
-					<url>http://download.eclipse.org/modeling/mdt/papyrus/updates/nightly/${papyrus.eclipse.target}/
-					</url>
-					<releases>
-						<enabled>true</enabled>
-						<updatePolicy>daily</updatePolicy>
-						<checksumPolicy>warn</checksumPolicy>
-					</releases>
-					<snapshots>
-						<enabled>true</enabled>
-						<updatePolicy>daily</updatePolicy>
-						<checksumPolicy>fail</checksumPolicy>
-					</snapshots>
-				</repository>
-			</repositories>
-			<activation>
-				<property>
-					<name>env</name>
-					<value>devnightly</value>
-				</property>
-				<activeByDefault>false</activeByDefault>
 			</activation>
 		</profile>
 	</profiles>
