@@ -27,11 +27,11 @@ import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
-import org.eclipse.gef4.mvc.fx.parts.VisualBoundsGeometryProvider;
 import org.eclipse.gef4.mvc.fx.policies.FXChangeViewportPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXPanOnScrollPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXZoomOnScrollPolicy;
+import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
 import org.eclipse.gef4.mvc.parts.IHandlePartFactory;
@@ -162,7 +162,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 		adapterMapBinder
 				.addBinding(
 						AdapterKey.role(FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
-				.to(VisualBoundsGeometryProvider.class);
+				.to(ShapeBoundsProvider.class);
 
 		adapterMapBinder.addBinding(
 				AdapterKey.defaultRole()).to(MoveOnDragPolicy.class);
@@ -170,7 +170,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 		adapterMapBinder
 				.addBinding(
 						AdapterKey.role(FXDefaultHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
-				.to(VisualBoundsGeometryProvider.class);
+				.to(ShapeBoundsProvider.class);
 	}
 
 	protected void bindCollapseHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
