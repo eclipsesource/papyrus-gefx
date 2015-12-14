@@ -19,7 +19,6 @@ import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
 import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
 import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
 import org.eclipse.papyrus.gef4.shapes.PackagePath;
-import org.eclipse.papyrus.gef4.shapes.RoundedRectanglePath;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
@@ -33,7 +32,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.CycleMethod;
@@ -166,12 +164,8 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			break;
 
 		default:
-			if (!getCornerRadii().equals(CornerRadii.EMPTY)) {// RoundedRectangle case
-				region.setShape(new RoundedRectanglePath(width, height, getCornerRadii()));
-			} else {
-				// Rectangle case
-				region.setShape(null);
-			}
+			// Rectangle case (Might be cornered)
+			region.setShape(null);
 			break;
 		}
 
