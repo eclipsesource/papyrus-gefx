@@ -85,8 +85,11 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		this.view = view;
 		setContent(view);
 
-		setAdapter(getElement(), "semantic");
-		setAdapter(getElement(), AdapterKey.DEFAULT_ROLE);
+		EObject semanticElement = getElement();
+		if (semanticElement != null) { // TODO: The adapters will be missing if we're in this case. Check the new implementation of GEF4 AdapterSupport, the adapters may be incorrectly declared here
+			setAdapter(getElement(), "semantic");
+			setAdapter(getElement(), AdapterKey.DEFAULT_ROLE);
+		}
 		setAdapter(view, "notation");
 
 		changeListener = createAdapter();
@@ -216,6 +219,10 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	protected EObject getElement() {
 		final EObject element = getView().getElement();
 		if (element == null) {
+			if (this instanceof IPrimaryContentPart) {
+				return null; // Do not go beyond the Primary part
+			}
+
 			final NotationContentPart<? extends View, ? extends Node> parent = getParentContentPart();
 			if (parent != null) {
 				return parent.getElement();
