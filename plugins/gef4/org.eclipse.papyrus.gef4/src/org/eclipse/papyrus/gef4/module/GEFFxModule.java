@@ -29,8 +29,6 @@ import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
 import org.eclipse.gef4.mvc.fx.policies.FXChangeViewportPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
-import org.eclipse.gef4.mvc.fx.policies.FXPanOnScrollPolicy;
-import org.eclipse.gef4.mvc.fx.policies.FXZoomOnScrollPolicy;
 import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
@@ -111,13 +109,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 						AdapterKey.defaultRole())
 				.to(MarqueeOnDragPolicy.class);
 
-		adapterMapBinder.addBinding(
-				AdapterKey.role("zoomOnScroll"))
-				.to(FXZoomOnScrollPolicy.class);
-		adapterMapBinder.addBinding(
-				AdapterKey.role("panOnScroll"))
-				.to(FXPanOnScrollPolicy.class);
-
+		bindFXPanOrZoomOnScrollPolicyAsFXRootPartAdapter(adapterMapBinder);
 
 		adapterMapBinder
 				.addBinding(AdapterKey.defaultRole())

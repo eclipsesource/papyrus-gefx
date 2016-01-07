@@ -117,7 +117,7 @@ public class SlidableFxAnchor extends ChopBoxAnchor {
 		}
 
 		@Override
-		public Point computeAnchorageReferencePointInLocal(Node node, IGeometry geometryInLocal) {
+		public Point computeAnchorageReferencePointInLocal(Node node, IGeometry geometryInLocal, Point anchoredReferencePointInAnchorageLocal) {
 			Rectangle localBounds = geometryInLocal.getBounds();
 			Point result = localBounds.getBottomRight().getScaled(myRatioX, myRatioY);
 			return result;
