@@ -133,6 +133,7 @@ public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements Prop
 		for (IVisualPart<Node, ? extends Node> target : targets) {
 			IFeedbackPart<Node, ? extends Node> f = currentFeedbackParts.get(target);
 
+			// FIXME NPE here when closing the editor while an element is selected (And probably in many other cases)
 			getHost().getRoot().getViewer().getVisualPartMap().remove(f.getVisual());
 
 			currentFeedbackParts.remove(target);

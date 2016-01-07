@@ -29,6 +29,7 @@ import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
 import org.eclipse.gef4.mvc.fx.policies.FXChangeViewportPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
+import org.eclipse.gef4.mvc.fx.providers.GeometricOutlineProvider;
 import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
@@ -44,6 +45,8 @@ import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
+import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
+import org.eclipse.papyrus.gef4.parts.ContainerContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
@@ -151,13 +154,32 @@ public abstract class GEFFxModule extends MvcFxModule {
 						AdapterKey.defaultRole())
 				.to(FocusAndSelectOnClickPolicy.class);
 
+
+		adapterMapBinder.addBinding(
+				AdapterKey.defaultRole()).to(MoveOnDragPolicy.class);
+	}
+
+	protected void bindConnectionPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(
+						AdapterKey.role(FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
+				.to(GeometricOutlineProvider.class);
+
+		adapterMapBinder
+				.addBinding(
+						AdapterKey.role(FXDefaultHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
+				.to(GeometricOutlineProvider.class);
+	}
+
+	protected void bindNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		// The GeometricOutlineProvider supports most elements, but not FX VBox for example
+		// Use ShapeBoundsProvider for Nodes (We mostly use VBoxes...)
+		// TODO: Use a common provider that supports both Connection and VBoxes (And others)
+		// See org.eclipse.gef4.fx.utils.NodeUtils.getGeometricOutline(Node)
 		adapterMapBinder
 				.addBinding(
 						AdapterKey.role(FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
 				.to(ShapeBoundsProvider.class);
-
-		adapterMapBinder.addBinding(
-				AdapterKey.defaultRole()).to(MoveOnDragPolicy.class);
 
 		adapterMapBinder
 				.addBinding(
@@ -224,6 +246,8 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 
 		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), NotationContentPart.class));
+		bindNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ContainerContentPart.class));
+		bindConnectionPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class));
 
 		// define specific policy for affixed Label
 		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
