@@ -63,28 +63,28 @@ public class HandlePartFactory extends FXDefaultSelectionHandlePartFactory {
 	public List<IHandlePart<Node, ? extends Node>> createHandleParts(List<? extends IVisualPart<Node, ? extends Node>> targets, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap) {
 		if (contextBehavior instanceof SelectionBehavior) {
 			return super.createHandleParts(targets, contextBehavior, contextMap);
-		} else if (contextBehavior instanceof HoverBehavior){
-			return createHoverHandleParts(targets, (HoverBehavior<Node>)contextBehavior, contextMap);
+		} else if (contextBehavior instanceof HoverBehavior) {
+			return createHoverHandleParts(targets, (HoverBehavior<Node>) contextBehavior, contextMap);
 		}
 		return Collections.emptyList();
 	}
-	
+
 	protected List<IHandlePart<Node, ? extends Node>> createHoverHandleParts(final List<? extends IVisualPart<Node, ? extends Node>> targets, final HoverBehavior<Node> contextBehavior, final Map<Object, Object> contextMap) {
 		List<IHandlePart<Node, ? extends Node>> result = new ArrayList<>();
-		for (IVisualPart<Node, ? extends Node> target : targets){
+		for (IVisualPart<Node, ? extends Node> target : targets) {
 			result.addAll(createHoverHandleParts(target, contextBehavior, contextMap));
 		}
 		return result;
 	}
-	
+
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandlePartsForCurve(IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap, Provider<BezierCurve[]> segmentsProvider) {
 		List<IHandlePart<Node, ? extends Node>> result = super.createSingleSelectionHandlePartsForCurve(target, contextBehavior, contextMap, segmentsProvider);
 
-		for (IHandlePart<Node, ? extends Node> handlePart : result){
+		for (IHandlePart<Node, ? extends Node> handlePart : result) {
 			handlePart.setAdapter(new FXBendOnSegmentHandleDragPolicy());
 		}
-		
+
 		return result;
 	}
 

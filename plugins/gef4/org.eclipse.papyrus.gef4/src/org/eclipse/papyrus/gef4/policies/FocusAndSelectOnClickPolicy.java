@@ -32,10 +32,10 @@ import javafx.scene.input.MouseEvent;
 
 /**
  * This policy manages Focus and Select actions, in response to mouse clicks
- * 
- *  In practice, this is implemented as a Drag policy, because we need detailed access 
- *  to mouse pressed and mouse released events, that the IFXOnClickPolicy doesn't provide
- * 
+ *
+ * In practice, this is implemented as a Drag policy, because we need detailed access
+ * to mouse pressed and mouse released events, that the IFXOnClickPolicy doesn't provide
+ *
  * @author Camille Letavernier
  *
  */
@@ -43,14 +43,14 @@ import javafx.scene.input.MouseEvent;
 public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
 
 	private boolean wasSelected = false;
-	
+
 	@Override
 	public void press(MouseEvent e) {
 		// focus and select are only done on single click
 		if (e.getClickCount() > 1) {
 			return;
 		}
-		
+
 		wasSelected = false;
 
 		IVisualPart<Node, ? extends Node> host = getHost();
@@ -106,7 +106,7 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 			selectionModel.setSelection(firstChild);
 		}
 	}
-	
+
 	protected void select(IContentPart<Node, ? extends Node> target, MouseEvent e) {
 
 		FocusModel<Node> focusModel = target.getRoot().getViewer().getAdapter(new TypeToken<FocusModel<Node>>() {
@@ -130,23 +130,23 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 			}
 		}
 	}
-	
-	protected void unselect(IContentPart<Node, ? extends Node> target, MouseEvent e){
-		//The host has been selected during the mouse pressed event. Do not unselect it when releasing...
-		if (wasSelected){
+
+	protected void unselect(IContentPart<Node, ? extends Node> target, MouseEvent e) {
+		// The host has been selected during the mouse pressed event. Do not unselect it when releasing...
+		if (wasSelected) {
 			return;
 		}
-		
+
 		FocusModel<Node> focusModel = target.getRoot().getViewer().getAdapter(new TypeToken<FocusModel<Node>>() {
 		});
 		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
 		});
-		
+
 		focusModel.setFocus(target);
-		
+
 		boolean append = e.isControlDown();
-		
-		if (selectionModel.isSelected(target)){
+
+		if (selectionModel.isSelected(target)) {
 			if (append) {
 				// deselect the target edit part (ensure we get a new
 				// primary selection)

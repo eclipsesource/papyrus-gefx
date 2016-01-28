@@ -56,7 +56,7 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 	protected static final int SOUTH_EAST = 2;
 
 	protected static final int SOUTH_WEST = 3;
-	
+
 	private CursorSupport cursorSupport = new CursorSupport(this);
 
 	@Override
@@ -283,8 +283,8 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 		getCursorSupport().storeAndReplaceCursor(getCursor());
 		return true;
 	}
-	
-	protected CursorSupport getCursorSupport(){
+
+	protected CursorSupport getCursorSupport() {
 		return cursorSupport;
 	}
 

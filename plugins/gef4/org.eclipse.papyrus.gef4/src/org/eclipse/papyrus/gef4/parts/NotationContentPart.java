@@ -292,10 +292,10 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 			}
 		}
 	}
-	
-	protected DiagramEventBroker getEventBroker(){
+
+	protected DiagramEventBroker getEventBroker() {
 		TransactionalEditingDomain domain = getDomain();
-		if (domain == null){
+		if (domain == null) {
 			return null;
 		}
 		return DiagramEventBroker.getInstance(domain);
@@ -326,8 +326,8 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	protected final EObject getElement() {
 		return semanticElement;
 	}
-	
-	protected EObject findSemanticElement(){
+
+	protected EObject findSemanticElement() {
 		final EObject element = getView().getElement();
 		if (element == null) {
 			if (this instanceof IPrimaryContentPart) {

@@ -47,7 +47,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * The Class AffixedLabelMoveOnDragPolicy.
  */
-public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy{
+public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
 
 	/**
 	 * Called on Drag.
@@ -171,7 +171,7 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node
 
 		Location location = getLocation();
 		if (null == location) {
-			//If Constraint doesn't exit create it.
+			// If Constraint doesn't exit create it.
 			location = NotationFactory.eINSTANCE.createLocation();
 			final View hostView = NotationHelper.findView(getHost());
 			if (hostView instanceof org.eclipse.gmf.runtime.notation.Node) {
@@ -293,7 +293,7 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node
 
 	@Override
 	public void hideIndicationCursor() {
-		//Nothing
+		// Nothing
 	}
 
 

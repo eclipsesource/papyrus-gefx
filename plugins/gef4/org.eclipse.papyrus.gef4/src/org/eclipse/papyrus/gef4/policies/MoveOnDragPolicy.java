@@ -88,7 +88,7 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 			// If I'm the main receiver of the event, I propagate it to other selected elements
 			// If I'm not the main receiver, do nothing; someone else will do the propagation
 			NotationContentPart<?, ?> targetPart = PolicyUtil.getTargetPrimaryPart(this, e);
-			
+
 			if (targetPart == getHost()) {
 				for (final IContentPart<Node, ? extends Node> selectedPart : selection) {
 					if (selectedPart != getPrimaryHost()) {

@@ -332,8 +332,8 @@ public class NotationUtil {
 					// Test if its a custom Style then test if its a custom Dash for top
 					final BorderStrokeStyle topBorderStrokeStyle = topLineStyle.equals(BorderStrokeStyleEnum.CUSTOM) ? customizedStrokeStyle
 							: topLineStyle.equals(BorderStrokeStyleEnum.DASH.getLiteral()) ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
-							// //Test if its a custom Dash
-							// topBorderStrokeStyle = topLineStyle.equals(BorderStrokeStyleEnum.DASH.getLiteral()) ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
+					// //Test if its a custom Dash
+					// topBorderStrokeStyle = topLineStyle.equals(BorderStrokeStyleEnum.DASH.getLiteral()) ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
 
 					// Test if its a custom Style then test if its a custom Dash for right
 					final BorderStrokeStyle rightBorderStrokeStyle = rightLineStyle.equals(BorderStrokeStyleEnum.CUSTOM) ? customizedStrokeStyle

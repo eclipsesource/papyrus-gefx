@@ -25,14 +25,14 @@ public class ChangeBoundsModel {
 	public static final String CHANGE_BOUNDS_PROPERTY = "changeBounds"; //$NON-NLS-1$
 
 	private ObservableMap<IVisualPart<Node, ? extends Node>, Bounds> elements = FXCollections.observableHashMap();
-	
+
 	private ReadOnlyMapWrapper<IVisualPart<Node, ? extends Node>, Bounds> elementsProperty = new ReadOnlyMapWrapper<>(this, CHANGE_BOUNDS_PROPERTY, elements);
 
 	public ObservableMap<IVisualPart<Node, ? extends Node>, Bounds> getManagedElements() {
 		return elements;
 	}
-	
-	public ReadOnlyMapProperty<IVisualPart<Node, ? extends Node>, Bounds> elementsProperty(){
+
+	public ReadOnlyMapProperty<IVisualPart<Node, ? extends Node>, Bounds> elementsProperty() {
 		return elementsProperty.getReadOnlyProperty();
 	}
 

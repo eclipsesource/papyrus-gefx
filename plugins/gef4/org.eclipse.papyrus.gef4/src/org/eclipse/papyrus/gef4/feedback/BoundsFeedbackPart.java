@@ -9,7 +9,7 @@
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - add absolute bounds.
- *  
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.feedback;
 
@@ -19,9 +19,7 @@ import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.EffectsUtil;
 
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

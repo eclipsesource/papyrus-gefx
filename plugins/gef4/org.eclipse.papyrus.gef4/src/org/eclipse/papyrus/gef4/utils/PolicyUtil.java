@@ -23,9 +23,9 @@ import javafx.scene.input.MouseEvent;
 public class PolicyUtil {
 
 	/**
-	 * Return the nearest IPrimaryPart for this mouse event, 
+	 * Return the nearest IPrimaryPart for this mouse event,
 	 * or null if the target is not owned by an IPrimaryPart
-	 * 
+	 *
 	 * @param event
 	 * @return
 	 */

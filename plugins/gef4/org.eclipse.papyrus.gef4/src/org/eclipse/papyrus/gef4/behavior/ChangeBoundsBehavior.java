@@ -142,10 +142,10 @@ public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements MapC
 		for (IVisualPart<Node, ? extends Node> target : targets) {
 			IFeedbackPart<Node, ? extends Node> f = currentFeedbackParts.get(target);
 			if (f == null) {
-				//A different feedback has been installed (e.g. for connections). The ChangeBoundsBehavior should probably not be installed in this case
+				// A different feedback has been installed (e.g. for connections). The ChangeBoundsBehavior should probably not be installed in this case
 				continue;
 			}
-			
+
 			currentFeedbackParts.remove(target);
 		}
 	}

@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2015 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
- *   
+ *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
@@ -43,8 +43,9 @@ public class ColorUtil {
 			h_ = 0;
 		} else if (max == red) {
 			h_ = (float) (green - blue) / delta;
-			if (h_ < 0)
+			if (h_ < 0) {
 				h_ += 6.f;
+			}
 		} else if (max == green) {
 			h_ = (float) (blue - red) / delta + 2.f;
 		} else if (max == blue) {
@@ -90,10 +91,11 @@ public class ColorUtil {
 		final float c = (1 - Math.abs(2.f * l - 1.f)) * s;
 		final float h_ = h / 60.f;
 		float h_mod2 = h_;
-		if (h_mod2 >= 4.f)
+		if (h_mod2 >= 4.f) {
 			h_mod2 -= 4.f;
-		else if (h_mod2 >= 2.f)
+		} else if (h_mod2 >= 2.f) {
 			h_mod2 -= 2.f;
+		}
 
 		final float x = c * (1 - Math.abs(h_mod2 - 1));
 		float r_, g_, b_;
@@ -127,7 +129,7 @@ public class ColorUtil {
 		final int r = (int) ((r_ + m) * (255.f) + 0.5f);
 		final int g = (int) ((g_ + m) * (255.f) + 0.5f);
 		final int b = (int) ((b_ + m) * (255.f) + 0.5f);
-		
+
 		return getColor(b << 16 | g << 8 | r, opacity);
 
 	}
