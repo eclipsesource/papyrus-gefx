@@ -108,6 +108,11 @@ public abstract class OperationBuilder {
 			public boolean isNoOp() {
 				return false;
 			}
+
+			@Override
+			public boolean isContentRelevant() {
+				return false;
+			}
 		};
 	}
 

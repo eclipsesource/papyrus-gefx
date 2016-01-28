@@ -91,7 +91,7 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractTransact
 	 * Returns the anchorage for given role from the host <strong>model</strong>
 	 */
 	protected Optional<View> findHostAnchorageForRole(String endRole) {
-		return firstKeyForValue(getHost().getContentAnchorages(), endRole)
+		return firstKeyForValue(getHost().getContentAnchoragesUnmodifiable(), endRole)
 				.map(AbstractConnectionReconnectPolicy::asView);
 	}
 

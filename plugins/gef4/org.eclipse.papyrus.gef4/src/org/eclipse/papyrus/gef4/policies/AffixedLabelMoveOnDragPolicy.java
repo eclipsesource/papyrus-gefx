@@ -12,15 +12,17 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.geometry.planar.Dimension;
-import org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy;
+import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
 import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
 import org.eclipse.gef4.mvc.models.SelectionModel;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -39,12 +41,13 @@ import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
 
 import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 /**
  * The Class AffixedLabelMoveOnDragPolicy.
  */
-public class AffixedLabelMoveOnDragPolicy extends AbstractFXOnDragPolicy {
+public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy{
 
 	/**
 	 * Called on Drag.
@@ -125,18 +128,19 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractFXOnDragPolicy {
 	 * @param actionToPropagate
 	 *            the action to propagate
 	 */
-	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<AbstractFXOnDragPolicy> actionToPropagate) {
+	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<IFXOnDragPolicy> actionToPropagate) {
 		final SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(SelectionModel.class);
 
-		if (selectionModel.getSelection().size() > 1) {
+		List<IContentPart<Node, ? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
+		if (selection.size() > 1) {
 
 			// If I'm the main receiver of the event, I propagate it to other selected elements
 			// If I'm not the main receiver, do nothing; someone else will do the propagation
 			if (e.getTarget() == getHost().getVisual()) {
 
-				for (final IContentPart<Node, ? extends Node> selectedPart : selectionModel.getSelection()) {
+				for (final IContentPart<Node, ? extends Node> selectedPart : selection) {
 					if (selectedPart != getPrimaryHost()) {
-						for (final AbstractFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.DRAG_TOOL_POLICY_KEY).values()) {
+						for (final IFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.ON_DRAG_POLICY_KEY).values()) {
 							actionToPropagate.accept(dragPolicy);
 						}
 					}
@@ -283,6 +287,27 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractFXOnDragPolicy {
 		}
 		return null;
 
+	}
+
+
+
+	@Override
+	public void hideIndicationCursor() {
+		//Nothing
+	}
+
+
+
+	@Override
+	public boolean showIndicationCursor(KeyEvent event) {
+		return false;
+	}
+
+
+
+	@Override
+	public boolean showIndicationCursor(MouseEvent event) {
+		return false;
 	}
 
 }

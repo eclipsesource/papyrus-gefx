@@ -11,49 +11,37 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.gef4.common.properties.IPropertyChangeNotifier;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
 
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 
-public class ChangeBoundsModel implements IPropertyChangeNotifier {
+public class ChangeBoundsModel {
 
 	public static final String CHANGE_BOUNDS_PROPERTY = "changeBounds"; //$NON-NLS-1$
 
-	private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-	private Map<IVisualPart<Node, ? extends Node>, Bounds> elements = new HashMap<>();
+	private ObservableMap<IVisualPart<Node, ? extends Node>, Bounds> elements = FXCollections.observableHashMap();
+	
+	private ReadOnlyMapWrapper<IVisualPart<Node, ? extends Node>, Bounds> elementsProperty = new ReadOnlyMapWrapper<>(this, CHANGE_BOUNDS_PROPERTY, elements);
 
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		pcs.addPropertyChangeListener(listener);
+	public ObservableMap<IVisualPart<Node, ? extends Node>, Bounds> getManagedElements() {
+		return elements;
 	}
-
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		pcs.removePropertyChangeListener(listener);
-	}
-
-	public Map<IVisualPart<Node, ? extends Node>, Bounds> getManagedElements() {
-		return Collections.unmodifiableMap(elements);
+	
+	public ReadOnlyMapProperty<IVisualPart<Node, ? extends Node>, Bounds> elementsProperty(){
+		return elementsProperty.getReadOnlyProperty();
 	}
 
 	public void addManagedElement(IVisualPart<Node, ? extends Node> element, Bounds bounds) {
-		Map<IVisualPart<Node, ? extends Node>, Bounds> oldContents = Collections.unmodifiableMap(new HashMap<>(this.elements));
 		this.elements.put(element, bounds);
-		pcs.firePropertyChange(CHANGE_BOUNDS_PROPERTY, oldContents, getManagedElements());
 	}
 
 	public void removeManagedElement(IVisualPart<Node, ? extends Node> element) {
-		Map<IVisualPart<Node, ? extends Node>, Bounds> oldContents = Collections.unmodifiableMap(new HashMap<>(this.elements));
 		this.elements.remove(element);
-		pcs.firePropertyChange(CHANGE_BOUNDS_PROPERTY, oldContents, getManagedElements());
 	}
 
 }

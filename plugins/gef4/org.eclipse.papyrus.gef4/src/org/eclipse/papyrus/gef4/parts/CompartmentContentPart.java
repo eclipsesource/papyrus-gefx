@@ -183,7 +183,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	 * @return
 	 */
 	protected boolean isShowTitle() {
-		TitleStyle titleStyle = (TitleStyle) view.getStyle(NotationPackage.eINSTANCE.getTitleStyle());
+		TitleStyle titleStyle = (TitleStyle) getView().getStyle(NotationPackage.eINSTANCE.getTitleStyle());
 		if (titleStyle == null) {
 			return false;
 		}

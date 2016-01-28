@@ -50,7 +50,7 @@ public class DiagramContentPart extends NotationContentPart<Diagram, Group> {
 	}
 
 	@Override
-	public List<View> getContentChildren() {
+	protected List<View> getContentChildren() {
 		List<View> allChildren = new ArrayList<>(super.getContentChildren());
 		allChildren.addAll(getView().getEdges());
 		return allChildren;

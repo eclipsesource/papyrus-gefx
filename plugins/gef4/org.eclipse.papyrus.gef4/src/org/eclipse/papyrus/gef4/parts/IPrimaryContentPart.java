@@ -12,6 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-public interface IPrimaryContentPart {
+import org.eclipse.gef4.common.adapt.IAdaptable;
+
+public interface IPrimaryContentPart extends IAdaptable {
 	// Tag interface
 }

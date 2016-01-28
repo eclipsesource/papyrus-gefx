@@ -71,7 +71,7 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 	@Override
 	protected void doRefreshVisual(final StackPane visual) {
 		// check if we have a host
-		final SetMultimap<IVisualPart<Node, ? extends Node>, String> anchorages = getAnchorages();
+		final SetMultimap<IVisualPart<Node, ? extends Node>, String> anchorages = getAnchoragesUnmodifiable();
 		if (anchorages.isEmpty()) {
 			return;
 		}

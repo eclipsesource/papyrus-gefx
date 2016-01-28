@@ -15,14 +15,13 @@ package org.eclipse.papyrus.gef4.parts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
@@ -31,6 +30,9 @@ import org.eclipse.gef4.mvc.fx.parts.AbstractFXContentPart;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef4.mvc.viewer.IViewer;
+import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
+import org.eclipse.gmf.runtime.diagram.core.listener.NotificationListener;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.FillStyle;
 import org.eclipse.gmf.runtime.notation.FontStyle;
@@ -49,10 +51,13 @@ import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -74,25 +79,36 @@ import javafx.scene.text.Font;
  */
 public abstract class NotationContentPart<V extends View, N extends Node> extends AbstractFXContentPart<N> {
 
-	protected final Adapter changeListener;
+	private final NotificationListener notificationListener;
 
-	protected final V view;
+	private final V view;
 
-	protected final List<View> lastKnownChildren = new ArrayList<>();
+	private TransactionalEditingDomain editingDomain;
+
+	private final EObject semanticElement;
+
+	/**
+	 * Some changes may happen outside the doCreateVisual/doRefreshVisual methods (e.g. during JavaFX rendering)
+	 * Since it is not possible to catch these changes directly, we use a listener to refresh the visualPartMap
+	 */
+	protected final ListChangeListener<Node> nodeChildrenListener = (change) -> updateOnChange(change);
+
+	// The list of contentChildren, as known by GEF4. It may be different from View#getChildren during updates, as items will be added/removed 1 by 1
+	protected final List<View> contentChildren = new ArrayList<>();
 
 	public NotationContentPart(final V view) {
 		Assert.isNotNull(view);
 		this.view = view;
+		this.semanticElement = findSemanticElement(); // May be null
 		setContent(view);
 
-		EObject semanticElement = getElement();
 		if (semanticElement != null) { // TODO: The adapters will be missing if we're in this case. Check the new implementation of GEF4 AdapterSupport, the adapters may be incorrectly declared here
-			setAdapter(getElement(), "semantic");
-			setAdapter(getElement(), AdapterKey.DEFAULT_ROLE);
+			setAdapter(semanticElement, "semantic");
+			setAdapter(semanticElement, AdapterKey.DEFAULT_ROLE);
 		}
 		setAdapter(view, "notation");
 
-		changeListener = createAdapter();
+		notificationListener = createNotificationListener();
 	}
 
 	/**
@@ -111,9 +127,29 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 	protected abstract N doCreateVisual();
 
-	private void updateLastKnownChildren() {
-		lastKnownChildren.clear();
-		lastKnownChildren.addAll(getContentChildren());
+	private void updateContentChildren() {
+		// TODO Update order?
+
+
+		// FIXME: This operation will have a high complexity:
+		// - n = number of children, c = number of changes (Addition/Removal)
+		// - We iterate on actual model children & ContentPart contentChildren lists (n²)
+		// - For each added/removed item, the super implementation will iterate several times on the list again to check the validity of the operation (3n * c)
+		// - The super implementation will do a setAll for each added/removed item (c * n)
+		// However, the number of changes should, in general, be limited (The worst case being e.g. the creation of a model element with "a lot" of compartments, with n = c ~= 10)
+		// It may however be noticeable when opening a diagram as this list will be updated for all elements in the model
+		List<View> modelChildren = getContentChildren();
+		for (View modelChild : modelChildren) {
+			if (!contentChildren.contains(modelChild)) {
+				addContentChild(modelChild, contentChildren.size());
+			}
+		}
+		for (View contentChild : new ArrayList<View>(contentChildren)) {
+			if (!modelChildren.contains(contentChild)) {
+				removeContentChild(contentChild);
+			}
+		}
+
 	}
 
 	protected void installDefaultPolicies() {
@@ -157,14 +193,15 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	/**
-	 * The Adapter used to listen to changes on View/Model
+	 * The NotificationListener used to listen to changes on View/Model
 	 *
-	 * It should call {@link #notifyChildrenChanged()} and {@link #refreshVisual()} as necessary
+	 * It should call {@link #updateContentChildren()} and {@link #refreshVisual()} as necessary
 	 *
 	 * @return
 	 */
-	protected Adapter createAdapter() {
-		return new AdapterImpl() {
+	protected NotificationListener createNotificationListener() {
+
+		return new NotificationListener() {
 
 			@Override
 			public void notifyChanged(final Notification msg) {
@@ -174,7 +211,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 				if (!(msg.isTouch())) {
 					if (childrenChanged(msg)) {
-						notifyChildrenChanged();
+						updateContentChildren();
 					}
 					refreshVisual();
 				}
@@ -190,23 +227,89 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	@Override
 	protected final void doRefreshVisual(final N visual) {
 		try {
-			getDomain().runExclusive(() -> refreshVisualInTransaction(visual));
+			getDomain().runExclusive(() -> {
+				refreshVisualInTransaction(visual);
+			});
 		} catch (InterruptedException ex) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred while refreshing the content part", ex));
 		}
 	}
 
+	protected void updateOnChange(Change<? extends Node> change) {
+		while (change.next()) {
+			for (Node removedNode : change.getRemoved()) {
+				unregisterVisuals(getRoot().getViewer(), removedNode);
+			}
+
+			for (Node addedNode : change.getAddedSubList()) {
+				registerVisuals(getRoot().getViewer(), addedNode);
+			}
+		}
+	}
+
+	@Override
+	protected void registerAtVisualPartMap(IViewer<Node> viewer, N visual) {
+		// Override the parent behavior to ensure that listeners are properly installed when required
+		registerVisuals(viewer, visual);
+	}
+
+	@Override
+	protected void unregisterFromVisualPartMap(IViewer<Node> viewer, N visual) {
+		// Override the parent behavior to ensure that listeners are properly uninstalled
+		unregisterVisuals(viewer, visual);
+	}
+
+	protected void unregisterVisuals(IViewer<Node> viewer, Node visual) {
+		Map<Node, IVisualPart<Node, ? extends Node>> visualPartMap = viewer.getVisualPartMap();
+
+		// Do not unregister child content parts; only child figures for this content part
+		if (visualPartMap.get(visual) == this) {
+			visualPartMap.remove(visual);
+
+			if (visual instanceof Parent) {
+				Parent parentVisual = (Parent) visual;
+				for (Node childNode : parentVisual.getChildrenUnmodifiable()) {
+					unregisterVisuals(viewer, childNode);
+				}
+				parentVisual.getChildrenUnmodifiable().removeListener(nodeChildrenListener);
+			}
+		}
+	}
+
+	protected void registerVisuals(IViewer<Node> viewer, Node visual) {
+		Map<Node, IVisualPart<Node, ? extends Node>> visualPartMap = viewer.getVisualPartMap();
+
+		IVisualPart<Node, ? extends Node> currentPart = visualPartMap.get(visual);
+		if (currentPart == null) { // Not yet registered
+			visualPartMap.put(visual, this);
+		}
+
+		if (visual instanceof Parent && (currentPart == null || currentPart == this)) { // Do not register nested visuals if they are associated with a child part
+			Parent parentVisual = (Parent) visual;
+			parentVisual.getChildrenUnmodifiable().addListener(nodeChildrenListener);
+			for (Node child : parentVisual.getChildrenUnmodifiable()) {
+				registerVisuals(viewer, child);
+			}
+		}
+	}
+	
+	protected DiagramEventBroker getEventBroker(){
+		TransactionalEditingDomain domain = getDomain();
+		if (domain == null){
+			return null;
+		}
+		return DiagramEventBroker.getInstance(domain);
+	}
+
 	protected TransactionalEditingDomain getDomain() {
-		return TransactionUtil.getEditingDomain(getView());
+		if (editingDomain == null) {
+			editingDomain = TransactionUtil.getEditingDomain(getView());
+		}
+		return editingDomain;
 	}
 
 	protected void refreshVisualInTransaction(final N visual) {
 		// Nothing
-	}
-
-	protected void notifyChildrenChanged() {
-		pcs.firePropertyChange(CONTENT_PROPERTY, lastKnownChildren, getContentChildren());
-		updateLastKnownChildren();
 	}
 
 	protected boolean childrenChanged(final Notification msg) {
@@ -216,7 +319,15 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return msg.getFeature() == NotationPackage.Literals.VIEW__PERSISTED_CHILDREN || msg.getFeature() == NotationPackage.Literals.VIEW__TRANSIENT_CHILDREN;
 	}
 
-	protected EObject getElement() {
+	/**
+	 * The semantic element referenced by the view
+	 * May be null
+	 */
+	protected final EObject getElement() {
+		return semanticElement;
+	}
+	
+	protected EObject findSemanticElement(){
 		final EObject element = getView().getElement();
 		if (element == null) {
 			if (this instanceof IPrimaryContentPart) {
@@ -291,16 +402,15 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return (FXViewer) super.getViewer();
 	}
 
-	// FIXME Use DiagramEventBroker instead of simple listeners, to avoid reacting to changes during a transaction
 	protected void installListeners() {
-		getView().eAdapters().add(changeListener);
-		final EObject element = getElement();
-		if (element != null) {
-			element.eAdapters().add(changeListener);
+		DiagramEventBroker eventBroker = getEventBroker();
+		eventBroker.addNotificationListener(getView(), notificationListener);
+		if (semanticElement != null) {
+			eventBroker.addNotificationListener(semanticElement, notificationListener);
 		}
 		final LayoutConstraint layout = getLayout();
 		if (layout != null) {
-			layout.eAdapters().add(changeListener);
+			eventBroker.addNotificationListener(layout, notificationListener);
 		}
 	}
 
@@ -310,21 +420,23 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 		super.doActivate();
 
-		updateLastKnownChildren();
+		updateContentChildren();
 
 		installListeners();
 	}
 
 	@Override
 	protected void doDeactivate() {
-		getView().eAdapters().remove(changeListener);
-		final EObject element = getElement();
+		DiagramEventBroker eventBroker = getEventBroker();
+
+		eventBroker.removeNotificationListener(getView(), notificationListener);
+		EObject element = getElement();
 		if (element != null) {
-			element.eAdapters().remove(changeListener);
+			eventBroker.removeNotificationListener(element, notificationListener);
 		}
 		final LayoutConstraint layout = getLayout();
 		if (layout != null) {
-			layout.eAdapters().remove(changeListener);
+			eventBroker.removeNotificationListener(layout, notificationListener);
 		}
 		super.doDeactivate();
 	}
@@ -609,16 +721,38 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	// return NotationUtil.getNotationMinHeight(view);
 	// }
 
-	@Override
-	public List<View> getContentChildren() {
+	protected List<View> getContentChildren() {
 		return ((List<View>) getView().getChildren()).stream().filter(c -> c.isVisible()).collect(Collectors.toList());
 	}
 
 	protected abstract String getStyleClass();// TODO support mutli styleClass named label should match on .genericLabel and .namedLabel
 
 	@Override
-	public SetMultimap<? extends Object, String> getContentAnchorages() {
+	public SetMultimap<? extends Object, String> doGetContentAnchorages() {
 		return HashMultimap.create();
+	}
+
+	@Override
+	protected List<? extends Object> doGetContentChildren() {
+		return contentChildren;
+	}
+
+	@Override
+	protected void doAddContentChild(Object contentChild, int index) {
+		Assert.isTrue(contentChild instanceof View);
+		contentChildren.add(index, (View) contentChild);
+	}
+
+	@Override
+	protected void doRemoveContentChild(Object contentChild) {
+		contentChildren.remove(contentChild);
+	}
+
+	@Override
+	protected void doReorderContentChild(Object contentChild, int newIndex) {
+		Assert.isTrue(contentChild instanceof View);
+		contentChildren.remove(contentChild);
+		contentChildren.add(newIndex, (View) contentChild);
 	}
 
 }

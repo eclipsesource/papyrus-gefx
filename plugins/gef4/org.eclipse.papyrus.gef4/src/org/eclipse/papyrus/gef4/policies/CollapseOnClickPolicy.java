@@ -13,8 +13,9 @@
 package org.eclipse.papyrus.gef4.policies;
 
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.gef4.mvc.fx.policies.AbstractFXOnClickPolicy;
+import org.eclipse.gef4.mvc.fx.policies.IFXOnClickPolicy;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
 import org.eclipse.gmf.runtime.diagram.core.commands.SetPropertyCommand;
 import org.eclipse.gmf.runtime.diagram.ui.internal.properties.Properties;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
@@ -34,7 +35,7 @@ import javafx.scene.input.MouseEvent;
  * The Class CollapseOnClickPolicy.
  */
 // FIXME use the notation model rather than the ContentPart
-public class CollapseOnClickPolicy extends AbstractFXOnClickPolicy {
+public class CollapseOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
 
 	/**
 	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnClickPolicy#click(javafx.scene.input.MouseEvent)
@@ -44,7 +45,7 @@ public class CollapseOnClickPolicy extends AbstractFXOnClickPolicy {
 	@Override
 	public void click(final MouseEvent event) {
 		if (getHost() instanceof CollapseHandlePart) {
-			final IVisualPart<Node, ? extends Node> compartment = CompartmentUtils.getCollapsablePart(getHost().getAnchorages().keys().iterator().next());
+			final IVisualPart<Node, ? extends Node> compartment = CompartmentUtils.getCollapsablePart(getHost().getAnchoragesUnmodifiable().keys().iterator().next());
 
 			if (null != compartment) {
 				DrawerStyle drawerStyle = getDrawerStyle(compartment);

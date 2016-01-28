@@ -14,7 +14,7 @@ package org.eclipse.papyrus.infra.gefdiag.common.editor;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.papyrus.infra.core.extension.diagrameditor.AbstractEditorFactory;
+import org.eclipse.papyrus.infra.ui.extension.diagrameditor.AbstractEditorFactory;
 import org.eclipse.papyrus.infra.core.sasheditor.contentprovider.IPageModel;
 
 public abstract class GEFEditorFactory extends AbstractEditorFactory {

@@ -50,7 +50,7 @@ public class FXGraphContentProvider implements ITreeContentProvider {
 			List<Node> result = new LinkedList<Node>();
 			result.add(part.getVisual());
 
-			part.getAnchoreds().stream().forEach(p -> result.add(p.getVisual()));
+			part.getAnchoredsUnmodifiable().stream().forEach(p -> result.add(p.getVisual()));
 
 			// for (IVisualPart<Node, ? extends Node> anchored : part.getAnchored()){
 			//

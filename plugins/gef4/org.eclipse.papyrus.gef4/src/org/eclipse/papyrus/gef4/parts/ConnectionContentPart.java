@@ -85,7 +85,7 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	}
 
 	@Override
-	public SetMultimap<? extends Object, String> getContentAnchorages() {
+	public SetMultimap<? extends Object, String> doGetContentAnchorages() {
 		SetMultimap<View, String> anchorages = HashMultimap.create();
 		anchorages.put(getView().getSource(), SOURCE);
 		anchorages.put(getView().getTarget(), TARGET);

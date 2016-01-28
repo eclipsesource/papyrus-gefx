@@ -42,7 +42,7 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 	 */
 	@Override
 	protected String getText() {
-		return getParser().getEditString(new EObjectAdapter(view.getElement() != null ? view.getElement() : view), ParserOptions.NONE.intValue());
+		return getParser().getEditString(new EObjectAdapter(getElement() != null ? getElement() : getView()), ParserOptions.NONE.intValue());
 	}
 
 

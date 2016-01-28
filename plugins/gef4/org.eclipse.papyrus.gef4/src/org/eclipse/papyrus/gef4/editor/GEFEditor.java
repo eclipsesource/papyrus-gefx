@@ -12,8 +12,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.editor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,6 +22,7 @@ import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.models.ContentModel;
 import org.eclipse.gef4.mvc.models.GridModel;
 import org.eclipse.gef4.mvc.models.SelectionModel;
+import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IRootPart;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -43,11 +42,12 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 
 @SuppressWarnings("serial")
-public abstract class GEFEditor extends EditorPart implements PropertyChangeListener {
+public abstract class GEFEditor extends EditorPart {
 
 	private final Diagram diagram;
 
@@ -68,10 +68,27 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 
 	private Scene scene;
 
+	private final ListChangeListener<IContentPart<Node, ? extends Node>> selectionListener;
+
 	public GEFEditor(final Diagram diagram) {
 		this.diagram = diagram;
 		final Injector injector = Guice.createInjector(createModule());
 		injector.injectMembers(this);
+
+		selectionListener = new ListChangeListener<IContentPart<Node, ? extends Node>>() {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends IContentPart<Node, ? extends Node>> change) {
+				final List<?> selectedElements = change.getList();
+
+				IStructuredSelection selection;
+				if (selectedElements.size() > 0) {
+					selection = new StructuredSelection(selectedElements);
+				} else {
+					selection = StructuredSelection.EMPTY;
+				}
+				getSite().getSelectionProvider().setSelection(selection);
+			}
+		};
 	}
 
 	@Override
@@ -129,7 +146,7 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 		domain.activate();
 
 		// Set contents
-		viewer.getAdapter(ContentModel.class).setContents(getContents());
+		viewer.getAdapter(ContentModel.class).getContents().setAll(getContents());
 
 		// viewer.getScene().getStylesheets().add("platform:/plugin/org.eclipse.papyrus.infra.gefdiag.common/style/defaultFX.css");
 
@@ -143,13 +160,13 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 		// selectionForwarder = new SelectionForwarder<>(selectionProvider, viewer);
 
 		// Manual change listener and synchronization with SelectionModel
-		getSelectionModel().addPropertyChangeListener(this);
+		getSelectionModel().getSelectionUnmodifiable().addListener(selectionListener);
 
-		if (viewer.getRootPart() == null || viewer.getRootPart().getChildren().isEmpty()) {
-			System.out.println("Break");
+		if (viewer.getRootPart() == null || viewer.getRootPart().getChildrenUnmodifiable().isEmpty()) {
+			selectionProvider.setSelection(StructuredSelection.EMPTY);
+		} else {
+			selectionProvider.setSelection(new StructuredSelection(viewer.getRootPart().getChildrenUnmodifiable().get(0)));
 		}
-
-		selectionProvider.setSelection(new StructuredSelection(viewer.getRootPart().getChildren().get(0)));
 		getSite().setSelectionProvider(selectionProvider);
 	}
 
@@ -176,24 +193,6 @@ public abstract class GEFEditor extends EditorPart implements PropertyChangeList
 		domain.dispose();
 		// this.viewer.dispose();
 		super.dispose();
-	}
-
-	@Override
-	public void propertyChange(final PropertyChangeEvent evt) {
-		switch (evt.getPropertyName()) {
-		case SelectionModel.SELECTION_PROPERTY:
-			final List<?> oldSelection = (List<?>) evt.getOldValue();
-			final List<?> selectedElements = (List<?>) evt.getNewValue();
-
-			IStructuredSelection selection;
-			if (selectedElements.size() > 0) {
-				selection = new StructuredSelection(selectedElements);
-			} else {
-				selection = StructuredSelection.EMPTY;
-			}
-			getSite().getSelectionProvider().setSelection(selection);
-			break;
-		}
 	}
 
 	protected SelectionModel<Node> getSelectionModel() {

@@ -46,7 +46,7 @@ public class MarqueeOnDragPolicy extends FXMarqueeOnDragPolicy {
 		}
 
 		if (result.size() > 1) {
-			result.remove(getHost().getRoot().getChildren().get(0)); // Remove the diagram edit part, if it is selected and is not the only selected element
+			result.remove(getHost().getRoot().getChildrenUnmodifiable().get(0)); // Remove the diagram edit part, if it is selected and is not the only selected element
 		}
 
 		return result;

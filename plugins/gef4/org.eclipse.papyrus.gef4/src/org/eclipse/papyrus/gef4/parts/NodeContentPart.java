@@ -127,7 +127,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			double tabHeight = 0;
 
 			// get the tab dimension of the package
-			for (final IVisualPart<Node, ? extends Node> child : getChildren()) {
+			for (final IVisualPart<Node, ? extends Node> child : getChildrenUnmodifiable()) {
 				if (child instanceof LabelContentPart) {
 					LabelContentPart childPart = (LabelContentPart) child;
 

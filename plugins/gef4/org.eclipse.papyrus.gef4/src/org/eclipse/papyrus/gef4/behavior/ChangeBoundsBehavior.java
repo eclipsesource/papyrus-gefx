@@ -11,8 +11,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.behavior;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,20 +25,21 @@ import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPart;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 
+import javafx.collections.MapChangeListener;
 import javafx.scene.Node;
 
-public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements PropertyChangeListener {
+public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements MapChangeListener<IVisualPart<Node, ? extends Node>, Bounds> {
 
 	protected final Map<IVisualPart<Node, ? extends Node>, IFeedbackPart<Node, ? extends Node>> currentFeedbackParts = new HashMap<>();
 
 	@Override
-	public void activate() {
-		super.activate();
+	public void doActivate() {
+		super.doActivate();
 
 		ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
 
 		// register
-		boundsModel.addPropertyChangeListener(this);
+		boundsModel.getManagedElements().addListener(this);
 
 		// create feedback and handles if we are already selected
 		updateFeedback(Collections.emptyMap(), boundsModel.getManagedElements());
@@ -51,23 +50,36 @@ public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements Prop
 	}
 
 	@Override
-	public void deactivate() {
+	public void doDeactivate() {
 		ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
 		removeFeedback(extractTargets(boundsModel.getManagedElements()));
 
-		boundsModel.removePropertyChangeListener(this);
+		boundsModel.getManagedElements().removeListener(this);
 
-		super.deactivate();
+		super.doDeactivate();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		if (event.getPropertyName().equals(ChangeBoundsModel.CHANGE_BOUNDS_PROPERTY)) {
-			Map<IVisualPart<Node, ? extends Node>, Bounds> oldSelection = (Map<IVisualPart<Node, ? extends Node>, Bounds>) event.getOldValue();
-			Map<IVisualPart<Node, ? extends Node>, Bounds> newSelection = (Map<IVisualPart<Node, ? extends Node>, Bounds>) event.getNewValue();
+	public void onChanged(MapChangeListener.Change<? extends IVisualPart<Node, ? extends Node>, ? extends Bounds> change) {
 
-			updateFeedback(oldSelection, newSelection);
+		IVisualPart<Node, ? extends Node> modifiedPart = change.getKey();
+		if (modifiedPart == getHost()) {
+			if (change.getValueAdded() != null) { // Addition or Update
+				IFeedbackPart<Node, ? extends Node> feedback = currentFeedbackParts.get(modifiedPart);
+				if (feedback == null) {
+					addFeedback(Collections.singletonList(modifiedPart), new HashMap<Object, Object>(change.getMap()));
+				} else {
+					updateFeedback(feedback, change.getValueAdded());
+				}
+			} else { // Removal
+				removeFeedback(Collections.singletonList(modifiedPart));
+			}
+		}
+	}
+
+	protected void updateFeedback(IFeedbackPart<Node, ? extends Node> feedbackPart, Bounds bounds) {
+		if (feedbackPart instanceof BoundsFeedbackPart) {
+			((BoundsFeedbackPart) feedbackPart).updateBounds(bounds);
 		}
 	}
 

@@ -12,13 +12,14 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
 
-import org.eclipse.gef4.mvc.fx.policies.AbstractFXOnClickPolicy;
+import org.eclipse.gef4.mvc.fx.policies.IFXOnClickPolicy;
 import org.eclipse.gef4.mvc.models.FocusModel;
 import org.eclipse.gef4.mvc.models.SelectionModel;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IRootPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.papyrus.gef4.parts.EmptyContentPart;
+import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
+import org.eclipse.gef4.mvc.viewer.IViewer;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
 import com.google.common.reflect.TypeToken;
@@ -27,7 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("serial")
-public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
+public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
 	@Override
 	public void click(MouseEvent e) {
 		// focus and select are only done on single click
@@ -36,31 +37,20 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 		}
 
 		IVisualPart<Node, ? extends Node> host = getHost();
-
-		if (host instanceof EmptyContentPart) {
-			host = host.getRoot();
-		}
-
-		if (host instanceof IContentPart) {
-			select((IContentPart<Node, ? extends Node>) host, e);
-		} else if (host instanceof IRootPart) {
-			// check if click on background (either one of the root visuals, or
-			// an unregistered visual)
-			IVisualPart<Node, ? extends Node> targetPart = getHost().getRoot().getViewer().getVisualPartMap().get(e.getTarget());
-			if (targetPart == null || targetPart instanceof IRootPart) {
-				select(getHost().getRoot(), e);
-			} else if (targetPart instanceof IContentPart) {
-				select((IContentPart<Node, ? extends Node>) targetPart, e);
-			}
-
-			/*
-			 * if (targetPart == null || targetPart == host) {
-			 * // unset focus
-			 * focusModel.setFocused(null);
-			 * // remove all selected
-			 * selectionModel.deselectAll();
-			 * }
-			 */
+		
+		IViewer<Node> viewer = host.getRoot().getViewer();
+		IVisualPart<Node, ? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
+		if (targetPart instanceof NotationContentPart){
+			NotationContentPart<?, ?> targetNotationPart = (NotationContentPart<?, ?>)targetPart;
+			
+			NotationContentPart<?, ?> targetPrimaryPart = targetNotationPart.getPrimaryContentPart();
+			
+			if (targetPrimaryPart == host){
+				select(targetPrimaryPart, e);
+			} //Else: We're just a parent of the target element. Do nothing
+			
+		} else if (host instanceof IRootPart){ // Root or Unknown target: select the root
+			select((IRootPart<Node, ? extends Node>)host, e);
 		}
 	}
 
@@ -70,10 +60,15 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
 		});
 
-		IContentPart<Node, ? extends Node> firstChild = (IContentPart<Node, ? extends Node>) target.getChildren().get(0);
+		IContentPart<Node, ? extends Node> firstChild = (IContentPart<Node, ? extends Node>) target.getChildrenUnmodifiable().get(0);
 
-		focusModel.setFocused(firstChild);
-		selectionModel.setSelection(firstChild);
+		focusModel.setFocus(firstChild);
+		if (e.isControlDown()){
+			//TODO append
+			//focusModel.set
+		} else {
+			selectionModel.setSelection(firstChild);
+		}
 	}
 
 	protected void select(IContentPart<Node, ? extends Node> target, MouseEvent e) {
@@ -91,7 +86,7 @@ public class FocusAndSelectOnClickPolicy extends AbstractFXOnClickPolicy {
 		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
 		});
 
-		focusModel.setFocused(target);
+		focusModel.setFocus(target);
 
 		boolean append = e.isControlDown();
 		if (selectionModel.isSelected(target)) {

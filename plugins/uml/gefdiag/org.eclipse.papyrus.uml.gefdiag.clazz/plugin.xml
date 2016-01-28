@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.papyrus.infra.core.papyrusDiagram">
+         point="org.eclipse.papyrus.infra.ui.papyrusDiagram">
       <editorDiagram
             factoryClass="org.eclipse.papyrus.uml.gefdiag.clazz.editor.ClassDiagramEditorFactory"
             order="10">
