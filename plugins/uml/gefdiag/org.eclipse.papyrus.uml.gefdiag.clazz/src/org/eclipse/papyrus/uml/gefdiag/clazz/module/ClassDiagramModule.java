@@ -1,6 +1,6 @@
 package org.eclipse.papyrus.uml.gefdiag.clazz.module;
 
-import org.eclipse.gef4.common.inject.AdaptableScopes;
+import org.eclipse.gef4.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 import org.eclipse.gmf.runtime.notation.Diagram;

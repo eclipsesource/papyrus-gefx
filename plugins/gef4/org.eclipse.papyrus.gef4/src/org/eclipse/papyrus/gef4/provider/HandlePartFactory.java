@@ -21,7 +21,9 @@ import java.util.Map;
 
 import org.eclipse.gef4.geometry.planar.BezierCurve;
 import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
-import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
+import org.eclipse.gef4.mvc.behaviors.IBehavior;
+import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
+import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.policies.FXBendOnSegmentHandleDragPolicy;
 import org.eclipse.gef4.mvc.parts.IHandlePart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
@@ -35,58 +37,57 @@ import com.google.inject.Provider;
 
 import javafx.scene.Node;
 
-public class HandlePartFactory extends FXDefaultHandlePartFactory {
+public class HandlePartFactory extends FXDefaultSelectionHandlePartFactory {
 
 	@Inject
 	private Injector injector;
 
 	@Override
-	protected List<IHandlePart<Node, ? extends Node>> createMultiSelectionHandleParts(final List<? extends IVisualPart<Node, ? extends Node>> targets, final Map<Object, Object> contextMap) {
+	protected List<IHandlePart<Node, ? extends Node>> createMultiSelectionHandleParts(final List<? extends IVisualPart<Node, ? extends Node>> targets, IBehavior<Node> contextBehavior, final Map<Object, Object> contextMap) {
 		final List<IHandlePart<Node, ? extends Node>> allHandles = new LinkedList<>();
 		for (final IVisualPart<Node, ? extends Node> target : targets) {
-			allHandles.addAll(createSingleSelectionHandleParts(target, contextMap));
+			allHandles.addAll(createSingleSelectionHandleParts(target, contextBehavior, contextMap));
 		}
 		return allHandles;
 	}
 
 	@Override
-	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandleParts(final IVisualPart<Node, ? extends Node> target, final Map<Object, Object> contextMap) {
+	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandleParts(final IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, final Map<Object, Object> contextMap) {
 		if (target instanceof DiagramContentPart) {
 			return Collections.emptyList();
 		}
-		return super.createSingleSelectionHandleParts(target, contextMap);
+		return super.createSingleSelectionHandleParts(target, contextBehavior, contextMap);
 	}
 
 	@Override
-	protected IHandlePart<Node, ? extends Node> createCurveSelectionHandlePart(final IVisualPart<Node, ? extends Node> targetPart,
-			final Provider<BezierCurve[]> segmentsProvider, final int segmentCount, final int segmentIndex, final double segmentParameter) {
+	public List<IHandlePart<Node, ? extends Node>> createHandleParts(List<? extends IVisualPart<Node, ? extends Node>> targets, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap) {
+		if (contextBehavior instanceof SelectionBehavior) {
+			return super.createHandleParts(targets, contextBehavior, contextMap);
+		} else if (contextBehavior instanceof HoverBehavior){
+			return createHoverHandleParts(targets, (HoverBehavior<Node>)contextBehavior, contextMap);
+		}
+		return Collections.emptyList();
+	}
+	
+	protected List<IHandlePart<Node, ? extends Node>> createHoverHandleParts(final List<? extends IVisualPart<Node, ? extends Node>> targets, final HoverBehavior<Node> contextBehavior, final Map<Object, Object> contextMap) {
+		List<IHandlePart<Node, ? extends Node>> result = new ArrayList<>();
+		for (IVisualPart<Node, ? extends Node> target : targets){
+			result.addAll(createHoverHandleParts(target, contextBehavior, contextMap));
+		}
+		return result;
+	}
+	
+	@Override
+	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandlePartsForCurve(IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap, Provider<BezierCurve[]> segmentsProvider) {
+		List<IHandlePart<Node, ? extends Node>> result = super.createSingleSelectionHandlePartsForCurve(target, contextBehavior, contextMap, segmentsProvider);
 
-		final IHandlePart<Node, ? extends Node> result = super.createCurveSelectionHandlePart(targetPart, segmentsProvider,
-				segmentCount, segmentIndex, segmentParameter);
-
-		result.setAdapter(new FXBendOnSegmentHandleDragPolicy()
-		// {
-		// FIXME: discuss and revisit
-		// @Override
-		// protected void commit(final IPolicy<Node> policy) {
-		// if (policy != null && policy instanceof ITransactional) {
-		// final IUndoableOperation o = ((ITransactional) policy).commit();
-		// if (o != null && o.canExecute()) {
-		// final IContentPart<Node, ? extends Node> targetPartImpl = (IContentPart<Node, ? extends Node>) targetPart;
-		// final View hostView = (View) targetPartImpl.getContent();
-		// final OperationToGEFCommandWrapper gefWrapper = new OperationToGEFCommandWrapper(o);
-		// final GEFtoEMFCommandWrapper emfWrapper = new GEFtoEMFCommandWrapper(gefWrapper);
-		// AdapterFactoryEditingDomain.getEditingDomainFor(hostView).getCommandStack().execute(emfWrapper);
-		// }
-		// }
-		// }
-		// }
-		);
-
+		for (IHandlePart<Node, ? extends Node> handlePart : result){
+			handlePart.setAdapter(new FXBendOnSegmentHandleDragPolicy());
+		}
+		
 		return result;
 	}
 
-	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createHoverHandleParts(final IVisualPart<Node, ? extends Node> target, final HoverBehavior<Node> contextBehavior, final Map<Object, Object> contextMap) {
 		// Check if the target or one of its parents are a compartment
 		final IVisualPart<Node, ? extends Node> compartment = CompartmentUtils.getCollapsablePart(target);
@@ -102,6 +103,6 @@ public class HandlePartFactory extends FXDefaultHandlePartFactory {
 			return handles;
 		}
 
-		return super.createHoverHandleParts(target, contextBehavior, contextMap);
+		return Collections.emptyList();
 	}
 }

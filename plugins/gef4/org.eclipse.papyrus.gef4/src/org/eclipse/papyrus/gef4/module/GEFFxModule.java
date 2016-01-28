@@ -17,19 +17,18 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.common.adapt.AdapterKey;
-import org.eclipse.gef4.common.inject.AdaptableScopes;
-import org.eclipse.gef4.common.inject.AdapterMaps;
+import org.eclipse.gef4.common.adapt.inject.AdaptableScopes;
+import org.eclipse.gef4.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef4.mvc.behaviors.ContentBehavior;
+import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef4.mvc.fx.MvcFxModule;
 import org.eclipse.gef4.mvc.fx.behaviors.FXGridBehavior;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
-import org.eclipse.gef4.mvc.fx.parts.FXDefaultFeedbackPartFactory;
-import org.eclipse.gef4.mvc.fx.parts.FXDefaultHandlePartFactory;
+import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
+import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
 import org.eclipse.gef4.mvc.fx.policies.FXChangeViewportPolicy;
-import org.eclipse.gef4.mvc.fx.policies.FXDeleteSelectedOnTypePolicy;
-import org.eclipse.gef4.mvc.fx.policies.FXFocusAndSelectOnClickPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef4.mvc.fx.providers.GeometricOutlineProvider;
 import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
@@ -65,6 +64,7 @@ import org.eclipse.papyrus.gef4.provider.HandlePartFactory;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.google.inject.name.Names;
 
 import javafx.scene.Node;
 
@@ -104,9 +104,9 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 	@Override
 	protected void bindFXRootPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		
+
 		bindFocusAndSelectOnClickPolicyAsFXRootPartAdapter(adapterMapBinder);
-		
+
 		adapterMapBinder
 				.addBinding(
 						AdapterKey.defaultRole())
@@ -131,43 +131,68 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
-				.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragPolicy.class);
+				.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragPolicy.class); // FIXME this shouldn't be installed on all handle parts (e.g. this will be installed on connection's bendpoints and anchors)
 	}
 
 	@Override
-	protected void bindIHandlePartFactory() {
+	protected void bindIHandlePartFactories() {
+
+		// Parent module uses named injects.
+		binder().bind(new TypeLiteral<IHandlePartFactory<Node>>() {
+		}).annotatedWith(
+				Names.named(SelectionBehavior.PART_FACTORIES_BINDING_NAME))
+				.to(HandlePartFactory.class)
+				.in(AdaptableScopes.typed(FXViewer.class));
+
+		binder().bind(new TypeLiteral<IHandlePartFactory<Node>>() {
+		}).annotatedWith(Names.named(HoverBehavior.PART_FACTORIES_BINDING_NAME))
+				.to(HandlePartFactory.class)
+				.in(AdaptableScopes.typed(FXViewer.class));
+
+		// Generic handle part factory binding for unnamed injects
 		binder().bind(new TypeLiteral<IHandlePartFactory<Node>>() {
 		}).to(HandlePartFactory.class)
 				.in(AdaptableScopes.typed(FXViewer.class));
 	}
 
 	@Override
-	protected void bindIFeedbackPartFactory() {
+	protected void bindIFeedbackPartFactories() {
+		// Parent module uses named injects.
+		binder().bind(new TypeLiteral<IFeedbackPartFactory<Node>>() {
+		}).annotatedWith(
+				Names.named(SelectionBehavior.PART_FACTORIES_BINDING_NAME))
+				.to(FeedbackPartFactory.class)
+				.in(AdaptableScopes.typed(FXViewer.class));
+		binder().bind(new TypeLiteral<IFeedbackPartFactory<Node>>() {
+		}).annotatedWith(Names.named(HoverBehavior.PART_FACTORIES_BINDING_NAME))
+				.to(FeedbackPartFactory.class)
+				.in(AdaptableScopes.typed(FXViewer.class));
+
+		// Generic feedback part factory binding for unnamed injects
 		binder().bind(new TypeLiteral<IFeedbackPartFactory<Node>>() {
 		}).to(FeedbackPartFactory.class)
 				.in(AdaptableScopes.typed(FXViewer.class));
 	}
 
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(
-				AdapterKey.defaultRole()).to(MoveOnDragPolicy.class);
+		// Nothing (Most binding moved to PrimaryPartAdapter due to the new propagation mechanism of policies in GEF4)
 	}
-	
+
 	@Override
 	protected void bindFocusAndSelectOnClickPolicyAsFXRootPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(AdapterKey.role("0"))
-			.to(FocusAndSelectOnClickPolicy.class);
+				.to(FocusAndSelectOnClickPolicy.class);
 	}
 
 	protected void bindConnectionPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
 				.addBinding(
-						AdapterKey.role(FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
+						AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
 				.to(GeometricOutlineProvider.class);
 
 		adapterMapBinder
 				.addBinding(
-						AdapterKey.role(FXDefaultHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
+						AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
 				.to(GeometricOutlineProvider.class);
 	}
 
@@ -178,12 +203,12 @@ public abstract class GEFFxModule extends MvcFxModule {
 		// See org.eclipse.gef4.fx.utils.NodeUtils.getGeometricOutline(Node)
 		adapterMapBinder
 				.addBinding(
-						AdapterKey.role(FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
+						AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
 				.to(ShapeBoundsProvider.class);
 
 		adapterMapBinder
 				.addBinding(
-						AdapterKey.role(FXDefaultHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
+						AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
 				.to(ShapeBoundsProvider.class);
 	}
 
@@ -265,12 +290,17 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		bindPalette();
 	}
-	
+
 	protected void bindPrimaryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
-			.addBinding(
-					AdapterKey.defaultRole())
-			.to(FocusAndSelectOnClickPolicy.class);
+				.addBinding(
+						AdapterKey.defaultRole())
+				.to(FocusAndSelectOnClickPolicy.class);
+
+		adapterMapBinder
+				.addBinding(
+						AdapterKey.defaultRole())
+				.to(MoveOnDragPolicy.class);
 	}
 
 	protected void bindPalette() {

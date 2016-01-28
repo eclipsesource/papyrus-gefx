@@ -23,6 +23,7 @@ import org.eclipse.gef4.mvc.models.SelectionModel;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
+import org.eclipse.gef4.mvc.viewer.IViewer;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -35,6 +36,7 @@ import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
+import org.eclipse.papyrus.gef4.utils.PolicyUtil;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
@@ -45,6 +47,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+@SuppressWarnings("serial")
 public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
 
 	@Override
@@ -75,7 +78,8 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 	}
 
 	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<IFXOnDragPolicy> actionToPropagate) {
-		final SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
+		IViewer<Node> viewer = getHost().getRoot().getViewer();
+		final SelectionModel<Node> selectionModel = viewer.getAdapter(new TypeToken<SelectionModel<Node>>() {
 		});
 
 		List<IContentPart<Node, ? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
@@ -83,8 +87,9 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 
 			// If I'm the main receiver of the event, I propagate it to other selected elements
 			// If I'm not the main receiver, do nothing; someone else will do the propagation
-			if (e.getTarget() == getHost().getVisual()) {
-
+			NotationContentPart<?, ?> targetPart = PolicyUtil.getTargetPrimaryPart(this, e);
+			
+			if (targetPart == getHost()) {
 				for (final IContentPart<Node, ? extends Node> selectedPart : selection) {
 					if (selectedPart != getPrimaryHost()) {
 						for (final IFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.ON_DRAG_POLICY_KEY).values()) {
@@ -92,14 +97,12 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 						}
 					}
 				}
-
 			}
 		}
 	}
 
 	@Override
 	public void release(final MouseEvent e, final Dimension delta) {
-
 		if (!isSelected()) {
 			return;
 		}
@@ -116,7 +119,10 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 
 		final Bounds newBounds = computeNewBounds(bounds, delta);
 		if (bounds == null || newBounds == null) {
-			boundsModel.removeManagedElement(getPrimaryHost());
+			IVisualPart<Node, ? extends Node> primaryHost = getPrimaryHost();
+			if (boundsModel.getManagedElements().containsKey(primaryHost)) {
+				boundsModel.removeManagedElement(getPrimaryHost());
+			}
 			return;
 		}
 

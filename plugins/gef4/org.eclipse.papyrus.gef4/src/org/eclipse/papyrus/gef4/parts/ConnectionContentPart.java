@@ -27,7 +27,7 @@ import com.google.common.collect.SetMultimap;
 
 import javafx.scene.Node;
 
-public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E, Connection> {
+public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E, Connection> implements IPrimaryContentPart{
 
 	/** Role for Connection source anchorage */
 	public static final String SOURCE = "source";

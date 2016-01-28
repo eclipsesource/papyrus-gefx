@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.geometry.planar.Dimension;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXSegmentHandlePart;
+import org.eclipse.gef4.mvc.fx.policies.CursorSupport;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
 import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
 import org.eclipse.gef4.mvc.models.SelectionModel;
@@ -40,10 +41,12 @@ import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
 
 import com.google.common.reflect.TypeToken;
 
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+@SuppressWarnings("serial")
 public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
 
 	protected static final int NORTH_WEST = 0;
@@ -53,6 +56,8 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 	protected static final int SOUTH_EAST = 2;
 
 	protected static final int SOUTH_WEST = 3;
+	
+	private CursorSupport cursorSupport = new CursorSupport(this);
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
@@ -61,6 +66,9 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 
 		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
 		final Bounds newBounds = computeNewBounds(getBounds(), delta);
+		if (newBounds == null) { // If the host element doesn't have bounds (e.g. Connections)
+			return;
+		}
 		boundsModel.addManagedElement(getPrimaryHost(), newBounds);
 	}
 
@@ -73,9 +81,6 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 
 		final int xOffset = toPixels(delta.getWidth());
 		final int yOffset = toPixels(delta.getHeight());
-
-		// FIXME: Identify the selected Handle (Top-left, ...) and change the position/size accordingly (e.g. moving top left anchor will change the position and size)
-		// Currently, this policy only works "as expected" for the bottom-right Handle (i.e. add the delta to the current size)
 
 		if (xOffset == 0 && yOffset == 0) {
 			return null;
@@ -265,7 +270,7 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 
 	@Override
 	public void hideIndicationCursor() {
-		// Nothing
+		getCursorSupport().restoreCursor();
 	}
 
 	@Override
@@ -275,7 +280,27 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 
 	@Override
 	public boolean showIndicationCursor(MouseEvent event) {
-		return false;
+		getCursorSupport().storeAndReplaceCursor(getCursor());
+		return true;
+	}
+	
+	protected CursorSupport getCursorSupport(){
+		return cursorSupport;
+	}
+
+	private Cursor getCursor() {
+		switch (getAnchorDirection()) {
+		case NORTH_EAST:
+			return Cursor.NE_RESIZE;
+		case NORTH_WEST:
+			return Cursor.NW_RESIZE;
+		case SOUTH_EAST:
+			return Cursor.SE_RESIZE;
+		case SOUTH_WEST:
+			return Cursor.SW_RESIZE;
+		default:
+			return Cursor.DEFAULT;
+		}
 	}
 
 }

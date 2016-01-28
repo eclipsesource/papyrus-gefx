@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.eclipse.gef4.mvc.behaviors.IBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
-import org.eclipse.gef4.mvc.fx.parts.FXDefaultFeedbackPartFactory;
+import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef4.mvc.parts.IFeedbackPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -32,18 +32,10 @@ import com.google.inject.Injector;
 
 import javafx.scene.Node;
 
-public class FeedbackPartFactory extends FXDefaultFeedbackPartFactory {
+public class FeedbackPartFactory extends FXDefaultSelectionFeedbackPartFactory {
 
 	@Inject
 	private Injector injector;
-
-	@Override
-	protected List<IFeedbackPart<Node, ? extends Node>> createSelectionFeedbackParts(List<? extends IVisualPart<Node, ? extends Node>> targets, SelectionBehavior<Node> selectionBehavior, Map<Object, Object> contextMap) {
-		if (targets.size() == 1 && targets.get(0) instanceof DiagramContentPart) {
-			return Collections.emptyList();
-		}
-		return super.createSelectionFeedbackParts(targets, selectionBehavior, contextMap);
-	}
 
 	@Override
 	public List<IFeedbackPart<Node, ? extends Node>> createFeedbackParts(List<? extends IVisualPart<Node, ? extends Node>> targets, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap) {
@@ -52,7 +44,14 @@ public class FeedbackPartFactory extends FXDefaultFeedbackPartFactory {
 					(ChangeBoundsBehavior) contextBehavior, contextMap);
 		}
 
-		return super.createFeedbackParts(targets, contextBehavior, contextMap);
+		if (contextBehavior instanceof SelectionBehavior) {
+			if (targets.size() == 1 && targets.get(0) instanceof DiagramContentPart) {
+				return Collections.emptyList();
+			}
+			return super.createFeedbackParts(targets, contextBehavior, contextMap);
+		}
+
+		return Collections.emptyList();
 	}
 
 	protected List<IFeedbackPart<Node, ? extends Node>> createBoundsFeedback(List<? extends IVisualPart<Node, ? extends Node>> targets, ChangeBoundsBehavior contextBehavior, Map<Object, Object> contextMap) {

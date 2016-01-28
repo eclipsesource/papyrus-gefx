@@ -102,15 +102,4 @@ public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
 
 	}
 
-	@Override
-	protected void doDeactivate() {
-		// FIXME we shouldn't need to "deactivate" the effect manually to remove the visual.
-		// Where should this be done? AbstractFeedback seems to work with Anchorage/Anchored. Does it make sense for this case?
-		final Parent p = getVisual().getParent();
-		if (p instanceof Group) {
-			((Group) p).getChildren().remove(getVisual());
-		}
-		super.doDeactivate();
-	}
-
 }

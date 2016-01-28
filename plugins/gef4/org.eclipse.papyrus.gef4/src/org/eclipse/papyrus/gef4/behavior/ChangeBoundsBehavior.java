@@ -20,10 +20,13 @@ import java.util.Map;
 
 import org.eclipse.gef4.mvc.behaviors.AbstractBehavior;
 import org.eclipse.gef4.mvc.parts.IFeedbackPart;
+import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPart;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
+
+import com.google.inject.Inject;
 
 import javafx.collections.MapChangeListener;
 import javafx.scene.Node;
@@ -31,6 +34,9 @@ import javafx.scene.Node;
 public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements MapChangeListener<IVisualPart<Node, ? extends Node>, Bounds> {
 
 	protected final Map<IVisualPart<Node, ? extends Node>, IFeedbackPart<Node, ? extends Node>> currentFeedbackParts = new HashMap<>();
+
+	@Inject
+	IFeedbackPartFactory<Node> feedbackPartFactory;
 
 	@Override
 	public void doActivate() {
@@ -67,7 +73,9 @@ public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements MapC
 			if (change.getValueAdded() != null) { // Addition or Update
 				IFeedbackPart<Node, ? extends Node> feedback = currentFeedbackParts.get(modifiedPart);
 				if (feedback == null) {
-					addFeedback(Collections.singletonList(modifiedPart), new HashMap<Object, Object>(change.getMap()));
+					List<IVisualPart<Node, ? extends Node>> targets = Collections.singletonList(modifiedPart);
+					List<IFeedbackPart<Node, ? extends Node>> newFeedbackParts = feedbackPartFactory.createFeedbackParts(targets, this, new HashMap<Object, Object>(change.getMap()));
+					addFeedback(Collections.singletonList(modifiedPart), newFeedbackParts);
 				} else {
 					updateFeedback(feedback, change.getValueAdded());
 				}
@@ -104,7 +112,8 @@ public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements MapC
 
 		Map<Object, Object> contextMap = new HashMap<>(newSelection);
 
-		addFeedback(partsToCreate, contextMap);
+		List<IFeedbackPart<Node, ? extends Node>> newFeedbackParts = feedbackPartFactory.createFeedbackParts(partsToCreate, this, contextMap);
+		addFeedback(partsToCreate, newFeedbackParts);
 
 		for (IVisualPart<Node, ? extends Node> partToUpdate : partsToUpdate) {
 			IFeedbackPart<Node, ? extends Node> feedback = currentFeedbackParts.get(partToUpdate);
@@ -115,9 +124,8 @@ public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements MapC
 	}
 
 	@Override
-	protected void addFeedback(List<? extends IVisualPart<Node, ? extends Node>> targets, Map<Object, Object> contextMap) {
-		super.addFeedback(targets, contextMap);
-		List<IFeedbackPart<Node, ? extends Node>> feedbackParts = getFeedbackParts();
+	protected void addFeedback(List<? extends IVisualPart<Node, ? extends Node>> targets, List<? extends IFeedbackPart<Node, ? extends Node>> feedbackParts) {
+		super.addFeedback(targets, feedbackParts);
 		if (feedbackParts != null) {
 			for (IFeedbackPart<Node, ? extends Node> f : feedbackParts) {
 				if (f instanceof BoundsFeedbackPart) {
@@ -127,27 +135,17 @@ public class ChangeBoundsBehavior extends AbstractBehavior<Node> implements MapC
 		}
 	}
 
-	// protected void addFeedback(Map<IVisualPart<Node, ? extends Node>, Bounds> newSelection) {
-	// ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
-	// Map<Object, Object> contextMap = new HashMap<>(boundsModel.getManagedElements());
-	// addFeedback(extractTargets(boundsModel.getManagedElements()), contextMap);
-	// }
-	//
-	// protected void removeFeedback(Map<IVisualPart<Node, ? extends Node>, Bounds> oldSelection) {
-	// ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
-	// removeFeedback(extractTargets(boundsModel.getManagedElements()));
-	// }
-
 	@Override
 	protected void removeFeedback(List<? extends IVisualPart<Node, ? extends Node>> targets) {
 		super.removeFeedback(targets);
 
 		for (IVisualPart<Node, ? extends Node> target : targets) {
 			IFeedbackPart<Node, ? extends Node> f = currentFeedbackParts.get(target);
-
-			// FIXME NPE here when closing the editor while an element is selected (And probably in many other cases)
-			getHost().getRoot().getViewer().getVisualPartMap().remove(f.getVisual());
-
+			if (f == null) {
+				//A different feedback has been installed (e.g. for connections). The ChangeBoundsBehavior should probably not be installed in this case
+				continue;
+			}
+			
 			currentFeedbackParts.remove(target);
 		}
 	}
