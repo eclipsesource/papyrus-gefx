@@ -12,8 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.parts;
 
-import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
-import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 
@@ -25,6 +24,8 @@ import javafx.scene.control.Label;
  */
 public class NamedElementLabelContentPart extends LabelContentPart {
 
+	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
+
 	/**
 	 * Instantiates a new named element label content part.
 	 *
@@ -34,17 +35,6 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 	public NamedElementLabelContentPart(final View view) {
 		super(view);
 	}
-
-	/**
-	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#getText()
-	 *
-	 * @return
-	 */
-	@Override
-	protected String getText() {
-		return getParser().getEditString(new EObjectAdapter(getElement() != null ? getElement() : getView()), ParserOptions.NONE.intValue());
-	}
-
 
 	/**
 	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#doRefreshVisual(javafx.scene.layout.StackPane)
@@ -66,6 +56,15 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 		return super.getPadding(); // return new Insets(5); // TODO : fix this. margin of nameLabel shall be set with Class>Label[kind=name]{margin:5;}
 	}
 
+	@Override
+	protected String getImagePath() {
+		final EObject semanticElement = getElement();
+		if (semanticElement == null) {
+			return null;
+		}
+		return imagePath + "/" + semanticElement.eClass().getName() + ".gif";//$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 
 	/**
 	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#getStyleClass()
@@ -74,6 +73,7 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 	 */
 	@Override
 	protected String getStyleClass() {
-		return "namedLabel";
+		return "namedLabel"; //$NON-NLS-1$
 	}
+
 }

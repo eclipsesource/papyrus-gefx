@@ -12,19 +12,12 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.geometry.planar.Dimension;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXSegmentHandlePart;
 import org.eclipse.gef4.mvc.fx.policies.CursorSupport;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
-import org.eclipse.gef4.mvc.models.SelectionModel;
-import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -32,22 +25,20 @@ import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.commands.wrappers.GMFtoEMFCommandWrapper;
+import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
-
-import com.google.common.reflect.TypeToken;
 
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-@SuppressWarnings("serial")
-public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
+public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
 
 	protected static final int NORTH_WEST = 0;
 
@@ -173,7 +164,7 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 			return;
 		}
 
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 
 		final Bounds newBounds = computeNewBounds(bounds, delta);
 		if (newBounds == null) {
@@ -201,6 +192,14 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 		boundsModel.removeManagedElement(getPrimaryHost());
 	}
 
+	@Override
+	public void dragAborted() {
+		propagate(policy -> policy.dragAborted());
+
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
+		boundsModel.removeManagedElement(getPrimaryHost());
+	}
+
 	protected int getCurrentWidth() {
 		final Node visual = getPrimaryHost().getVisual();
 		final javafx.geometry.Bounds local = visual.getLayoutBounds();
@@ -219,35 +218,13 @@ public class ResizeOnDragPolicy extends AbstractInteractionPolicy<Node> implemen
 		return getHost().getAnchoragesUnmodifiable().keys().iterator().next();
 	}
 
+	@Override
 	protected IVisualPart<Node, ? extends Node> getPrimaryHost() {
 		IVisualPart<Node, ? extends Node> host = getAnchorageHost();
 		if (host instanceof NotationContentPart) {
 			host = ((NotationContentPart<?, ?>) host).getPrimaryContentPart();
 		}
 		return host;
-	}
-
-	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<IFXOnDragPolicy> actionToPropagate) {
-		final SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
-		});
-
-		List<IContentPart<Node, ? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
-		if (selection.size() > 1) {
-
-			// If I'm the main receiver of the event, I propagate it to other selected elements
-			// If I'm not the main receiver, do nothing; someone else will do the propagation
-			if (e.getTarget() == getHost().getVisual()) {
-
-				for (final IContentPart<Node, ? extends Node> selectedPart : selection) {
-					if (selectedPart != getPrimaryHost()) {
-						for (final IFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.ON_DRAG_POLICY_KEY).values()) {
-							actionToPropagate.accept(dragPolicy);
-						}
-					}
-				}
-
-			}
-		}
 	}
 
 	protected Bounds getBounds() {

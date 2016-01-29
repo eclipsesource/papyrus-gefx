@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library:Model
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:library="http://www.eclipse.org/papyrus/gef4/example/library"
+    xmi:id="_4NlF0M9aEeW_GvSRHd10og">
+  <library xmi:id="_47Z1IM9aEeW_GvSRHd10og">
+    <books xmi:id="_6gSIQM9aEeW_GvSRHd10og"/>
+    <books xmi:id="_6wMzkM9aEeW_GvSRHd10og"/>
+  </library>
+  <library xmi:id="_5PCi0M9aEeW_GvSRHd10og"/>
+  <persons xsi:type="library:Author"
+      xmi:id="_5gKIAM9aEeW_GvSRHd10og"/>
+  <persons xmi:id="_5t1-sM9aEeW_GvSRHd10og"/>
+</library:Model>

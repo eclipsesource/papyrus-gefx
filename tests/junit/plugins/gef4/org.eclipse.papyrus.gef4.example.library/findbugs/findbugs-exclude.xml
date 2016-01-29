@@ -1,0 +1,9 @@
+<FindBugsFilter>
+	<Match>
+		<Or>
+			<Package name="org.eclipse.papyrus.gef4.example.library" />
+			<Package name="org.eclipse.papyrus.gef4.example.library.impl" />
+			<Package name="org.eclipse.papyrus.gef4.example.library.util" />
+		</Or>
+	</Match>
+</FindBugsFilter>

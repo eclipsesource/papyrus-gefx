@@ -4,6 +4,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="org.eclipse.papyrus.dev.views.category"
             class="org.eclipse.papyrus.dev.gefdiag.fxnode.views.FXNodeView"
             id="org.eclipse.papyrus.dev.gefdiag.fxnode.view"
             name="FXNode View"

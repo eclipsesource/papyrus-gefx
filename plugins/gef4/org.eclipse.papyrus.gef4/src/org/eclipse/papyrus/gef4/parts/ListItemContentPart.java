@@ -19,7 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class ListItemContentPart extends LabelContentPart implements IPrimaryContentPart {
+//FIXME Implement generic IParser (Or injected IParser) to avoid abstract class here
+public abstract class ListItemContentPart extends LabelContentPart implements IPrimaryContentPart {
 
 	public ListItemContentPart(View view) {
 		super(view);

@@ -29,7 +29,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	public static ILog log;
+	private static ILog log;
 
 	/**
 	 * The constructor
@@ -46,7 +46,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		log = getLog();
+		setLog(getLog());
 	}
 
 	/*
@@ -58,6 +58,10 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+	}
+
+	private static void setLog(ILog log) {
+		Activator.log = log;
 	}
 
 	/**

@@ -1,11 +1,11 @@
 /*****************************************************************************
  * Copyright (c) 2014 CEA LIST.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *  CEA LIST - Initial API and implementation based on GMF-T generator
  *****************************************************************************/
@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.util.CodeGenUtil;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -84,6 +84,7 @@ import org.eclipse.papyrus.gef4.codegen.emitters.LabelNodeEditPartEmitter;
 import org.eclipse.papyrus.gef4.codegen.emitters.LinkEditPartEmitter;
 import org.eclipse.papyrus.gef4.codegen.emitters.NodeEditPartEmitter;
 import org.eclipse.papyrus.gef4.codegen.emitters.VisualPartProviderEmitter;
+import org.eclipse.papyrus.papyrusgmfgenextension.VisualIDOverride;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -169,21 +170,21 @@ public class GenerateCode extends AbstractHandler {
 
 	protected void genLabelNode(GenChildLabelNode eObject) throws InterruptedException {
 		generateJava(new LabelNodeEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
-		visualIDToPartMap.put(Integer.toString(eObject.getVisualID()), eObject);
+		visualIDToPartMap.put(getVisualID(eObject), eObject);
 		processCompartments(eObject);
 		processLabels(eObject);
 	}
 
 	protected void genAffixedNode(GenChildSideAffixedNode eObject) throws InterruptedException {
 		generateJava(new AffixedNodeEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
-		visualIDToPartMap.put(Integer.toString(eObject.getVisualID()), eObject);
+		visualIDToPartMap.put(getVisualID(eObject), eObject);
 		processCompartments(eObject);
 		processLabels(eObject);
 	}
 
 	protected void genLink(GenLink eObject) throws InterruptedException {
 		generateJava(new LinkEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
-		visualIDToPartMap.put(Integer.toString(eObject.getVisualID()), eObject);
+		visualIDToPartMap.put(getVisualID(eObject), eObject);
 		processLabels(eObject);
 	}
 
@@ -195,17 +196,17 @@ public class GenerateCode extends AbstractHandler {
 
 	protected void genCompartment(GenCompartment eObject) throws InterruptedException {
 		generateJava(new CompartmentEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
-		visualIDToPartMap.put(Integer.toString(eObject.getVisualID()), eObject);
+		visualIDToPartMap.put(getVisualID(eObject), eObject);
 	}
 
 	protected void genAffixedLabel(GenCommonBase eObject) throws InterruptedException {
 		generateJava(new AffixedLabelEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
-		visualIDToPartMap.put(Integer.toString(eObject.getVisualID()), eObject);
+		visualIDToPartMap.put(getVisualID(eObject), eObject);
 	}
 
 	protected void genInnerLabel(GenCommonBase eObject) throws InterruptedException {
 		generateJava(new InnerLabelEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
-		visualIDToPartMap.put(Integer.toString(eObject.getVisualID()), eObject);
+		visualIDToPartMap.put(getVisualID(eObject), eObject);
 	}
 
 	protected void processLabels(GenNode eObject) throws InterruptedException {
@@ -218,12 +219,47 @@ public class GenerateCode extends AbstractHandler {
 		}
 	}
 
+	protected String getVisualID(GenCommonBase eObject) {
+		// Check if the GMF Tooling visualID (Integer) has been overridden with a String ID (Papyrus 2.0)
+		VisualIDOverride override = getOverride(eObject);
+		if (override != null) {
+			return override.getVisualID();
+		}
+		// Default case
+		return Integer.toString(eObject.getVisualID());
+	}
+
+	protected VisualIDOverride getOverride(GenCommonBase targetElement) {
+		for (EObject rootElement : targetElement.eResource().getContents()) {
+			if (rootElement instanceof VisualIDOverride) {
+				VisualIDOverride override = (VisualIDOverride) rootElement;
+				return getOverride(targetElement, override);
+			}
+		}
+		return null;
+	}
+
+	protected VisualIDOverride getOverride(GenCommonBase targetElement, VisualIDOverride rootElement) {
+		if (rootElement.getGenView() == targetElement) {
+			return rootElement;
+		}
+
+		for (VisualIDOverride childOverride : rootElement.getChild()) {
+			VisualIDOverride override = getOverride(targetElement, childOverride);
+			if (override != null) {
+				return override;
+			}
+		}
+
+		return null;
+	}
+
 	protected void genNode(GenNode eObject) throws InterruptedException {
 		generateJava(new NodeEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
-		visualIDToPartMap.put(Integer.toString(eObject.getVisualID()), eObject);
+		visualIDToPartMap.put(getVisualID(eObject), eObject);
 
-		processCompartments((GenNode) eObject);
-		processLabels((GenNode) eObject);
+		processCompartments(eObject);
+		processLabels(eObject);
 	}
 
 	protected void processCompartments(GenNode eObject) throws InterruptedException {
@@ -245,7 +281,7 @@ public class GenerateCode extends AbstractHandler {
 			TreeIterator<EObject> it = resource.getAllContents();
 
 			while (it.hasNext()) {
-				EObject eObject = (EObject) it.next();
+				EObject eObject = it.next();
 
 				if (eObject instanceof GenTopLevelNode) {
 					topNodes.add((GenTopLevelNode) eObject);
@@ -263,7 +299,7 @@ public class GenerateCode extends AbstractHandler {
 			if (genTopLevelNode.getModelFacet().getMetaClass().equals(childNodeMetaclass)) {
 				Activator.log.info("Pointless childNode: " + childNode);
 
-				visualIDToPartMap.put(Integer.toString(childNode.getVisualID()), genTopLevelNode);
+				visualIDToPartMap.put(getVisualID(childNode), genTopLevelNode);
 				return false;
 			}
 		}
@@ -272,9 +308,9 @@ public class GenerateCode extends AbstractHandler {
 
 	protected void generateCode(Resource inputResource) throws InterruptedException, UnexpectedBehaviourException {
 
-		topNodes = new HashSet<GenTopLevelNode>();
+		topNodes = new HashSet<>();
 
-		visualIDToPartMap = new HashMap<String, GenCommonBase>();
+		visualIDToPartMap = new HashMap<>();
 
 		EObject root = inputResource.getContents().get(0);
 		if (root instanceof GenEditorGenerator) {
@@ -287,7 +323,7 @@ public class GenerateCode extends AbstractHandler {
 			TreeIterator<EObject> it = inputResource.getAllContents();
 
 			while (it.hasNext()) {
-				EObject eObject = (EObject) it.next();
+				EObject eObject = it.next();
 
 				if (eObject instanceof GenTopLevelNode) {
 					genNode((GenNode) eObject);
@@ -301,6 +337,11 @@ public class GenerateCode extends AbstractHandler {
 					} else {
 						if (isUsefullChildNode((GenChildNode) eObject)) {
 							genNode((GenNode) eObject);
+						} else {
+							// Still keep the recursion
+							// FIXME Should be mapped to their respective TopNode to avoid useless duplication (Similar to the isUsefulChildNode method)
+							processCompartments((GenNode) eObject);
+							processLabels((GenNode) eObject);
 						}
 					}
 				} else if (eObject instanceof GenLink) {
@@ -326,14 +367,14 @@ public class GenerateCode extends AbstractHandler {
 	/**
 	 * Delegates to {@link #initializeEditorProject(IPath, IPath, List)}, using plug-in id as workspace project name and
 	 * 'src' as Java sources location.
-	 * 
+	 *
 	 * @param pluginId
 	 *            both name of workspace project and plug-in id
 	 * @param projectLocation
 	 *            {@link IPath} to folder where <code>.project</code> file would reside. Use <code>null</code> to use default workspace location.
 	 * @param referencedProjects
 	 *            collection of {@link IProject}
-	 * 
+	 *
 	 */
 	protected final void initializeEditorProject(String pluginId, IPath projectLocation, List<IProject> referencedProjects) throws UnexpectedBehaviourException, InterruptedException {
 		// not sure if there's any reason to get project's name via IProject (not use pluginId directly), this is just how it was done from 1.1.
@@ -388,7 +429,7 @@ public class GenerateCode extends AbstractHandler {
 		if (progressMonitor.isCanceled()) {
 			throw new InterruptedException();
 		}
-		return new SubProgressMonitor(progressMonitor, 1);
+		return SubMonitor.convert(progressMonitor, 1);// new SubProgressMonitor(progressMonitor, 1);
 	}
 
 	protected void setProgressTaskName(String text) {
@@ -444,13 +485,13 @@ public class GenerateCode extends AbstractHandler {
 			return;
 		}
 		try {
-			String genText = emitter.generate(new SubProgressMonitor(pm, 2), Arrays.asList(input));
-			IPackageFragment pf = destRoot.createPackageFragment(packageName, true, new SubProgressMonitor(pm, 1));
+			String genText = emitter.generate(SubMonitor.convert(pm, 2), Arrays.asList(input));
+			IPackageFragment pf = destRoot.createPackageFragment(packageName, true, SubMonitor.convert(pm, 1));
 			ICompilationUnit cu = pf.getCompilationUnit(className + ".java"); //$NON-NLS-1$
 			if (cu.exists()) {
 				ICompilationUnit workingCopy = null;
 				try {
-					workingCopy = cu.getWorkingCopy(new SubProgressMonitor(pm, 1));
+					workingCopy = cu.getWorkingCopy(SubMonitor.convert(pm, 1));
 					final String oldContents = workingCopy.getSource();
 					IImportDeclaration[] declaredImports = workingCopy.getImports();
 					workingCopy.getBuffer().setContents(genText);
@@ -461,9 +502,9 @@ public class GenerateCode extends AbstractHandler {
 						for (int i = 0; i < declaredImports.length; i++) {
 							declaredImportsAsStrings[i] = declaredImports[i].getElementName();
 						}
-						getImportsPostrocessor().organizeImports(workingCopy, declaredImportsAsStrings, new SubProgressMonitor(pm, 1));
+						getImportsPostrocessor().organizeImports(workingCopy, declaredImportsAsStrings, SubMonitor.convert(pm, 1));
 					} catch (CoreException e) {
-						workingCopy.commitWorkingCopy(true, new SubProgressMonitor(pm, 1)); // save to investigate contents
+						workingCopy.commitWorkingCopy(true, SubMonitor.convert(pm, 1)); // save to investigate contents
 						throw e;
 					}
 					// genText = mergeJavaCode(oldContents, workingCopy.getSource(), new SubProgressMonitor(pm, 1));
@@ -471,20 +512,22 @@ public class GenerateCode extends AbstractHandler {
 					if (!genText.equals(oldContents)) {
 						workingCopy.getBuffer().setContents(genText);
 						workingCopy.reconcile(ICompilationUnit.NO_AST, false, null, null);
-						workingCopy.commitWorkingCopy(true, new SubProgressMonitor(pm, 1));
+						workingCopy.commitWorkingCopy(true, SubMonitor.convert(pm, 1));
 					} else {
 						// discard changes - would happen in finally, nothing else to do
 						pm.worked(1);
 					}
 				} finally {
-					workingCopy.discardWorkingCopy();
+					if (workingCopy != null) {
+						workingCopy.discardWorkingCopy();
+					}
 				}
 			} else {
-				cu = pf.createCompilationUnit(cu.getElementName(), genText, true, new SubProgressMonitor(pm, 1));
-				getImportsPostrocessor().organizeImports(cu, null, new SubProgressMonitor(pm, 1));
+				cu = pf.createCompilationUnit(cu.getElementName(), genText, true, SubMonitor.convert(pm, 1));
+				getImportsPostrocessor().organizeImports(cu, null, SubMonitor.convert(pm, 1));
 				String newContents = formatCode(cu.getSource());
 				cu.getBuffer().setContents(newContents);
-				cu.save(new SubProgressMonitor(pm, 2), true);
+				cu.save(SubMonitor.convert(pm, 2), true);
 			}
 
 
@@ -505,7 +548,7 @@ public class GenerateCode extends AbstractHandler {
 	/**
 	 * Inspired by GenBaseImpl.EclipseUtil.findOrCreateContainer
 	 * Although later (with EMF API adopting Platform changes) we might need to return URI here
-	 * 
+	 *
 	 * @return path suitable for IProjectDescription, or <code>null</code> to indicate use of default
 	 * @throws UnexpectedBehaviourException
 	 * @throws CoreException

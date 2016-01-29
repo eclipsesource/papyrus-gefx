@@ -12,6 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
 
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnClickPolicy;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
@@ -22,10 +24,9 @@ import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.commands.wrappers.GMFtoEMFCommandWrapper;
+import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.utils.CompartmentUtils;
-import org.eclipse.papyrus.infra.emf.utils.EMFHelper;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 
 import javafx.scene.Node;
@@ -54,13 +55,15 @@ public class CollapseOnClickPolicy extends AbstractInteractionPolicy<Node> imple
 				}
 
 				final boolean valueToSet = !drawerStyle.isCollapsed();
-				TransactionalEditingDomain editingDomain = (TransactionalEditingDomain) EMFHelper.resolveEditingDomain(compartment);
 
-				SetPropertyCommand setCommand = new SetPropertyCommand(editingDomain, "Collapse compartment", new EObjectAdapter(drawerStyle), Properties.ID_COLLAPSED, valueToSet);
+				EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(compartment);
+				if (editingDomain instanceof TransactionalEditingDomain) {
+					SetPropertyCommand setCommand = new SetPropertyCommand((TransactionalEditingDomain) editingDomain, "Collapse compartment", new EObjectAdapter(drawerStyle), Properties.ID_COLLAPSED, valueToSet);
 
-				editingDomain.getCommandStack().execute(new GMFtoEMFCommandWrapper(setCommand));
-				compartment.refreshVisual(); // FIXME Shouldn't be required. The compartment should listen on its DrawerStyle
-				getHost().refreshVisual(); // To refresh the +/- button. Install listeners as well?
+					editingDomain.getCommandStack().execute(new GMFtoEMFCommandWrapper(setCommand));
+					compartment.refreshVisual(); // FIXME Shouldn't be required. The compartment should listen on its DrawerStyle
+					getHost().refreshVisual(); // To refresh the +/- button. Install listeners as well?
+				}
 			}
 		}
 	}

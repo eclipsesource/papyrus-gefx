@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GEF4 VisualParts Debugger
+Bundle-SymbolicName: org.eclipse.papyrus.dev.gefdiag.parts;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: Eclipse Modeling Project
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.ui;bundle-version="3.107.0",
+ org.eclipse.papyrus.gef4;bundle-version="0.1.0"

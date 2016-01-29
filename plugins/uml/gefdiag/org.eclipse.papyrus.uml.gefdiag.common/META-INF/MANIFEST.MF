@@ -1,16 +1,25 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Papyrus GEF4 Connector Common
-Bundle-SymbolicName: org.eclipse.papyrus.uml.gefdiag.common
-Bundle-Version: 1.2.0.qualifier
-Bundle-Activator: org.eclipse.papyrus.uml.gefdiag.common.Activator
+Bundle-SymbolicName: org.eclipse.papyrus.uml.gefdiag.common;singleton:=true
+Bundle-Version: 0.2.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.papyrus.infra.gefdiag.common;bundle-version="1.1.0",
+ org.eclipse.papyrus.infra.gefdiag.common;bundle-version="0.2.0";visibility:=reexport,
  org.eclipse.uml2.uml;bundle-version="5.1.0",
  org.eclipse.papyrus.gef4;bundle-version="0.1.0",
  com.google.guava;bundle-version="11.0.0",
- org.eclipse.gmf.runtime.common.ui.services;visibility:=reexport
+ org.eclipse.papyrus.uml.diagram.common;bundle-version="1.2.0",
+ org.eclipse.papyrus.infra.gmfdiag.css;bundle-version="1.2.0",
+ org.eclipse.papyrus.infra.tools;bundle-version="1.2.0",
+ org.eclipse.papyrus.infra.core;bundle-version="1.2.0",
+ org.eclipse.papyrus.infra.emf;bundle-version="1.2.0",
+ org.eclipse.papyrus.infra.emf.gmf;bundle-version="1.2.0",
+ org.eclipse.papyrus.infra.ui,
+ org.eclipse.papyrus.infra.services.openelement
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.papyrus.uml.gefdiag.common.parts
+Export-Package: org.eclipse.papyrus.uml.gefdiag.common.locator,
+ org.eclipse.papyrus.uml.gefdiag.common.module,
+ org.eclipse.papyrus.uml.gefdiag.common.parts,
+ org.eclipse.papyrus.uml.gefdiag.common.provider

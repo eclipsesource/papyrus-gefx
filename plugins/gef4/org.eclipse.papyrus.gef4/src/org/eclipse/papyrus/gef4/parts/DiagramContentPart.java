@@ -12,28 +12,39 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
-import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
+import org.eclipse.papyrus.infra.gmfdiag.common.utils.NamedStyleProperties;
 
-import javafx.scene.Group;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
-public class DiagramContentPart extends NotationContentPart<Diagram, Group> {
+public class DiagramContentPart extends NotationContentPart<Diagram, Pane> {
 
+	private Label frame;
 
 	public DiagramContentPart(Diagram view) {
 		super(view);
 	}
 
 	@Override
-	protected Group doCreateVisual() {
-		return new Group();
+	protected Pane doCreateVisual() {
+		Pane group = new Pane();
+
+		frame = new Label();
+		group.getChildren().add(frame);
+
+		return group;
 	}
 
 	@Override
@@ -50,10 +61,40 @@ public class DiagramContentPart extends NotationContentPart<Diagram, Group> {
 	}
 
 	@Override
-	protected List<View> getContentChildren() {
-		List<View> allChildren = new ArrayList<>(super.getContentChildren());
-		allChildren.addAll(getView().getEdges());
-		return allChildren;
+	protected void refreshVisualInTransaction(Pane visual) {
+		super.refreshVisualInTransaction(visual);
+
+		boolean displayFrame = NotationUtils.getBooleanValue(getView(), NamedStyleProperties.DISPLAY_HEADER, false);
+
+		if (displayFrame) {
+			frame.setText(getElement().eClass().getName() + "\n" + getView().getType());
+			frame.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, null, null, null)));
+			frame.setPadding(new Insets(3));
+
+			visual.setPadding(new Insets(5));
+
+			visual.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, null, null, null)));
+
+			visual.setLayoutX(10);
+			visual.setLayoutY(10);
+
+			visual.setMinSize(600, 768);
+			visual.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+			visual.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+		} else {
+			visual.setBorder(null);
+			visual.setPadding(new Insets(0));
+
+			visual.setLayoutX(0);
+			visual.setLayoutY(0);
+
+			visual.setMinSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+			visual.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+			visual.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+		}
+
+		frame.setManaged(displayFrame);
+		frame.setVisible(displayFrame);
 	}
 
 	@Override

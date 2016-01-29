@@ -1,0 +1,52 @@
+Generalization,
+Realization,
+InterfaceRealization,
+ComponentRealization,
+Substitution {
+	targetDecoration: whiteArrow;
+	targetDecorationFillColor: white; 
+}
+
+Extension {
+	targetDecoration: closedArrow;
+}
+
+Dependency,
+Usage,
+Abstraction,
+Manifestation,
+ElementImport,
+PackageImport,
+PackageImport,
+Representation,
+InformationFlow,
+Transition, 
+ControlFlow,
+ObjectFlow,
+ExceptionHandler,
+Deployment,
+Include, 
+Extend {
+	targetDecoration: openArrow;
+}
+
+Message[messageSort=reply],
+Message[messageSort=syncCall],
+Message[messageSort=deleteMessage]{
+	targetDecoration: blackArrow;
+}
+
+Message[messageSort=asyncCall]{
+	targetDecoration: openArrow;
+}
+
+Message[messageSort=asyncSignal] {
+	/*TODO*/
+}
+
+Connector[type="4023"] { /* TODO Selector */
+	sourceDecoration: crossCircle;
+	rotateWithLink: false; /* The decoration is a circle, there is no need to adjust it to match the link orientation */
+}
+
+

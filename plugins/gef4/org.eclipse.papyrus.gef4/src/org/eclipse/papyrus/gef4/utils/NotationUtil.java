@@ -13,6 +13,7 @@
 package org.eclipse.papyrus.gef4.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
@@ -25,6 +26,8 @@ import org.eclipse.papyrus.infra.emf.appearance.helper.AppearanceHelper;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
 import org.eclipse.papyrus.infra.gmfdiag.common.utils.NamedStyleProperties;
 import org.eclipse.papyrus.infra.gmfdiag.common.utils.PositionEnum;
+
+import com.google.common.collect.ImmutableList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -47,7 +50,6 @@ import javafx.scene.paint.Paint;
  * The Class NotationUtil.
  */
 // TODO add default value as attribute of methods ??
-
 public class NotationUtil {
 
 
@@ -143,7 +145,8 @@ public class NotationUtil {
 
 
 
-	public static final int[] DEFAULT_CUSTOM_DASH = new int[] { 5, 5 };
+	private static final int[] DEFAULT_CUSTOM_DASH_ARRAY = new int[] { 5, 5 };
+	public static final ImmutableList<Integer> DEFAULT_CUSTOM_DASH = ImmutableList.copyOf(Arrays.stream(DEFAULT_CUSTOM_DASH_ARRAY).boxed().toArray(Integer[]::new));
 
 
 
@@ -154,6 +157,11 @@ public class NotationUtil {
 	 * The NamedStyle property to set the background paint.
 	 */
 	public static final String BACKGROUND_PAINT = "backgroundPaint";
+
+
+	public static final String SOURCE_DECORATION = "sourceDecoration";
+
+	public static final String TARGET_DECORATION = "targetDecoration";
 
 
 	/**
@@ -330,31 +338,31 @@ public class NotationUtil {
 					final BorderStrokeStyle customizeDashStrokeStyle = new BorderStrokeStyle(null, null, null, 10, 0, getCustomDash(view));
 
 					// Test if its a custom Style then test if its a custom Dash for top
-					final BorderStrokeStyle topBorderStrokeStyle = topLineStyle.equals(BorderStrokeStyleEnum.CUSTOM) ? customizedStrokeStyle
-							: topLineStyle.equals(BorderStrokeStyleEnum.DASH.getLiteral()) ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle topBorderStrokeStyle = topLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
+							: topLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
 					// //Test if its a custom Dash
 					// topBorderStrokeStyle = topLineStyle.equals(BorderStrokeStyleEnum.DASH.getLiteral()) ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
 
 					// Test if its a custom Style then test if its a custom Dash for right
-					final BorderStrokeStyle rightBorderStrokeStyle = rightLineStyle.equals(BorderStrokeStyleEnum.CUSTOM) ? customizedStrokeStyle
-							: rightLineStyle.equals(BorderStrokeStyleEnum.DASH) ? customizeDashStrokeStyle : rightLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle rightBorderStrokeStyle = rightLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
+							: rightLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : rightLineStyle.getBorderStrokeStyle();
 
 					// Test if its a custom Style then test if its a custom Dash for bottom
-					final BorderStrokeStyle bottomBorderStrokeStyle = bottomLineStyle.equals(BorderStrokeStyleEnum.CUSTOM) ? customizedStrokeStyle
-							: bottomLineStyle.equals(BorderStrokeStyleEnum.DASH) ? customizeDashStrokeStyle : bottomLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle bottomBorderStrokeStyle = bottomLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
+							: bottomLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : bottomLineStyle.getBorderStrokeStyle();
 
 					// Test if its a custom Style then test if its a custom Dash for left
-					final BorderStrokeStyle leftBorderStrokeStyle = leftLineStyle.equals(BorderStrokeStyleEnum.CUSTOM) ? customizedStrokeStyle
-							: leftLineStyle.equals(BorderStrokeStyleEnum.DASH) ? customizeDashStrokeStyle : leftLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle leftBorderStrokeStyle = leftLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
+							: leftLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : leftLineStyle.getBorderStrokeStyle();
 
 					borderStyles = new BorderStrokeStyles(topBorderStrokeStyle, rightBorderStrokeStyle, bottomBorderStrokeStyle, leftBorderStrokeStyle);
 
 					// Set double line
 					borderStyles.setDouble(
-							topLineStyle.equals(BorderStrokeStyleEnum.DOUBLE),
-							rightLineStyle.equals(BorderStrokeStyleEnum.DOUBLE),
-							bottomLineStyle.equals(BorderStrokeStyleEnum.DOUBLE),
-							leftLineStyle.equals(BorderStrokeStyleEnum.DOUBLE));
+							topLineStyle == BorderStrokeStyleEnum.DOUBLE,
+							rightLineStyle == BorderStrokeStyleEnum.DOUBLE,
+							bottomLineStyle == BorderStrokeStyleEnum.DOUBLE,
+							leftLineStyle == BorderStrokeStyleEnum.DOUBLE);
 
 				}
 			}
@@ -364,7 +372,7 @@ public class NotationUtil {
 
 
 	protected static List<Double> getCustomDash(final View view) {
-		final List<Double> customDashList = new ArrayList<Double>();
+		final List<Double> customDashList = new ArrayList<>();
 		customDashList.add((double) NotationUtils.getIntValue(view, LINE_DASH_LENGTH, 5));// TODO DEFAULT_VALUE
 		customDashList.add((double) NotationUtils.getIntValue(view, LINE_DASH_GAP, 5));// TODO DEFAULT_VALUE
 		return customDashList;
@@ -372,8 +380,8 @@ public class NotationUtil {
 
 
 	protected static List<Double> getCustomStyle(final View view) {
-		final int[] customDash = NotationUtils.getIntListValue(view, NamedStyleProperties.LINE_CUSTOM_VALUE, DEFAULT_CUSTOM_DASH);
-		final List<Double> customDashList = new ArrayList<Double>();
+		final int[] customDash = NotationUtils.getIntListValue(view, NamedStyleProperties.LINE_CUSTOM_VALUE, DEFAULT_CUSTOM_DASH_ARRAY);
+		final List<Double> customDashList = new ArrayList<>();
 		for (int j = 0; j < customDash.length; ++j) {
 			customDashList.add((double) customDash[j]);
 		}
@@ -881,6 +889,19 @@ public class NotationUtil {
 		return scrollBarPolicy;
 
 	}
+
+	public static String getSourceDecoration(final View view) {
+		final String sourceDecoration = NotationUtils.getStringValue(view, SOURCE_DECORATION, "none"); //$NON-NLS-1$
+
+		return sourceDecoration;
+	}
+
+	public static String getTargetDecoration(final View view) {
+		final String targetDecoration = NotationUtils.getStringValue(view, TARGET_DECORATION, "none"); //$NON-NLS-1$
+
+		return targetDecoration;
+	}
+
 	//
 	//
 	// public static int getNotationMinHeight(final View view) {

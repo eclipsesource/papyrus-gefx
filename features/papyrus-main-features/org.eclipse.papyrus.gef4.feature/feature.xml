@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.papyrus.gef4.feature"
       label="Papyrus GEF4 Connector Feature"
-      version="1.2.0.qualifier"
+      version="0.2.0.qualifier"
       provider-name="Eclipse Modeling Project">
 
    <description url="http://www.example.com/description">
@@ -47,6 +47,20 @@
 
    <plugin
          id="org.eclipse.papyrus.uml.gefdiag.statemachine"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.papyrus.uml.gefdiag.component"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.papyrus.uml.gefdiag.composite"
          download-size="0"
          install-size="0"
          version="0.0.0"

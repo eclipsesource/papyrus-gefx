@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GEF4 Connector Tests
+Bundle-SymbolicName: org.eclipse.papyrus.gef4.tests
+Bundle-Version: 0.2.0.qualifier
+Bundle-Vendor: Eclipse Modeling Project
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.papyrus.gef4;bundle-version="0.1.0",
+ org.junit;bundle-version="4.12.0",
+ org.eclipse.papyrus.gef4.example.library;bundle-version="0.1.0",
+ org.eclipse.ui.ide;bundle-version="3.12.0"
+Export-Package: org.eclipse.papyrus.gef4.tests.utils

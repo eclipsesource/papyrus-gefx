@@ -15,7 +15,6 @@ package org.eclipse.papyrus.gef4.fx.anchors;
 
 import org.eclipse.gef4.fx.anchors.IAnchor;
 import org.eclipse.gef4.geometry.planar.Point;
-import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 
 import com.google.inject.Provider;

@@ -13,20 +13,21 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.fx.anchors;
 
+import java.util.Set;
+
 import org.eclipse.draw2d.ChopboxAnchor;
-import org.eclipse.draw2d.geometry.PrecisionPoint;
-import org.eclipse.gef4.fx.anchors.ChopBoxAnchor;
-import org.eclipse.gef4.geometry.planar.IGeometry;
+import org.eclipse.gef4.fx.anchors.DynamicAnchor;
+import org.eclipse.gef4.fx.anchors.ProjectionStrategy;
 import org.eclipse.gef4.geometry.planar.Point;
-import org.eclipse.gef4.geometry.planar.Rectangle;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.BaseSlidableAnchor;
 import org.eclipse.gmf.runtime.notation.Anchor;
 import org.eclipse.gmf.runtime.notation.IdentityAnchor;
+import org.eclipse.papyrus.gef4.utils.AnchorParser;
 
 import javafx.scene.Node;
 
 /**
- * Extension of the {@link FXChopBoxAnchor} which uses configurable
+ * Extension of the {@link DynamicAnchor} which uses configurable
  * point inside the host bounds as a target point for connection
  * (which is always the center of the host for {@link ChopboxAnchor}).
  * <p/>
@@ -37,7 +38,7 @@ import javafx.scene.Node;
  * position at the creation time and is not recomputed on the host resize. To handle resize,
  * some external code should replace an anchor instance.
  */
-public class SlidableFxAnchor extends ChopBoxAnchor {
+public class SlidableFxAnchor extends DynamicAnchor {
 
 	private final RatioBasedAnchorStrategy myStrategy;
 
@@ -88,9 +89,8 @@ public class SlidableFxAnchor extends ChopBoxAnchor {
 		if (notationAnchor instanceof IdentityAnchor) {
 			String id = ((IdentityAnchor) notationAnchor).getId();
 			if (id != null && id.length() != 0) {
-				PrecisionPoint ratio = BaseSlidableAnchor.parseTerminalString(id);
-				ratioX = ratio.preciseX();
-				ratioY = ratio.preciseY();
+				ratioX = AnchorParser.getX(id);
+				ratioY = AnchorParser.getY(id);
 			}
 		}
 		return new RatioBasedAnchorStrategy(ratioX, ratioY);
@@ -100,7 +100,7 @@ public class SlidableFxAnchor extends ChopBoxAnchor {
 	 * Overrides default {@link FXChopBoxAnchor.ComputationStrategy.Impl} with customization of
 	 * the position of the anchor in the host bounds, which is set as a ratio.
 	 */
-	public static class RatioBasedAnchorStrategy extends ChopBoxAnchor.IComputationStrategy.Impl {
+	public static class RatioBasedAnchorStrategy extends ProjectionStrategy {
 
 		private final double myRatioX;
 		private final double myRatioY;
@@ -117,10 +117,9 @@ public class SlidableFxAnchor extends ChopBoxAnchor {
 		}
 
 		@Override
-		public Point computeAnchorageReferencePointInLocal(Node node, IGeometry geometryInLocal, Point anchoredReferencePointInAnchorageLocal) {
-			Rectangle localBounds = geometryInLocal.getBounds();
-			Point result = localBounds.getBottomRight().getScaled(myRatioX, myRatioY);
-			return result;
+		public Point computePositionInScene(Node anchorage, Node anchored, Set<Parameter<?>> parameters) {
+			// TODO reimplement this class to match the refactoring of ChopBoxAnchor in GEF4 (Bug 488355, commit 05157a8 and newer)
+			return super.computePositionInScene(anchorage, anchored, parameters);
 		}
 
 		public double getRatioX() {

@@ -18,6 +18,8 @@ import org.eclipse.gef4.fx.anchors.IAnchor;
 import org.eclipse.gef4.geometry.planar.Point;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 
@@ -27,7 +29,7 @@ import javafx.scene.Node;
  */
 public class SlidableAnchorProvider implements PositionalAnchorProvider, IAdaptable.Bound<IVisualPart<Node, ? extends Node>> {
 
-	private IVisualPart<Node, ? extends Node> myHost;
+	private ReadOnlyObjectProperty<IVisualPart<Node, ? extends Node>> myHost;
 
 	@Override
 	public IAnchor get() {
@@ -53,11 +55,16 @@ public class SlidableAnchorProvider implements PositionalAnchorProvider, IAdapta
 
 	@Override
 	public IVisualPart<Node, ? extends Node> getAdaptable() {
-		return myHost;
+		return myHost == null ? null : myHost.get();
 	}
 
 	@Override
 	public void setAdaptable(IVisualPart<Node, ? extends Node> adaptable) {
-		myHost = adaptable;
+		myHost = new ReadOnlyObjectWrapper<>(adaptable);
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<IVisualPart<Node, ? extends Node>> adaptableProperty() {
+		return myHost;
 	}
 }

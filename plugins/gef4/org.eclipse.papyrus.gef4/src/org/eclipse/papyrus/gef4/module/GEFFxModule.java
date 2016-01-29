@@ -14,8 +14,6 @@
 package org.eclipse.papyrus.gef4.module;
 
 import org.eclipse.core.commands.operations.IOperationHistory;
-import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef4.common.adapt.inject.AdapterMaps;
@@ -23,25 +21,23 @@ import org.eclipse.gef4.mvc.behaviors.ContentBehavior;
 import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef4.mvc.fx.MvcFxModule;
+import org.eclipse.gef4.mvc.fx.behaviors.FXFocusBehavior;
 import org.eclipse.gef4.mvc.fx.behaviors.FXGridBehavior;
+import org.eclipse.gef4.mvc.fx.domain.FXDomain;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
-import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
 import org.eclipse.gef4.mvc.fx.policies.FXChangeViewportPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef4.mvc.fx.providers.GeometricOutlineProvider;
 import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
+import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
 import org.eclipse.gef4.mvc.parts.IHandlePartFactory;
-import org.eclipse.gef4.mvc.parts.IRootPart;
-import org.eclipse.gmf.runtime.emf.commands.core.command.EditingDomainUndoContext;
-import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.editor.Palette;
-import org.eclipse.papyrus.gef4.editor.ViewerSelectionProvider;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
@@ -60,23 +56,17 @@ import org.eclipse.papyrus.gef4.policies.MoveOnDragPolicy;
 import org.eclipse.papyrus.gef4.policies.ResizeOnDragPolicy;
 import org.eclipse.papyrus.gef4.provider.FeedbackPartFactory;
 import org.eclipse.papyrus.gef4.provider.HandlePartFactory;
+import org.eclipse.papyrus.gef4.provider.IContentChildrenProvider;
+import org.eclipse.papyrus.gef4.provider.NotationContentChildrenProvider;
+import org.eclipse.papyrus.gef4.provider.ProviderBasedContentPartFactory;
 
-import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import com.google.inject.name.Names;
 
 import javafx.scene.Node;
 
 public abstract class GEFFxModule extends MvcFxModule {
 
-	protected final Diagram diagram;
-
-	public GEFFxModule(final Diagram diagram) {
-		this.diagram = diagram;
-	}
-
-	protected abstract void bindIContentPartFactory();
 	// {
 	// binder().bind(new TypeLiteral<IContentPartFactory<Node>>() {
 	// }).to(ContentPartFactory.class)
@@ -84,8 +74,9 @@ public abstract class GEFFxModule extends MvcFxModule {
 	// }
 
 	@Override
-	protected void bindFXViewerAdapters(final com.google.inject.multibindings.MapBinder<org.eclipse.gef4.common.adapt.AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindFXViewerAdapters(adapterMapBinder);
+	protected void bindContentViewerAdapters(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindContentViewerAdapters(adapterMapBinder);
 
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(ChangeBoundsModel.class);
@@ -103,7 +94,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	@Override
-	protected void bindFXRootPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindContentViewerRootPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 
 		bindFocusAndSelectOnClickPolicyAsFXRootPartAdapter(adapterMapBinder);
 
@@ -135,43 +126,45 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	@Override
-	protected void bindIHandlePartFactories() {
-
-		// Parent module uses named injects.
-		binder().bind(new TypeLiteral<IHandlePartFactory<Node>>() {
-		}).annotatedWith(
-				Names.named(SelectionBehavior.PART_FACTORIES_BINDING_NAME))
-				.to(HandlePartFactory.class)
-				.in(AdaptableScopes.typed(FXViewer.class));
-
-		binder().bind(new TypeLiteral<IHandlePartFactory<Node>>() {
-		}).annotatedWith(Names.named(HoverBehavior.PART_FACTORIES_BINDING_NAME))
-				.to(HandlePartFactory.class)
-				.in(AdaptableScopes.typed(FXViewer.class));
-
-		// Generic handle part factory binding for unnamed injects
-		binder().bind(new TypeLiteral<IHandlePartFactory<Node>>() {
-		}).to(HandlePartFactory.class)
-				.in(AdaptableScopes.typed(FXViewer.class));
+	protected void bindHoverHandlePartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(HoverBehavior.HOVER_HANDLE_PART_FACTORY))
+				.to(HandlePartFactory.class);
 	}
 
 	@Override
-	protected void bindIFeedbackPartFactories() {
-		// Parent module uses named injects.
-		binder().bind(new TypeLiteral<IFeedbackPartFactory<Node>>() {
-		}).annotatedWith(
-				Names.named(SelectionBehavior.PART_FACTORIES_BINDING_NAME))
-				.to(FeedbackPartFactory.class)
-				.in(AdaptableScopes.typed(FXViewer.class));
-		binder().bind(new TypeLiteral<IFeedbackPartFactory<Node>>() {
-		}).annotatedWith(Names.named(HoverBehavior.PART_FACTORIES_BINDING_NAME))
-				.to(FeedbackPartFactory.class)
-				.in(AdaptableScopes.typed(FXViewer.class));
+	protected void bindSelectionHandlePartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(SelectionBehavior.SELECTION_HANDLE_PART_FACTORY))
+				.to(FXDefaultSelectionHandlePartFactory.class);
+	}
 
-		// Generic feedback part factory binding for unnamed injects
-		binder().bind(new TypeLiteral<IFeedbackPartFactory<Node>>() {
-		}).to(FeedbackPartFactory.class)
-				.in(AdaptableScopes.typed(FXViewer.class));
+	@Override
+	protected void bindSelectionFeedbackPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(SelectionBehavior.SELECTION_FEEDBACK_PART_FACTORY))
+				.to(FeedbackPartFactory.class);
+	}
+
+	@Override
+	protected void bindHoverFeedbackPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(HoverBehavior.HOVER_FEEDBACK_PART_FACTORY))
+				.to(FeedbackPartFactory.class);
+	}
+
+	@Override
+	protected void bindFocusFeedbackPartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(FXFocusBehavior.FOCUS_FEEDBACK_PART_FACTORY))
+				.to(FeedbackPartFactory.class);
 	}
 
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -235,39 +228,30 @@ public abstract class GEFFxModule extends MvcFxModule {
 		// .toProvider(Providers.of(null));
 	}
 
-	protected void bindSelectionProvider() {
-		binder().bind(ISelectionProvider.class).to(
-				ViewerSelectionProvider.class);
-	}
-
-	/**
-	 * Binds {@link FXRootPart} to {@link IRootPart}, parameterized by
-	 * {@link Node}, in adaptable scope of {@link FXViewer}.
-	 */
-	@Override
-	protected void bindIRootPart() {
-		binder().bind(new TypeLiteral<IRootPart<Node, ? extends Node>>() {
-		}).to(DiagramRootPart.class).in(AdaptableScopes.typed(FXViewer.class));
-	}
-
-	// /**
-	// * Binds {@link FXRootPart} to {@link IRootPart}, parameterized by
-	// * {@link Node}, in adaptable scope of {@link FXViewer}.
-	// */
-	// @Override
-	// protected void bindIRootPart() {
-	// binder().bind(new TypeLiteral<IRootPart<Node, ? extends Node>>() {
-	// }).to(PapyrusRootPart.class).in(AdaptableScopes.typed(FXViewer.class));
+	// TODO The SelectionProvider now takes the Viewer as parameter (But it is not Injected). This makes injection non-trivial. The SelectionProvider is currently instantiated in the GEFEditor
+	// protected void bindSelectionProvider() {
+	// binder().bind(ISelectionProvider.class).to(
+	// ViewerSelectionProvider.class);
 	// }
+
+	@Override
+	protected void bindFXRootPartAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+
+		adapterMapBinder
+				.addBinding(AdapterKey.role(FXDomain.CONTENT_VIEWER_ROLE))
+				.to(DiagramRootPart.class).in(AdaptableScopes.typed(FXViewer.class));
+	}
 
 	@Override
 	protected void configure() {
 		super.configure();
 
 		bindIContentPartFactory();
+		bindIVisualPartProvider();
 
 		// bind selection provider
-		bindSelectionProvider();
+		// bindSelectionProvider();
 
 
 		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), NotationContentPart.class));
@@ -289,6 +273,23 @@ public abstract class GEFFxModule extends MvcFxModule {
 		bindBoundsModel();
 
 		bindPalette();
+
+		bindDefaultContentChildrenProvider();
+
+
+
+
+
+		// Generic handle part factory binding for unnamed injects
+		binder().bind(new TypeLiteral<IHandlePartFactory<Node>>() {
+		}).to(HandlePartFactory.class)
+				.in(AdaptableScopes.typed(FXViewer.class));
+
+
+		// Generic feedback part factory binding for unnamed injects
+		binder().bind(new TypeLiteral<IFeedbackPartFactory<Node>>() {
+		}).to(FeedbackPartFactory.class)
+				.in(AdaptableScopes.typed(FXViewer.class));
 	}
 
 	protected void bindPrimaryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -318,21 +319,24 @@ public abstract class GEFFxModule extends MvcFxModule {
 	@Override
 	protected void bindIUndoContext() {
 		super.bindIUndoContext();
-		if (true) {
-			return;
-		}
-		binder().bind(IUndoContext.class).toProvider(new Provider<IUndoContext>() {
-			@Override
-			public IUndoContext get() {
-				return new EditingDomainUndoContext(AdapterFactoryEditingDomain.getEditingDomainFor(diagram));
-			}
-		});
 	}
 
 	@Override
 	protected void bindIOperationHistory() {
 		// Transactions are handled separately in Papyrus. Do not use the operation history for graphical operations, to avoid conflicts
 		binder().bind(IOperationHistory.class).toInstance(EmptyOperationHistory.INSTANCE);
+	}
+
+	protected abstract void bindIVisualPartProvider();
+
+	protected void bindIContentPartFactory() {
+		binder().bind(new TypeLiteral<IContentPartFactory<Node>>() {
+		}).to(ProviderBasedContentPartFactory.class);
+	}
+
+	protected void bindDefaultContentChildrenProvider() {
+		binder().bind(new TypeLiteral<IContentChildrenProvider<View>>() {
+		}).to(NotationContentChildrenProvider.class);
 	}
 
 }

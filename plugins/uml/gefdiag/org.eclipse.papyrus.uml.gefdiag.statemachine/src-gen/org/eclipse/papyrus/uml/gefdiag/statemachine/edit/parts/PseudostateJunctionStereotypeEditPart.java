@@ -1,13 +1,8 @@
-
 package org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
+public class PseudostateJunctionStereotypeEditPart extends org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart {
 
-public class PseudostateJunctionStereotypeEditPart extends AffixedLabelContentPart {
-
-	public PseudostateJunctionStereotypeEditPart(View view) {
+	public PseudostateJunctionStereotypeEditPart(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);
 	}
-
 }

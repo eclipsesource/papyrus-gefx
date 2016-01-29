@@ -1,3 +1,4 @@
+
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
 public class EnumerationFloatingNameEditPart extends org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart {
@@ -5,4 +6,5 @@ public class EnumerationFloatingNameEditPart extends org.eclipse.papyrus.gef4.pa
 	public EnumerationFloatingNameEditPart(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);
 	}
+
 }

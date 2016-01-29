@@ -12,18 +12,11 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.geometry.planar.Dimension;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
 import org.eclipse.gef4.mvc.models.SelectionModel;
-import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
-import org.eclipse.gef4.mvc.viewer.IViewer;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -31,24 +24,21 @@ import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.commands.wrappers.GMFtoEMFCommandWrapper;
+import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
-import org.eclipse.papyrus.gef4.utils.PolicyUtil;
+import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
-
-import com.google.common.reflect.TypeToken;
 
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-@SuppressWarnings("serial")
-public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
+public class MoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
@@ -59,8 +49,7 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 
 		propagate(e, delta, policy -> policy.drag(e, delta));
 
-		// Nothing
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 		final Bounds newBounds = computeNewBounds(getBounds(), delta);
 
 		if (null != newBounds) {
@@ -77,30 +66,6 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 		return (int) Math.round(pos);
 	}
 
-	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<IFXOnDragPolicy> actionToPropagate) {
-		IViewer<Node> viewer = getHost().getRoot().getViewer();
-		final SelectionModel<Node> selectionModel = viewer.getAdapter(new TypeToken<SelectionModel<Node>>() {
-		});
-
-		List<IContentPart<Node, ? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
-		if (selection.size() > 1) {
-
-			// If I'm the main receiver of the event, I propagate it to other selected elements
-			// If I'm not the main receiver, do nothing; someone else will do the propagation
-			NotationContentPart<?, ?> targetPart = PolicyUtil.getTargetPrimaryPart(this, e);
-
-			if (targetPart == getHost()) {
-				for (final IContentPart<Node, ? extends Node> selectedPart : selection) {
-					if (selectedPart != getPrimaryHost()) {
-						for (final IFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.ON_DRAG_POLICY_KEY).values()) {
-							actionToPropagate.accept(dragPolicy);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	@Override
 	public void release(final MouseEvent e, final Dimension delta) {
 		if (!isSelected()) {
@@ -113,7 +78,7 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 
 		// Own behavior
 
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 
 		final Bounds bounds = getBounds();
 
@@ -145,10 +110,17 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 		}
 	}
 
+	@Override
+	public void dragAborted() {
+		propagate(policy -> policy.dragAborted());
+
+		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		boundsModel.removeManagedElement(getPrimaryHost());
+	}
+
 	protected boolean isSelected() {
 		// Since Bug 484690, the entire hierarchy of parts will receive the event. Filter on selected elements
-		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
-		});
+		SelectionModel<Node> selectionModel = ModelUtil.getSelectionModel(getHost());
 		return selectionModel.getSelectionUnmodifiable().contains(getHost());
 	}
 
@@ -177,6 +149,7 @@ public class MoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements
 		return newBounds;
 	}
 
+	@Override
 	protected IVisualPart<Node, ? extends Node> getPrimaryHost() {
 		IVisualPart<Node, ? extends Node> host = getHost();
 		if (host instanceof NotationContentPart) {

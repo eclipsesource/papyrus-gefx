@@ -15,6 +15,7 @@ package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Shape;
+import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
 import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
 import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
@@ -63,9 +64,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	protected void refreshBounds() {
 		final VBox region = getVisual();
 
-		region.setLayoutX(getX());
-		region.setLayoutY(getY());
-
 		boolean autoSize = true; // FIXME configure (autoHeight + autoWidth)
 		if (autoSize) {
 			region.setMinWidth(getWidth());
@@ -77,6 +75,16 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			region.setMinWidth(Region.USE_COMPUTED_SIZE);
 			region.setPrefHeight(getHeight());
 			region.setPrefWidth(getWidth());
+		}
+
+		Locator locator = getLocator();
+		if (locator != null) {
+			locator.applyLayout(region);
+		} else {
+			region.setManaged(true); // A non-null locator will typically set this to false. We need to ensure it is true
+
+			region.setLayoutX(getX());
+			region.setLayoutY(getY());
 		}
 	}
 
@@ -283,9 +291,6 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	@Override
 	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
-			if (child instanceof AffixedNodeContentPart || child instanceof AffixedLabelContentPart) {
-				child.getVisual().setManaged(false);
-			}
 			getVisual().getChildren().add(child.getVisual());
 		}
 	}

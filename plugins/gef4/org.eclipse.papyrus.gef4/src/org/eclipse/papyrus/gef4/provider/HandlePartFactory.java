@@ -24,7 +24,7 @@ import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef4.mvc.behaviors.IBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
-import org.eclipse.gef4.mvc.fx.policies.FXBendOnSegmentHandleDragPolicy;
+import org.eclipse.gef4.mvc.fx.policies.FXBendFirstAnchorageOnSegmentHandleDragPolicy;
 import org.eclipse.gef4.mvc.parts.IHandlePart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
@@ -82,7 +82,7 @@ public class HandlePartFactory extends FXDefaultSelectionHandlePartFactory {
 		List<IHandlePart<Node, ? extends Node>> result = super.createSingleSelectionHandlePartsForCurve(target, contextBehavior, contextMap, segmentsProvider);
 
 		for (IHandlePart<Node, ? extends Node> handlePart : result) {
-			handlePart.setAdapter(new FXBendOnSegmentHandleDragPolicy());
+			handlePart.setAdapter(new FXBendFirstAnchorageOnSegmentHandleDragPolicy());
 		}
 
 		return result;

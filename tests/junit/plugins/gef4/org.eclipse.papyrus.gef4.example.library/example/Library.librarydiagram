@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+	xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation"
+	xmi:id="_XUyPMM8rEeWo79KYMV6Huw"
+	type="Library" name="Library Example" measurementUnit="Pixel"
+	xmlns:library="http://www.eclipse.org/papyrus/gef4/example/library">
+	
+	<element xmi:type="library:Model" href="library.uml#_4NlF0M9aEeW_GvSRHd10og"/>
+	<children xmi:type="notation:Shape" type="10002">
+		<children xmi:type="notation:DecorationNode" type="50002" />
+		<element xmi:type="library:Author" href="library.uml#_5gKIAM9aEeW_GvSRHd10og" />
+		<layoutConstraint xmi:type="notation:Bounds" x="12" y="35" width="60" height="40" /> 
+	</children>
+	
+	<children xmi:type="notation:Shape" type="10002">
+	<children xmi:type="notation:DecorationNode" type="50002" />
+		<element xmi:type="library:Author" href="library.uml#_5gKIAM9aEeW_GvSRHd10og" />
+		<layoutConstraint xmi:type="notation:Bounds" x="150" y="60" width="60" height="40" /> 
+	</children>
+	
+	<children xmi:type="notation:Shape" type="10002">
+		<children xmi:type="notation:DecorationNode" type="50002" />
+		<element xmi:type="library:Author" href="library.uml#_5gKIAM9aEeW_GvSRHd10og" />
+		<layoutConstraint xmi:type="notation:Bounds" x="80" y="35" width="60" height="40" /> 
+	</children>
+	
+	
+	<children xmi:type="notation:Shape" type="10001">
+		<children xmi:type="notation:DecorationNode" type="50001" />
+		<element xmi:type="library:Library" href="library.uml#_5PCi0M9aEeW_GvSRHd10og" />
+		<layoutConstraint xmi:type="notation:Bounds" x="80" y="150" width="120" height="40" /> 
+	</children>
+
+</notation:Diagram>

@@ -22,9 +22,8 @@ import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
 import org.eclipse.gef4.mvc.viewer.IViewer;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.gef4.utils.PolicyUtil;
-
-import com.google.common.reflect.TypeToken;
 
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
@@ -39,7 +38,6 @@ import javafx.scene.input.MouseEvent;
  * @author Camille Letavernier
  *
  */
-@SuppressWarnings("serial")
 public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
 
 	private boolean wasSelected = false;
@@ -91,10 +89,8 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 	}
 
 	protected void select(IRootPart<Node, ? extends Node> target, MouseEvent e) {
-		FocusModel<Node> focusModel = target.getRoot().getViewer().getAdapter(new TypeToken<FocusModel<Node>>() {
-		});
-		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
-		});
+		FocusModel<Node> focusModel = ModelUtil.getFocusModel(target);
+		SelectionModel<Node> selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		IContentPart<Node, ? extends Node> firstChild = (IContentPart<Node, ? extends Node>) target.getChildrenUnmodifiable().get(0);
 
@@ -109,10 +105,8 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 
 	protected void select(IContentPart<Node, ? extends Node> target, MouseEvent e) {
 
-		FocusModel<Node> focusModel = target.getRoot().getViewer().getAdapter(new TypeToken<FocusModel<Node>>() {
-		});
-		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
-		});
+		FocusModel<Node> focusModel = ModelUtil.getFocusModel(target);
+		SelectionModel<Node> selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		focusModel.setFocus(target);
 
@@ -137,10 +131,8 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 			return;
 		}
 
-		FocusModel<Node> focusModel = target.getRoot().getViewer().getAdapter(new TypeToken<FocusModel<Node>>() {
-		});
-		SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(new TypeToken<SelectionModel<Node>>() {
-		});
+		FocusModel<Node> focusModel = ModelUtil.getFocusModel(target);
+		SelectionModel<Node> selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		focusModel.setFocus(target);
 
@@ -161,6 +153,11 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 	@Override
 	public void drag(MouseEvent e, Dimension delta) {
 		// Nothing
+	}
+
+	@Override
+	public void dragAborted() {
+		// Nothing to do: this is not a (real) drag policy
 	}
 
 	@Override

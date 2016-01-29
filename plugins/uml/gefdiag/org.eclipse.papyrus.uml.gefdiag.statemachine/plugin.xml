@@ -2,12 +2,13 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.papyrus.infra.ui.papyrusDiagram">
-      <editorDiagram
-            factoryClass="org.eclipse.papyrus.uml.gefdiag.statemachine.editor.StateMachineDiagramEditorFactory"
-            icon="/icons/Diagram_StateMachine.gif"
-            order="50">
-      </editorDiagram>
+         point="org.eclipse.papyrus.infra.gefdiag.common.diagram">
+      <diagramEditor
+            image="icons/Diagram_StateMachine.gif"
+            label="StateMachine (GEF4)"
+            module="org.eclipse.papyrus.uml.gefdiag.statemachine.module.StateMachineDiagramModule"
+            type="PapyrusUMLStateMachineDiagram">
+      </diagramEditor>
    </extension>
 
 </plugin>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="diagram" name="diagram" schema="schema/diagram.exsd"/>
+   <extension
+         point="org.eclipse.papyrus.infra.ui.papyrusDiagram">
+      <editorDiagram
+            factoryClass="org.eclipse.papyrus.infra.gefdiag.common.internal.editor.GEFEditorFactory"
+            order="10">
+      </editorDiagram>
+   </extension>
+
+</plugin>

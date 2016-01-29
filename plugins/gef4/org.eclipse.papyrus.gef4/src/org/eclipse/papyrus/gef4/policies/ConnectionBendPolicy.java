@@ -20,10 +20,10 @@ import java.util.Map;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.gef4.fx.anchors.IAnchor;
 import org.eclipse.gef4.fx.utils.NodeUtils;
-import org.eclipse.gef4.geometry.convert.fx.Geometry2JavaFX;
-import org.eclipse.gef4.geometry.convert.fx.JavaFX2Geometry;
+import org.eclipse.gef4.geometry.convert.fx.FX2Geometry;
+import org.eclipse.gef4.geometry.convert.fx.Geometry2FX;
 import org.eclipse.gef4.geometry.planar.Point;
-import org.eclipse.gef4.mvc.fx.policies.FXBendPolicy;
+import org.eclipse.gef4.mvc.fx.policies.FXBendConnectionPolicy;
 import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
@@ -50,7 +50,7 @@ import javafx.scene.Node;
  * So we will probably remove ```extends {@link FXBendPolicy}``` in future, it is mainly to
  * allow the existing tool to work.
  */
-public class ConnectionBendPolicy extends FXBendPolicy {
+public class ConnectionBendPolicy extends FXBendConnectionPolicy {
 
 	@Override
 	public ITransactionalOperation commit() {
@@ -82,9 +82,9 @@ public class ConnectionBendPolicy extends FXBendPolicy {
 		IAnchor anchor = null;
 		// try to find an anchor that is provided from an underlying node
 		if (canConnect) {
-			Point selectedPointCurrentPositionInScene = JavaFX2Geometry
+			Point selectedPointCurrentPositionInScene = FX2Geometry
 					.toPoint(getConnection().localToScene(
-							Geometry2JavaFX.toFXPoint(positionInLocal)));
+							Geometry2FX.toFXPoint(positionInLocal)));
 
 			List<Node> pickedNodes = NodeUtils.getNodesAt(getHost().getRoot()
 					.getVisual(), selectedPointCurrentPositionInScene.x,

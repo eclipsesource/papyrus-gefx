@@ -12,17 +12,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.policies;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef4.geometry.planar.Dimension;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
-import org.eclipse.gef4.mvc.models.SelectionModel;
-import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -31,11 +24,11 @@ import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.commands.wrappers.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
+import org.eclipse.papyrus.gef4.utils.ModelUtil;
+import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
@@ -47,7 +40,7 @@ import javafx.scene.input.MouseEvent;
 /**
  * The Class AffixedLabelMoveOnDragPolicy.
  */
-public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
+public class AffixedLabelMoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
 
 	/**
 	 * Called on Drag.
@@ -87,10 +80,7 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node
 		newBounds.setWidth(BoundsUtil.getWidth(visual));
 		newBounds.setHeight(BoundsUtil.getHeight(visual));
 
-		if (null != newBounds) {
-			boundsModel.addManagedElement(getPrimaryHost(), newBounds);
-		}
-
+		boundsModel.addManagedElement(getPrimaryHost(), newBounds);
 	}
 
 
@@ -119,38 +109,6 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node
 	}
 
 	/**
-	 * Propagate the event. //TODO to verify
-	 *
-	 * @param e
-	 *            the e
-	 * @param delta
-	 *            the delta
-	 * @param actionToPropagate
-	 *            the action to propagate
-	 */
-	protected void propagate(final MouseEvent e, final Dimension delta, final Consumer<IFXOnDragPolicy> actionToPropagate) {
-		final SelectionModel<Node> selectionModel = getHost().getRoot().getViewer().getAdapter(SelectionModel.class);
-
-		List<IContentPart<Node, ? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
-		if (selection.size() > 1) {
-
-			// If I'm the main receiver of the event, I propagate it to other selected elements
-			// If I'm not the main receiver, do nothing; someone else will do the propagation
-			if (e.getTarget() == getHost().getVisual()) {
-
-				for (final IContentPart<Node, ? extends Node> selectedPart : selection) {
-					if (selectedPart != getPrimaryHost()) {
-						for (final IFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.ON_DRAG_POLICY_KEY).values()) {
-							actionToPropagate.accept(dragPolicy);
-						}
-					}
-				}
-
-			}
-		}
-	}
-
-	/**
 	 * Called on Release.
 	 *
 	 * @param e
@@ -167,7 +125,7 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node
 		propagate(e, delta, policy -> policy.release(e, delta));
 
 		// Own behavior
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 
 		Location location = getLocation();
 		if (null == location) {
@@ -212,6 +170,18 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node
 		}
 	}
 
+
+
+	@Override
+	public void dragAborted() {
+		// Propagation, in case of multi-selection
+		propagate(policy -> policy.dragAborted());
+
+		// Own behavior
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
+		boundsModel.removeManagedElement(getPrimaryHost());
+	}
+
 	/**
 	 * Compute new location.
 	 *
@@ -240,19 +210,6 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractInteractionPolicy<Node
 
 
 		return newLocation;
-	}
-
-	/**
-	 * Gets the primary host.
-	 *
-	 * @return the primary host
-	 */
-	protected IVisualPart<Node, ? extends Node> getPrimaryHost() {
-		IVisualPart<Node, ? extends Node> host = getHost();
-		if (host instanceof NotationContentPart) {
-			host = ((NotationContentPart<?, ?>) host).getPrimaryContentPart();
-		}
-		return host;
 	}
 
 	/**

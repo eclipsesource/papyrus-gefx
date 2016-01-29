@@ -1,0 +1,15 @@
+Library {
+	lineColor: red;
+	textAlignment: left;
+}
+
+Book {
+	lineColor: blue;
+}
+
+Person,
+Author {
+	lineColor: black;
+	gradient: white vertical;
+	fillColor: deepskyblue;
+}

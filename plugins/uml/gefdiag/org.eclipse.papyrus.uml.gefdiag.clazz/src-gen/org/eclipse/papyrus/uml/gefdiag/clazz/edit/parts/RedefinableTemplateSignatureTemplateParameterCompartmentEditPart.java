@@ -1,8 +1,12 @@
+
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
-public class RedefinableTemplateSignatureTemplateParameterCompartmentEditPart extends org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode> {
+public class RedefinableTemplateSignatureTemplateParameterCompartmentEditPart extends
+		org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode> {
 
-	public RedefinableTemplateSignatureTemplateParameterCompartmentEditPart(org.eclipse.gmf.runtime.notation.DecorationNode view) {
+	public RedefinableTemplateSignatureTemplateParameterCompartmentEditPart(
+			org.eclipse.gmf.runtime.notation.DecorationNode view) {
 		super(view);
 	}
+
 }

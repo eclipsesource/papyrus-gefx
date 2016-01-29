@@ -2,10 +2,12 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.papyrus.infra.ui.papyrusDiagram">
-      <editorDiagram
-            factoryClass="org.eclipse.papyrus.uml.gefdiag.clazz.editor.ClassDiagramEditorFactory"
-            order="10">
-      </editorDiagram>
+         point="org.eclipse.papyrus.infra.gefdiag.common.diagram">
+      <diagramEditor
+            image="icons/Diagram_Class.gif"
+            label="Class Diagram (GEF4)"
+            module="org.eclipse.papyrus.uml.gefdiag.clazz.module.ClassDiagramModule"
+            type="PapyrusUMLClassDiagram">
+      </diagramEditor>
    </extension>
 </plugin>

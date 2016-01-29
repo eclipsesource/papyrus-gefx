@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef4.fx.swt.canvas.FXCanvasEx;
 import org.eclipse.gef4.mvc.domain.IDomain;
+import org.eclipse.gef4.mvc.fx.domain.FXDomain;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.models.ContentModel;
 import org.eclipse.gef4.mvc.models.GridModel;
@@ -29,6 +30,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
+import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
@@ -36,7 +38,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -46,21 +47,19 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 
-@SuppressWarnings("serial")
 public abstract class GEFEditor extends EditorPart {
 
-	private final Diagram diagram;
+	/**
+	 * Set during {@link #init(Diagram)}
+	 */
+	private Diagram diagram;
 
 	private IRootPart<Node, ? extends Node> rootPart;
 
 	@Inject
-	private IDomain<Node> domain;
+	private FXDomain domain;
 
-	@Inject
 	private ISelectionProvider selectionProvider;
-
-	@Inject
-	private Palette palette;
 
 	private FXViewer viewer;
 
@@ -70,11 +69,13 @@ public abstract class GEFEditor extends EditorPart {
 
 	private final ListChangeListener<IContentPart<Node, ? extends Node>> selectionListener;
 
-	public GEFEditor(final Diagram diagram) {
-		this.diagram = diagram;
-		final Injector injector = Guice.createInjector(createModule());
-		injector.injectMembers(this);
+	public GEFEditor(final Diagram diagram, final Module module) {
+		this();
 
+		init(diagram, module);
+	}
+
+	public GEFEditor() {
 		selectionListener = new ListChangeListener<IContentPart<Node, ? extends Node>>() {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends IContentPart<Node, ? extends Node>> change) {
@@ -89,6 +90,20 @@ public abstract class GEFEditor extends EditorPart {
 				getSite().getSelectionProvider().setSelection(selection);
 			}
 		};
+	}
+
+	public void init(final Diagram diagram, final Module module) {
+		if (this.diagram != null) {
+			throw new IllegalStateException("This editor has already been initialized");
+		}
+
+		if (module == null) {
+			throw new IllegalArgumentException("The module is undefined. It must be either passed in the constructor, or the method createModule() must be overridden");
+		}
+
+		this.diagram = diagram;
+		final Injector injector = Guice.createInjector(module);
+		injector.injectMembers(this);
 	}
 
 	@Override
@@ -114,19 +129,18 @@ public abstract class GEFEditor extends EditorPart {
 
 	@Override
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = getDomain().getAdapter(FXViewer.class);
+		selectionProvider = new ViewerSelectionProvider(viewer);
 		rootPart = viewer.getRootPart();
 		if (rootPart instanceof DiagramRootPart) {
 			((DiagramRootPart) rootPart).setDiagram(diagram);
@@ -178,8 +192,6 @@ public abstract class GEFEditor extends EditorPart {
 		return domain;
 	}
 
-	protected abstract Module createModule();
-
 	@Override
 	public void setFocus() {
 		// if (canvas != null && !canvas.isDisposed()) {
@@ -196,8 +208,7 @@ public abstract class GEFEditor extends EditorPart {
 	}
 
 	protected SelectionModel<Node> getSelectionModel() {
-		return viewer.getAdapter(new TypeToken<SelectionModel<Node>>() {
-		});
+		return ModelUtil.getSelectionModel(viewer);
 	}
 
 	public Diagram getDiagram() {

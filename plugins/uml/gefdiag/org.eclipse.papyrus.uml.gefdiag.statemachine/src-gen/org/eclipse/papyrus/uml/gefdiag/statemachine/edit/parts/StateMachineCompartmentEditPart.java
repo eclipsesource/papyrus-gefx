@@ -1,13 +1,8 @@
-
 package org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.DecorationNode;
-import org.eclipse.papyrus.gef4.parts.XYCompartmentContentPart;
+public class StateMachineCompartmentEditPart extends org.eclipse.papyrus.gef4.parts.XYCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode> {
 
-public class StateMachineCompartmentEditPart extends XYCompartmentContentPart<DecorationNode> {
-
-	public StateMachineCompartmentEditPart(DecorationNode view) {
+	public StateMachineCompartmentEditPart(org.eclipse.gmf.runtime.notation.DecorationNode view) {
 		super(view);
 	}
-
 }

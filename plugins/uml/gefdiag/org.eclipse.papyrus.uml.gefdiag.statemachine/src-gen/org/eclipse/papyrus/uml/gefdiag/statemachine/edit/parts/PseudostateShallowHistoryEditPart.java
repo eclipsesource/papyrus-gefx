@@ -1,13 +1,8 @@
-
 package org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.Shape;
-import org.eclipse.papyrus.gef4.parts.NodeContentPart;
+public class PseudostateShallowHistoryEditPart extends org.eclipse.papyrus.gef4.parts.NodeContentPart {
 
-public class PseudostateShallowHistoryEditPart extends NodeContentPart {
-
-	public PseudostateShallowHistoryEditPart(Shape view) {
+	public PseudostateShallowHistoryEditPart(org.eclipse.gmf.runtime.notation.Shape view) {
 		super(view);
 	}
-
 }

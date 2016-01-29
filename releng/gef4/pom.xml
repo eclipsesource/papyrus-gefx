@@ -7,65 +7,38 @@
 	<parent>
 		<groupId>org.eclipse.papyrus</groupId>
 		<artifactId>org.eclipse.papyrus.all.releng</artifactId>
-		<version>1.2.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>
-		<jarSignerVersion>1.1.2</jarSignerVersion>
-		<java.source.version>1.8</java.source.version>
-		<java.target.version>1.8</java.target.version>
-		<gef4.repo>https://hudson.eclipse.org/gef/job/gef4-master/lastSuccessfulBuild/artifact/update-site/</gef4.repo>
-		<efxclipse.repo>${eclipse.download}/efxclipse/updates-released/2.0.0/site</efxclipse.repo>
+		<test.argLine>-Dosgi.framework.extensions=org.eclipse.fx.osgi</test.argLine>
+		<target.platform>org.eclipse.papyrus.gef4.${target.suffix}.target</target.platform>
+		<useUIThread>false</useUIThread>
 	</properties>
 
 	<modules>
+		<!-- Main plug-ins -->
 		<module>../../features/papyrus-main-features/org.eclipse.papyrus.gef4.feature</module>
 		<module>../../plugins/gef4/org.eclipse.papyrus.gef4</module>
 		<module>../../plugins/infra/gefdiag/org.eclipse.papyrus.infra.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.clazz</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.statemachine</module>
+		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.component</module>
+		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.composite</module>
+
+		<!-- Test Plug-ins -->
+		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gef4.example.library</module>
+		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gef4.tests</module>
+		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.uml.gefdiag.clazz.tests</module>
+
+		<!-- Target Platform -->
+		<module>targetPlatform</module>
+
+		<!-- Update site -->
 		<module>site</module>
 	</modules>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>org.eclipse.cbi.maven.plugins</id>
-			<name>Eclipse CBI</name>
-			<url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-		<pluginRepository>
-			<id>eclipse.org-mylyn</id>
-			<!-- url>https://repo.eclipse.org/content/repositories/mylyn-releases/</url -->
-			<url>https://repo.eclipse.org/content/repositories/mylyn/</url>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<repositories>
-		<!-- Other repos are inherited from parent -->
-		<repository>
-			<id>efxclipse</id>
-			<layout>p2</layout>
-			<url>${efxclipse.repo}</url>
-		</repository>
-		<repository>
-			<id>gef4</id>
-			<layout>p2</layout>
-			<url>${gef4.repo}</url>
-		</repository>
-		<repository>
-			<id>papyrus</id>
-			<layout>p2</layout>
-			<url>${papyrus.repo.main}</url>
-		</repository>
-	</repositories>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -112,69 +85,42 @@
 								<systemPath>${java.home}/lib/jfxswt.jar</systemPath>
 								<scope>system</scope>
 							</extraClasspathElement>
-							<extraClasspathElement>
-								<groupId>com.google.inject.extensions</groupId>
-								<artifactId>guice-multibindings</artifactId>
-								<version>3.0</version>
-							</extraClasspathElement>
 						</extraClasspathElements>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-maven-plugin</artifactId>
-					<version>${tycho-version}</version>
-					<extensions>true</extensions>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>target-platform-configuration</artifactId>
+					<artifactId>tycho-surefire-plugin</artifactId>
 					<version>${tycho-version}</version>
 					<configuration>
-						<environments>
-							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
-								<arch>x86_64</arch>
-							</environment>
-						</environments>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.mylyn.docs</groupId>
-					<artifactId>org.eclipse.mylyn.wikitext.core.maven</artifactId>
-					<version>${mylyn.wikitext.version}</version>
-				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.eclipse.mylyn.docs
-										</groupId>
-										<artifactId>
-											org.eclipse.mylyn.wikitext.core.maven
-										</artifactId>
-										<versionRange>
-											[2.4.0-SNAPSHOT,)
-										</versionRange>
-										<goals>
-											<goal>eclipse-help</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
+						<failIfNoTests>true</failIfNoTests>
+						<useUIHarness>true</useUIHarness>
+						<useUIThread>${useUIThread}</useUIThread>
+						<testFailureIgnore>false</testFailureIgnore>
+						<!-- ${tycho.testArgLine} is populated by JaCoCo and is required to 
+							enable code coverage -->
+						<argLine>${test.argLine}</argLine>
+						<systemProperties>
+							<SWT_GTK3>0</SWT_GTK3>
+						</systemProperties>
+						<useSystemClassLoader>true</useSystemClassLoader>
+						<includes>**/*Test.java,**/*Tests.java</includes>
+						<frameworkExtensions>
+							<frameworkExtension>
+								<groupId>org.eclipse.fx.shared</groupId>
+								<artifactId>org.eclipse.fx.osgi</artifactId>
+								<scope>system</scope>
+								<systemPath>${project.parent.basedir}/libs/org.eclipse.fx.osgi_2.0.0.201504180501.jar</systemPath>
+								<version>1.0.0</version>
+							</frameworkExtension>
+							<frameworkExtension>
+								<groupId>org.eclipse.fx.runtime</groupId>
+								<artifactId>org.eclipse.fx.osgi.util</artifactId>
+								<scope>system</scope>
+								<systemPath>${project.parent.basedir}/libs/org.eclipse.fx.osgi.util_2.0.0.201504180602.jar</systemPath>
+								<version>1.0.0</version>
+							</frameworkExtension>
+						</frameworkExtensions>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -195,6 +141,17 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-feature</type>
+								<id>org.eclipse.platform</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -228,6 +185,10 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -265,7 +226,7 @@
 		</profile>
 
 		<profile>
-			<id>findBugs</id> <!-- Analysis profile. Takes +1h -->
+			<id>findBugs</id> <!-- Analysis profile -->
 			<build>
 				<plugins>
 					<plugin>
