@@ -25,6 +25,7 @@ import org.eclipse.gef4.mvc.models.GridModel;
 import org.eclipse.gef4.mvc.models.SelectionModel;
 import org.eclipse.gef4.mvc.parts.IContentPart;
 import org.eclipse.gef4.mvc.parts.IRootPart;
+import org.eclipse.gef4.mvc.ui.parts.ISelectionProviderFactory;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -58,6 +59,9 @@ public abstract class GEFEditor extends EditorPart {
 
 	@Inject
 	private FXDomain domain;
+
+	@Inject
+	private ISelectionProviderFactory selectionProviderFactory;
 
 	private ISelectionProvider selectionProvider;
 
@@ -140,7 +144,7 @@ public abstract class GEFEditor extends EditorPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 		viewer = getDomain().getAdapter(FXViewer.class);
-		selectionProvider = new ViewerSelectionProvider(viewer);
+		selectionProvider = selectionProviderFactory.create(this);
 		rootPart = viewer.getRootPart();
 		if (rootPart instanceof DiagramRootPart) {
 			((DiagramRootPart) rootPart).setDiagram(diagram);

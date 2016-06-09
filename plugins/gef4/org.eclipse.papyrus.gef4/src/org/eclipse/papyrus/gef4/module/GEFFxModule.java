@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
+ * Copyright (c) 2015-2016 CEA LIST and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,9 +35,11 @@ import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 import org.eclipse.gef4.mvc.parts.IFeedbackPartFactory;
 import org.eclipse.gef4.mvc.parts.IHandlePartFactory;
+import org.eclipse.gef4.mvc.ui.parts.ISelectionProviderFactory;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.editor.Palette;
+import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
@@ -66,12 +68,6 @@ import com.google.inject.multibindings.MapBinder;
 import javafx.scene.Node;
 
 public abstract class GEFFxModule extends MvcFxModule {
-
-	// {
-	// binder().bind(new TypeLiteral<IContentPartFactory<Node>>() {
-	// }).to(ContentPartFactory.class)
-	// .in(AdaptableScopes.typed(FXViewer.class));
-	// }
 
 	@Override
 	protected void bindContentViewerAdapters(
@@ -219,20 +215,13 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindDiagramPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		// adapterMapBinder
-		// .addBinding(
-		// AdapterKey
-		// .get(new TypeToken<Provider<IGeometry>>() {
-		// },
-		// FXDefaultFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
-		// .toProvider(Providers.of(null));
+		// Nothing
 	}
 
-	// TODO The SelectionProvider now takes the Viewer as parameter (But it is not Injected). This makes injection non-trivial. The SelectionProvider is currently instantiated in the GEFEditor
-	// protected void bindSelectionProvider() {
-	// binder().bind(ISelectionProvider.class).to(
-	// ViewerSelectionProvider.class);
-	// }
+	protected void bindSelectionProviderFactory() {
+		binder().bind(ISelectionProviderFactory.class).to(
+				SelectionProviderFactory.class);
+	}
 
 	@Override
 	protected void bindFXRootPartAsContentViewerAdapter(
@@ -263,6 +252,8 @@ public abstract class GEFFxModule extends MvcFxModule {
 		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
 
 		bindDiagramPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class));
+
+		bindSelectionProviderFactory();
 
 		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractFXHandlePart.class));
 
