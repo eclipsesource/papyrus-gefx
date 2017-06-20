@@ -13,7 +13,7 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
@@ -98,7 +98,7 @@ public class DiagramContentPart extends NotationContentPart<Diagram, Pane> {
 	}
 
 	@Override
-	protected void removeChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doRemoveChildVisual(IVisualPart<? extends Node> child, int index) {
 		Node childVisual = child.getVisual();
 		if (childVisual == null) {
 			return;
@@ -108,7 +108,7 @@ public class DiagramContentPart extends NotationContentPart<Diagram, Pane> {
 	}
 
 	@Override
-	protected void addChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doAddChildVisual(IVisualPart<? extends Node> child, int index) {
 		if (child.getVisual() != null) {
 			getVisual().getChildren().add(child.getVisual());
 		}

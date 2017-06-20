@@ -1,6 +1,6 @@
 package org.eclipse.papyrus.gef4.example.library.diagram.providers;
 
-import org.eclipse.gef4.mvc.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gmf.runtime.notation.BasicCompartment;
 import org.eclipse.gmf.runtime.notation.DecorationNode;
 import org.eclipse.gmf.runtime.notation.Shape;
@@ -14,7 +14,7 @@ import javafx.scene.Node;
 public class VisualPartProvider extends AbstractVisualPartProvider {
 
 	@Override
-	public IContentPart<Node, ? extends Node> createContentPart(
+	public IContentPart<? extends Node> createContentPart(
 			org.eclipse.gmf.runtime.notation.View view) {
 		switch (view.getType()) {
 
@@ -48,7 +48,7 @@ public class VisualPartProvider extends AbstractVisualPartProvider {
 
 		default:
 			// System.out.println("View not supported: " + view);
-			return (org.eclipse.gef4.mvc.parts.IContentPart<javafx.scene.Node, ? extends javafx.scene.Node>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
+			return (org.eclipse.gef.mvc.fx.parts.IContentPart<? extends javafx.scene.Node>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
 				@Override
 				public Object caseDecorationNode(DecorationNode object) {
 					return new LabelContentPart(object);

@@ -13,7 +13,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
@@ -135,7 +135,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			double tabHeight = 0;
 
 			// get the tab dimension of the package
-			for (final IVisualPart<Node, ? extends Node> child : getChildrenUnmodifiable()) {
+			for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
 				if (child instanceof LabelContentPart) {
 					LabelContentPart childPart = (LabelContentPart) child;
 
@@ -289,14 +289,14 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	}
 
 	@Override
-	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
+	protected void doAddChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
 			getVisual().getChildren().add(child.getVisual());
 		}
 	}
 
 	@Override
-	protected void removeChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
+	protected void doRemoveChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		final Node childVisual = child.getVisual();
 		if (childVisual == null) {
 			return;

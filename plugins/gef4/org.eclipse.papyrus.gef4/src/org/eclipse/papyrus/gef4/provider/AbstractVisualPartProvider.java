@@ -12,28 +12,28 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.provider;
 
-import org.eclipse.gef4.mvc.parts.IFeedbackPart;
-import org.eclipse.gef4.mvc.parts.IHandlePart;
-import org.eclipse.gef4.mvc.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
+import org.eclipse.gef.mvc.fx.parts.IHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 
 import javafx.scene.Node;
 
-public abstract class AbstractVisualPartProvider implements IVisualPartProvider<Node> {
+public abstract class AbstractVisualPartProvider implements IVisualPartProvider {
 
 	@Override
-	public IRootPart<Node, ? extends Node> createRootPart(Diagram diagram) {
+	public IRootPart<? extends Node> createRootPart(Diagram diagram) {
 		return new DiagramRootPart(diagram);
 	}
 
 	@Override
-	public IFeedbackPart<Node, ? extends Node> createFeedbackPart() {
+	public IFeedbackPart<? extends Node> createFeedbackPart() {
 		return null;
 	}
 
 	@Override
-	public IHandlePart<Node, ? extends Node> createHandlePart() {
+	public IHandlePart<? extends Node> createHandlePart() {
 		return null;
 	}
 

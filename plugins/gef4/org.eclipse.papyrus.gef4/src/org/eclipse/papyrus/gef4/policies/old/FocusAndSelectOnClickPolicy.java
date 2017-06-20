@@ -10,17 +10,17 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
-import org.eclipse.gef4.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.mvc.fx.models.FocusModel;
+import org.eclipse.gef.mvc.fx.models.SelectionModel;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.models.FocusModel;
-import org.eclipse.gef4.mvc.models.SelectionModel;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IRootPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
-import org.eclipse.gef4.mvc.viewer.IViewer;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.gef4.utils.PolicyUtil;
@@ -38,7 +38,7 @@ import javafx.scene.input.MouseEvent;
  * @author Camille Letavernier
  *
  */
-public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnDragPolicy {
+public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy implements IFXOnDragPolicy {
 
 	private boolean wasSelected = false;
 
@@ -51,17 +51,17 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 
 		wasSelected = false;
 
-		IVisualPart<Node, ? extends Node> host = getHost();
+		IVisualPart<? extends Node> host = getHost();
 
-		IViewer<Node> viewer = host.getRoot().getViewer();
+		IViewer viewer = host.getRoot().getViewer();
 		NotationContentPart<?, ?> targetPrimaryPart = PolicyUtil.getTargetPrimaryPart(this, e);
 
 		if (targetPrimaryPart == host) {
 			select(targetPrimaryPart, e);
 		} else if (host instanceof IRootPart) { // Root or Unknown target: select the root
-			IVisualPart<Node, ? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
+			IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
 			if (targetPart == host || targetPart == null) { // Target part is null when clicking outside the root
-				select((IRootPart<Node, ? extends Node>) host, e);
+				select((IRootPart<? extends Node>) host, e);
 			}
 		}
 	}
@@ -73,26 +73,26 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 			return;
 		}
 
-		IVisualPart<Node, ? extends Node> host = getHost();
+		IVisualPart<? extends Node> host = getHost();
 
-		IViewer<Node> viewer = host.getRoot().getViewer();
+		IViewer viewer = host.getRoot().getViewer();
 		NotationContentPart<?, ?> targetPrimaryPart = PolicyUtil.getTargetPrimaryPart(this, e);
 
 		if (targetPrimaryPart == host) {
 			unselect(targetPrimaryPart, e);
 		} else if (host instanceof IRootPart) { // Root or Unknown target: select the root
-			IVisualPart<Node, ? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
+			IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
 			if (targetPart == host || targetPart == null) { // Target part is null when clicking outside the root
-				select((IRootPart<Node, ? extends Node>) host, e);
+				select((IRootPart<? extends Node>) host, e);
 			}
 		}
 	}
 
-	protected void select(IRootPart<Node, ? extends Node> target, MouseEvent e) {
-		FocusModel<Node> focusModel = ModelUtil.getFocusModel(target);
-		SelectionModel<Node> selectionModel = ModelUtil.getSelectionModel(getHost());
+	protected void select(IRootPart<? extends Node> target, MouseEvent e) {
+		FocusModel focusModel = ModelUtil.getFocusModel(target);
+		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
-		IContentPart<Node, ? extends Node> firstChild = (IContentPart<Node, ? extends Node>) target.getChildrenUnmodifiable().get(0);
+		IContentPart<? extends Node> firstChild = (IContentPart<? extends Node>) target.getChildrenUnmodifiable().get(0);
 
 		focusModel.setFocus(firstChild);
 		if (e.isControlDown()) {
@@ -103,10 +103,10 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 		}
 	}
 
-	protected void select(IContentPart<Node, ? extends Node> target, MouseEvent e) {
+	protected void select(IContentPart<? extends Node> target, MouseEvent e) {
 
-		FocusModel<Node> focusModel = ModelUtil.getFocusModel(target);
-		SelectionModel<Node> selectionModel = ModelUtil.getSelectionModel(getHost());
+		FocusModel focusModel = ModelUtil.getFocusModel(target);
+		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		focusModel.setFocus(target);
 
@@ -125,14 +125,14 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy<Node>
 		}
 	}
 
-	protected void unselect(IContentPart<Node, ? extends Node> target, MouseEvent e) {
+	protected void unselect(IContentPart<? extends Node> target, MouseEvent e) {
 		// The host has been selected during the mouse pressed event. Do not unselect it when releasing...
 		if (wasSelected) {
 			return;
 		}
 
-		FocusModel<Node> focusModel = ModelUtil.getFocusModel(target);
-		SelectionModel<Node> selectionModel = ModelUtil.getSelectionModel(getHost());
+		FocusModel focusModel = ModelUtil.getFocusModel(target);
+		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		focusModel.setFocus(target);
 

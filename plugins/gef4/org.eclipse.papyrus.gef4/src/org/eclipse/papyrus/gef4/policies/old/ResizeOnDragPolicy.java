@@ -10,14 +10,14 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.gef4.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.mvc.fx.handlers.CursorSupport;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXSegmentHandlePart;
-import org.eclipse.gef4.mvc.fx.policies.CursorSupport;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -25,10 +25,10 @@ import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
+import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
@@ -214,13 +214,13 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 		return toPixels(local.getHeight());
 	}
 
-	protected IVisualPart<Node, ? extends Node> getAnchorageHost() {
+	protected IVisualPart<? extends Node> getAnchorageHost() {
 		return getHost().getAnchoragesUnmodifiable().keys().iterator().next();
 	}
 
 	@Override
-	protected IVisualPart<Node, ? extends Node> getPrimaryHost() {
-		IVisualPart<Node, ? extends Node> host = getAnchorageHost();
+	protected IVisualPart<? extends Node> getPrimaryHost() {
+		IVisualPart<? extends Node> host = getAnchorageHost();
 		if (host instanceof NotationContentPart) {
 			host = ((NotationContentPart<?, ?>) host).getPrimaryContentPart();
 		}
@@ -228,7 +228,7 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 	}
 
 	protected Bounds getBounds() {
-		final IVisualPart<?, ?> host = getPrimaryHost();
+		final IVisualPart<?> host = getPrimaryHost();
 
 		if (host == null) {
 			return null;

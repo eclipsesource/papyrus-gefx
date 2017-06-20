@@ -16,7 +16,7 @@ package org.eclipse.papyrus.gef4.parts;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.DecorationNode;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
@@ -384,7 +384,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	 * @see org.eclipse.gef4.mvc.parts.AbstractVisualPart#addChildVisual(org.eclipse.gef4.mvc.parts.IVisualPart, int)
 	 */
 	@Override
-	protected void addChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
+	protected void doAddChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		final Node childVisual = child.getVisual();
 		if (null != childVisual && null != compartment) {
 			compartment.getChildren().add(childVisual);
@@ -406,7 +406,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	 * @see org.eclipse.gef4.mvc.parts.AbstractVisualPart#removeChildVisual(org.eclipse.gef4.mvc.parts.IVisualPart, int)
 	 */
 	@Override
-	protected void removeChildVisual(final IVisualPart<Node, ? extends Node> child, final int index) {
+	protected void doRemoveChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		final Node childVisual = child.getVisual();
 		if (childVisual == null || compartment == null) {
 			return;

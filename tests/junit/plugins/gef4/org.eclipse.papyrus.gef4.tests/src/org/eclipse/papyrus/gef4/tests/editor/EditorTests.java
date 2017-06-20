@@ -15,9 +15,9 @@ package org.eclipse.papyrus.gef4.tests.editor;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.example.library.editor.LibraryEditor;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
@@ -41,16 +41,16 @@ public class EditorTests {
 
 		Assert.assertNotNull(libraryEditor);
 
-		FXViewer viewer = libraryEditor.getViewer();
+		IViewer viewer = libraryEditor.getViewer();
 
-		List<IContentPart<Node, ? extends Node>> viewerContents = viewer.getRootPart().getContentPartChildren();
+		List<IContentPart<? extends Node>> viewerContents = viewer.getRootPart().getContentPartChildren();
 
 		DiagramContentPart diagramPart = (DiagramContentPart) viewerContents.get(0);
 
-		List<IVisualPart<Node, ? extends Node>> diagramContents = diagramPart.getChildrenUnmodifiable();
+		List<IVisualPart<? extends Node>> diagramContents = diagramPart.getChildrenUnmodifiable();
 
 		Assert.assertEquals("The diagram doesn't contain the expected number of elements", 4, diagramContents.size());
-		for (IVisualPart<Node, ? extends Node> visualChild : diagramContents) {
+		for (IVisualPart<? extends Node> visualChild : diagramContents) {
 			View notationElement = visualChild.getAdapter(View.class);
 			EObject semanticElement = visualChild.getAdapter(EObject.class);
 

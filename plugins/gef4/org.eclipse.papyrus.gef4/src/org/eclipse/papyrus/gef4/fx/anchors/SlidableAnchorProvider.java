@@ -13,10 +13,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.fx.anchors;
 
-import org.eclipse.gef4.common.adapt.IAdaptable;
-import org.eclipse.gef4.fx.anchors.IAnchor;
-import org.eclipse.gef4.geometry.planar.Point;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.common.adapt.IAdaptable;
+import org.eclipse.gef.fx.anchors.IAnchor;
+import org.eclipse.gef.geometry.planar.Point;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -27,9 +27,9 @@ import javafx.scene.Node;
  * Default implementation of the {@link PositionalAnchorProvider} which
  * serves configured {@link SlidableFxAnchor}s.
  */
-public class SlidableAnchorProvider implements PositionalAnchorProvider, IAdaptable.Bound<IVisualPart<Node, ? extends Node>> {
+public class SlidableAnchorProvider implements PositionalAnchorProvider, IAdaptable.Bound<IVisualPart<? extends Node>> {
 
-	private ReadOnlyObjectProperty<IVisualPart<Node, ? extends Node>> myHost;
+	private ReadOnlyObjectProperty<IVisualPart<? extends Node>> myHost;
 
 	@Override
 	public IAnchor get() {
@@ -37,7 +37,7 @@ public class SlidableAnchorProvider implements PositionalAnchorProvider, IAdapta
 	}
 
 	@Override
-	public IAnchor getForContext(Point scenePoint, IVisualPart<?, ?> connection) {
+	public IAnchor getForContext(Point scenePoint, IVisualPart<?> connection) {
 		if (scenePoint == null || connection == null) {
 			return get();
 		}
@@ -54,17 +54,17 @@ public class SlidableAnchorProvider implements PositionalAnchorProvider, IAdapta
 	}
 
 	@Override
-	public IVisualPart<Node, ? extends Node> getAdaptable() {
+	public IVisualPart<? extends Node> getAdaptable() {
 		return myHost == null ? null : myHost.get();
 	}
 
 	@Override
-	public void setAdaptable(IVisualPart<Node, ? extends Node> adaptable) {
+	public void setAdaptable(IVisualPart<? extends Node> adaptable) {
 		myHost = new ReadOnlyObjectWrapper<>(adaptable);
 	}
 
 	@Override
-	public ReadOnlyObjectProperty<IVisualPart<Node, ? extends Node>> adaptableProperty() {
+	public ReadOnlyObjectProperty<IVisualPart<? extends Node>> adaptableProperty() {
 		return myHost;
 	}
 }

@@ -12,7 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.provider;
 
-import org.eclipse.gef4.mvc.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.EmptyContentPart;
 import org.eclipse.papyrus.gef4.provider.AbstractVisualPartProvider;
@@ -26,7 +26,7 @@ import javafx.scene.Node;
 public abstract class AbstractUMLVisualPartProvider extends AbstractVisualPartProvider {
 
 	@Override
-	public IContentPart<Node, ? extends Node> createContentPart(View view) {
+	public IContentPart<? extends Node> createContentPart(View view) {
 		switch (view.getType()) {
 		case "DynamicStereotypeLabel":
 			return new StereotypeLabelContentPart(view);

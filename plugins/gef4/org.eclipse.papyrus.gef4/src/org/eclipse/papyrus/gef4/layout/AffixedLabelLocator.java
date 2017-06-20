@@ -28,7 +28,7 @@ public class AffixedLabelLocator implements Locator {
 
 	private final NotationContentPart<? extends View, ? extends Node> host;
 
-	private final ListChangeListener<Node> childrenListener;
+	private final ListChangeListener childrenListener;
 	private final ChangeListener<Bounds> boundsListener;
 
 	public AffixedLabelLocator(NotationContentPart<? extends View, ? extends Node> host) {

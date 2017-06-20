@@ -10,12 +10,13 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.gef4.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.mvc.fx.models.SelectionModel;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -37,15 +38,18 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
+public class MoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
 
+		if (!isSelected()) {
+			return;
+		}
+
 		propagate(e, delta, policy -> policy.drag(e, delta));
 
-		// Nothing
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 		final Bounds newBounds = computeNewBounds(getBounds(), delta);
 
 		if (null != newBounds) {
@@ -63,17 +67,10 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 	}
 
 	@Override
-	public void dragAborted() {
-		// Propagation, in case of multi-selection
-		propagate(policy -> policy.dragAborted());
-
-		// Own behavior
-		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
-		boundsModel.removeManagedElement(getPrimaryHost());
-	}
-
-	@Override
 	public void release(final MouseEvent e, final Dimension delta) {
+		if (!isSelected()) {
+			return;
+		}
 
 		// Propagation, in case of multi-selection
 
@@ -81,13 +78,16 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 
 		// Own behavior
 
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 
 		final Bounds bounds = getBounds();
 
 		final Bounds newBounds = computeNewBounds(bounds, delta);
 		if (bounds == null || newBounds == null) {
-			boundsModel.removeManagedElement(getPrimaryHost());
+			IVisualPart<? extends Node> primaryHost = getPrimaryHost();
+			if (boundsModel.getManagedElements().containsKey(primaryHost)) {
+				boundsModel.removeManagedElement(getPrimaryHost());
+			}
 			return;
 		}
 
@@ -108,6 +108,20 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 		} catch (final Exception ex) {
 			Activator.error(ex);
 		}
+	}
+
+	@Override
+	public void dragAborted() {
+		propagate(policy -> policy.dragAborted());
+
+		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		boundsModel.removeManagedElement(getPrimaryHost());
+	}
+
+	protected boolean isSelected() {
+		// Since Bug 484690, the entire hierarchy of parts will receive the event. Filter on selected elements
+		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
+		return selectionModel.getSelectionUnmodifiable().contains(getHost());
 	}
 
 	protected Bounds computeNewBounds(final Bounds currentBounds, final Dimension delta) {
@@ -136,8 +150,8 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 	}
 
 	@Override
-	protected IVisualPart<Node, ? extends Node> getPrimaryHost() {
-		IVisualPart<Node, ? extends Node> host = getHost();
+	protected IVisualPart<? extends Node> getPrimaryHost() {
+		IVisualPart<? extends Node> host = getHost();
 		if (host instanceof NotationContentPart) {
 			host = ((NotationContentPart<?, ?>) host).getPrimaryContentPart();
 		}
@@ -145,7 +159,7 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 	}
 
 	protected Bounds getBounds() {
-		final IVisualPart<?, ?> host = getPrimaryHost();
+		final IVisualPart<?> host = getPrimaryHost();
 
 		if (host == null) {
 			return null;
@@ -161,7 +175,6 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 
 		return null;
 	}
-
 
 	@Override
 	public void hideIndicationCursor() {

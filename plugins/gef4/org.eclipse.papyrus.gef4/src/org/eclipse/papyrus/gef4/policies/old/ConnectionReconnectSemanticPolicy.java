@@ -11,12 +11,12 @@
  *  Michael Golubev (Montages) - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import java.util.Optional;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRequest;
 import org.eclipse.gmf.runtime.notation.View;

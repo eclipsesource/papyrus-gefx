@@ -13,8 +13,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.feedback;
 
-import org.eclipse.gef4.mvc.fx.parts.AbstractFXFeedbackPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.AbstractFeedbackPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.EffectsUtil;
@@ -24,9 +24,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
+public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 
-	private final IVisualPart<Node, ? extends Node> host;
+	private final IVisualPart<? extends Node> host;
 
 	private Bounds newBounds;// Absolute bounds
 
@@ -38,7 +38,7 @@ public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
 	 * @param newBounds
 	 *            the new bounds in relative.
 	 */
-	public BoundsFeedbackPart(final IVisualPart<Node, ? extends Node> host, final Bounds newBounds) {
+	public BoundsFeedbackPart(final IVisualPart<? extends Node> host, final Bounds newBounds) {
 		this.host = host;
 
 		newBounds.setX(BoundsUtil.getAbsoluteX(host) + getDeltaX(newBounds));
@@ -67,11 +67,11 @@ public class BoundsFeedbackPart extends AbstractFXFeedbackPart<Rectangle> {
 	}
 
 	@Override
-	protected Rectangle createVisual() {
+	protected Rectangle doCreateVisual() {
 		return new Rectangle();
 	}
 
-	public IVisualPart<Node, ? extends Node> getHost() {
+	public IVisualPart<? extends Node> getHost() {
 		return host;
 	}
 

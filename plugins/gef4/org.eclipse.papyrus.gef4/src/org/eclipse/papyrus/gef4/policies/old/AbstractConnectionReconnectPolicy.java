@@ -11,17 +11,17 @@
  *  Michael Golubev (Montages) - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import java.util.Optional;
 
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
-import org.eclipse.gef4.fx.anchors.IAnchor;
-import org.eclipse.gef4.fx.nodes.Connection;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.AbstractTransactionPolicy;
+import org.eclipse.gef.fx.anchors.IAnchor;
+import org.eclipse.gef.fx.nodes.Connection;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.policies.AbstractPolicy;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
@@ -29,7 +29,7 @@ import com.google.common.collect.SetMultimap;
 
 import javafx.scene.Node;
 
-public abstract class AbstractConnectionReconnectPolicy extends AbstractTransactionPolicy<Node> {
+public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy {
 
 
 	/**
@@ -56,11 +56,11 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractTransact
 	protected Object getAnchorageContent(IAnchor anchor) {
 		Node anchorageNode = anchor.getAnchorage();
 		if (anchorageNode != getConnection()) {
-			IVisualPart<Node, ? extends Node> part = getHost().getRoot()
+			IVisualPart<? extends Node> part = getHost().getRoot()
 					.getViewer().getVisualPartMap().get(anchorageNode);
 
 			if (part instanceof IContentPart) {
-				return ((IContentPart<Node, ? extends Node>) part).getContent();
+				return ((IContentPart<? extends Node>) part).getContent();
 			}
 		}
 		return null;
@@ -71,8 +71,8 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractTransact
 	 * semantic- policies to not-content parts.
 	 */
 	@Override
-	public IContentPart<Node, ? extends Node> getHost() {
-		return (IContentPart<Node, ? extends Node>) super.getHost();
+	public IContentPart<? extends Node> getHost() {
+		return (IContentPart<? extends Node>) super.getHost();
 	}
 
 	protected Edge getHostNotationEdge() {

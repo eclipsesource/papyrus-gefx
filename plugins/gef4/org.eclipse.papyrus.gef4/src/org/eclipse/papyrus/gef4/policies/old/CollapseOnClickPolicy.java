@@ -10,13 +10,13 @@
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnClickPolicy;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
 import org.eclipse.gmf.runtime.diagram.core.commands.SetPropertyCommand;
 import org.eclipse.gmf.runtime.diagram.ui.internal.properties.Properties;
@@ -24,9 +24,9 @@ import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.utils.CompartmentUtils;
+import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 
 import javafx.scene.Node;
@@ -36,7 +36,7 @@ import javafx.scene.input.MouseEvent;
  * The Class CollapseOnClickPolicy.
  */
 // FIXME use the notation model rather than the ContentPart
-public class CollapseOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
+public class CollapseOnClickPolicy extends AbstractInteractionPolicy implements IFXOnClickPolicy {
 
 	/**
 	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnClickPolicy#click(javafx.scene.input.MouseEvent)
@@ -46,7 +46,7 @@ public class CollapseOnClickPolicy extends AbstractInteractionPolicy<Node> imple
 	@Override
 	public void click(final MouseEvent event) {
 		if (getHost() instanceof CollapseHandlePart) {
-			final IVisualPart<Node, ? extends Node> compartment = CompartmentUtils.getCollapsablePart(getHost().getAnchoragesUnmodifiable().keys().iterator().next());
+			final IVisualPart<? extends Node> compartment = CompartmentUtils.getCollapsablePart(getHost().getAnchoragesUnmodifiable().keys().iterator().next());
 
 			if (null != compartment) {
 				DrawerStyle drawerStyle = getDrawerStyle(compartment);
@@ -68,7 +68,7 @@ public class CollapseOnClickPolicy extends AbstractInteractionPolicy<Node> imple
 		}
 	}
 
-	protected DrawerStyle getDrawerStyle(final IVisualPart<?, ?> compartment) {
+	protected DrawerStyle getDrawerStyle(final IVisualPart<?> compartment) {
 		final View hostView = NotationHelper.findView(compartment);
 		if (null != hostView) {
 			return (DrawerStyle) hostView.getStyle(NotationPackage.eINSTANCE.getDrawerStyle());

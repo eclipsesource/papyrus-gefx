@@ -16,9 +16,9 @@ package org.eclipse.papyrus.gef4.fx.anchors;
 import java.util.Set;
 
 import org.eclipse.draw2d.ChopboxAnchor;
-import org.eclipse.gef4.fx.anchors.DynamicAnchor;
-import org.eclipse.gef4.fx.anchors.ProjectionStrategy;
-import org.eclipse.gef4.geometry.planar.Point;
+import org.eclipse.gef.fx.anchors.DynamicAnchor;
+import org.eclipse.gef.fx.anchors.ProjectionStrategy;
+import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.BaseSlidableAnchor;
 import org.eclipse.gmf.runtime.notation.Anchor;
 import org.eclipse.gmf.runtime.notation.IdentityAnchor;

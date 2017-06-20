@@ -11,22 +11,22 @@
  *  Michael Golubev (Montages) - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.gef4.fx.anchors.IAnchor;
-import org.eclipse.gef4.fx.utils.NodeUtils;
-import org.eclipse.gef4.geometry.convert.fx.FX2Geometry;
-import org.eclipse.gef4.geometry.convert.fx.Geometry2FX;
-import org.eclipse.gef4.geometry.planar.Point;
+import org.eclipse.gef.fx.anchors.IAnchor;
+import org.eclipse.gef.fx.utils.NodeUtils;
+import org.eclipse.gef.geometry.convert.fx.FX2Geometry;
+import org.eclipse.gef.geometry.convert.fx.Geometry2FX;
+import org.eclipse.gef.geometry.planar.Point;
+import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef4.mvc.fx.policies.FXBendConnectionPolicy;
-import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gef4.mvc.policies.AbstractTransactionPolicy;
 import org.eclipse.gmf.runtime.common.core.command.UnexecutableCommand;
 import org.eclipse.papyrus.gef4.fx.anchors.PositionalAnchorProvider;
@@ -86,17 +86,17 @@ public class ConnectionBendPolicy extends FXBendConnectionPolicy {
 					.toPoint(getConnection().localToScene(
 							Geometry2FX.toFXPoint(positionInLocal)));
 
-			List<Node> pickedNodes = NodeUtils.getNodesAt(getHost().getRoot()
+			List pickedNodes = NodeUtils.getNodesAt(getHost().getRoot()
 					.getVisual(), selectedPointCurrentPositionInScene.x,
 					selectedPointCurrentPositionInScene.y);
-			IVisualPart<Node, ? extends Node> anchorPart = getAnchorPart(getParts(pickedNodes));
+			IVisualPart<? extends Node> anchorPart = getAnchorPart(getParts(pickedNodes));
 			if (anchorPart != null) {
 				Provider<? extends IAnchor> anchorProvider = anchorPart.getAdapter(
 						new TypeToken<Provider<? extends IAnchor>>() {
 						});
 
 				if (anchorProvider instanceof PositionalAnchorProvider) {
-					IVisualPart<Node, ? extends Node> connectionPart = getHost();
+					IVisualPart<? extends Node> connectionPart = getHost();
 					return ((PositionalAnchorProvider) anchorProvider).getForContext(selectedPointCurrentPositionInScene, connectionPart);
 				} else {
 					return anchorProvider.get();
@@ -112,11 +112,11 @@ public class ConnectionBendPolicy extends FXBendConnectionPolicy {
 	@SuppressWarnings("serial")
 	// FIXME: change to protected in super-class, use lambda
 	// FIXME: or extract?
-	private IContentPart<Node, ? extends Node> getAnchorPart(
-			List<IContentPart<Node, ? extends Node>> partsUnderMouse) {
+	private IContentPart<? extends Node> getAnchorPart(
+			List<IContentPart<? extends Node>> partsUnderMouse) {
 
-		for (IContentPart<Node, ? extends Node> cp : partsUnderMouse) {
-			IContentPart<Node, ? extends Node> part = cp;
+		for (IContentPart<? extends Node> cp : partsUnderMouse) {
+			IContentPart<? extends Node> part = cp;
 			Provider<? extends IAnchor> anchorProvider = part
 					.getAdapter(new TypeToken<Provider<? extends IAnchor>>() {
 					});
@@ -128,17 +128,17 @@ public class ConnectionBendPolicy extends FXBendConnectionPolicy {
 		return null;
 	}
 
-	private List<IContentPart<Node, ? extends Node>> getParts(
-			List<Node> nodesUnderMouse) {
-		List<IContentPart<Node, ? extends Node>> parts = new ArrayList<IContentPart<Node, ? extends Node>>();
+	private List<IContentPart<? extends Node>> getParts(
+			List nodesUnderMouse) {
+		List<IContentPart<? extends Node>> parts = new ArrayList<IContentPart<? extends Node>>();
 
-		Map<Node, IVisualPart<Node, ? extends Node>> partMap = getHost()
+		Map<Node, IVisualPart<? extends Node>> partMap = getHost()
 				.getRoot().getViewer().getVisualPartMap();
 		for (Node node : nodesUnderMouse) {
 			if (partMap.containsKey(node)) {
-				IVisualPart<Node, ? extends Node> part = partMap.get(node);
+				IVisualPart<? extends Node> part = partMap.get(node);
 				if (part instanceof IContentPart) {
-					parts.add((IContentPart<Node, ? extends Node>) part);
+					parts.add((IContentPart<? extends Node>) part);
 				}
 			}
 		}

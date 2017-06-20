@@ -16,11 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.models.SelectionModel;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IRootPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.models.SelectionModel;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.gef4.editor.GEFEditor;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
@@ -67,14 +67,14 @@ public class GEF4DiagramEditor extends GEFEditor implements IRevealSemanticEleme
 	 */
 	@Override
 	public void revealSemanticElement(List<?> elementList) {
-		FXViewer viewer = getViewer();
+		IViewer viewer = getViewer();
 		if (viewer == null || !viewer.isActive()) {
 			return;
 		}
 
-		List<IContentPart<Node, ? extends Node>> partsToReveal = new LinkedList<>();
+		List<IContentPart<? extends Node>> partsToReveal = new LinkedList<>();
 
-		for (IContentPart<Node, ? extends Node> contentPart : viewer.getContentPartMap().values()) {
+		for (IContentPart<? extends Node> contentPart : viewer.getContentPartMap().values()) {
 			if (contentPart instanceof IPrimaryContentPart) {
 				EObject semanticElement = EMFHelper.getEObject(contentPart);
 				if (elementList.contains(semanticElement)) {
@@ -83,7 +83,7 @@ public class GEF4DiagramEditor extends GEFEditor implements IRevealSemanticEleme
 			}
 		}
 
-		SelectionModel<Node> selectionModel = getSelectionModel();
+		SelectionModel selectionModel = getSelectionModel();
 		selectionModel.setSelection(partsToReveal);
 	}
 
@@ -93,16 +93,16 @@ public class GEF4DiagramEditor extends GEFEditor implements IRevealSemanticEleme
 			return;
 		}
 
-		IRootPart<Node, ? extends Node> root = getViewer().getRootPart();
-		for (IVisualPart<Node, ? extends Node> visualPart : root.getChildrenUnmodifiable()) {
+		IRootPart<? extends Node> root = getViewer().getRootPart();
+		for (IVisualPart<? extends Node> visualPart : root.getChildrenUnmodifiable()) {
 			refresh(visualPart, true);
 		}
 	}
 
-	protected void refresh(IVisualPart<?, ?> visualPart, boolean recursive) {
+	protected void refresh(IVisualPart<?> visualPart, boolean recursive) {
 		visualPart.refreshVisual();
 		if (recursive) {
-			for (IVisualPart<?, ?> childPart : visualPart.getChildrenUnmodifiable()) {
+			for (IVisualPart<?> childPart : visualPart.getChildrenUnmodifiable()) {
 				refresh(childPart, true);
 			}
 		}

@@ -12,7 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.layout;
 
-import org.eclipse.gef4.geometry.planar.Point;
+import org.eclipse.gef.geometry.planar.Point;
 
 import javafx.scene.Node;
 

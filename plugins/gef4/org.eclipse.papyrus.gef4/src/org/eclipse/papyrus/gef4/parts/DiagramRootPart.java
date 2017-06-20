@@ -12,12 +12,12 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
+import org.eclipse.gef.mvc.fx.parts.LayeredRootPart;
 import org.eclipse.gmf.runtime.notation.Diagram;
 
 import javafx.scene.Group;
 
-public class DiagramRootPart extends FXRootPart {
+public class DiagramRootPart extends LayeredRootPart {
 
 	protected Diagram diagram;
 
@@ -44,8 +44,8 @@ public class DiagramRootPart extends FXRootPart {
 	}
 
 	@Override
-	protected Group createVisual() {
-		Group visual = super.createVisual();
+	protected Group doCreateVisual() {
+		Group visual = super.doCreateVisual();
 		getContentLayer().getStyleClass().add("contentLayer");
 		getFeedbackLayer().getStyleClass().add("feedbackLayer");
 		getHandleLayer().getStyleClass().add("handleLayer");

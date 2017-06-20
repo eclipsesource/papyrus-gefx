@@ -12,23 +12,21 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.composite.module;
 
-import org.eclipse.gef4.common.adapt.inject.AdaptableScopes;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
+import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.provider.IVisualPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
 import org.eclipse.papyrus.uml.gefdiag.composite.providers.VisualPartProvider;
 
 import com.google.inject.TypeLiteral;
 
-import javafx.scene.Node;
-
 public class CompositeDiagramModule extends UMLDiagramModule {
 
 	@Override
 	protected void bindIVisualPartProvider() {
-		binder().bind(new TypeLiteral<IVisualPartProvider<Node>>() {
+		binder().bind(new TypeLiteral<IVisualPartProvider>() {
 		}).to(VisualPartProvider.class)
-				.in(AdaptableScopes.typed(FXViewer.class));
+				.in(AdaptableScopes.typed(IViewer.class));
 	}
 
 }

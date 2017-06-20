@@ -25,12 +25,11 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
-import org.eclipse.gef4.common.adapt.AdapterKey;
-import org.eclipse.gef4.mvc.fx.parts.AbstractFXContentPart;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.viewer.IViewer;
+import org.eclipse.gef.common.adapt.AdapterKey;
+import org.eclipse.gef.mvc.fx.parts.AbstractContentPart;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.diagram.core.listener.NotificationListener;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -82,7 +81,7 @@ import javafx.scene.text.Font;
  * @param <N>
  *            The FX {@link Node} used to display this ContentPart
  */
-public abstract class NotationContentPart<V extends View, N extends Node> extends AbstractFXContentPart<N> implements IAdaptable {
+public abstract class NotationContentPart<V extends View, N extends Node> extends AbstractContentPart<N> implements IAdaptable {
 
 	private final NotificationListener notificationListener;
 
@@ -95,12 +94,14 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	private Locator locator;
 
 	private IContentChildrenProvider<View> contentChildrenProvider;
+	
+	private boolean visualCreated = false;
 
 	/**
 	 * Some changes may happen outside the doCreateVisual/doRefreshVisual methods (e.g. during JavaFX rendering)
 	 * Since it is not possible to catch these changes directly, we use a listener to refresh the visualPartMap
 	 */
-	protected final ListChangeListener<Node> nodeChildrenListener = (change) -> updateOnChange(change);
+	protected final ListChangeListener nodeChildrenListener = (change) -> updateOnChange(change);
 
 	// The list of contentChildren, as known by GEF4. It may be different from View#getChildren during updates, as items will be added/removed 1 by 1
 	protected final List<View> contentChildren = new ArrayList<>();
@@ -126,10 +127,11 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	 * @see {@link #getStyleClass()}
 	 */
 	@Override
-	protected final N createVisual() {
-		final N visual = doCreateVisual();
-		if (visual != null) {
+	public final N getVisual() {
+		final N visual = super.getVisual();
+		if (!visualCreated && visual != null) {
 			visual.getStyleClass().add(getStyleClass());
+			visualCreated = true;
 		}
 		return visual;
 	}
@@ -197,7 +199,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return null;
 	}
 
-	protected IContentPart<Node, ? extends Node> getContentPart(final View forView) {
+	protected IContentPart<? extends Node> getContentPart(final View forView) {
 		if (forView == null) {
 			return null;
 		}
@@ -262,7 +264,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	protected void updateOnChange(Change<? extends Node> change) {
-		IViewer<Node> viewer = getRoot().getViewer();
+		IViewer viewer = getRoot().getViewer();
 		while (change.next()) {
 			for (Node removedNode : change.getRemoved()) {
 				unregisterVisuals(viewer, removedNode);
@@ -275,19 +277,19 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	@Override
-	protected void registerAtVisualPartMap(IViewer<Node> viewer, N visual) {
+	protected void registerAtVisualPartMap(IViewer viewer, N visual) {
 		// Override the parent behavior to ensure that listeners are properly installed when required
 		registerVisuals(viewer, visual);
 	}
 
 	@Override
-	protected void unregisterFromVisualPartMap(IViewer<Node> viewer, N visual) {
+	protected void unregisterFromVisualPartMap(IViewer viewer, N visual) {
 		// Override the parent behavior to ensure that listeners are properly uninstalled
 		unregisterVisuals(viewer, visual);
 	}
 
-	protected void unregisterVisuals(IViewer<Node> viewer, Node visual) {
-		Map<Node, IVisualPart<Node, ? extends Node>> visualPartMap = viewer.getVisualPartMap();
+	protected void unregisterVisuals(IViewer viewer, Node visual) {
+		Map<Node, IVisualPart<? extends Node>> visualPartMap = viewer.getVisualPartMap();
 
 		// Do not unregister child content parts; only child figures for this content part
 		if (visualPartMap.get(visual) == this) {
@@ -303,10 +305,10 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		}
 	}
 
-	protected void registerVisuals(IViewer<Node> viewer, Node visual) {
-		Map<Node, IVisualPart<Node, ? extends Node>> visualPartMap = viewer.getVisualPartMap();
+	protected void registerVisuals(IViewer viewer, Node visual) {
+		Map<Node, IVisualPart<? extends Node>> visualPartMap = viewer.getVisualPartMap();
 
-		IVisualPart<Node, ? extends Node> currentPart = visualPartMap.get(visual);
+		IVisualPart<? extends Node> currentPart = visualPartMap.get(visual);
 		if (currentPart == null) { // Not yet registered
 			visualPartMap.put(visual, this);
 		}
@@ -377,7 +379,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	}
 
 	protected NotationContentPart<? extends View, ? extends Node> getParentContentPart() {
-		final IVisualPart<Node, ? extends Node> parent = getParent();
+		final IVisualPart<? extends Node> parent = getParent();
 		if (parent instanceof NotationContentPart) {
 			return (NotationContentPart<?, ?>) parent;
 		}
@@ -429,11 +431,6 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	protected double getWidth() {
 		final Bounds bounds = getBounds();
 		return Math.max(20, bounds == null ? 20 : bounds.getWidth());
-	}
-
-	@Override
-	protected FXViewer getViewer() {
-		return (FXViewer) super.getViewer();
 	}
 
 	protected void installListeners() {

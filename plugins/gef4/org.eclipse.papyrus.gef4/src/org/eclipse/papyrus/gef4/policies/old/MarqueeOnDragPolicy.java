@@ -10,15 +10,15 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef4.mvc.fx.policies.FXMarqueeOnDragPolicy;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
@@ -26,20 +26,20 @@ import javafx.scene.Node;
 
 public class MarqueeOnDragPolicy extends FXMarqueeOnDragPolicy {
 	@Override
-	protected List<IContentPart<Node, ? extends Node>> getParts(List<Node> nodes) {
-		List<IContentPart<Node, ? extends Node>> allParts = super.getParts(nodes);
+	protected List<IContentPart<? extends Node>> getParts(List nodes) {
+		List<IContentPart<? extends Node>> allParts = super.getParts(nodes);
 
-		List<IContentPart<Node, ? extends Node>> result = new LinkedList<IContentPart<Node, ? extends Node>>();
+		List<IContentPart<? extends Node>> result = new LinkedList<IContentPart<? extends Node>>();
 
-		for (IContentPart<Node, ? extends Node> part : allParts) {
+		for (IContentPart<? extends Node> part : allParts) {
 			if (part instanceof IPrimaryContentPart) {
 				result.add(part);
 			}
 		}
 
-		Iterator<IContentPart<Node, ? extends Node>> iterator = result.iterator();
+		Iterator<IContentPart<? extends Node>> iterator = result.iterator();
 		while (iterator.hasNext()) {
-			IContentPart<Node, ? extends Node> part = iterator.next();
+			IContentPart<? extends Node> part = iterator.next();
 			if (result.contains(getPrimary(part.getParent()))) {
 				iterator.remove();
 			}
@@ -52,12 +52,12 @@ public class MarqueeOnDragPolicy extends FXMarqueeOnDragPolicy {
 		return result;
 	}
 
-	private IContentPart<Node, ? extends Node> getPrimary(IVisualPart<Node, ? extends Node> parent) {
+	private IContentPart<? extends Node> getPrimary(IVisualPart<? extends Node> parent) {
 		if (parent instanceof NotationContentPart) {
 			return ((NotationContentPart<?, ?>) parent).getPrimaryContentPart();
 		}
 		if (parent instanceof IContentPart) {
-			return (IContentPart<Node, ? extends Node>) parent;
+			return (IContentPart<? extends Node>) parent;
 		}
 		return null;
 	}

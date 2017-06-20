@@ -12,9 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
-import org.eclipse.gef4.mvc.parts.IVisualPart;
-import org.eclipse.gef4.mvc.policies.IPolicy;
-import org.eclipse.gef4.mvc.viewer.IViewer;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.policies.IPolicy;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
 import javafx.scene.Node;
@@ -29,9 +29,9 @@ public class PolicyUtil {
 	 * @param event
 	 * @return
 	 */
-	public static NotationContentPart<?, ?> getTargetPrimaryPart(IPolicy<Node> policy, MouseEvent event) {
-		IViewer<Node> viewer = policy.getHost().getRoot().getViewer();
-		IVisualPart<Node, ? extends Node> targetPart = viewer.getVisualPartMap().get(event.getTarget());
+	public static NotationContentPart<?, ?> getTargetPrimaryPart(IPolicy policy, MouseEvent event) {
+		IViewer viewer = policy.getHost().getRoot().getViewer();
+		IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(event.getTarget());
 		if (targetPart instanceof NotationContentPart) {
 			NotationContentPart<?, ?> targetNotationPart = (NotationContentPart<?, ?>) targetPart;
 			return targetNotationPart.getPrimaryContentPart();

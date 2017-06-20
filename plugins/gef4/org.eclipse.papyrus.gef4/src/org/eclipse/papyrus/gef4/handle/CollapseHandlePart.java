@@ -13,8 +13,8 @@
 
 package org.eclipse.papyrus.gef4.handle;
 
-import org.eclipse.gef4.mvc.fx.parts.AbstractFXHandlePart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
@@ -29,7 +29,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 
-public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
+public class CollapseHandlePart extends AbstractHandlePart<StackPane> {
 
 	/** The width of the collapse handle part. */
 	private static final int WIDTH = 8;
@@ -46,7 +46,7 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 	 * @return
 	 */
 	@Override
-	protected StackPane createVisual() {
+	protected StackPane doCreateVisual() {
 		final StackPane stackPane = new StackPane();
 		stackPane.setPickOnBounds(true);
 		stackPane.setStyle(""
@@ -71,16 +71,16 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 	@Override
 	protected void doRefreshVisual(final StackPane visual) {
 		// check if we have a host
-		final SetMultimap<IVisualPart<Node, ? extends Node>, String> anchorages = getAnchoragesUnmodifiable();
+		final SetMultimap<IVisualPart<? extends Node>, String> anchorages = getAnchoragesUnmodifiable();
 		if (anchorages.isEmpty()) {
 			return;
 		}
 		// determine center location of host visual
-		final IVisualPart<Node, ? extends Node> anchorage = anchorages.keys()
+		final IVisualPart<? extends Node> anchorage = anchorages.keys()
 				.iterator().next();
 
 		// Get the parent compartment
-		final IVisualPart<Node, ? extends Node> compartment = CompartmentUtils.getCollapsablePart(anchorage);
+		final IVisualPart<? extends Node> compartment = CompartmentUtils.getCollapsablePart(anchorage);
 
 		// FIXME: Use the notation model rather than the ContentPart
 		if (null != compartment) {
@@ -106,7 +106,7 @@ public class CollapseHandlePart extends AbstractFXHandlePart<StackPane> {
 	 * @param compartment
 	 *            the host visual
 	 */
-	protected void refreshHandleLocation(final IVisualPart<Node, ? extends Node> compartment) {
+	protected void refreshHandleLocation(final IVisualPart<? extends Node> compartment) {
 		getVisual().setLayoutX(BoundsUtil.getAbsoluteX(compartment));
 		getVisual().setLayoutY(BoundsUtil.getAbsoluteY(compartment));
 	}

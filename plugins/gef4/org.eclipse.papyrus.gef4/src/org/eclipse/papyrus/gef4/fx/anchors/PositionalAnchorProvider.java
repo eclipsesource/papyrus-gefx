@@ -13,9 +13,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.fx.anchors;
 
-import org.eclipse.gef4.fx.anchors.IAnchor;
-import org.eclipse.gef4.geometry.planar.Point;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.fx.anchors.IAnchor;
+import org.eclipse.gef.geometry.planar.Point;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.inject.Provider;
 
@@ -30,7 +30,7 @@ import com.google.inject.Provider;
  */
 public interface PositionalAnchorProvider extends Provider<IAnchor> {
 
-	public IAnchor getForContext(Point scenePoint, IVisualPart<?, ?> connection);
+	public IAnchor getForContext(Point scenePoint, IVisualPart<?> connection);
 
 
 }

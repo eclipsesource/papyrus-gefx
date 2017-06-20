@@ -11,7 +11,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.model;
 
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
 
 import javafx.beans.property.ReadOnlyMapProperty;
@@ -24,23 +24,23 @@ public class ChangeBoundsModel {
 
 	public static final String CHANGE_BOUNDS_PROPERTY = "changeBounds"; //$NON-NLS-1$
 
-	private ObservableMap<IVisualPart<Node, ? extends Node>, Bounds> elements = FXCollections.observableHashMap();
+	private ObservableMap<IVisualPart<? extends Node>, Bounds> elements = FXCollections.observableHashMap();
 
-	private ReadOnlyMapWrapper<IVisualPart<Node, ? extends Node>, Bounds> elementsProperty = new ReadOnlyMapWrapper<>(this, CHANGE_BOUNDS_PROPERTY, elements);
+	private ReadOnlyMapWrapper<IVisualPart<? extends Node>, Bounds> elementsProperty = new ReadOnlyMapWrapper<>(this, CHANGE_BOUNDS_PROPERTY, elements);
 
-	public ObservableMap<IVisualPart<Node, ? extends Node>, Bounds> getManagedElements() {
+	public ObservableMap<IVisualPart<? extends Node>, Bounds> getManagedElements() {
 		return elements;
 	}
 
-	public ReadOnlyMapProperty<IVisualPart<Node, ? extends Node>, Bounds> elementsProperty() {
+	public ReadOnlyMapProperty<IVisualPart<? extends Node>, Bounds> elementsProperty() {
 		return elementsProperty.getReadOnlyProperty();
 	}
 
-	public void addManagedElement(IVisualPart<Node, ? extends Node> element, Bounds bounds) {
+	public void addManagedElement(IVisualPart<? extends Node> element, Bounds bounds) {
 		this.elements.put(element, bounds);
 	}
 
-	public void removeManagedElement(IVisualPart<Node, ? extends Node> element) {
+	public void removeManagedElement(IVisualPart<? extends Node> element) {
 		this.elements.remove(element);
 	}
 

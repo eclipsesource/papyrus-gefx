@@ -32,7 +32,7 @@ public class VisualPartUtil {
 		final Parent parent = node.getParent();
 		int position = -1;
 		if (parent != null) {
-			final ObservableList<Node> childrenUnmodifiable = parent.getChildrenUnmodifiable();
+			final ObservableList childrenUnmodifiable = parent.getChildrenUnmodifiable();
 			position = childrenUnmodifiable.indexOf(node);
 		}
 		return position;

@@ -12,20 +12,22 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.provider;
 
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IFeedbackPart;
-import org.eclipse.gef4.mvc.parts.IHandlePart;
-import org.eclipse.gef4.mvc.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
+import org.eclipse.gef.mvc.fx.parts.IHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
 
-public interface IVisualPartProvider<VR> {
-	IRootPart<VR, ? extends VR> createRootPart(Diagram diagram);
+import javafx.scene.Node;
 
-	IContentPart<VR, ? extends VR> createContentPart(View view);
+public interface IVisualPartProvider {
+	IRootPart<? extends Node> createRootPart(Diagram diagram);
 
-	IFeedbackPart<VR, ? extends VR> createFeedbackPart();
+	IContentPart<? extends Node> createContentPart(View view);
 
-	IHandlePart<VR, ? extends VR> createHandlePart();
+	IFeedbackPart<? extends Node> createFeedbackPart();
+
+	IHandlePart<? extends Node> createHandlePart();
 
 }

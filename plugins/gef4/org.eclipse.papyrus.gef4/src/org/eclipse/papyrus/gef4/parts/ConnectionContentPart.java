@@ -15,9 +15,9 @@ package org.eclipse.papyrus.gef4.parts;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.gef4.fx.nodes.Connection;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.fx.nodes.Connection;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.diagram.core.listener.NotificationListener;
 import org.eclipse.gmf.runtime.notation.Anchor;
 import org.eclipse.gmf.runtime.notation.Edge;
@@ -25,9 +25,6 @@ import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.decorations.DecorationFactory;
 import org.eclipse.papyrus.gef4.fx.anchors.SlidableFxAnchor;
-import org.eclipse.papyrus.gef4.policies.ConnectionBendPolicy;
-import org.eclipse.papyrus.gef4.policies.ConnectionReconnectNotationPolicy;
-import org.eclipse.papyrus.gef4.policies.ConnectionReconnectSemanticPolicy;
 import org.eclipse.papyrus.gef4.utils.NotationUtil;
 
 import com.google.common.collect.HashMultimap;
@@ -50,10 +47,10 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	public ConnectionContentPart(E view) {
 		super(view);
 
-		setAdapter(new ConnectionBendPolicy());
-		// FIXME: works only for element-based links now
-		setAdapter(new ConnectionReconnectSemanticPolicy());
-		setAdapter(new ConnectionReconnectNotationPolicy());
+//		setAdapter(new ConnectionBendPolicy());
+//		// FIXME: works only for element-based links now
+//		setAdapter(new ConnectionReconnectSemanticPolicy());
+//		setAdapter(new ConnectionReconnectNotationPolicy());
 	}
 
 	@Override
@@ -114,11 +111,11 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 		return msg.getFeature() == NotationPackage.Literals.EDGE__SOURCE_ANCHOR || msg.getFeature() == NotationPackage.Literals.EDGE__TARGET_ANCHOR || msg.getFeature() == NotationPackage.Literals.IDENTITY_ANCHOR__ID;
 	}
 
-	protected IContentPart<Node, ? extends Node> getSourcePart() {
+	protected IContentPart<? extends Node> getSourcePart() {
 		return getContentPart(getView().getSource());
 	}
 
-	protected IContentPart<Node, ? extends Node> getTargetPart() {
+	protected IContentPart<? extends Node> getTargetPart() {
 		return getContentPart(getView().getTarget());
 	}
 
@@ -193,13 +190,13 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 		Anchor targetAnchor = getView().getTargetAnchor();
 
 		if (sourceAnchor != null) {
-			IVisualPart<Node, ? extends Node> anchorage = getAnchorage(SOURCE);
+			IVisualPart<? extends Node> anchorage = getAnchorage(SOURCE);
 			if (anchorage != null) {
 				getVisual().setStartAnchor(new SlidableFxAnchor(anchorage.getVisual(), sourceAnchor));
 			}
 		}
 		if (targetAnchor != null) {
-			IVisualPart<Node, ? extends Node> anchorage = getAnchorage(TARGET);
+			IVisualPart<? extends Node> anchorage = getAnchorage(TARGET);
 			if (anchorage != null) {
 				getVisual().setEndAnchor(new SlidableFxAnchor(anchorage.getVisual(), sourceAnchor));
 			}
@@ -208,12 +205,12 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 		refreshVisual();
 	}
 
-	protected IVisualPart<Node, ? extends Node> getAnchorage(String role) {
+	protected IVisualPart<? extends Node> getAnchorage(String role) {
 		if (role == null) {
 			return null;
 		}
 
-		for (Map.Entry<IVisualPart<Node, ? extends Node>, String> entry : getAnchoragesUnmodifiable().entries()) {
+		for (Map.Entry<IVisualPart<? extends Node>, String> entry : getAnchoragesUnmodifiable().entries()) {
 			if (role.equals(entry.getValue())) {
 				return entry.getKey();
 			}
@@ -223,7 +220,7 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	}
 
 	@Override
-	protected void attachToAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
+	protected void doAttachToAnchorageVisual(IVisualPart<? extends Node> anchorage, String role) {
 		Edge notation = getView();
 		switch (role) {
 		case SOURCE:
@@ -240,8 +237,8 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	}
 
 	@Override
-	protected void detachFromAnchorageVisual(
-			IVisualPart<Node, ? extends Node> anchorage, String role) {
+	protected void doDetachFromAnchorageVisual(
+			IVisualPart<? extends Node> anchorage, String role) {
 		if (SOURCE.equals(role)) {
 			getVisual().setStartPoint(getVisual().getStartPoint());
 		} else if (TARGET.equals(role)) {
@@ -263,13 +260,13 @@ public class ConnectionContentPart<E extends Edge> extends NotationContentPart<E
 	}
 
 	@Override
-	protected void addChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doAddChildVisual(IVisualPart<? extends Node> child, int index) {
 		// Floating labels attached to the edge
 		// Nothing yet
 	}
 
 	@Override
-	protected void removeChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doRemoveChildVisual(IVisualPart<? extends Node> child, int index) {
 		// Floating labels attached to the edge
 		// Nothing yet
 	}

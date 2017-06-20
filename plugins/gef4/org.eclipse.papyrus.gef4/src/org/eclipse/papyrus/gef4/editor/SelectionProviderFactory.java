@@ -12,9 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.editor;
 
-import org.eclipse.gef4.mvc.fx.domain.FXDomain;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.ui.parts.ISelectionProviderFactory;
+import org.eclipse.gef.mvc.fx.domain.IDomain;
+import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -23,11 +22,11 @@ import com.google.inject.Inject;
 public class SelectionProviderFactory implements ISelectionProviderFactory {
 
 	@Inject
-	FXDomain domain;
+	IDomain domain;
 
 	@Override
 	public ISelectionProvider create(IWorkbenchPart workbenchPart) {
-		return new ViewerSelectionProvider(domain.getAdapter(FXViewer.class));
+		return new ViewerSelectionProvider(domain.getViewers().values().stream().findFirst().orElseThrow(IllegalStateException::new));
 	}
 
 }

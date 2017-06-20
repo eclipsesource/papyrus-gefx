@@ -1,13 +1,16 @@
 package org.eclipse.papyrus.uml.gefdiag.composite.providers;
 
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gmf.runtime.notation.Connector;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLVisualPartProvider;
 
+import javafx.scene.Node;
+
 public class VisualPartProvider extends AbstractUMLVisualPartProvider {
 
 	@Override
-	public org.eclipse.gef4.mvc.parts.IContentPart<javafx.scene.Node, ? extends javafx.scene.Node> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
+	public IContentPart<? extends Node> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
 		switch (view.getType()) {
 		case "3082":
 			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);

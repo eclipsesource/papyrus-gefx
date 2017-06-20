@@ -19,9 +19,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.parts.IRootPart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.editor.GEFEditor;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.swt.widgets.Display;
@@ -64,9 +64,9 @@ public class EditorUtils {
 
 	public static DiagramContentPart openDiagram(String projectName, String folder, String[] sourceFileNames, String fileToOpen, String editorID) throws Exception {
 		GEFEditor editorPart = (GEFEditor) openEditor(projectName, folder, sourceFileNames, fileToOpen, editorID);
-		FXViewer viewer = editorPart.getViewer();
-		IRootPart<Node, ? extends Node> root = viewer.getRootPart();
-		IVisualPart<Node, ? extends Node> diagramPart = root.getChildrenUnmodifiable().get(0);
+		IViewer viewer = editorPart.getViewer();
+		IRootPart<? extends Node> root = viewer.getRootPart();
+		IVisualPart<? extends Node> diagramPart = root.getChildrenUnmodifiable().get(0);
 
 		return (DiagramContentPart) diagramPart;
 	}

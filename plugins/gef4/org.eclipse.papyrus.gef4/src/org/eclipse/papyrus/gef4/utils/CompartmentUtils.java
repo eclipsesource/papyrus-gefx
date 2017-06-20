@@ -12,7 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
@@ -35,8 +36,8 @@ public class CompartmentUtils {
 	 * @param currentPart
 	 * @return
 	 */
-	public static IVisualPart<Node, ? extends Node> getCollapsablePart(IVisualPart<Node, ? extends Node> currentPart) {
-		IVisualPart<Node, ? extends Node> part = currentPart;
+	public static IVisualPart<? extends Node> getCollapsablePart(IVisualPart<? extends Node> currentPart) {
+		IVisualPart<? extends Node> part = currentPart;
 		while (part != null) {
 			View notationModel = NotationHelper.findView(currentPart);
 			if (notationModel == null) {

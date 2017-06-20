@@ -16,16 +16,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.gef4.fx.swt.canvas.FXCanvasEx;
-import org.eclipse.gef4.mvc.domain.IDomain;
-import org.eclipse.gef4.mvc.fx.domain.FXDomain;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.models.ContentModel;
-import org.eclipse.gef4.mvc.models.GridModel;
-import org.eclipse.gef4.mvc.models.SelectionModel;
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IRootPart;
-import org.eclipse.gef4.mvc.ui.parts.ISelectionProviderFactory;
+import org.eclipse.gef.fx.swt.canvas.FXCanvasEx;
+import org.eclipse.gef.mvc.fx.domain.IDomain;
+import org.eclipse.gef.mvc.fx.models.GridModel;
+import org.eclipse.gef.mvc.fx.models.SelectionModel;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -55,23 +53,23 @@ public abstract class GEFEditor extends EditorPart {
 	 */
 	private Diagram diagram;
 
-	private IRootPart<Node, ? extends Node> rootPart;
+	private IRootPart<? extends Node> rootPart;
 
 	@Inject
-	private FXDomain domain;
+	private IDomain domain;
 
 	@Inject
 	private ISelectionProviderFactory selectionProviderFactory;
 
 	private ISelectionProvider selectionProvider;
 
-	private FXViewer viewer;
+	private IViewer viewer;
 
 	private FXCanvasEx canvas;
 
 	private Scene scene;
 
-	private final ListChangeListener<IContentPart<Node, ? extends Node>> selectionListener;
+	private final ListChangeListener<IContentPart<? extends Node>> selectionListener;
 
 	public GEFEditor(final Diagram diagram, final Module module) {
 		this();
@@ -80,9 +78,9 @@ public abstract class GEFEditor extends EditorPart {
 	}
 
 	public GEFEditor() {
-		selectionListener = new ListChangeListener<IContentPart<Node, ? extends Node>>() {
+		selectionListener = new ListChangeListener<IContentPart<? extends Node>>() {
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends IContentPart<Node, ? extends Node>> change) {
+			public void onChanged(ListChangeListener.Change<? extends IContentPart<? extends Node>> change) {
 				final List<?> selectedElements = change.getList();
 
 				IStructuredSelection selection;
@@ -143,7 +141,7 @@ public abstract class GEFEditor extends EditorPart {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = getDomain().getAdapter(FXViewer.class);
+		viewer = getDomain().getViewers().values().stream().findFirst().orElseThrow(IllegalStateException::new);
 		selectionProvider = selectionProviderFactory.create(this);
 		rootPart = viewer.getRootPart();
 		if (rootPart instanceof DiagramRootPart) {
@@ -164,7 +162,7 @@ public abstract class GEFEditor extends EditorPart {
 		domain.activate();
 
 		// Set contents
-		viewer.getAdapter(ContentModel.class).getContents().setAll(getContents());
+		viewer.getContents().setAll(getContents());
 
 		// viewer.getScene().getStylesheets().add("platform:/plugin/org.eclipse.papyrus.infra.gefdiag.common/style/defaultFX.css");
 
@@ -172,7 +170,7 @@ public abstract class GEFEditor extends EditorPart {
 
 		final GridModel gridModel = viewer.getAdapter(GridModel.class);
 		gridModel.setShowGrid(false);
-		gridModel.setSnapToGrid(false);
+		//gridModel.setSnapToGrid(false);
 
 		// Don't use SelectionForwarder because it selects the Content element rather than the ContentPart
 		// selectionForwarder = new SelectionForwarder<>(selectionProvider, viewer);
@@ -192,7 +190,7 @@ public abstract class GEFEditor extends EditorPart {
 		return Collections.singletonList(diagram);
 	}
 
-	public final IDomain<Node> getDomain() {
+	public final IDomain getDomain() {
 		return domain;
 	}
 
@@ -211,7 +209,7 @@ public abstract class GEFEditor extends EditorPart {
 		super.dispose();
 	}
 
-	protected SelectionModel<Node> getSelectionModel() {
+	protected SelectionModel getSelectionModel() {
 		return ModelUtil.getSelectionModel(viewer);
 	}
 
@@ -219,7 +217,7 @@ public abstract class GEFEditor extends EditorPart {
 		return diagram;
 	}
 
-	public FXViewer getViewer() {
+	public IViewer getViewer() {
 		return viewer;
 	}
 

@@ -12,10 +12,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.locator;
 
-import org.eclipse.gef4.geometry.planar.Dimension;
-import org.eclipse.gef4.geometry.planar.IGeometry;
-import org.eclipse.gef4.geometry.planar.Point;
-import org.eclipse.gef4.geometry.planar.Polyline;
+import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.IGeometry;
+import org.eclipse.gef.geometry.planar.Point;
+import org.eclipse.gef.geometry.planar.Polyline;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.layout.BorderItemLocator;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;

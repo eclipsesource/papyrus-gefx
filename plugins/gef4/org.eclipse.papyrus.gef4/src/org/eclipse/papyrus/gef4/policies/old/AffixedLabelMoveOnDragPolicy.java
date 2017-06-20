@@ -10,12 +10,12 @@
  *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies;
+package org.eclipse.papyrus.gef4.policies.old;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.gef4.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -232,7 +232,7 @@ public class AffixedLabelMoveOnDragPolicy extends AbstractMultiSelectionDragPoli
 	 * @return the layout constraint
 	 */
 	protected LayoutConstraint getLayoutConstraint() {
-		final IVisualPart<?, ?> host = getPrimaryHost();
+		final IVisualPart<?> host = getPrimaryHost();
 
 		if (host == null) {
 			return null;
