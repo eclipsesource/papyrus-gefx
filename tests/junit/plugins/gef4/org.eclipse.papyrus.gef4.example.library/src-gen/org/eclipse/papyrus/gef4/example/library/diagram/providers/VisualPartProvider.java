@@ -1,12 +1,7 @@
 package org.eclipse.papyrus.gef4.example.library.diagram.providers;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
-import org.eclipse.gmf.runtime.notation.BasicCompartment;
-import org.eclipse.gmf.runtime.notation.DecorationNode;
-import org.eclipse.gmf.runtime.notation.Shape;
-import org.eclipse.papyrus.gef4.parts.LabelContentPart;
-import org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart;
-import org.eclipse.papyrus.gef4.parts.NodeContentPart;
+import org.eclipse.papyrus.gef4.parts.EmptyContentPart;
 import org.eclipse.papyrus.gef4.provider.AbstractVisualPartProvider;
 
 import javafx.scene.Node;
@@ -45,26 +40,8 @@ public class VisualPartProvider extends AbstractVisualPartProvider {
 		case "10001":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.LibraryEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
-
 		default:
-			// System.out.println("View not supported: " + view);
-			return (org.eclipse.gef.mvc.fx.parts.IContentPart<? extends javafx.scene.Node>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
-				@Override
-				public Object caseDecorationNode(DecorationNode object) {
-					return new LabelContentPart(object);
-				}
-
-				@Override
-				public Object caseShape(Shape object) {
-					return new NodeContentPart(object);
-				}
-
-				@Override
-				public Object caseBasicCompartment(BasicCompartment object) {
-					return new ListCompartmentContentPart<DecorationNode>(object);
-				}
-			}.doSwitch(view);
-		// return new EmptyContentPart(view);
+			return new EmptyContentPart(view);
 		}
 	}
 

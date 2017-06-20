@@ -21,6 +21,7 @@ import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.StringValueStyle;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
+import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.infra.tools.util.ListHelper;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.NamedElement;
@@ -81,7 +82,7 @@ public class StereotypeLabelContentPart extends LabelContentPart {
 	protected List<Stereotype> getVisibleStereotypes() {
 		EObject semanticElement = getElement();
 
-		List<View> childViews = getPrimaryContentPart().getView().getChildren();
+		List<? extends View> childViews = NotationUtil.getNotationChildren(getPrimaryContentPart());
 		List<String> hiddenStereotypes = childViews
 				.stream()
 				.filter((view) -> !view.isVisible())

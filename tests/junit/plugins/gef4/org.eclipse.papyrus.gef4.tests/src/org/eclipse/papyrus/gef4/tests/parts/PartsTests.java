@@ -27,7 +27,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
-import org.eclipse.gmf.runtime.diagram.ui.internal.DiagramUIPlugin;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.example.library.editor.LibraryEditor;
@@ -58,8 +57,6 @@ public class PartsTests {
 
 	@BeforeClass
 	public static void initEventBroker() {
-		DiagramUIPlugin.getInstance(); // Force activation of DiagramUIPlugin, which registers the Thread-Safe event broker. We will override this
-
 		DiagramEventBroker.registerDiagramEventBrokerFactory(new DiagramEventBroker.DiagramEventBrokerFactory() {
 			@Override
 			public DiagramEventBroker createDiagramEventBroker(TransactionalEditingDomain editingDomain) {

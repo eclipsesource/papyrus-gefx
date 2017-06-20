@@ -15,13 +15,10 @@ package org.eclipse.papyrus.gef4.provider;
 
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-
 public class HandlePartFactory extends DefaultSelectionHandlePartFactory {
 
-	@Inject
-	private Injector injector;
+//	@Inject
+//	private Injector injector;
 
 //	@Override
 //	protected List<IHandlePart<? extends Node>> createMultiSelectionHandleParts(final List<? extends IVisualPart<? extends Node>> targets, IBehavior contextBehavior, final Map<Object, Object> contextMap) {

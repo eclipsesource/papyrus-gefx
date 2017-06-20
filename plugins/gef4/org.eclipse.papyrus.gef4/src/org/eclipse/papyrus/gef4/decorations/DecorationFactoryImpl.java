@@ -12,11 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.decorations;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Shape;
@@ -115,9 +113,10 @@ public class DecorationFactoryImpl implements DecorationFactory {
 		Circle containmentCircle = new Circle(-radius, 0, radius);
 		containmentCircle.setFill(Color.WHITE);
 		containmentCircle.setStroke(Color.BLACK);
-		Line verticalLine = new Line(-radius, -radius + 1, -radius, radius - 1); // +1/-1 to avoid overlap with the circle
-		Line horizontalLine = new Line(-radius * 2 + 1, 0, -1, 0); // +1/-1 to avoid overlap with the circle
-		Group containmentLink = new Group(containmentCircle, verticalLine, horizontalLine);
+		
+		//Line verticalLine = new Line(-radius, -radius + 1, -radius, radius - 1); // +1/-1 to avoid overlap with the circle
+		//Line horizontalLine = new Line(-radius * 2 + 1, 0, -1, 0); // +1/-1 to avoid overlap with the circle
+		//Group containmentLink = new Group(containmentCircle, verticalLine, horizontalLine);
 
 		// return containmentLink;
 		return containmentCircle; // FIXME Groups not supported yet (GEF4 only supports Shape decorators)

@@ -101,7 +101,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	 * Some changes may happen outside the doCreateVisual/doRefreshVisual methods (e.g. during JavaFX rendering)
 	 * Since it is not possible to catch these changes directly, we use a listener to refresh the visualPartMap
 	 */
-	protected final ListChangeListener nodeChildrenListener = (change) -> updateOnChange(change);
+	protected final ListChangeListener<? super Node> nodeChildrenListener = (change) -> updateOnChange(change);
 
 	// The list of contentChildren, as known by GEF4. It may be different from View#getChildren during updates, as items will be added/removed 1 by 1
 	protected final List<View> contentChildren = new ArrayList<>();

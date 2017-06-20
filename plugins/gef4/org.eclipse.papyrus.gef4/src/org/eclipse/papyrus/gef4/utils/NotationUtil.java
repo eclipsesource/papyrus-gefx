@@ -14,14 +14,18 @@ package org.eclipse.papyrus.gef4.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.FillStyle;
 import org.eclipse.gmf.runtime.notation.GradientStyle;
 import org.eclipse.gmf.runtime.notation.LineStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.infra.emf.appearance.helper.AppearanceHelper;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
 import org.eclipse.papyrus.infra.gmfdiag.common.utils.NamedStyleProperties;
@@ -32,6 +36,7 @@ import com.google.common.collect.ImmutableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
@@ -307,8 +312,9 @@ public class NotationUtil {
 
 		BorderStrokeStyles borderStyles = null;
 
+		// TODO take into account lineStyle.
 		// notation Line
-		final LineStyle style = (LineStyle) view.getStyle(NotationPackage.Literals.LINE_TYPE_STYLE); // TODO take into account lineStyle.
+		//final LineStyle style = (LineStyle) view.getStyle(NotationPackage.Literals.LINE_TYPE_STYLE); 
 
 		// Set with borderStyle namedStyle
 		final EList<String> borderStyleList = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE, null);
@@ -900,6 +906,42 @@ public class NotationUtil {
 		final String targetDecoration = NotationUtils.getStringValue(view, TARGET_DECORATION, "none"); //$NON-NLS-1$
 
 		return targetDecoration;
+	}
+	
+	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationChildren(NotationContentPart<? extends View, ? extends Node> part){
+		return getChildren(part.getView());
+	}
+	
+	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationTransientChildren(NotationContentPart<? extends View, ? extends Node> part){
+		return getTransientChildren(part.getView());
+	}
+	
+	@SuppressWarnings("unchecked") //GMF API is Java 1.4
+	public static List<org.eclipse.gmf.runtime.notation.Node> getChildren(View view){
+		return view.getChildren();
+	}
+	
+	@SuppressWarnings("unchecked") //GMF API is Java 1.4
+	public static List<org.eclipse.gmf.runtime.notation.Node> getTransientChildren(View view){
+		return view.getTransientChildren();
+	}
+	
+	@SuppressWarnings("unchecked") //GMF API is Java 1.4
+	public static List<Edge> getEdges(View view){
+		if (view instanceof Diagram) {
+			return ((Diagram) view).getEdges();
+		} else {
+			return Collections.emptyList();
+		}
+	}
+	
+	@SuppressWarnings("unchecked") //GMF API is Java 1.4
+	public static List<Edge> getTransientEdges(View view){
+		if (view instanceof Diagram) {
+			return ((Diagram) view).getTransientEdges();
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	//

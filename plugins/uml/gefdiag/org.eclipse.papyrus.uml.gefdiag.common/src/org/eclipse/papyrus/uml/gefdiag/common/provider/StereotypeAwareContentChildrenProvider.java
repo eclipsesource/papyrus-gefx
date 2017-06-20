@@ -18,15 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
-import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.transaction.RollbackException;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.provider.NotationContentChildrenProvider;
-import org.eclipse.papyrus.infra.emf.gmf.util.GMFUnsafe;
 
 /**
  * Filters the child views of this element, removing the Stereotype Views that shouldn't be associated to ContentParts
@@ -60,35 +54,37 @@ public class StereotypeAwareContentChildrenProvider extends NotationContentChild
 
 	protected void addDynamicStereotypeLabelView(View parent, List<View> children) {
 		if (true) {
-			// This method doesn't work for all nodes. We need more flexibility in the
+			// FIXME This method doesn't work for all nodes. We need more flexibility in the
 			// Injector/Module before enabling this (using a different provider for e.g. Labels)
 			return;
 		}
 
-		View stereotypeLabel = children
-				.stream()
-				.filter((view) -> "DynamicStereotypeLabel".equals(view.getType()))
-				.findAny()
-				.orElse(null);
-
-		if (stereotypeLabel == null) {
-			stereotypeLabel = NotationFactory.eINSTANCE.createDecorationNode();
-			stereotypeLabel.setType("DynamicStereotypeLabel");
-
-			EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(parent);
-			if (domain instanceof TransactionalEditingDomain) {
-				try {
-					final View labelToAdd = stereotypeLabel;
-					GMFUnsafe.write((TransactionalEditingDomain) domain, () -> parent.getTransientChildren().add(0, labelToAdd));
-				} catch (InterruptedException | RollbackException e) {
-					e.printStackTrace(); // TODO improve log
-				}
-			}
-		}
-
-		// Ensure the Stereotype label is always the first element
-		// FIXME: Add a separate strategy for sorting children
-		children.add(0, stereotypeLabel);
+//		Node stereotypeLabel = children
+//				.stream()
+//				.filter(view -> "DynamicStereotypeLabel".equals(view.getType()))
+//				.filter(view -> view instanceof Node)
+//				.map(view -> (Node)view)
+//				.findAny()
+//				.orElse(null);
+//
+//		if (stereotypeLabel == null) {
+//			stereotypeLabel = NotationFactory.eINSTANCE.createDecorationNode();
+//			stereotypeLabel.setType("DynamicStereotypeLabel");
+//
+//			EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(parent);
+//			if (domain instanceof TransactionalEditingDomain) {
+//				try {
+//					final Node labelToAdd = stereotypeLabel;
+//					GMFUnsafe.write((TransactionalEditingDomain) domain, () -> NotationUtil.getTransientChildren(parent).add(0, labelToAdd));
+//				} catch (InterruptedException | RollbackException e) {
+//					e.printStackTrace(); // TODO improve log
+//				}
+//			}
+//		}
+//
+//		// Ensure the Stereotype label is always the first element
+//		// FIXME: Add a separate strategy for sorting children
+//		children.add(0, stereotypeLabel);
 	}
 
 	protected boolean isPrimaryView(View view) {

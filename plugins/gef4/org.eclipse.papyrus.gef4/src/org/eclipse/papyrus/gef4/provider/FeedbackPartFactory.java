@@ -19,15 +19,12 @@ import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-
 import javafx.scene.Node;
 
 public class FeedbackPartFactory extends DefaultSelectionFeedbackPartFactory {
 
-	@Inject
-	private Injector injector;
+//	@Inject
+//	private Injector injector;
 
 	@Override
 	public List<IFeedbackPart<? extends Node>> createFeedbackParts(List<? extends IVisualPart<? extends Node>> targets, Map<Object, Object> contextMap) {
