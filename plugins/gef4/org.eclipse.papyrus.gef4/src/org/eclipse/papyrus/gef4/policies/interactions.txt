@@ -1,0 +1,14 @@
+Move (Drag primary)
+	+ Multiselection
+Resize (Drag handle)
+Marquee (Drag root)
+Focus/Select (Click)
+Move Affixed Label (Drag affixed)
+Moved Affixed Node (Drag affixed primary)
+
+Connections:
+	ConnectionReconnect
+	ConnectionBend
+	
+Specific:
+	Collapse compartment (Click handle)
