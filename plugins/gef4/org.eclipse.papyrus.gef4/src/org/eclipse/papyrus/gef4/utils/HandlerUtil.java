@@ -12,15 +12,15 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
+import org.eclipse.gef.mvc.fx.handlers.IHandler;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef.mvc.fx.policies.IPolicy;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
-public class PolicyUtil {
+public class HandlerUtil {
 
 	/**
 	 * Return the nearest IPrimaryPart for this mouse event,
@@ -29,8 +29,8 @@ public class PolicyUtil {
 	 * @param event
 	 * @return
 	 */
-	public static NotationContentPart<?, ?> getTargetPrimaryPart(IPolicy policy, MouseEvent event) {
-		IViewer viewer = policy.getHost().getRoot().getViewer();
+	public static NotationContentPart<?, ?> getTargetPrimaryPart(IHandler handler, MouseEvent event) {
+		IViewer viewer = handler.getHost().getRoot().getViewer();
 		IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(event.getTarget());
 		if (targetPart instanceof NotationContentPart) {
 			NotationContentPart<?, ?> targetNotationPart = (NotationContentPart<?, ?>) targetPart;

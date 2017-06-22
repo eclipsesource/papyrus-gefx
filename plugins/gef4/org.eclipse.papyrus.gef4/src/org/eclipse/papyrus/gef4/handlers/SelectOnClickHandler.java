@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
+ * Copyright (c) 2015, 2017 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,22 +8,23 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Migrate to GEF5
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.handlers;
 
 import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;
+import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.models.FocusModel;
 import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.policies.AbstractInteractionPolicy;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
-import org.eclipse.papyrus.gef4.utils.PolicyUtil;
+import org.eclipse.papyrus.gef4.utils.HandlerUtil;
 
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
@@ -38,12 +39,12 @@ import javafx.scene.input.MouseEvent;
  * @author Camille Letavernier
  *
  */
-public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy implements IFXOnDragPolicy {
+public class SelectOnClickHandler extends AbstractHandler implements IOnDragHandler {
 
 	private boolean wasSelected = false;
 
 	@Override
-	public void press(MouseEvent e) {
+	public void startDrag(MouseEvent e) {
 		// focus and select are only done on single click
 		if (e.getClickCount() > 1) {
 			return;
@@ -54,7 +55,7 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy imple
 		IVisualPart<? extends Node> host = getHost();
 
 		IViewer viewer = host.getRoot().getViewer();
-		NotationContentPart<?, ?> targetPrimaryPart = PolicyUtil.getTargetPrimaryPart(this, e);
+		NotationContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
 
 		if (targetPrimaryPart == host) {
 			select(targetPrimaryPart, e);
@@ -67,7 +68,7 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy imple
 	}
 
 	@Override
-	public void release(MouseEvent e, Dimension delta) {
+	public void endDrag(MouseEvent e, Dimension delta) {
 		// focus and select are only done on single click
 		if (e.getClickCount() > 1 || !e.isStillSincePress()) {
 			return;
@@ -76,7 +77,7 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy imple
 		IVisualPart<? extends Node> host = getHost();
 
 		IViewer viewer = host.getRoot().getViewer();
-		NotationContentPart<?, ?> targetPrimaryPart = PolicyUtil.getTargetPrimaryPart(this, e);
+		NotationContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
 
 		if (targetPrimaryPart == host) {
 			unselect(targetPrimaryPart, e);
@@ -156,7 +157,7 @@ public class FocusAndSelectOnClickPolicy extends AbstractInteractionPolicy imple
 	}
 
 	@Override
-	public void dragAborted() {
+	public void abortDrag() {
 		// Nothing to do: this is not a (real) drag policy
 	}
 

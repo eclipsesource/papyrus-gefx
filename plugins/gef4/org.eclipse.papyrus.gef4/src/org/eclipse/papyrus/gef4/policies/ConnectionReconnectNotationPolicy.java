@@ -11,7 +11,7 @@
  *  Michael Golubev (Montages) - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.policies;
 
 import java.util.Optional;
 
@@ -25,6 +25,7 @@ import org.eclipse.gmf.runtime.diagram.core.commands.SetConnectionEndsCommand;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.fx.anchors.SlidableFxAnchor;
+import org.eclipse.papyrus.gef4.handlers.AbstractConnectionReconnectHandler;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.gef4.utils.OperationBuilder;
 
@@ -33,7 +34,7 @@ import org.eclipse.papyrus.gef4.utils.OperationBuilder;
  *
  * @see ConnectionBendPolicy
  */
-public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconnectPolicy {
+public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconnectHandler {
 
 	protected ITransactionalOperation createNotationReconnectOperation() {
 		ITransactionalOperation result = OperationBuilder.withForwardUndo("Update notation model")

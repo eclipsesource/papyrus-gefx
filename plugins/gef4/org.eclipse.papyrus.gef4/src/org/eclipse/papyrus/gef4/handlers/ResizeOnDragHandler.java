@@ -10,14 +10,14 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.handlers;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.mvc.fx.handlers.CursorSupport;
+import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
+import org.eclipse.gef.mvc.fx.parts.AbstractSegmentHandlePart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef4.mvc.fx.parts.AbstractFXSegmentHandlePart;
-import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -38,7 +38,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
+public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler implements IOnDragHandler {
 
 	protected static final int NORTH_WEST = 0;
 
@@ -47,8 +47,6 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 	protected static final int SOUTH_EAST = 2;
 
 	protected static final int SOUTH_WEST = 3;
-
-	private CursorSupport cursorSupport = new CursorSupport(this);
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
@@ -136,8 +134,8 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 	}
 
 	protected int getAnchorDirection() {
-		if (getHost() instanceof AbstractFXSegmentHandlePart) {
-			return ((AbstractFXSegmentHandlePart<?>) getHost()).getSegmentIndex();
+		if (getHost() instanceof AbstractSegmentHandlePart) {
+			return ((AbstractSegmentHandlePart<?>) getHost()).getSegmentIndex();
 		}
 
 		return SOUTH_EAST; // Arbitrary Default (Everyone resizes elements from the South East, right?)
@@ -146,7 +144,7 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 
 
 	@Override
-	public void press(final MouseEvent e) {
+	public void startDrag(final MouseEvent e) {
 		// Nothing
 	}
 
@@ -155,9 +153,9 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 	}
 
 	@Override
-	public void release(final MouseEvent e, final Dimension delta) {
+	public void endDrag(final MouseEvent e, final Dimension delta) {
 
-		propagate(e, delta, policy -> policy.release(e, delta));
+		propagate(e, delta, policy -> policy.endDrag(e, delta));
 
 		final Bounds bounds = getBounds();
 		if (bounds == null) {
@@ -193,8 +191,8 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 	}
 
 	@Override
-	public void dragAborted() {
-		propagate(policy -> policy.dragAborted());
+	public void abortDrag() {
+		propagate(policy -> policy.abortDrag());
 
 		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 		boundsModel.removeManagedElement(getPrimaryHost());
@@ -262,7 +260,7 @@ public class ResizeOnDragPolicy extends AbstractMultiSelectionDragPolicy impleme
 	}
 
 	protected CursorSupport getCursorSupport() {
-		return cursorSupport;
+		return getHost().getViewer().getAdapter(CursorSupport.class);
 	}
 
 	private Cursor getCursor() {

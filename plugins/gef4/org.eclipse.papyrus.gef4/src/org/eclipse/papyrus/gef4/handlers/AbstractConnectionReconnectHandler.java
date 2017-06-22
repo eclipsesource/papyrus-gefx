@@ -11,7 +11,7 @@
  *  Michael Golubev (Montages) - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.handlers;
 
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.nodes.Connection;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef.mvc.fx.policies.AbstractPolicy;
+import org.eclipse.gef.mvc.fx.policies.AbstractHandler;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
@@ -29,7 +29,7 @@ import com.google.common.collect.SetMultimap;
 
 import javafx.scene.Node;
 
-public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy {
+public abstract class AbstractConnectionReconnectHandler extends AbstractHandler {
 
 
 	/**
@@ -92,7 +92,7 @@ public abstract class AbstractConnectionReconnectPolicy extends AbstractPolicy {
 	 */
 	protected Optional<View> findHostAnchorageForRole(String endRole) {
 		return firstKeyForValue(getHost().getContentAnchoragesUnmodifiable(), endRole)
-				.map(AbstractConnectionReconnectPolicy::asView);
+				.map(AbstractConnectionReconnectHandler::asView);
 	}
 
 	protected static <K, V> Optional<K> firstKeyForValue(SetMultimap<K, V> setMultimap, V value) {

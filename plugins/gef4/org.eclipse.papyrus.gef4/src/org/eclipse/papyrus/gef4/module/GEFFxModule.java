@@ -25,6 +25,7 @@ import org.eclipse.gef.mvc.fx.behaviors.HoverBehavior;
 import org.eclipse.gef.mvc.fx.behaviors.SelectionBehavior;
 import org.eclipse.gef.mvc.fx.domain.IDomain;
 import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
+import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
 import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
@@ -35,9 +36,16 @@ import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.editor.Palette;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
+import org.eclipse.papyrus.gef4.handlers.AffixedLabelMoveOnDragHandler;
+import org.eclipse.papyrus.gef4.handlers.CollapseOnClickHandler;
+import org.eclipse.papyrus.gef4.handlers.MarqueeOnDragHandler;
+import org.eclipse.papyrus.gef4.handlers.MoveOnDragHandler;
+import org.eclipse.papyrus.gef4.handlers.ResizeOnDragHandler;
+import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
@@ -47,7 +55,7 @@ import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
-import org.eclipse.papyrus.gef4.provider.FeedbackPartFactory;
+import org.eclipse.papyrus.gef4.provider.BoundsFeedbackPartFactory;
 import org.eclipse.papyrus.gef4.provider.HandlePartFactory;
 import org.eclipse.papyrus.gef4.provider.IContentChildrenProvider;
 import org.eclipse.papyrus.gef4.provider.NotationContentChildrenProvider;
@@ -65,14 +73,24 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(ChangeBoundsModel.class);
+		
+		bindBoundsFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
+	}
+
+	protected void bindBoundsFeedbackPartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+			.addBinding(AdapterKey
+				.role(ChangeBoundsBehavior.BOUNDS_ROLE))
+				.to(BoundsFeedbackPartFactory.class);
 	}
 
 	@Override
 	protected void bindAbstractContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindAbstractContentPartAdapters(adapterMapBinder);
 
-//		adapterMapBinder.addBinding(AdapterKey.defaultRole())
-//				.to(ChangeBoundsBehavior.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
+				.to(ChangeBoundsBehavior.class);
 
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(HoverOnHoverHandler.class);
@@ -83,10 +101,10 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		bindFocusAndSelectOnClickHandlerAsIRootPartAdapter(adapterMapBinder);
 
-//		adapterMapBinder
-//				.addBinding(
-//						AdapterKey.defaultRole())
-//				.to(MarqueeOnDragPolicy.class);
+		adapterMapBinder
+				.addBinding(
+						AdapterKey.defaultRole())
+				.to(MarqueeOnDragHandler.class);
 
 		bindPanOrZoomOnScrollHandlerAsIRootPartAdapter(adapterMapBinder);
 		
@@ -108,8 +126,8 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-//		adapterMapBinder
-//				.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragPolicy.class); // FIXME this shouldn't be installed on all handle parts (e.g. this will be installed on connection's bendpoints and anchors)
+		adapterMapBinder
+				.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragHandler.class); // FIXME this shouldn't be installed on all handle parts (e.g. this will be installed on connection's bendpoints and anchors)
 	}
 
 	@Override
@@ -120,49 +138,16 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.to(HandlePartFactory.class);
 	}
 
-	@Override
-	protected void bindSelectionHandlePartFactoryAsContentViewerAdapter(
-			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder
-				.addBinding(AdapterKey
-						.role(SelectionBehavior.SELECTION_HANDLE_PART_FACTORY))
-				.to(DefaultSelectionHandlePartFactory.class);
-	}
-
-	@Override
-	protected void bindSelectionFeedbackPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder
-				.addBinding(AdapterKey
-						.role(SelectionBehavior.SELECTION_FEEDBACK_PART_FACTORY))
-				.to(FeedbackPartFactory.class);
-	}
-
-	@Override
-	protected void bindHoverFeedbackPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder
-				.addBinding(AdapterKey
-						.role(HoverBehavior.HOVER_FEEDBACK_PART_FACTORY))
-				.to(FeedbackPartFactory.class);
-	}
-
-	@Override
-	protected void bindFocusFeedbackPartFactoryAsContentViewerAdapter(
-			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder
-				.addBinding(AdapterKey
-						.role(FocusBehavior.FOCUS_FEEDBACK_PART_FACTORY))
-				.to(FeedbackPartFactory.class);
-	}
-
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		// Nothing (Most binding moved to PrimaryPartAdapter due to the new propagation mechanism of policies in GEF4)
 	}
 
-//	@Override
-//	protected void bindFocusAndSelectOnClickHandlerAsIRootPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-//		adapterMapBinder.addBinding(AdapterKey.role("0"))
-//				.to(FocusAndSelectOnClickPolicy.class);
-//	}
+	@Override
+	protected void bindFocusAndSelectOnClickHandlerAsIRootPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+			.addBinding(AdapterKey.defaultRole())
+			.to(SelectOnClickHandler.class);
+	}
 
 	protected void bindConnectionPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder
@@ -193,16 +178,16 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindCollapseHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-//		adapterMapBinder
-//				.addBinding(AdapterKey.defaultRole())
-//				.to(CollapseOnClickPolicy.class);
+		adapterMapBinder
+				.addBinding(AdapterKey.defaultRole())
+				.to(CollapseOnClickHandler.class);
 	}
 
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-//
-//		adapterMapBinder.addBinding(
-//				AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
-//				.to(AffixedLabelMoveOnDragPolicy.class);
+
+		adapterMapBinder.addBinding(
+				AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
+				.to(AffixedLabelMoveOnDragHandler.class);
 	}
 
 	protected void bindDiagramPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -246,7 +231,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		bindSelectionProviderFactory();
 
-		//bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractFXHandlePart.class));
+		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractHandlePart.class));
 
 		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
 
@@ -270,20 +255,20 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		// Generic feedback part factory binding for unnamed injects
 		binder().bind(new TypeLiteral<IFeedbackPartFactory>() {
-		}).to(FeedbackPartFactory.class)
+		}).to(BoundsFeedbackPartFactory.class)
 				.in(AdaptableScopes.typed(IViewer.class));
 	}
 
 	protected void bindPrimaryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-//		adapterMapBinder
-//				.addBinding(
-//						AdapterKey.defaultRole())
-//				.to(FocusAndSelectOnClickPolicy.class);
-//
-//		adapterMapBinder
-//				.addBinding(
-//						AdapterKey.defaultRole())
-//				.to(MoveOnDragPolicy.class);
+		adapterMapBinder
+				.addBinding(
+						AdapterKey.defaultRole())
+				.to(SelectOnClickHandler.class);
+
+		adapterMapBinder
+				.addBinding(
+						AdapterKey.defaultRole())
+				.to(MoveOnDragHandler.class);
 	}
 
 	protected void bindPalette() {
@@ -291,7 +276,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindBoundsBehavior() {
-//		binder().bind(ChangeBoundsBehavior.class);
+		binder().bind(ChangeBoundsBehavior.class);
 	}
 
 	protected void bindBoundsModel() {

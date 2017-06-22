@@ -10,7 +10,7 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.handlers;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,13 +18,12 @@ import java.util.List;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef4.mvc.fx.policies.FXMarqueeOnDragPolicy;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
 import javafx.scene.Node;
 
-public class MarqueeOnDragPolicy extends FXMarqueeOnDragPolicy {
+public class MarqueeOnDragHandler extends org.eclipse.gef.mvc.fx.handlers.MarqueeOnDragHandler {
 	@Override
 	protected List<IContentPart<? extends Node>> getParts(List nodes) {
 		List<IContentPart<? extends Node>> allParts = super.getParts(nodes);

@@ -11,7 +11,7 @@
  *  Michael Golubev (Montages) - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.policies;
 
 import java.util.Optional;
 
@@ -20,6 +20,7 @@ import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRequest;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.handlers.AbstractConnectionReconnectHandler;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.gef4.utils.OperationBuilder;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
@@ -30,7 +31,7 @@ import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
  *
  * @see ConnectionBendPolicy
  */
-public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconnectPolicy {
+public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconnectHandler {
 
 	protected ITransactionalOperation createSemanticReconnectOperation() {
 		// System.out.println("ConnectionReconnectSemanticPolicy.createSemanticReconnectOperation()");

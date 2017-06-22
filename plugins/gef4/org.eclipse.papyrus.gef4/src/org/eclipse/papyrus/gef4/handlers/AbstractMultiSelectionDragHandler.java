@@ -1,23 +1,23 @@
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.handlers;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.mvc.fx.gestures.ClickDragGesture;
+import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;
+import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.parts.PartUtils;
-import org.eclipse.gef.mvc.fx.policies.AbstractPolicy;
-import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
-import org.eclipse.gef4.mvc.fx.tools.FXClickDragTool;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
-public abstract class AbstractMultiSelectionDragPolicy extends AbstractPolicy implements IFXOnDragPolicy {
+public abstract class AbstractMultiSelectionDragHandler extends AbstractHandler implements IOnDragHandler {
 
 	/**
 	 * Propagate the event to selected elements. //FIXME: Propagating to Drag Policies is not relevant, as several policies can react to the drag action. We also need to check the kind of policy (e.g. Move vs Resize vs Select ...)
@@ -29,7 +29,7 @@ public abstract class AbstractMultiSelectionDragPolicy extends AbstractPolicy im
 	 * @param actionToPropagate
 	 *            the action to propagate
 	 */
-	protected final void propagate(final MouseEvent e, final Dimension delta, final Consumer<IFXOnDragPolicy> actionToPropagate) {
+	protected final void propagate(final MouseEvent e, final Dimension delta, final Consumer<IOnDragHandler> actionToPropagate) {
 		final SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		List<IContentPart<? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
@@ -49,8 +49,8 @@ public abstract class AbstractMultiSelectionDragPolicy extends AbstractPolicy im
 
 				for (final IContentPart<? extends Node> selectedPart : selection) {
 					if (selectedPart != getPrimaryHost()) {
-						for (final IFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.ON_DRAG_POLICY_KEY).values()) {
-							actionToPropagate.accept(dragPolicy);
+						for (final IOnDragHandler dragHandler : selectedPart.getAdapters(ClickDragGesture.ON_DRAG_POLICY_KEY).values()) {
+							actionToPropagate.accept(dragHandler);
 						}
 					}
 				}
@@ -62,7 +62,7 @@ public abstract class AbstractMultiSelectionDragPolicy extends AbstractPolicy im
 	boolean isPropagating = false;
 
 
-	protected final void propagate(final Consumer<IFXOnDragPolicy> actionToPropagate) {
+	protected final void propagate(final Consumer<IOnDragHandler> actionToPropagate) {
 
 		if (isPropagating) {
 			return;
@@ -76,8 +76,8 @@ public abstract class AbstractMultiSelectionDragPolicy extends AbstractPolicy im
 			if (selection.size() > 1) {
 				for (final IContentPart<? extends Node> selectedPart : selection) {
 					if (selectedPart != getPrimaryHost()) {
-						for (final IFXOnDragPolicy dragPolicy : selectedPart.getAdapters(FXClickDragTool.ON_DRAG_POLICY_KEY).values()) {
-							actionToPropagate.accept(dragPolicy);
+						for (final IOnDragHandler dragHandler : selectedPart.getAdapters(ClickDragGesture.ON_DRAG_POLICY_KEY).values()) {
+							actionToPropagate.accept(dragHandler);
 						}
 					}
 				}

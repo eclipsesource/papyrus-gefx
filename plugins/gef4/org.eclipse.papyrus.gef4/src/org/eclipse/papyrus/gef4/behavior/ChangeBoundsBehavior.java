@@ -12,8 +12,9 @@
 package org.eclipse.papyrus.gef4.behavior;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -22,19 +23,19 @@ import org.eclipse.gef.mvc.fx.behaviors.AbstractBehavior;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPart;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-
-import com.google.inject.Inject;
 
 import javafx.collections.MapChangeListener;
 import javafx.scene.Node;
 
 public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeListener<IVisualPart<? extends Node>, Bounds> {
 
-	@Inject
-	IFeedbackPartFactory feedbackPartFactory;
+	public static final String BOUNDS_ROLE = "bounds";
+
+	protected final Map<IVisualPart<? extends Node>, IFeedbackPart<? extends Node>> currentFeedbackParts = new HashMap<>();
 
 	@Override
 	public void doActivate() {
@@ -67,10 +68,13 @@ public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeL
 	public void onChanged(MapChangeListener.Change<? extends IVisualPart<? extends Node>, ? extends Bounds> change) {
 		IVisualPart<? extends Node> modifiedPart = change.getKey();
 		if (modifiedPart == getHost()) {
+			IFeedbackPartFactory feedbackPartFactory = getFeedbackPartFactory(modifiedPart.getViewer());
 			if (change.getValueAdded() != null) { // Addition or Update
-				List<IFeedbackPart<? extends Node>> feedback = getFeedbackPerTargetSet().get(Collections.singleton(modifiedPart));
+				IFeedbackPart<? extends Node> feedback = currentFeedbackParts.get(modifiedPart);
 				if (feedback == null) {
-					addFeedback(Collections.singletonList(modifiedPart));
+					List<IVisualPart<? extends Node>> targets = Collections.singletonList(modifiedPart);
+					List<IFeedbackPart<? extends Node>> newFeedbackParts = feedbackPartFactory.createFeedbackParts(targets, new HashMap<Object, Object>(change.getMap()));
+					addFeedback(Collections.singletonList(modifiedPart), newFeedbackParts);
 				} else {
 					updateFeedback(feedback, change.getValueAdded());
 				}
@@ -80,11 +84,9 @@ public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeL
 		}
 	}
 
-	protected void updateFeedback(List<IFeedbackPart<? extends Node>> feedbackParts, Bounds bounds) {
-		for (IFeedbackPart<? extends Node> feedbackPart : feedbackParts){
-			if (feedbackPart instanceof BoundsFeedbackPart) {
-				((BoundsFeedbackPart) feedbackPart).updateBounds(bounds);
-			}
+	protected void updateFeedback(IFeedbackPart<? extends Node> feedbackPart, Bounds bounds) {
+		if (feedbackPart instanceof BoundsFeedbackPart) {
+			((BoundsFeedbackPart) feedbackPart).updateBounds(bounds);
 		}
 	}
 
@@ -107,43 +109,51 @@ public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeL
 
 		removeFeedback(partsToRemove);
 
-		addFeedback(partsToCreate);
+		IFeedbackPartFactory feedbackPartFactory = getFeedbackPartFactory(host.getViewer());
+
+		Map<Object, Object> contextMap = new HashMap<>(newSelection);
+
+		List<IFeedbackPart<? extends Node>> newFeedbackParts = feedbackPartFactory.createFeedbackParts(partsToCreate, contextMap);
+		addFeedback(partsToCreate, newFeedbackParts);
 
 		for (IVisualPart<? extends Node> partToUpdate : partsToUpdate) {
-			List<IFeedbackPart<? extends Node>> feedbacks = getFeedbackPerTargetSet().get(Collections.singleton(partToUpdate));
-			for (IFeedbackPart<? extends Node> feedback : feedbacks) {
-				if (feedback instanceof BoundsFeedbackPart) {
-					((BoundsFeedbackPart) feedback).updateBounds(newSelection.get(partToUpdate));
-				}
+			IFeedbackPart<? extends Node> feedback = currentFeedbackParts.get(partToUpdate);
+			if (feedback instanceof BoundsFeedbackPart) {
+				((BoundsFeedbackPart) feedback).updateBounds(newSelection.get(partToUpdate));
 			}
 		}
 	}
 
-	@Override
-	protected void addFeedback(List<? extends IVisualPart<? extends Node>> targets) {
-		super.addFeedback(targets);
-//		if (feedbackParts != null) {
-//			for (IFeedbackPart<? extends Node> f : feedbackParts) {
-//				if (f instanceof BoundsFeedbackPart) {
-//					currentFeedbackParts.put(((BoundsFeedbackPart) f).getHost(), f);
-//				}
-//			}
-//		}
+	protected void addFeedback(List<? extends IVisualPart<? extends Node>> targets, List<IFeedbackPart<? extends Node>> feedbackParts) {
+		if (feedbackParts != null) {
+			for (IFeedbackPart<? extends Node> f : feedbackParts) {
+				if (f instanceof BoundsFeedbackPart) {
+					currentFeedbackParts.put(((BoundsFeedbackPart) f).getHost(), f);
+				}
+			}
+		}
+		getFeedbackPerTargetSet().put(new HashSet<>(targets), feedbackParts);
+		super.addAnchoreds(targets, feedbackParts);
+	}
+
+	protected void removeFeedback(List<? extends IVisualPart<? extends Node>> targets) {
+		for (IVisualPart<? extends Node> target : targets) {
+			IFeedbackPart<? extends Node> f = currentFeedbackParts.get(target);
+			if (f == null) {
+				// A different feedback has been installed (e.g. for connections). The ChangeBoundsBehavior should probably not be installed in this case
+				continue;
+			}
+
+			currentFeedbackParts.remove(target);
+		}
+
+		if (!targets.isEmpty()) {
+			super.removeFeedback(targets);
+		}
 	}
 
 	@Override
-	protected void removeFeedback(Collection<? extends IVisualPart<? extends Node>> targets) {
-		super.removeFeedback(targets);
-
-//		for (IVisualPart<? extends Node> target : targets) {
-//			IFeedbackPart<? extends Node> f = currentFeedbackParts.get(target);
-//			if (f == null) {
-//				// A different feedback has been installed (e.g. for connections). The
-//				// ChangeBoundsBehavior should probably not be installed in this case
-//				continue;
-//			}
-//
-//			currentFeedbackParts.remove(target);
-//		}
+	protected IFeedbackPartFactory getFeedbackPartFactory(IViewer viewer) {
+		return getFeedbackPartFactory(viewer, BOUNDS_ROLE);
 	}
 }

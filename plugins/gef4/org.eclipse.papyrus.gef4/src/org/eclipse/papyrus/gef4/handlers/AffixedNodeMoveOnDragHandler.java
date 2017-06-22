@@ -10,12 +10,11 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.handlers;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -37,7 +36,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
+public class AffixedNodeMoveOnDragHandler extends AbstractMultiSelectionDragHandler {
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
@@ -54,7 +53,7 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 	}
 
 	@Override
-	public void press(final MouseEvent e) {
+	public void startDrag(final MouseEvent e) {
 		// Nothing
 	}
 
@@ -63,9 +62,9 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 	}
 
 	@Override
-	public void dragAborted() {
+	public void abortDrag() {
 		// Propagation, in case of multi-selection
-		propagate(policy -> policy.dragAborted());
+		propagate(handler -> handler.abortDrag());
 
 		// Own behavior
 		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
@@ -73,11 +72,11 @@ public class AffixedNodeMoveOnDragPolicy extends AbstractMultiSelectionDragPolic
 	}
 
 	@Override
-	public void release(final MouseEvent e, final Dimension delta) {
+	public void endDrag(final MouseEvent e, final Dimension delta) {
 
 		// Propagation, in case of multi-selection
 
-		propagate(e, delta, policy -> policy.release(e, delta));
+		propagate(e, delta, policy -> policy.endDrag(e, delta));
 
 		// Own behavior
 

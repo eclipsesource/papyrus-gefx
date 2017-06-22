@@ -10,13 +10,13 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.policies.old;
+package org.eclipse.papyrus.gef4.handlers;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef4.mvc.fx.policies.IFXOnDragPolicy;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
@@ -38,7 +38,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class MoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implements IFXOnDragPolicy {
+public class MoveOnDragHandler extends AbstractMultiSelectionDragHandler implements IOnDragHandler {
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
@@ -58,7 +58,7 @@ public class MoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implement
 	}
 
 	@Override
-	public void press(final MouseEvent e) {
+	public void startDrag(final MouseEvent e) {
 		// Nothing
 	}
 
@@ -67,14 +67,14 @@ public class MoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implement
 	}
 
 	@Override
-	public void release(final MouseEvent e, final Dimension delta) {
+	public void endDrag(final MouseEvent e, final Dimension delta) {
 		if (!isSelected()) {
 			return;
 		}
 
 		// Propagation, in case of multi-selection
 
-		propagate(e, delta, policy -> policy.release(e, delta));
+		propagate(e, delta, handler -> handler.endDrag(e, delta));
 
 		// Own behavior
 
@@ -111,8 +111,8 @@ public class MoveOnDragPolicy extends AbstractMultiSelectionDragPolicy implement
 	}
 
 	@Override
-	public void dragAborted() {
-		propagate(policy -> policy.dragAborted());
+	public void abortDrag() {
+		propagate(policy -> policy.abortDrag());
 
 		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
 		boundsModel.removeManagedElement(getPrimaryHost());
