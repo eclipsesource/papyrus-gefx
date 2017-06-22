@@ -14,18 +14,18 @@ package org.eclipse.papyrus.uml.gefdiag.component.module;
 
 import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.papyrus.gef4.provider.IVisualPartProvider;
+import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
-import org.eclipse.papyrus.uml.gefdiag.component.providers.VisualPartProvider;
+import org.eclipse.papyrus.uml.gefdiag.component.providers.ContentPartProvider;
 
 import com.google.inject.TypeLiteral;
 
 public class ComponentDiagramModule extends UMLDiagramModule {
 
 	@Override
-	protected void bindIVisualPartProvider() {
-		binder().bind(new TypeLiteral<IVisualPartProvider>() {
-		}).to(VisualPartProvider.class)
+	protected void bindIContentPartProvider() {
+		binder().bind(new TypeLiteral<IContentPartProvider>() {
+		}).to(ContentPartProvider.class)
 				.in(AdaptableScopes.typed(IViewer.class));
 	}
 

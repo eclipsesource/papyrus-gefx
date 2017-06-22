@@ -45,6 +45,7 @@ import com.google.inject.Module;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 public abstract class GEFEditor extends EditorPart {
 
@@ -78,19 +79,16 @@ public abstract class GEFEditor extends EditorPart {
 	}
 
 	public GEFEditor() {
-		selectionListener = new ListChangeListener<IContentPart<? extends Node>>() {
-			@Override
-			public void onChanged(ListChangeListener.Change<? extends IContentPart<? extends Node>> change) {
-				final List<?> selectedElements = change.getList();
+		selectionListener = change -> {
+			final List<?> selectedElements = change.getList();
 
-				IStructuredSelection selection;
-				if (selectedElements.size() > 0) {
-					selection = new StructuredSelection(selectedElements);
-				} else {
-					selection = StructuredSelection.EMPTY;
-				}
-				getSite().getSelectionProvider().setSelection(selection);
+			IStructuredSelection selection;
+			if (selectedElements.size() > 0) {
+				selection = new StructuredSelection(selectedElements);
+			} else {
+				selection = StructuredSelection.EMPTY;
 			}
+			getSite().getSelectionProvider().setSelection(selection);
 		};
 	}
 
@@ -151,10 +149,6 @@ public abstract class GEFEditor extends EditorPart {
 		// Canvas and SceneContainer
 		canvas = new FXCanvasEx(parent, SWT.NONE);
 
-		// SplitPane splitPane = new SplitPane();
-		// splitPane.getItems().addAll(viewer.getScrollPane(), palette.getVisual());
-		// splitPane.setDividerPositions(0.3f);
-
 		scene = new Scene(viewer.getCanvas());
 		canvas.setScene(scene);
 
@@ -164,18 +158,11 @@ public abstract class GEFEditor extends EditorPart {
 		// Set contents
 		viewer.getContents().setAll(getContents());
 
-		// viewer.getScene().getStylesheets().add("platform:/plugin/org.eclipse.papyrus.infra.gefdiag.common/style/defaultFX.css");
-
-		// viewer.getScene().setFill(Color.ALICEBLUE);
+		scene.setFill(Color.ALICEBLUE);
 
 		final GridModel gridModel = viewer.getAdapter(GridModel.class);
 		gridModel.setShowGrid(false);
-		//gridModel.setSnapToGrid(false);
 
-		// Don't use SelectionForwarder because it selects the Content element rather than the ContentPart
-		// selectionForwarder = new SelectionForwarder<>(selectionProvider, viewer);
-
-		// Manual change listener and synchronization with SelectionModel
 		getSelectionModel().getSelectionUnmodifiable().addListener(selectionListener);
 
 		if (viewer.getRootPart() == null || viewer.getRootPart().getChildrenUnmodifiable().isEmpty()) {
@@ -205,7 +192,6 @@ public abstract class GEFEditor extends EditorPart {
 	public void dispose() {
 		domain.deactivate();
 		domain.dispose();
-		// this.viewer.dispose();
 		super.dispose();
 	}
 

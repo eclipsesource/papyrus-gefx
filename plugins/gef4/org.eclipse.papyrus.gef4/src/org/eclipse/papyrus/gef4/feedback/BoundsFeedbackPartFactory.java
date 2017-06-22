@@ -10,9 +10,9 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.provider;
+package org.eclipse.papyrus.gef4.feedback;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,21 +20,20 @@ import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.Bounds;
-import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPart;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import javafx.scene.Node;
 
-public class BoundsFeedbackPartFactory implements IFeedbackPartFactory{
+public class BoundsFeedbackPartFactory implements IFeedbackPartFactory {
 
 	@Inject
 	private Injector injector;
 
 	@Override
 	public List<IFeedbackPart<? extends Node>> createFeedbackParts(List<? extends IVisualPart<? extends Node>> targets, Map<Object, Object> contextMap) {
-		List<IFeedbackPart<? extends Node>> result = new LinkedList<>();
+		List<IFeedbackPart<? extends Node>> result = new ArrayList<>(targets.size());
 
 		for (IVisualPart<? extends Node> target : targets) {
 			Bounds newBounds = (Bounds) contextMap.get(target);

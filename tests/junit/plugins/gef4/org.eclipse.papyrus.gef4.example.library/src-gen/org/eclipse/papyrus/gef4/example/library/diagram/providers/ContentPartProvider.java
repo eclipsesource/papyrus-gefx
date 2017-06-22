@@ -2,11 +2,11 @@ package org.eclipse.papyrus.gef4.example.library.diagram.providers;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.papyrus.gef4.parts.EmptyContentPart;
-import org.eclipse.papyrus.gef4.provider.AbstractVisualPartProvider;
+import org.eclipse.papyrus.gef4.provider.AbstractContentPartProvider;
 
 import javafx.scene.Node;
 
-public class VisualPartProvider extends AbstractVisualPartProvider {
+public class ContentPartProvider extends AbstractContentPartProvider {
 
 	@Override
 	public IContentPart<? extends Node> createContentPart(

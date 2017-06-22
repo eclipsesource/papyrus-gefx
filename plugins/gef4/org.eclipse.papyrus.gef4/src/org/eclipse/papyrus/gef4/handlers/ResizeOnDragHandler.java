@@ -48,6 +48,8 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 
 	protected static final int SOUTH_WEST = 3;
 
+	private CursorSupport cursorSupport;
+
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
 
@@ -138,7 +140,7 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 			return ((AbstractSegmentHandlePart<?>) getHost()).getSegmentIndex();
 		}
 
-		return SOUTH_EAST; // Arbitrary Default (Everyone resizes elements from the South East, right?)
+		return -1;
 	}
 
 
@@ -245,7 +247,9 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 
 	@Override
 	public void hideIndicationCursor() {
-		getCursorSupport().restoreCursor();
+		if (cursorSupport != null) {
+			cursorSupport.restoreCursor();
+		}
 	}
 
 	@Override
@@ -255,12 +259,23 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 
 	@Override
 	public boolean showIndicationCursor(MouseEvent event) {
-		getCursorSupport().storeAndReplaceCursor(getCursor());
+		if (cursorSupport != null) {
+			cursorSupport.storeAndReplaceCursor(getCursor());
+		}
 		return true;
 	}
 
-	protected CursorSupport getCursorSupport() {
-		return getHost().getViewer().getAdapter(CursorSupport.class);
+	/**
+	 * @see org.eclipse.gef.common.adapt.IAdaptable.Bound.Impl#setAdaptable(org.eclipse.gef.common.adapt.IAdaptable)
+	 *
+	 * @param adaptable
+	 */
+	@Override
+	public void setAdaptable(IVisualPart<? extends Node> adaptable) {
+		super.setAdaptable(adaptable);
+		if (adaptable != null) {
+			cursorSupport = adaptable.getViewer().getAdapter(CursorSupport.class);
+		}
 	}
 
 	private Cursor getCursor() {

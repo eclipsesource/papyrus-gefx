@@ -37,6 +37,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -117,23 +118,27 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 
 		wrapper.getChildren().addAll(titleLabel, scrollPane);
 
-		refreshCollapsed(false); // FIXME the animation should be off by default, and only enabled when we receive an event from the Notation model
+		refreshCollapsed(false);
 
 		return wrapper;
 	}
 
 	protected void bindMinHeight() {
+
+		System.out.println("Do bind min height");
+
 		// The isEmpty() property is not directly observable. We need to manually create an observable boolean property
 		BooleanBinding isCompartmentEmpty = Bindings.createBooleanBinding(() -> compartment.getChildren().isEmpty(), compartment.getChildren()).or(collapsed);
 
 		// If the title is visible, we can hide the scroll pane entirely. Otherwise, give a non-null min size to the scroll pane
-		DoubleBinding conditionalMinSize = (new When(titleLabel.visibleProperty())).then(0.).otherwise(3.);
+		DoubleBinding conditionalMinSize = (new When(titleLabel.visibleProperty())).then(0.).otherwise(5.);
 
 		// If the collapse animation is running, always use the minimal min size, to get a fluid transition
 		BooleanBinding useMinSize = isCompartmentEmpty.or(getCollapseTimeline().statusProperty().isEqualTo(Timeline.Status.RUNNING));
 
 		// If the compartment is empty, then set a small minHeight. Otherwise, leave enough room to display at least one item
 		scrollPane.minHeightProperty().bind(new When(useMinSize).then(conditionalMinSize).otherwise(MINIMUM_COMPARTMENT_HEIGHT));
+		titleLabel.prefHeightProperty().bind(new When(useMinSize).then(conditionalMinSize).otherwise(Region.USE_COMPUTED_SIZE));
 	}
 
 	/**
@@ -157,6 +162,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 		// Add or remove the Title label
 		if (isShowTitle()) {
 			titleLabel.setVisible(true);
+			titleLabel.managedProperty().unbind();
 			titleLabel.setManaged(true);
 
 			titleLabel.setMaxWidth(Double.MAX_VALUE);
@@ -164,11 +170,20 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 			titleLabel.setFont(getFont(7));
 			FXUtils.setPadding(titleLabel, 1, 1);
 
+			titleLabel.setMinHeight(Region.USE_COMPUTED_SIZE);
+
 			// Update the Title text
 			titleLabel.setText(getTitle());
 		} else {
 			titleLabel.setVisible(false);
-			titleLabel.setManaged(false);
+
+			titleLabel.managedProperty().bind(collapsed);
+			titleLabel.managedProperty().addListener((a, b, c) -> {
+				System.out.println(titleLabel.getPrefHeight());
+			});
+
+			titleLabel.setMinHeight(Region.USE_PREF_SIZE);
+
 			return;
 		}
 	}
@@ -293,23 +308,13 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 					timeline.stop();
 				}
 
-				scrollPane.setVisible(true);
-				scrollPane.setManaged(true);
-
 				scrollPane.setPrefHeight(scrollPane.prefHeight(scrollPane.getWidth()));
 				scrollPane.setMaxHeight(Region.USE_PREF_SIZE);
 
 				KeyFrame[] targetFrame = createCollapseKeyFrames(0);
 				timeline.getKeyFrames().setAll(targetFrame);
 
-				timeline.setOnFinished(e -> {
-					scrollPane.setVisible(false);
-					scrollPane.setManaged(false);
-					scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
-					scrollPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
-					VBox.setVgrow(scrollPane, Priority.NEVER);
-					VBox.setVgrow(wrapper, Priority.NEVER);
-				});
+				timeline.setOnFinished(e -> doSetCollapsed(collapsed));
 
 				timeline.play();
 			} else { // Set visible, then expand to standard size
@@ -320,6 +325,8 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 					timeline.stop();
 				}
 
+				scrollPane.getChildrenUnmodifiable().forEach(n -> n.setVisible(true));
+
 				scrollPane.setVisible(true);
 				scrollPane.setManaged(true);
 
@@ -328,28 +335,33 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 				scrollPane.setMaxHeight(Region.USE_PREF_SIZE);
 				timeline.getKeyFrames().setAll(targetFrame);
 
-				timeline.setOnFinished(e -> {
-					scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
-					scrollPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
-					VBox.setVgrow(scrollPane, Priority.ALWAYS);
-					VBox.setVgrow(wrapper, Priority.ALWAYS);
-				});
+				timeline.setOnFinished(e -> doSetCollapsed(collapsed));
 				timeline.play();
 			}
 		} else {
-			if (collapsed) {
-				scrollPane.setVisible(false);
-				scrollPane.setManaged(false);
-				VBox.setVgrow(scrollPane, Priority.NEVER);
-				VBox.setVgrow(wrapper, Priority.NEVER);
-			} else {
-				scrollPane.setVisible(true);
-				scrollPane.setManaged(true);
-				VBox.setVgrow(scrollPane, Priority.ALWAYS);
-				VBox.setVgrow(wrapper, Priority.ALWAYS);
-			}
-			scrollPane.setOpacity(1.0); // In case it has been previously animated with an opacity change
+			doSetCollapsed(collapsed);
 		}
+	}
+
+	private void doSetCollapsed(boolean collapsed) {
+		if (collapsed) {
+			scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+			scrollPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
+			VBox.setVgrow(wrapper, Priority.NEVER);
+
+			scrollPane.setVisible(false);
+			scrollPane.setManaged(false);
+		} else {
+			scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+			scrollPane.setMaxHeight(Region.USE_COMPUTED_SIZE);
+			VBox.setVgrow(wrapper, Priority.ALWAYS);
+			scrollPane.setOpacity(1.0); // In case it has been previously animated with an opacity change
+
+			scrollPane.setVisible(true);
+			scrollPane.setManaged(true);
+		}
+
+		wrapper.pseudoClassStateChanged(PseudoClass.getPseudoClass("collapsed"), collapsed);
 	}
 
 	protected Timeline getCollapseTimeline() {

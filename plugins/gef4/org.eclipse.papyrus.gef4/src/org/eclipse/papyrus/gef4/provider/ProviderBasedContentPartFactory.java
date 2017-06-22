@@ -26,7 +26,7 @@ import javafx.scene.Node;
 public class ProviderBasedContentPartFactory implements IContentPartFactory {
 
 	@Inject
-	private IVisualPartProvider provider;
+	private IContentPartProvider provider;
 
 	@Inject
 	private Injector injector;

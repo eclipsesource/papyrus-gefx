@@ -32,10 +32,6 @@ import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
-/**
- * The Class CollapseOnClickPolicy.
- */
-// FIXME use the notation model rather than the ContentPart
 public class CollapseOnClickHandler extends AbstractHandler implements IOnClickHandler {
 
 	/**
@@ -56,7 +52,7 @@ public class CollapseOnClickHandler extends AbstractHandler implements IOnClickH
 
 				final boolean valueToSet = !drawerStyle.isCollapsed();
 
-				EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(compartment);
+				EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(drawerStyle);
 				if (editingDomain instanceof TransactionalEditingDomain) {
 					SetPropertyCommand setCommand = new SetPropertyCommand((TransactionalEditingDomain) editingDomain, "Collapse compartment", new EObjectAdapter(drawerStyle), Properties.ID_COLLAPSED, valueToSet);
 

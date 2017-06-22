@@ -22,9 +22,10 @@ import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
+import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;
-import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.gef4.utils.HandlerUtil;
+import org.eclipse.papyrus.gef4.utils.ModelUtil;
 
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
@@ -61,7 +62,7 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 			select(targetPrimaryPart, e);
 		} else if (host instanceof IRootPart) { // Root or Unknown target: select the root
 			IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
-			if (targetPart == host || targetPart == null) { // Target part is null when clicking outside the root
+			if (targetPart == host || targetPart == null || targetPart instanceof DiagramContentPart) { // Target part is null when clicking outside the root
 				select((IRootPart<? extends Node>) host, e);
 			}
 		}

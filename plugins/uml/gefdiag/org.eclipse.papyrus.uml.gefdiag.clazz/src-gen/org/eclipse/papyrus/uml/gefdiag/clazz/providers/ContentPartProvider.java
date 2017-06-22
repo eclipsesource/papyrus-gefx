@@ -1,11 +1,11 @@
 package org.eclipse.papyrus.uml.gefdiag.clazz.providers;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
-import org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLVisualPartProvider;
+import org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider;
 
 import javafx.scene.Node;
 
-public class VisualPartProvider extends AbstractUMLVisualPartProvider {
+public class ContentPartProvider extends AbstractUMLContentPartProvider {
 
 	@Override
 	public IContentPart<? extends Node> createContentPart(

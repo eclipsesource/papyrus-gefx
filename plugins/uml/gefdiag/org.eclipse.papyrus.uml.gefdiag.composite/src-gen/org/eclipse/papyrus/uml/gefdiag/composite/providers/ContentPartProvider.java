@@ -3,11 +3,11 @@ package org.eclipse.papyrus.uml.gefdiag.composite.providers;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gmf.runtime.notation.Connector;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
-import org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLVisualPartProvider;
+import org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider;
 
 import javafx.scene.Node;
 
-public class VisualPartProvider extends AbstractUMLVisualPartProvider {
+public class ContentPartProvider extends AbstractUMLContentPartProvider {
 
 	@Override
 	public IContentPart<? extends Node> createContentPart(org.eclipse.gmf.runtime.notation.View view) {

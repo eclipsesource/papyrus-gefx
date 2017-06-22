@@ -3,3 +3,8 @@
 .scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
+
+:collapsed .scroll-pane > .viewport {
+   -fx-background-color: white;
+   -fx-opacity: 0.5;
+}
