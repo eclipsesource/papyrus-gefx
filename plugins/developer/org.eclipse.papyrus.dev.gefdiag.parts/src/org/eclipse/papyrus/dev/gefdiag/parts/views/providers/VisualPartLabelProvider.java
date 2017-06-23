@@ -1,7 +1,7 @@
 package org.eclipse.papyrus.dev.gefdiag.parts.views.providers;
 
-import org.eclipse.gef4.mvc.parts.IFeedbackPart;
-import org.eclipse.gef4.mvc.parts.IHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
+import org.eclipse.gef.mvc.fx.parts.IHandlePart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.papyrus.gef4.parts.NotationContentPart;

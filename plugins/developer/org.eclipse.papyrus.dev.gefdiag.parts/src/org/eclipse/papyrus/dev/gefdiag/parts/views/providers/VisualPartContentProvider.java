@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.gef4.mvc.parts.IContentPart;
-import org.eclipse.gef4.mvc.parts.IFeedbackPart;
-import org.eclipse.gef4.mvc.parts.IHandlePart;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
+import org.eclipse.gef.mvc.fx.parts.IHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -38,17 +38,20 @@ public class VisualPartContentProvider implements ITreeContentProvider {
 		List<Object> childrenAndAnchored = new LinkedList<>();
 
 		if (parentElement instanceof IVisualPart) {
-			IVisualPart<?, ?> parent = (IVisualPart<?, ?>) parentElement;
+			IVisualPart<?> parent = (IVisualPart<?>) parentElement;
 			childrenAndAnchored.addAll(parent.getChildrenUnmodifiable());
 
 			if (!parent.getAnchoredsUnmodifiable().isEmpty()) {
-				if (parent.getAnchoredsUnmodifiable().stream().anyMatch((anchored) -> anchored instanceof IContentPart)) {
+				if (parent.getAnchoredsUnmodifiable().stream()
+						.anyMatch((anchored) -> anchored instanceof IContentPart)) {
 					childrenAndAnchored.add(new AnchorsWrapper(AnchorKind.CONTENT, parent));
 				}
-				if (parent.getAnchoredsUnmodifiable().stream().anyMatch((anchored) -> anchored instanceof IHandlePart)) {
+				if (parent.getAnchoredsUnmodifiable().stream()
+						.anyMatch((anchored) -> anchored instanceof IHandlePart)) {
 					childrenAndAnchored.add(new AnchorsWrapper(AnchorKind.HANDLE, parent));
 				}
-				if (parent.getAnchoredsUnmodifiable().stream().anyMatch((anchored) -> anchored instanceof IFeedbackPart)) {
+				if (parent.getAnchoredsUnmodifiable().stream()
+						.anyMatch((anchored) -> anchored instanceof IFeedbackPart)) {
 					childrenAndAnchored.add(new AnchorsWrapper(AnchorKind.FEEDBACK, parent));
 				}
 			}
@@ -56,21 +59,21 @@ public class VisualPartContentProvider implements ITreeContentProvider {
 			AnchorsWrapper wrapper = (AnchorsWrapper) parentElement;
 			switch (wrapper.kind) {
 			case FEEDBACK:
-				for (IVisualPart<?, ?> anchored : wrapper.owner.getAnchoredsUnmodifiable()) {
+				for (IVisualPart<?> anchored : wrapper.owner.getAnchoredsUnmodifiable()) {
 					if (anchored instanceof IFeedbackPart) {
 						childrenAndAnchored.add(anchored);
 					}
 				}
 				break;
 			case HANDLE:
-				for (IVisualPart<?, ?> anchored : wrapper.owner.getAnchoredsUnmodifiable()) {
+				for (IVisualPart<?> anchored : wrapper.owner.getAnchoredsUnmodifiable()) {
 					if (anchored instanceof IHandlePart) {
 						childrenAndAnchored.add(anchored);
 					}
 				}
 				break;
 			case CONTENT:
-				for (IVisualPart<?, ?> anchored : wrapper.owner.getAnchoredsUnmodifiable()) {
+				for (IVisualPart<?> anchored : wrapper.owner.getAnchoredsUnmodifiable()) {
 					if (anchored instanceof IContentPart) {
 						childrenAndAnchored.add(anchored);
 					}
@@ -86,7 +89,7 @@ public class VisualPartContentProvider implements ITreeContentProvider {
 	@Override
 	public Object getParent(Object element) {
 		if (element instanceof IVisualPart) {
-			return ((IVisualPart<?, ?>) element).getParent();
+			return ((IVisualPart<?>) element).getParent();
 		}
 		return null;
 	}
@@ -97,7 +100,7 @@ public class VisualPartContentProvider implements ITreeContentProvider {
 	}
 
 	class AnchorsWrapper {
-		public AnchorsWrapper(AnchorKind kind, IVisualPart<?, ?> owner) {
+		public AnchorsWrapper(AnchorKind kind, IVisualPart<?> owner) {
 			super();
 			this.kind = kind;
 			this.owner = owner;
@@ -105,7 +108,7 @@ public class VisualPartContentProvider implements ITreeContentProvider {
 
 		public AnchorKind kind;
 
-		public IVisualPart<?, ?> owner;
+		public IVisualPart<?> owner;
 	}
 
 	enum AnchorKind {

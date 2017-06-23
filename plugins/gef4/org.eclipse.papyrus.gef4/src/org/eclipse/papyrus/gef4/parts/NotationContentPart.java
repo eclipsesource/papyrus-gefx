@@ -94,7 +94,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	private Locator locator;
 
 	private IContentChildrenProvider<View> contentChildrenProvider;
-	
+
 	private boolean visualCreated = false;
 
 	/**
@@ -136,6 +136,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 		return visual;
 	}
 
+	@Override
 	protected abstract N doCreateVisual();
 
 	private void updateContentChildren() {
@@ -155,7 +156,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 				addContentChild(modelChild, contentChildren.size());
 			}
 		}
-		for (View contentChild : new ArrayList<View>(contentChildren)) {
+		for (View contentChild : new ArrayList<>(contentChildren)) {
 			if (!modelChildren.contains(contentChild)) {
 				removeContentChild(contentChild);
 			}
@@ -216,23 +217,19 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	protected NotificationListener createNotificationListener() {
 
 		// FIXME: This listener is difficult to extend in subclasses
-		return new NotificationListener() {
+		return msg -> {
+			if (!isActive()) {
+				return;
+			}
 
-			@Override
-			public void notifyChanged(final Notification msg) {
-				if (!isActive()) {
-					return;
+			if (!(msg.isTouch())) {
+				if (childrenChanged(msg)) {
+					updateContentChildren();
 				}
-
-				if (!(msg.isTouch())) {
-					if (childrenChanged(msg)) {
-						updateContentChildren();
-					}
-					// FIXME: Do not refresh immediately. If we use a ThreadSafeDiagramEventBroker, this will happen synchronously
-					// (The command execution will not complete until the view is fully refreshed)
-					// Rather mark the view as "needing refresh" and schedule a refresh runnable
-					refreshVisual();
-				}
+				// FIXME: Do not refresh immediately. If we use a ThreadSafeDiagramEventBroker, this will happen synchronously
+				// (The command execution will not complete until the view is fully refreshed)
+				// Rather mark the view as "needing refresh" and schedule a refresh runnable
+				refreshVisual();
 			}
 		};
 	}

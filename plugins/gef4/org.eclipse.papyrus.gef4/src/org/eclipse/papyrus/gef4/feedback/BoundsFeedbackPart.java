@@ -97,7 +97,6 @@ public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 
 		// refresh rotate
 		visual.setRotate(host.getVisual().getRotate());
-
 	}
 
 }

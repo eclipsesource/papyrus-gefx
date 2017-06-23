@@ -34,7 +34,6 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.css.PseudoClass;
@@ -72,7 +71,9 @@ import javafx.util.Duration;
 abstract public class CompartmentContentPart<V extends DecorationNode, P extends Pane> extends ContainerContentPart<V, VBox> {
 
 	// A value smaller than 18 will prevent the scrollbars from working properly (Size of the scrollbar arrows)
-	protected static final int MINIMUM_COMPARTMENT_HEIGHT = 20;
+	protected static final int MINIMUM_COMPARTMENT_SCROLLPANE_HEIGHT = 20;
+
+	protected static final int MINIMUM_COMPARTMENT_HEIGHT = 8;
 
 	protected VBox wrapper;
 
@@ -92,7 +93,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	@Override
 	protected final VBox doCreateVisual() {
 		wrapper = new VBox();
-		titleLabel = new Label(); // Do not add it to the contents yet. This will be managed by #refreshTitle()
+		titleLabel = new Label();
 
 		compartment = doCreatePane();
 
@@ -118,27 +119,22 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 
 		wrapper.getChildren().addAll(titleLabel, scrollPane);
 
+		wrapper.setMinHeight(MINIMUM_COMPARTMENT_HEIGHT);
+
 		refreshCollapsed(false);
 
 		return wrapper;
 	}
 
 	protected void bindMinHeight() {
-
-		System.out.println("Do bind min height");
-
 		// The isEmpty() property is not directly observable. We need to manually create an observable boolean property
 		BooleanBinding isCompartmentEmpty = Bindings.createBooleanBinding(() -> compartment.getChildren().isEmpty(), compartment.getChildren()).or(collapsed);
-
-		// If the title is visible, we can hide the scroll pane entirely. Otherwise, give a non-null min size to the scroll pane
-		DoubleBinding conditionalMinSize = (new When(titleLabel.visibleProperty())).then(0.).otherwise(5.);
 
 		// If the collapse animation is running, always use the minimal min size, to get a fluid transition
 		BooleanBinding useMinSize = isCompartmentEmpty.or(getCollapseTimeline().statusProperty().isEqualTo(Timeline.Status.RUNNING));
 
 		// If the compartment is empty, then set a small minHeight. Otherwise, leave enough room to display at least one item
-		scrollPane.minHeightProperty().bind(new When(useMinSize).then(conditionalMinSize).otherwise(MINIMUM_COMPARTMENT_HEIGHT));
-		titleLabel.prefHeightProperty().bind(new When(useMinSize).then(conditionalMinSize).otherwise(Region.USE_COMPUTED_SIZE));
+		scrollPane.minHeightProperty().bind(new When(useMinSize).then(0).otherwise(MINIMUM_COMPARTMENT_SCROLLPANE_HEIGHT));
 	}
 
 	/**
@@ -153,7 +149,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	@Override
 	protected void refreshVisualInTransaction(final VBox visual) {
 		super.refreshVisualInTransaction(visual);
-		refreshCollapsed(true);
+		refreshCollapsed(false);
 		refreshScrollBar();
 		refreshTitle();
 	}
@@ -170,19 +166,11 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 			titleLabel.setFont(getFont(7));
 			FXUtils.setPadding(titleLabel, 1, 1);
 
-			titleLabel.setMinHeight(Region.USE_COMPUTED_SIZE);
-
 			// Update the Title text
 			titleLabel.setText(getTitle());
 		} else {
 			titleLabel.setVisible(false);
-
-			titleLabel.managedProperty().bind(collapsed);
-			titleLabel.managedProperty().addListener((a, b, c) -> {
-				System.out.println(titleLabel.getPrefHeight());
-			});
-
-			titleLabel.setMinHeight(Region.USE_PREF_SIZE);
+			titleLabel.setManaged(false);
 
 			return;
 		}

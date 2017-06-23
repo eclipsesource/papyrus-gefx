@@ -10,7 +10,6 @@
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *
  *****************************************************************************/
-
 package org.eclipse.papyrus.gef4.handle;
 
 import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
@@ -18,27 +17,29 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.CompartmentUtils;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 
 import com.google.common.collect.SetMultimap;
 
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 public class CollapseHandlePart extends AbstractHandlePart<StackPane> {
 
 	/** The width of the collapse handle part. */
-	private static final int WIDTH = 8;
+	private static final int WIDTH = 7;
 
 	/** The height of the collapse handle part. */
-	private static final int HEIGHT = 8;
-
-	/** The text. */
-	private Text text;
+	private static final int HEIGHT = 7;
 
 	/**
 	 * @see org.eclipse.gef4.mvc.parts.AbstractVisualPart#createVisual()
@@ -53,12 +54,12 @@ public class CollapseHandlePart extends AbstractHandlePart<StackPane> {
 				+ "-fx-background-color: linear-gradient(from 0% 50% to 100% 50%, white 0%, lightgrey 100%);"//$NON-NLS-1$
 				+ "-fx-background-radius:3;"//$NON-NLS-1$
 				+ "-fx-border-color:darkgrey;"//$NON-NLS-1$
-				+ "-fx-border-radius:3");//$NON-NLS-1$
+				+ "-fx-border-radius:2;");//$NON-NLS-1$
 		stackPane.applyCss();
 
-		text = new Text("+");//$NON-NLS-1$
-		text.setBoundsType(TextBoundsType.VISUAL);
-		stackPane.getChildren().add(text);
+		stackPane.setPrefSize(WIDTH, HEIGHT);
+		stackPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+		stackPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
 		return stackPane;
 	}
@@ -76,27 +77,37 @@ public class CollapseHandlePart extends AbstractHandlePart<StackPane> {
 			return;
 		}
 		// determine center location of host visual
-		final IVisualPart<? extends Node> anchorage = anchorages.keys()
+		final IVisualPart<?> anchorage = anchorages.keys()
 				.iterator().next();
 
 		// Get the parent compartment
-		final IVisualPart<? extends Node> compartment = CompartmentUtils.getCollapsablePart(anchorage);
+		final IVisualPart<?> compartment = CompartmentUtils.getCollapsablePart(anchorage);
 
 		// FIXME: Use the notation model rather than the ContentPart
 		if (null != compartment) {
 			View view = NotationHelper.findView(compartment);
 			DrawerStyle style = (DrawerStyle) view.getStyle(NotationPackage.eINSTANCE.getDrawerStyle());
 
+			getVisual().getChildren().clear();
+
 			if (style == null) {
-				text.setVisible(false);
 				return;
 			}
 
-			text.setVisible(true);
-			text.setText(style.isCollapsed() ? "+" : "-"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (style.isCollapsed()) {
+				Group group = new Group();
+				group.getChildren().add(new Line(0, 2, 4, 2)); // Horizontal
+				Line e = new Line(2, 0, 2, 4); // Vertical
+				e.setFill(Color.BLACK);
+				group.getChildren().add(e);
+				getVisual().getChildren().add(group);
+			} else {
+				Group group = new Group();
+				group.getChildren().add(new Line(0, 2, 4, 2)); // Horizontal
+				getVisual().getChildren().add(group);
+			}
 
 			refreshHandleLocation(compartment);
-			getVisual().setPrefSize(WIDTH, HEIGHT);
 		}
 	}
 
@@ -104,11 +115,29 @@ public class CollapseHandlePart extends AbstractHandlePart<StackPane> {
 	 * Refresh handle location.
 	 *
 	 * @param compartment
-	 *            the host visual
+	 *            the host visual part
 	 */
 	protected void refreshHandleLocation(final IVisualPart<? extends Node> compartment) {
-		getVisual().setLayoutX(BoundsUtil.getAbsoluteX(compartment));
-		getVisual().setLayoutY(BoundsUtil.getAbsoluteY(compartment));
+		Node hostVisual = compartment.getVisual();
+
+		int left = 0, top = 0;
+		if (hostVisual instanceof Region) {
+			// Make sure the handle doesn't overlap the border (If any)
+			Border hostBorder = ((Region) hostVisual).getBorder();
+			if (hostBorder != null && hostBorder.getInsets() != null) {
+				left = (int) Math.round(hostBorder.getInsets().getLeft());
+				top = (int) Math.round(hostBorder.getInsets().getTop());
+			}
+		}
+
+		Bounds hostBounds = hostVisual.getBoundsInParent();
+		Parent parent = hostVisual.getParent();
+		if (parent != null) {
+			hostBounds = parent.localToScene(hostBounds);
+		}
+		Point2D location = getVisual().getParent().sceneToLocal(hostBounds.getMinX(), hostBounds.getMinY());
+		getVisual().setLayoutX(location.getX() + left);
+		getVisual().setLayoutY(location.getY() + top);
 	}
 
 }
