@@ -9,12 +9,20 @@ Package,
 Model{
 	isPackage:true;
 	textAlignment:left;
+	fillColor: deepskyblue;
+	gradient: grey horizontal;
+}
+
+Package > Label,
+Model > Label {
+	borderWidth: 1 1 1 1;
+	borderColor: black;
 }
 
 Package > Compartment,
 Model > Compartment{
-	borderWidth: 1 1 1 1;
-	borderColor: black;
+	borderWidth: 1 0 0 1;
+	borderColor: transparent;
 	padding : 0;
 	horizontalScrollBar:auto;
 	verticalScrollBar:auto;

@@ -15,6 +15,7 @@ package org.eclipse.papyrus.uml.gefdiag.common.parts;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
+import org.eclipse.papyrus.gef4.utils.NotationUtil;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -62,7 +63,12 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 		if (semanticElement == null) {
 			return null;
 		}
-		return imagePath + "/" + semanticElement.eClass().getName() + ".gif";//$NON-NLS-1$ //$NON-NLS-2$
+
+		if (NotationUtil.showElementIcon(getView())) {
+			return imagePath + "/" + semanticElement.eClass().getName() + ".gif"; //$NON-NLS-1$ //$NON-NLS-2$
+		} else {
+			return null;
+		}
 	}
 
 

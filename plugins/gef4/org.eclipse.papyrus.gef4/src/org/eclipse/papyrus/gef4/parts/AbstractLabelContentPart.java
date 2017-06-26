@@ -18,6 +18,8 @@ import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
 import org.eclipse.gmf.runtime.common.ui.services.parser.ParserService;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
+import org.eclipse.papyrus.gef4.utils.BorderColors;
+import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;
 import org.eclipse.papyrus.infra.gmfdiag.common.commands.SemanticAdapter;
@@ -26,6 +28,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
 
 public abstract class AbstractLabelContentPart<N extends Node> extends NotationContentPart<View, N> {
 
@@ -42,6 +46,7 @@ public abstract class AbstractLabelContentPart<N extends Node> extends NotationC
 	@Override
 	protected void refreshVisualInTransaction(final N visual) {
 		super.refreshVisualInTransaction(visual);
+		refreshBorder();
 		refreshLabel();
 		refreshTextAlignment();
 		refreshFont();
@@ -117,6 +122,19 @@ public abstract class AbstractLabelContentPart<N extends Node> extends NotationC
 			parser = ParserService.getInstance().getParser(new SemanticAdapter(getElement(), getView()));
 		}
 		return parser;
+	}
+
+	protected void refreshBorder() {
+		BorderStroke stroke = null;
+		final BorderColors borderColors = getBorderColors();
+		final BorderStrokeStyles borderStyles = getBorderStyles();
+
+		stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
+				borderStyles.getLeft(),
+				getCornerRadii(), getBorderWidths(),
+				getMargin());
+		final Border border = new Border(stroke);
+		label.setBorder(border);
 	}
 
 	@Override

@@ -19,13 +19,11 @@ import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
 import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
 import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
-import org.eclipse.papyrus.gef4.shapes.PackagePath;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Reflection;
@@ -59,6 +57,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	protected void refreshVisualInTransaction(final VBox visual) {
 		super.refreshVisualInTransaction(visual);
 		refreshBounds();
+		refreshShape();
 	}
 
 	protected void refreshBounds() {
@@ -122,39 +121,18 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		}
 	}
 
-	@Override
 	protected void refreshShape() {
 		final VBox region = getVisual();
-		final double width = getWidth();
-		final double height = getHeight();
+		final double width = region.getLayoutBounds().getWidth();
+		final double height = region.getLayoutBounds().getHeight();
+
+		System.out.println("Width: " + width);
+		System.out.println("Height: " + height);
+
+		boolean labelsUseAllWidth = true;
 
 		final ShapeTypeEnum shapeType = getShapeType();
 		switch (shapeType) {
-		case PACKAGE:
-			double tabWidth = 60;// TODO nameStyle minPackageTabSize
-			double tabHeight = 0;
-
-			// get the tab dimension of the package
-			for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
-				if (child instanceof LabelContentPart) {
-					LabelContentPart childPart = (LabelContentPart) child;
-
-					// get the margin
-					final Insets childMargin = childPart.getPadding();
-					// get the Label child
-					final Label label = childPart.getVisual();
-					tabWidth = Math.max(label.getWidth() + childMargin.getLeft() + childMargin.getRight(), tabWidth);
-					tabHeight += label.getHeight() + childMargin.getBottom() + childMargin.getTop();
-				}
-			}
-
-			// create package shape
-			final PackagePath packageShape = new PackagePath(width, height, tabWidth, tabHeight);
-			region.setScaleShape(false);
-			region.setShape(packageShape);
-
-			break;
-
 		case CORNER_BEND_RECTANGLE:
 			final double cornerBendWidth = getCornerBendWidth();
 			region.setScaleShape(false);
@@ -170,11 +148,55 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 				region.setShape(ellipse);
 			}
 			break;
+		case PACKAGE:
+			// double tabWidth = 60;// TODO nameStyle minPackageTabSize
+			// double tabHeight = 0;
+			//
+			// // get the tab dimension of the package
+			// for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
+			// if (child instanceof LabelContentPart) {
+			// LabelContentPart childPart = (LabelContentPart) child;
+			//
+			// // get the margin
+			// final Insets childMargin = childPart.getPadding();
+			// // get the Label child
+			// final Label label = childPart.getVisual();
+			// tabWidth = Math.max(label.prefWidth(label.getHeight()) + childMargin.getLeft() + childMargin.getRight(), tabWidth);
+			// tabHeight += Math.max(label.getHeight() + childMargin.getBottom() + childMargin.getTop(), tabHeight);
+			// } else {
+			// break; // The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name). Labels below other children are ignored (e.g. Label, Compartment, Label)
+			// }
+			// }
+			//
+			// // create package shape
+			// final PackagePath packageShape = new PackagePath(width, height, tabWidth, tabHeight);
+			// region.setScaleShape(false);
+			// region.setShape(packageShape);
+			// region.setCenterShape(false);
+			//
+			// packageShape.getLayoutBounds();
+			// region.getLayoutBounds();
+			//
+			// break;
 
-		default:
-			// Rectangle case (Might be cornered)
+			labelsUseAllWidth = false;
 			region.setShape(null);
 			break;
+		default:
+			// Rectangle case (Might be rounded)
+			region.setShape(null);
+			break;
+		}
+
+		for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
+			if (child instanceof LabelContentPart) {
+				LabelContentPart childPart = (LabelContentPart) child;
+				childPart.setUseAllWidth(labelsUseAllWidth);
+			} else {
+				// The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name).
+				// Labels below other children are ignored (e.g. Label, Compartment, Label)
+				break;
+			}
 		}
 
 		// Rotate the figure.

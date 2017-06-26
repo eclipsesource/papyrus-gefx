@@ -37,7 +37,6 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 		// Visual refresh
 		refreshBackground();
 		refreshBorder();
-		refreshShape();
 		refreshShadow();
 		refreshEffect();
 		refreshDecoration();
@@ -68,10 +67,6 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 	}
 
 	protected void refreshEffect() {
-		// Do nothing, the implementation is in charge to manage that.
-	}
-
-	protected void refreshShape() {
 		// Do nothing, the implementation is in charge to manage that.
 	}
 

@@ -163,10 +163,11 @@ public class NotationUtil {
 	 */
 	public static final String BACKGROUND_PAINT = "backgroundPaint";
 
-
 	public static final String SOURCE_DECORATION = "sourceDecoration";
 
 	public static final String TARGET_DECORATION = "targetDecoration";
+
+	public static final String ELEMENT_ICON = "elementIcon";
 
 
 	/**
@@ -314,7 +315,7 @@ public class NotationUtil {
 
 		// TODO take into account lineStyle.
 		// notation Line
-		//final LineStyle style = (LineStyle) view.getStyle(NotationPackage.Literals.LINE_TYPE_STYLE); 
+		// final LineStyle style = (LineStyle) view.getStyle(NotationPackage.Literals.LINE_TYPE_STYLE);
 
 		// Set with borderStyle namedStyle
 		final EList<String> borderStyleList = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE, null);
@@ -388,8 +389,8 @@ public class NotationUtil {
 	protected static List<Double> getCustomStyle(final View view) {
 		final int[] customDash = NotationUtils.getIntListValue(view, NamedStyleProperties.LINE_CUSTOM_VALUE, DEFAULT_CUSTOM_DASH_ARRAY);
 		final List<Double> customDashList = new ArrayList<>();
-		for (int j = 0; j < customDash.length; ++j) {
-			customDashList.add((double) customDash[j]);
+		for (int element : customDash) {
+			customDashList.add((double) element);
 		}
 		return customDashList;
 	}
@@ -907,41 +908,45 @@ public class NotationUtil {
 
 		return targetDecoration;
 	}
-	
-	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationChildren(NotationContentPart<? extends View, ? extends Node> part){
+
+	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationChildren(NotationContentPart<? extends View, ? extends Node> part) {
 		return getChildren(part.getView());
 	}
-	
-	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationTransientChildren(NotationContentPart<? extends View, ? extends Node> part){
+
+	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationTransientChildren(NotationContentPart<? extends View, ? extends Node> part) {
 		return getTransientChildren(part.getView());
 	}
-	
-	@SuppressWarnings("unchecked") //GMF API is Java 1.4
-	public static List<org.eclipse.gmf.runtime.notation.Node> getChildren(View view){
+
+	@SuppressWarnings("unchecked") // GMF API is Java 1.4
+	public static List<org.eclipse.gmf.runtime.notation.Node> getChildren(View view) {
 		return view.getChildren();
 	}
-	
-	@SuppressWarnings("unchecked") //GMF API is Java 1.4
-	public static List<org.eclipse.gmf.runtime.notation.Node> getTransientChildren(View view){
+
+	@SuppressWarnings("unchecked") // GMF API is Java 1.4
+	public static List<org.eclipse.gmf.runtime.notation.Node> getTransientChildren(View view) {
 		return view.getTransientChildren();
 	}
-	
-	@SuppressWarnings("unchecked") //GMF API is Java 1.4
-	public static List<Edge> getEdges(View view){
+
+	@SuppressWarnings("unchecked") // GMF API is Java 1.4
+	public static List<Edge> getEdges(View view) {
 		if (view instanceof Diagram) {
 			return ((Diagram) view).getEdges();
 		} else {
 			return Collections.emptyList();
 		}
 	}
-	
-	@SuppressWarnings("unchecked") //GMF API is Java 1.4
-	public static List<Edge> getTransientEdges(View view){
+
+	@SuppressWarnings("unchecked") // GMF API is Java 1.4
+	public static List<Edge> getTransientEdges(View view) {
 		if (view instanceof Diagram) {
 			return ((Diagram) view).getTransientEdges();
 		} else {
 			return Collections.emptyList();
 		}
+	}
+
+	public static boolean showElementIcon(View view) {
+		return NotationUtils.getBooleanValue(view, ELEMENT_ICON, false);
 	}
 
 	//

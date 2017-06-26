@@ -28,8 +28,8 @@ public class PackagePath extends Path {
 	double tabHeight;
 
 	public PackagePath(double width, double height, double tabWidth, double tabHeight) {
-		this.width = width;
-		this.height = height;
+		this.width = Math.max(width, tabWidth + 20);
+		this.height = Math.max(height, tabHeight + 20);
 		this.tabWidth = tabWidth;
 		this.tabHeight = tabHeight;
 

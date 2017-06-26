@@ -422,12 +422,12 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 
 	protected double getHeight() {
 		final Bounds bounds = getBounds();
-		return Math.max(20, bounds == null ? 20 : bounds.getHeight());
+		return Math.max(20, bounds == null ? 0 : bounds.getHeight());
 	}
 
 	protected double getWidth() {
 		final Bounds bounds = getBounds();
-		return Math.max(20, bounds == null ? 20 : bounds.getWidth());
+		return Math.max(20, bounds == null ? 0 : bounds.getWidth());
 	}
 
 	protected void installListeners() {

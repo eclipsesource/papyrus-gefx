@@ -5,9 +5,12 @@ import org.eclipse.papyrus.gef4.utils.FXUtils;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 import javafx.scene.text.TextAlignment;
 
 public class LabelContentPart extends AbstractLabelContentPart<Label> {
+
+	protected boolean useAllWidth = true;
 
 	public LabelContentPart(View view) {
 		super(view);
@@ -33,7 +36,11 @@ public class LabelContentPart extends AbstractLabelContentPart<Label> {
 		final Pos textAlignment = getTextAlignment();
 		getVisual().setAlignment(textAlignment);
 
-		getVisual().setMaxWidth(Double.MAX_VALUE);
+		if (useAllWidth) {
+			getVisual().setMaxWidth(Double.MAX_VALUE);
+		} else {
+			getVisual().setMaxWidth(Region.USE_COMPUTED_SIZE);
+		}
 
 		// Set the text alignment in case of multi-line
 		switch (textAlignment) {
@@ -51,6 +58,10 @@ public class LabelContentPart extends AbstractLabelContentPart<Label> {
 			label.setTextAlignment(TextAlignment.LEFT);
 			break;
 		}
+	}
+
+	public void setUseAllWidth(boolean useAllWidth) {
+		this.useAllWidth = useAllWidth;
 	}
 
 	protected void refreshPadding() {
