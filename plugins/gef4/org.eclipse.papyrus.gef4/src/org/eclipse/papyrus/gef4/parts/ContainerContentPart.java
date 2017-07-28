@@ -35,8 +35,8 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 		refreshLayout();
 
 		// Visual refresh
-		refreshBackground();
 		refreshBorder();
+		refreshBackground();
 		refreshShadow();
 		refreshEffect();
 		refreshDecoration();

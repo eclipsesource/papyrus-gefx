@@ -12,10 +12,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.shapes;
 
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
+import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.VLineTo;
 
 /**
  * Create a package path with the tab dimension tabWidth*tabHeight
@@ -27,9 +27,26 @@ public class PackagePath extends Path {
 	double tabWidth;
 	double tabHeight;
 
-	public PackagePath(double width, double height, double tabWidth, double tabHeight) {
-		this.width = Math.max(width, tabWidth + 20);
-		this.height = Math.max(height, tabHeight + 20);
+	/**
+	 *
+	 * Constructor.
+	 *
+	 * @param width
+	 *            the total width of the package
+	 * @param height
+	 *            the total height of the package
+	 * @param tabWidth
+	 *            the width of the tab
+	 * @param tabHeight
+	 *            the height of the tab
+	 * @param minWidthDelta
+	 *            the minimum difference between the width of the package and the width of the tab
+	 * @param minHeightDelta
+	 *            the minimum difference between the height of the package and the height of the tab
+	 */
+	public PackagePath(double width, double height, double tabWidth, double tabHeight, double minWidthDelta, double minHeightDelta) {
+		this.width = Math.max(width, tabWidth + minWidthDelta);
+		this.height = Math.max(height, tabHeight + minHeightDelta);
 		this.tabWidth = tabWidth;
 		this.tabHeight = tabHeight;
 
@@ -38,11 +55,11 @@ public class PackagePath extends Path {
 
 	private void init() {
 		getElements().add(new MoveTo(0, 0));
-		getElements().add(new LineTo(tabWidth, 0f));
-		getElements().add(new LineTo(tabWidth, tabHeight));
-		getElements().add(new LineTo(width, tabHeight));
-		getElements().add(new LineTo(width, height));
-		getElements().add(new LineTo(0, height));
-		getElements().add(new ClosePath());
+		getElements().add(new HLineTo(tabWidth));
+		getElements().add(new VLineTo(tabHeight));
+		getElements().add(new HLineTo(width));
+		getElements().add(new VLineTo(height));
+		getElements().add(new HLineTo(0));
+		getElements().add(new VLineTo(0));
 	}
 }

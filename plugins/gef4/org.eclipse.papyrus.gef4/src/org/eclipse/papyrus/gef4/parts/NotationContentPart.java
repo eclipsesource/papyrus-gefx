@@ -563,7 +563,7 @@ public abstract class NotationContentPart<V extends View, N extends Node> extend
 	 * @return the border widths
 	 */
 	protected BorderWidths getBorderWidths() {
-		return NotationUtil.getBorderWidths(view);
+		return NotationUtil.getBorderWidths(view, 0);
 	}
 
 	/**

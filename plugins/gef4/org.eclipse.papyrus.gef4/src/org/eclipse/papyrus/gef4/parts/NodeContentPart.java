@@ -19,11 +19,17 @@ import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
 import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
 import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
+import org.eclipse.papyrus.gef4.shapes.PackagePath;
+import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
+import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
+import javafx.beans.value.ChangeListener;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Reflection;
@@ -31,6 +37,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.CycleMethod;
@@ -44,6 +51,14 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	public static final int DEFAULT_MIN_WIDTH = 100;
 	public static final int DEFAULT_MIN_HEIGHT = 100;
 
+	/**
+	 * Listener to refresh the shape when layout bounds change.
+	 * This is especially useful if scaling == false (If scale == true, this is already handled by JavaFX)
+	 *
+	 * Asymmetric shapes (Package, comment) need to be maintained manually
+	 */
+	private ChangeListener<Bounds> boundsShapeListener = (a, b, c) -> refreshShape();
+
 	public NodeContentPart(final Shape view) {
 		super(view);
 	}
@@ -55,9 +70,15 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 	@Override
 	protected void refreshVisualInTransaction(final VBox visual) {
-		super.refreshVisualInTransaction(visual);
+		refreshBorder();
+
 		refreshBounds();
 		refreshShape();
+
+		refreshBounds();
+		refreshShape();
+		super.refreshVisualInTransaction(visual);
+
 	}
 
 	protected void refreshBounds() {
@@ -123,11 +144,9 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 	protected void refreshShape() {
 		final VBox region = getVisual();
+
 		final double width = region.getLayoutBounds().getWidth();
 		final double height = region.getLayoutBounds().getHeight();
-
-		System.out.println("Width: " + width);
-		System.out.println("Height: " + height);
 
 		boolean labelsUseAllWidth = true;
 
@@ -135,8 +154,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		switch (shapeType) {
 		case CORNER_BEND_RECTANGLE:
 			final double cornerBendWidth = getCornerBendWidth();
-			region.setScaleShape(false);
-			region.setShape(new CornerBendRectanglePath(width, height, cornerBendWidth));
+			setShape(new CornerBendRectanglePath(width, height, cornerBendWidth), false);
 			break;
 
 		case OVAL:
@@ -145,34 +163,32 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 				Ellipse ellipse = new Ellipse(10, 10); // Size doesn't matter, it will be resized to match the region's. We still need a size, otherwise the Ellipse is not drawn at all
 				ellipse.setFill(region.getBackground().getFills().get(0).getFill());
 				ellipse.setStroke(region.getBorder().getStrokes().get(0).getBottomStroke());
-				region.setShape(ellipse);
+				setShape(ellipse, true);
 			}
 			break;
 		case PACKAGE:
-			// double tabWidth = 60;// TODO nameStyle minPackageTabSize
-			// double tabHeight = 0;
-			//
-			// // get the tab dimension of the package
-			// for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
-			// if (child instanceof LabelContentPart) {
-			// LabelContentPart childPart = (LabelContentPart) child;
-			//
-			// // get the margin
-			// final Insets childMargin = childPart.getPadding();
-			// // get the Label child
-			// final Label label = childPart.getVisual();
-			// tabWidth = Math.max(label.prefWidth(label.getHeight()) + childMargin.getLeft() + childMargin.getRight(), tabWidth);
-			// tabHeight += Math.max(label.getHeight() + childMargin.getBottom() + childMargin.getTop(), tabHeight);
-			// } else {
-			// break; // The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name). Labels below other children are ignored (e.g. Label, Compartment, Label)
-			// }
-			// }
-			//
-			// // create package shape
-			// final PackagePath packageShape = new PackagePath(width, height, tabWidth, tabHeight);
-			// region.setScaleShape(false);
-			// region.setShape(packageShape);
-			// region.setCenterShape(false);
+			double tabWidth = 60;// TODO nameStyle minPackageTabSize
+			double tabHeight = 0;
+
+			// get the tab dimension of the package
+			for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
+				if (child instanceof LabelContentPart) {
+					LabelContentPart childPart = (LabelContentPart) child;
+
+					// get the margin
+					final Insets childMargin = childPart.getPadding();
+					// get the Label child
+					final Label label = childPart.getVisual();
+					tabWidth = Math.max(label.prefWidth(label.getHeight()) + childMargin.getLeft() + childMargin.getRight(), tabWidth);
+					tabHeight += Math.max(label.getHeight() + childMargin.getBottom() + childMargin.getTop(), tabHeight);
+				} else {
+					break; // The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name). Labels below other children are ignored (e.g. Label, Compartment, Label)
+				}
+			}
+
+			// create package shape
+			final PackagePath packageShape = new PackagePath(width, height, tabWidth, tabHeight, 35, 35);
+			setShape(packageShape, false);
 			//
 			// packageShape.getLayoutBounds();
 			// region.getLayoutBounds();
@@ -180,7 +196,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			// break;
 
 			labelsUseAllWidth = false;
-			region.setShape(null);
+			// region.setShape(null);
 			break;
 		default:
 			// Rectangle case (Might be rounded)
@@ -201,6 +217,24 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 		// Rotate the figure.
 		region.setRotate(getRotate());
+	}
+
+	protected void setShape(javafx.scene.shape.Shape shape, boolean scale) {
+		Region region = getVisual();
+		if (shape == null && region.getShape() != null) {
+			// Removing
+			region.setShape(null);
+			region.layoutBoundsProperty().removeListener(boundsShapeListener);
+		} else if (shape != null) {
+			if (region.getShape() == null) {
+				// Adding
+				region.layoutBoundsProperty().addListener(boundsShapeListener);
+			}
+			// Adding or Modifying
+			region.setShape(shape);
+			region.setScaleShape(scale);
+			region.setCenterShape(false);
+		}
 	}
 
 	// TODO: Store figures directly rather than re-creating them
@@ -290,15 +324,31 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		return new Insets(padding.getTop() + top, padding.getRight() + right, padding.getBottom() + bottom, padding.getLeft() + left);
 	}
 
+	/**
+	 * Gets the border widths.
+	 *
+	 * @return the border widths
+	 */
+	@Override
+	protected BorderWidths getBorderWidths() {
+		return NotationUtil.getBorderWidths(getView(), 1);
+	}
 
 	@Override
 	protected void refreshBorder() {
 		BorderStroke stroke = null;
-		stroke = new BorderStroke(getBorderColors().getTop(), getBorderColors().getRight(), getBorderColors().getBottom(), getBorderColors().getLeft(), getBorderStyles().getTop(), getBorderStyles().getRight(), getBorderStyles().getBottom(),
-				getBorderStyles().getLeft(),
-				getCornerRadii(), getBorderWidths(), null);
-		final Border border = new Border(stroke);
+		final BorderColors borderColors = getBorderColors();
+		final BorderStrokeStyles borderStyles = getBorderStyles();
+		final BorderWidths borderWidths = getBorderWidths();
 
+		Border border = null;
+		if (borderWidths != null) {
+			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
+					borderStyles.getLeft(),
+					getCornerRadii(), borderWidths,
+					getMargin());
+			border = new Border(stroke);
+		}
 		getVisual().setBorder(border);
 	}
 
@@ -324,6 +374,16 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			return;
 		}
 		getVisual().getChildren().remove(childVisual);
+	}
+
+	/**
+	 * @see org.eclipse.gef.mvc.fx.parts.AbstractVisualPart#dispose()
+	 *
+	 */
+	@Override
+	public void dispose() {
+		getVisual().layoutBoundsProperty().removeListener(boundsShapeListener);
+		super.dispose();
 	}
 
 	@Override

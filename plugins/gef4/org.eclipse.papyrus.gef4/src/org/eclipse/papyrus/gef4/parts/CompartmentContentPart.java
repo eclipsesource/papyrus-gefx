@@ -43,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -226,12 +227,16 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 		BorderStroke stroke = null;
 		final BorderColors borderColors = getBorderColors();
 		final BorderStrokeStyles borderStyles = getBorderStyles();
+		final BorderWidths borderWidths = getBorderWidths();
 
-		stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
-				borderStyles.getLeft(),
-				getCornerRadii(), getBorderWidths(),
-				getMargin());
-		final Border border = new Border(stroke);
+		Border border = null;
+		if (borderWidths != null) {
+			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
+					borderStyles.getLeft(),
+					getCornerRadii(), borderWidths,
+					getMargin());
+			border = new Border(stroke);
+		}
 		wrapper.setBorder(border);
 	}
 

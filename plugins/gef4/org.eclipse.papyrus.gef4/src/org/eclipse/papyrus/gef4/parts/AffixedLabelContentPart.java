@@ -14,8 +14,13 @@ package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.layout.AffixedLabelLocator;
+import org.eclipse.papyrus.gef4.utils.BorderColors;
+import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 
 import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderWidths;
 
 /**
  * The Class AffixedLabelContentPart.
@@ -38,12 +43,30 @@ public class AffixedLabelContentPart extends LabelContentPart implements IPrimar
 		super.refreshVisualInTransaction(visual);
 
 		refreshPosition();
+		refreshBorder();
 	}
 
 	protected void refreshPosition() {
 		if (getLocator() != null) {
 			getLocator().applyLayout(getVisual());
 		}
+	}
+
+	protected void refreshBorder() {
+		BorderStroke stroke = null;
+		final BorderColors borderColors = getBorderColors();
+		final BorderStrokeStyles borderStyles = getBorderStyles();
+		final BorderWidths borderWidths = getBorderWidths();
+
+		Border border = null;
+		if (borderWidths != null) {
+			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
+					borderStyles.getLeft(),
+					getCornerRadii(), borderWidths,
+					getMargin());
+			border = new Border(stroke);
+		}
+		label.setBorder(border);
 	}
 
 	/**

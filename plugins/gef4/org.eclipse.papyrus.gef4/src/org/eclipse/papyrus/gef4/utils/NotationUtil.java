@@ -402,23 +402,28 @@ public class NotationUtil {
 	 *            the view
 	 * @return the border widths
 	 */
-	public static BorderWidths getBorderWidths(final View view) {
+	public static BorderWidths getBorderWidths(final View view, int defaultBorderWidth) {
 		BorderWidths borderWidths = null;
 		final int[] borderWidth = NotationUtils.getIntListValue(view, BORDER_WIDTH, null);
 		if (null == borderWidth) {
 			final LineStyle style = (LineStyle) view.getStyle(NotationPackage.Literals.LINE_STYLE);
-			int lineWidth = 1;
+
 			if (null != style && style.getLineWidth() >= 0) {
-				lineWidth = style.getLineWidth();
+				borderWidths = new BorderWidths(style.getLineWidth());
 			}
-			borderWidths = new BorderWidths(lineWidth);
+
 		} else if (1 == borderWidth.length) {
 			borderWidths = new BorderWidths(borderWidth[0]);
 		} else if (4 == borderWidth.length) {
 			borderWidths = new BorderWidths(borderWidth[0], borderWidth[1], borderWidth[2], borderWidth[3]);
 		} else {
-			borderWidths = new BorderWidths(1);// TODO DEFAULT_VALUE;
+			// Keep default
 		}
+
+		if (borderWidths == null && defaultBorderWidth > 0) {
+			borderWidths = new BorderWidths(defaultBorderWidth);
+		}
+
 		return borderWidths;
 	}
 

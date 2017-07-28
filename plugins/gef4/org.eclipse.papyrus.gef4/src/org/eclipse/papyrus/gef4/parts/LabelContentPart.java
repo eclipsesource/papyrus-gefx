@@ -53,7 +53,6 @@ public class LabelContentPart extends AbstractLabelContentPart<Label> {
 		case TOP_RIGHT:
 			label.setTextAlignment(TextAlignment.RIGHT);
 			break;
-
 		default:
 			label.setTextAlignment(TextAlignment.LEFT);
 			break;
@@ -62,6 +61,7 @@ public class LabelContentPart extends AbstractLabelContentPart<Label> {
 
 	public void setUseAllWidth(boolean useAllWidth) {
 		this.useAllWidth = useAllWidth;
+		refreshTextAlignment();
 	}
 
 	protected void refreshPadding() {
