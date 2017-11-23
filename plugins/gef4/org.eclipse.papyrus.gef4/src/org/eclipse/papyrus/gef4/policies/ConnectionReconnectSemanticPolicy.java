@@ -15,6 +15,7 @@ package org.eclipse.papyrus.gef4.policies;
 
 import java.util.Optional;
 
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
 import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest;
@@ -79,7 +80,7 @@ public class ConnectionReconnectSemanticPolicy extends AbstractConnectionReconne
 	}
 
 	@Override
-	protected ITransactionalOperation createOperation() {
+	public IUndoableOperation createOperation() {
 		return createSemanticReconnectOperation();
 	}
 

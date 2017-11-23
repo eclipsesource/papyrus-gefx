@@ -15,13 +15,14 @@ package org.eclipse.papyrus.gef4.handlers;
 
 import java.util.Optional;
 
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.nodes.Connection;
+import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef.mvc.fx.policies.AbstractHandler;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
@@ -106,5 +107,6 @@ public abstract class AbstractConnectionReconnectHandler extends AbstractHandler
 		return eobject instanceof View ? (View) eobject : null;
 	}
 
+	public abstract IUndoableOperation createOperation();
 
 }

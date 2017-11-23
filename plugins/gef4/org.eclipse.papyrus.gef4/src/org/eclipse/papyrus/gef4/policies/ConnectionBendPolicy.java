@@ -57,84 +57,83 @@ public class ConnectionBendPolicy extends BendConnectionPolicy {
 		return requestFromTransactionalPolicy(ConnectionReconnectSemanticPolicy.class);
 	}
 
-//	@SuppressWarnings("serial")
-//	@Override
-//	protected IAnchor findOrCreateAnchor(Point positionInLocal,
-//			boolean canConnect) {
-//
-//		IAnchor anchor = null;
-//		// try to find an anchor that is provided from an underlying node
-//		if (canConnect) {
-//			Point selectedPointCurrentPositionInScene = FX2Geometry
-//					.toPoint(getConnection().localToScene(
-//							Geometry2FX.toFXPoint(positionInLocal)));
-//
-//			List pickedNodes = NodeUtils.getNodesAt(getHost().getRoot()
-//					.getVisual(), selectedPointCurrentPositionInScene.x,
-//					selectedPointCurrentPositionInScene.y);
-//			IVisualPart<? extends Node> anchorPart = getAnchorPart(getParts(pickedNodes));
-//			if (anchorPart != null) {
-//				Provider<? extends IAnchor> anchorProvider = anchorPart.getAdapter(
-//						new TypeToken<Provider<? extends IAnchor>>() {
-//						});
-//
-//				if (anchorProvider instanceof PositionalAnchorProvider) {
-//					IVisualPart<? extends Node> connectionPart = getHost();
-//					return ((PositionalAnchorProvider) anchorProvider).getForContext(selectedPointCurrentPositionInScene, connectionPart);
-//				} else {
-//					return anchorProvider.get();
-//				}
-//			}
-//		}
-//		if (anchor == null) {
-//			anchor = createUnconnectedAnchor(positionInLocal);
-//		}
-//		return anchor;
-//	}
+	// @SuppressWarnings("serial")
+	// @Override
+	// protected IAnchor findOrCreateAnchor(Point positionInLocal,
+	// boolean canConnect) {
+	//
+	// IAnchor anchor = null;
+	// // try to find an anchor that is provided from an underlying node
+	// if (canConnect) {
+	// Point selectedPointCurrentPositionInScene = FX2Geometry
+	// .toPoint(getConnection().localToScene(
+	// Geometry2FX.toFXPoint(positionInLocal)));
+	//
+	// List pickedNodes = NodeUtils.getNodesAt(getHost().getRoot()
+	// .getVisual(), selectedPointCurrentPositionInScene.x,
+	// selectedPointCurrentPositionInScene.y);
+	// IVisualPart<? extends Node> anchorPart = getAnchorPart(getParts(pickedNodes));
+	// if (anchorPart != null) {
+	// Provider<? extends IAnchor> anchorProvider = anchorPart.getAdapter(
+	// new TypeToken<Provider<? extends IAnchor>>() {
+	// });
+	//
+	// if (anchorProvider instanceof PositionalAnchorProvider) {
+	// IVisualPart<? extends Node> connectionPart = getHost();
+	// return ((PositionalAnchorProvider) anchorProvider).getForContext(selectedPointCurrentPositionInScene, connectionPart);
+	// } else {
+	// return anchorProvider.get();
+	// }
+	// }
+	// }
+	// if (anchor == null) {
+	// anchor = createUnconnectedAnchor(positionInLocal);
+	// }
+	// return anchor;
+	// }
 
-//	@SuppressWarnings("serial")
-//	// FIXME: change to protected in super-class, use lambda
-//	// FIXME: or extract?
-//	private IContentPart<? extends Node> getAnchorPart(
-//			List<IContentPart<? extends Node>> partsUnderMouse) {
-//
-//		for (IContentPart<? extends Node> cp : partsUnderMouse) {
-//			IContentPart<? extends Node> part = cp;
-//			Provider<? extends IAnchor> anchorProvider = part
-//					.getAdapter(new TypeToken<Provider<? extends IAnchor>>() {
-//					});
-//
-//			if (anchorProvider != null && anchorProvider.get() != null) {
-//				return part;
-//			}
-//		}
-//		return null;
-//	}
-//
-//	private List<IContentPart<? extends Node>> getParts(
-//			List<? extends Node> nodesUnderMouse) {
-//		List<IContentPart<? extends Node>> parts = new ArrayList<IContentPart<? extends Node>>();
-//
-//		Map<Node, IVisualPart<? extends Node>> partMap = getHost()
-//				.getRoot().getViewer().getVisualPartMap();
-//		for (Node node : nodesUnderMouse) {
-//			if (partMap.containsKey(node)) {
-//				IVisualPart<? extends Node> part = partMap.get(node);
-//				if (part instanceof IContentPart) {
-//					parts.add((IContentPart<? extends Node>) part);
-//				}
-//			}
-//		}
-//		return parts;
-//	}
+	// @SuppressWarnings("serial")
+	// // FIXME: change to protected in super-class, use lambda
+	// // FIXME: or extract?
+	// private IContentPart<? extends Node> getAnchorPart(
+	// List<IContentPart<? extends Node>> partsUnderMouse) {
+	//
+	// for (IContentPart<? extends Node> cp : partsUnderMouse) {
+	// IContentPart<? extends Node> part = cp;
+	// Provider<? extends IAnchor> anchorProvider = part
+	// .getAdapter(new TypeToken<Provider<? extends IAnchor>>() {
+	// });
+	//
+	// if (anchorProvider != null && anchorProvider.get() != null) {
+	// return part;
+	// }
+	// }
+	// return null;
+	// }
+	//
+	// private List<IContentPart<? extends Node>> getParts(
+	// List<? extends Node> nodesUnderMouse) {
+	// List<IContentPart<? extends Node>> parts = new ArrayList<IContentPart<? extends Node>>();
+	//
+	// Map<Node, IVisualPart<? extends Node>> partMap = getHost()
+	// .getRoot().getViewer().getVisualPartMap();
+	// for (Node node : nodesUnderMouse) {
+	// if (partMap.containsKey(node)) {
+	// IVisualPart<? extends Node> part = partMap.get(node);
+	// if (part instanceof IContentPart) {
+	// parts.add((IContentPart<? extends Node>) part);
+	// }
+	// }
+	// }
+	// return parts;
+	// }
 
 	protected <P extends AbstractConnectionReconnectHandler> IUndoableOperation requestFromTransactionalPolicy(Class<P> policyClass) {
 		P policy = getAdaptable().getAdapter(policyClass);
 		if (policy == null) {
 			return null;
 		}
-		policy.init();
-		return policy.commit();
+		return policy.createOperation();
 	}
 
 }

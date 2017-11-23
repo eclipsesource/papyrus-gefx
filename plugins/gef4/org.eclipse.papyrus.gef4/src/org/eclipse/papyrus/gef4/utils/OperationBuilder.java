@@ -111,7 +111,7 @@ public abstract class OperationBuilder {
 
 			@Override
 			public boolean isContentRelevant() {
-				return false;
+				return true;
 			}
 		};
 	}

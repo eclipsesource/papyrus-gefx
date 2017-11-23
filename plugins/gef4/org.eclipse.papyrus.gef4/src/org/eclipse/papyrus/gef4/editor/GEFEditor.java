@@ -44,8 +44,13 @@ import com.google.inject.Module;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public abstract class GEFEditor extends EditorPart {
 
@@ -152,13 +157,13 @@ public abstract class GEFEditor extends EditorPart {
 		scene = new Scene(viewer.getCanvas());
 		canvas.setScene(scene);
 
+		setSceneColor(Color.ANTIQUEWHITE);
+
 		// Activate
 		domain.activate();
 
 		// Set contents
 		viewer.getContents().setAll(getContents());
-
-		scene.setFill(Color.ALICEBLUE);
 
 		final GridModel gridModel = viewer.getAdapter(GridModel.class);
 		gridModel.setShowGrid(false);
@@ -171,6 +176,15 @@ public abstract class GEFEditor extends EditorPart {
 			selectionProvider.setSelection(new StructuredSelection(viewer.getRootPart().getChildrenUnmodifiable().get(0)));
 		}
 		getSite().setSelectionProvider(selectionProvider);
+	}
+
+	protected final void setSceneColor(Paint paint) {
+		if (viewer != null) {
+			Parent viewerCanvas = viewer.getCanvas();
+			if (viewerCanvas instanceof Region) {
+				((Region) viewerCanvas).setBackground(new Background(new BackgroundFill(paint, null, null)));
+			}
+		}
 	}
 
 	protected final List<Diagram> getContents() {

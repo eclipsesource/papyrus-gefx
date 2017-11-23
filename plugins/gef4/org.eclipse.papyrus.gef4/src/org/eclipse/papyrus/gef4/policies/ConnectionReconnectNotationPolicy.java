@@ -107,7 +107,7 @@ public class ConnectionReconnectNotationPolicy extends AbstractConnectionReconne
 	}
 
 	@Override
-	protected ITransactionalOperation createOperation() {
+	public IUndoableOperation createOperation() {
 		return createNotationReconnectOperation();
 	}
 
