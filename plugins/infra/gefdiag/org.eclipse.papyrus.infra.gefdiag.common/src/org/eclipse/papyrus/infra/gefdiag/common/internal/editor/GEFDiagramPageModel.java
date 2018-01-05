@@ -13,12 +13,15 @@
 package org.eclipse.papyrus.infra.gefdiag.common.internal.editor;
 
 import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.papyrus.gef4.module.DiagramModule;
 import org.eclipse.papyrus.infra.core.sasheditor.contentprovider.IEditorModel;
 import org.eclipse.papyrus.infra.gefdiag.common.editor.GEF4DiagramEditor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorActionBarContributor;
+
+import com.google.inject.util.Modules;
 
 public class GEFDiagramPageModel implements IEditorModel {
 
@@ -53,7 +56,7 @@ public class GEFDiagramPageModel implements IEditorModel {
 
 	@Override
 	public IEditorPart createIEditorPart() throws PartInitException {
-		return new GEF4DiagramEditor(diagram, descriptor.getModule());
+		return new GEF4DiagramEditor(diagram, Modules.override(descriptor.getModule()).with(new DiagramModule(diagram)));
 	}
 
 	@Override

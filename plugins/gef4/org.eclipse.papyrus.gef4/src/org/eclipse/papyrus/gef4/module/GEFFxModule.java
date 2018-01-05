@@ -35,7 +35,6 @@ import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
-import org.eclipse.papyrus.gef4.editor.Palette;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPartFactory;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
@@ -47,6 +46,7 @@ import org.eclipse.papyrus.gef4.handlers.ResizeOnDragHandler;
 import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
+import org.eclipse.papyrus.gef4.palette.Palette;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
@@ -60,6 +60,8 @@ import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
 import org.eclipse.papyrus.gef4.provider.IContentChildrenProvider;
 import org.eclipse.papyrus.gef4.provider.NotationContentChildrenProvider;
 import org.eclipse.papyrus.gef4.provider.ProviderBasedContentPartFactory;
+import org.eclipse.papyrus.gef4.tools.DefaultToolManager;
+import org.eclipse.papyrus.gef4.tools.ToolManager;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
@@ -251,6 +253,8 @@ public abstract class GEFFxModule extends MvcFxModule {
 
 		bindDefaultContentChildrenProvider();
 
+		bindToolManager();
+
 
 		// binder().bind(new TypeLiteral<IHandlePartFactory>() {
 		// }).to(SelectionHandlePartFactory.class)
@@ -292,8 +296,12 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.to(MoveOnDragHandler.class);
 	}
 
+	protected void bindToolManager() {
+		binder().bind(ToolManager.class).to(DefaultToolManager.class);
+	}
+
 	protected void bindPalette() {
-		binder().bind(Palette.class);
+		binder().bind(Palette.class).toInstance(() -> null);
 	}
 
 	protected void bindBoundsBehavior() {

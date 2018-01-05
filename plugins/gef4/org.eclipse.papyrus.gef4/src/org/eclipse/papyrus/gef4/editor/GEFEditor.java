@@ -28,6 +28,8 @@ import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.papyrus.gef4.module.DiagramModule;
+import org.eclipse.papyrus.gef4.palette.Palette;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.swt.SWT;
@@ -41,11 +43,13 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.util.Modules;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Region;
@@ -66,6 +70,9 @@ public abstract class GEFEditor extends EditorPart {
 
 	@Inject
 	private ISelectionProviderFactory selectionProviderFactory;
+
+	@Inject
+	private Palette palette;
 
 	private ISelectionProvider selectionProvider;
 
@@ -107,7 +114,9 @@ public abstract class GEFEditor extends EditorPart {
 		}
 
 		this.diagram = diagram;
-		final Injector injector = Guice.createInjector(module);
+		Module diagramModule = Modules.override(module).with(new DiagramModule(this.diagram));
+
+		final Injector injector = Guice.createInjector(diagramModule);
 		injector.injectMembers(this);
 	}
 
@@ -154,7 +163,21 @@ public abstract class GEFEditor extends EditorPart {
 		// Canvas and SceneContainer
 		canvas = new FXCanvasEx(parent, SWT.NONE);
 
-		scene = new Scene(viewer.getCanvas());
+		SplitPane diagramSplitPane = new SplitPane();
+
+		// VBox palette = new VBox();
+		// palette.setMinWidth(120);
+		// palette.setMaxWidth(350);
+		// palette.getChildren().addAll(new Label("Palette"), new Button("Item 1"), new Button("Item 2"));
+
+		diagramSplitPane.getItems().add(viewer.getCanvas());
+
+		Node paletteNode = palette.createPaletteControl();
+		if (paletteNode != null) {
+			diagramSplitPane.getItems().add(paletteNode);
+		}
+
+		scene = new Scene(diagramSplitPane);
 		canvas.setScene(scene);
 
 		setSceneColor(Color.ANTIQUEWHITE);

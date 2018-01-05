@@ -37,9 +37,11 @@ Export-Package: org.eclipse.papyrus.gef4.behavior,
  org.eclipse.papyrus.gef4.model,
  org.eclipse.papyrus.gef4.module,
  org.eclipse.papyrus.gef4.nodes,
+ org.eclipse.papyrus.gef4.palette,
  org.eclipse.papyrus.gef4.parts,
  org.eclipse.papyrus.gef4.provider,
  org.eclipse.papyrus.gef4.shapes,
+ org.eclipse.papyrus.gef4.tools,
  org.eclipse.papyrus.gef4.utils
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
