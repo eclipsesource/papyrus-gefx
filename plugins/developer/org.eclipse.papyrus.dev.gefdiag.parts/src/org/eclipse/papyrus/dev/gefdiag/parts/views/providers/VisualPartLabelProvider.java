@@ -4,20 +4,18 @@ import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IHandlePart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
-
-import javafx.scene.Node;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 public class VisualPartLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		StringBuffer buffer = new StringBuffer(element.getClass().getSimpleName());
 
-		if (element instanceof NotationContentPart) {
+		if (element instanceof BaseContentPart) {
 			buffer = new StringBuffer("[Content] ").append(buffer);
-			NotationContentPart<? extends View, ? extends Node> part = (NotationContentPart<?, ?>) element;
-			if (part.getElement() != null) {
-				buffer.append(": " + part.getElement().eClass().getName());
+			BaseContentPart<?, ?> part = (BaseContentPart<?, ?>) element;
+			if (part.getContent() instanceof View) {
+				buffer.append(": " + ((View) part.getContent()).eClass().getName());
 			} else {
 				buffer.append(": <No Semantic>");
 			}

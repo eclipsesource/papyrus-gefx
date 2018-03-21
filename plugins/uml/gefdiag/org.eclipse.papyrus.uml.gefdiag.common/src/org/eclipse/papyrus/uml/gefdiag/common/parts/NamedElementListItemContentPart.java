@@ -16,7 +16,7 @@ import org.eclipse.papyrus.gef4.parts.ListItemContentPart;
 /**
  * The Class NamedElementListItemContentPart.
  */
-public class NamedElementListItemContentPart extends ListItemContentPart {
+public class NamedElementListItemContentPart extends ListItemContentPart<View> {
 
 	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
 
@@ -42,7 +42,7 @@ public class NamedElementListItemContentPart extends ListItemContentPart {
 
 	@Override
 	protected String getImagePath() {
-		final EObject semanticElement = getElement();
+		final EObject semanticElement = getContent().getElement();
 		if (semanticElement == null) {
 			return null;
 		}

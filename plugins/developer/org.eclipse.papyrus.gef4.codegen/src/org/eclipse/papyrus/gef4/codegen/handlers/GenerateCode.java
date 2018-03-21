@@ -124,12 +124,12 @@ public class GenerateCode extends AbstractHandler {
 
 				String selectedFilePath = ((IFile) selectedElement).getFullPath().toString();
 
-				final Resource inputResource = resourceSet.getResource(URI.createPlatformResourceURI(selectedFilePath, true), true);
+				final Resource inputResource = resourceSet
+						.getResource(URI.createPlatformResourceURI(selectedFilePath, true), true);
 
 				if (inputResource != null) {
-					ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-
-
+					ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(
+							Display.getCurrent().getActiveShell());
 
 					progressMonitor = new NullProgressMonitor();
 
@@ -137,23 +137,27 @@ public class GenerateCode extends AbstractHandler {
 						progressMonitorDialog.run(true, true, new IRunnableWithProgress() {
 
 							@Override
-							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+							public void run(IProgressMonitor monitor)
+									throws InvocationTargetException, InterruptedException {
 								try {
 									generateCode(inputResource);
-									myRunStatus = new Status(IStatus.OK, Activator.PLUGIN_ID, 0, "Generation Completed", null);
+									myRunStatus = new Status(IStatus.OK, Activator.PLUGIN_ID, 0, "Generation Completed",
+											null);
 								} catch (InterruptedException e) {
-									myRunStatus = new Status(IStatus.CANCEL, Activator.PLUGIN_ID, 0, "Generation interrupted", e);
+									myRunStatus = new Status(IStatus.CANCEL, Activator.PLUGIN_ID, 0,
+											"Generation interrupted", e);
 								} catch (UnexpectedBehaviourException e) {
-									myRunStatus = new Status(IStatus.CANCEL, Activator.PLUGIN_ID, 0, "Generation interrupted", e);
+									myRunStatus = new Status(IStatus.CANCEL, Activator.PLUGIN_ID, 0,
+											"Generation interrupted", e);
 								}
 							}
 						});
 
-
 					} catch (InvocationTargetException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
-						if (myRunStatus.getSeverity() == IStatus.CANCEL && myRunStatus.getException() instanceof InterruptedException) {
+						if (myRunStatus.getSeverity() == IStatus.CANCEL
+								&& myRunStatus.getException() instanceof InterruptedException) {
 							throw new ExecutionException("Execption during generation", myRunStatus.getException());
 						}
 						e.printStackTrace();
@@ -220,7 +224,8 @@ public class GenerateCode extends AbstractHandler {
 	}
 
 	protected String getVisualID(GenCommonBase eObject) {
-		// Check if the GMF Tooling visualID (Integer) has been overridden with a String ID (Papyrus 2.0)
+		// Check if the GMF Tooling visualID (Integer) has been overridden with a String
+		// ID (Papyrus 2.0)
 		VisualIDOverride override = getOverride(eObject);
 		if (override != null) {
 			return override.getVisualID();
@@ -268,8 +273,6 @@ public class GenerateCode extends AbstractHandler {
 		}
 	}
 
-
-
 	protected void genDiagram(GenDiagram eObject) throws InterruptedException {
 		generateJava(new DiagramEditPartEmitter(), eObject.getEditPartQualifiedClassName(), eObject);
 		visualIDToPartMap.put(eObject.getEditorGen().getModelID(), eObject);
@@ -316,9 +319,9 @@ public class GenerateCode extends AbstractHandler {
 		if (root instanceof GenEditorGenerator) {
 			GenEditorGenerator editorGen = (GenEditorGenerator) root;
 
-
 			final Path pluginDirectory = new Path(editorGen.getPluginDirectory());
-			initializeEditorProject(pluginDirectory, guessProjectLocation(pluginDirectory.segment(0), editorGen), Collections.<IProject> emptyList());
+			initializeEditorProject(pluginDirectory, guessProjectLocation(pluginDirectory.segment(0), editorGen),
+					Collections.<IProject>emptyList());
 
 			TreeIterator<EObject> it = inputResource.getAllContents();
 
@@ -339,7 +342,8 @@ public class GenerateCode extends AbstractHandler {
 							genNode((GenNode) eObject);
 						} else {
 							// Still keep the recursion
-							// FIXME Should be mapped to their respective TopNode to avoid useless duplication (Similar to the isUsefulChildNode method)
+							// FIXME Should be mapped to their respective TopNode to avoid useless
+							// duplication (Similar to the isUsefulChildNode method)
 							processCompartments((GenNode) eObject);
 							processLabels((GenNode) eObject);
 						}
@@ -351,42 +355,47 @@ public class GenerateCode extends AbstractHandler {
 				}
 			}
 
-			generateJava(new VisualPartProviderEmitter(), editorGen.getPackageNamePrefix() + ".providers.VisualPartProvider", editorGen, visualIDToPartMap);
+			generateJava(new VisualPartProviderEmitter(),
+					editorGen.getPackageNamePrefix() + ".providers.ContentPartProvider", editorGen, visualIDToPartMap);
 		}
 	}
-
-
 
 	/**
 	 * @see #initializeEditorProject(String, IPath, List)
 	 */
-	protected final void initializeEditorProject(String pluginId, IPath projectLocation) throws UnexpectedBehaviourException, InterruptedException {
-		initializeEditorProject(pluginId, projectLocation, Collections.<IProject> emptyList());
+	protected final void initializeEditorProject(String pluginId, IPath projectLocation)
+			throws UnexpectedBehaviourException, InterruptedException {
+		initializeEditorProject(pluginId, projectLocation, Collections.<IProject>emptyList());
 	}
 
 	/**
-	 * Delegates to {@link #initializeEditorProject(IPath, IPath, List)}, using plug-in id as workspace project name and
-	 * 'src' as Java sources location.
+	 * Delegates to {@link #initializeEditorProject(IPath, IPath, List)}, using
+	 * plug-in id as workspace project name and 'src' as Java sources location.
 	 *
 	 * @param pluginId
 	 *            both name of workspace project and plug-in id
 	 * @param projectLocation
-	 *            {@link IPath} to folder where <code>.project</code> file would reside. Use <code>null</code> to use default workspace location.
+	 *            {@link IPath} to folder where <code>.project</code> file would
+	 *            reside. Use <code>null</code> to use default workspace location.
 	 * @param referencedProjects
 	 *            collection of {@link IProject}
 	 *
 	 */
-	protected final void initializeEditorProject(String pluginId, IPath projectLocation, List<IProject> referencedProjects) throws UnexpectedBehaviourException, InterruptedException {
-		// not sure if there's any reason to get project's name via IProject (not use pluginId directly), this is just how it was done from 1.1.
+	protected final void initializeEditorProject(String pluginId, IPath projectLocation,
+			List<IProject> referencedProjects) throws UnexpectedBehaviourException, InterruptedException {
+		// not sure if there's any reason to get project's name via IProject (not use
+		// pluginId directly), this is just how it was done from 1.1.
 		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(pluginId);
 		initializeEditorProject(new Path('/' + p.getName() + "/src"), projectLocation, referencedProjects);
 	}
 
 	/**
 	 * @param javaSource
-	 *            workspace absolute path to java source folder of the generated project, e.g. '/org.sample.aaa/sources'.
+	 *            workspace absolute path to java source folder of the generated
+	 *            project, e.g. '/org.sample.aaa/sources'.
 	 * @param projectLocation
-	 *            {@link IPath} to folder where <code>.project</code> file would reside. Use <code>null</code> to use default workspace location.
+	 *            {@link IPath} to folder where <code>.project</code> file would
+	 *            reside. Use <code>null</code> to use default workspace location.
 	 * @param referencedProjects
 	 *            collection of {@link IProject}
 	 * @throws UnexpectedBehaviourException
@@ -394,7 +403,8 @@ public class GenerateCode extends AbstractHandler {
 	 * @throws InterruptedException
 	 *             user canceled operation
 	 */
-	protected final void initializeEditorProject(IPath javaSource, IPath projectLocation, List<IProject> referencedProjects) throws UnexpectedBehaviourException, InterruptedException {
+	protected final void initializeEditorProject(IPath javaSource, IPath projectLocation,
+			List<IProject> referencedProjects) throws UnexpectedBehaviourException, InterruptedException {
 		destProject = ResourcesPlugin.getWorkspace().getRoot().getProject(javaSource.segment(0));
 		final int style = org.eclipse.emf.codegen.ecore.Generator.EMF_PLUGIN_PROJECT_STYLE;
 		// pluginVariables is NOT used when style is EMF_PLUGIN_PROJECT_STYLE
@@ -402,12 +412,14 @@ public class GenerateCode extends AbstractHandler {
 		final IProgressMonitor pm = getNextStepMonitor();
 		setProgressTaskName(Messages.initproject);
 
-		org.eclipse.emf.codegen.ecore.Generator.createEMFProject(javaSource, projectLocation, referencedProjects, pm, style, pluginVariables);
+		org.eclipse.emf.codegen.ecore.Generator.createEMFProject(javaSource, projectLocation, referencedProjects, pm,
+				style, pluginVariables);
 
 		try {
 			final IJavaProject jp = JavaCore.create(destProject);
 			destRoot = jp.findPackageFragmentRoot(javaSource);
-			// createEMFProject doesn't create source entry in case project exists and has some classpath entries already,
+			// createEMFProject doesn't create source entry in case project exists and has
+			// some classpath entries already,
 			// though the folder gets created.
 			if (destRoot == null) {
 				IClasspathEntry[] oldCP = jp.getRawClasspath();
@@ -436,7 +448,6 @@ public class GenerateCode extends AbstractHandler {
 		progressMonitor.subTask(text);
 	}
 
-
 	protected OrganizeImportsPostprocessor getImportsPostrocessor() {
 		if (importsPostprocessor == null) {
 			importsPostprocessor = new OrganizeImportsPostprocessor(true);
@@ -453,7 +464,8 @@ public class GenerateCode extends AbstractHandler {
 
 	protected final String formatCode(String text) {
 		IDocument doc = new Document(text);
-		TextEdit edit = getCodeFormatter().format(CodeFormatter.K_COMPILATION_UNIT, doc.get(), 0, doc.get().length(), 0, null);
+		TextEdit edit = getCodeFormatter().format(CodeFormatter.K_COMPILATION_UNIT, doc.get(), 0, doc.get().length(), 0,
+				null);
 
 		try {
 			// check if text formatted successfully
@@ -467,16 +479,18 @@ public class GenerateCode extends AbstractHandler {
 		return text;
 	}
 
-	protected void generateJava(IEmitter emitter, String qualifiedClassName, Object... input) throws InterruptedException {
+	protected void generateJava(IEmitter emitter, String qualifiedClassName, Object... input)
+			throws InterruptedException {
 
 		if (emitter != null) {
-			generateJava(emitter, CodeGenUtil.getPackageName(qualifiedClassName), CodeGenUtil.getSimpleClassName(qualifiedClassName), input);
+			generateJava(emitter, CodeGenUtil.getPackageName(qualifiedClassName),
+					CodeGenUtil.getSimpleClassName(qualifiedClassName), input);
 		}
 
 	}
 
-
-	protected void generateJava(IEmitter emitter, String packageName, String className, Object... input) throws InterruptedException {
+	protected void generateJava(IEmitter emitter, String packageName, String className, Object... input)
+			throws InterruptedException {
 		IProgressMonitor pm = getNextStepMonitor();
 		setProgressTaskName(className);
 		pm.beginTask(null, 7);
@@ -497,17 +511,20 @@ public class GenerateCode extends AbstractHandler {
 					workingCopy.getBuffer().setContents(genText);
 					workingCopy.reconcile(ICompilationUnit.NO_AST, false, null, null);
 					try {
-						// Since we do organizeImports prior to merge, we must ensure imports added manually are known to OrganizeImportsProcessor
+						// Since we do organizeImports prior to merge, we must ensure imports added
+						// manually are known to OrganizeImportsProcessor
 						String[] declaredImportsAsStrings = new String[declaredImports.length];
 						for (int i = 0; i < declaredImports.length; i++) {
 							declaredImportsAsStrings[i] = declaredImports[i].getElementName();
 						}
-						getImportsPostrocessor().organizeImports(workingCopy, declaredImportsAsStrings, SubMonitor.convert(pm, 1));
+						getImportsPostrocessor().organizeImports(workingCopy, declaredImportsAsStrings,
+								SubMonitor.convert(pm, 1));
 					} catch (CoreException e) {
 						workingCopy.commitWorkingCopy(true, SubMonitor.convert(pm, 1)); // save to investigate contents
 						throw e;
 					}
-					// genText = mergeJavaCode(oldContents, workingCopy.getSource(), new SubProgressMonitor(pm, 1));
+					// genText = mergeJavaCode(oldContents, workingCopy.getSource(), new
+					// SubProgressMonitor(pm, 1));
 					genText = formatCode(genText);
 					if (!genText.equals(oldContents)) {
 						workingCopy.getBuffer().setContents(genText);
@@ -530,7 +547,6 @@ public class GenerateCode extends AbstractHandler {
 				cu.save(SubMonitor.convert(pm, 2), true);
 			}
 
-
 		} catch (NullPointerException ex) {
 			Activator.log.error(ex);
 		} catch (InvocationTargetException ex) {
@@ -544,22 +560,24 @@ public class GenerateCode extends AbstractHandler {
 		}
 	}
 
-
 	/**
-	 * Inspired by GenBaseImpl.EclipseUtil.findOrCreateContainer
-	 * Although later (with EMF API adopting Platform changes) we might need to return URI here
+	 * Inspired by GenBaseImpl.EclipseUtil.findOrCreateContainer Although later
+	 * (with EMF API adopting Platform changes) we might need to return URI here
 	 *
-	 * @return path suitable for IProjectDescription, or <code>null</code> to indicate use of default
+	 * @return path suitable for IProjectDescription, or <code>null</code> to
+	 *         indicate use of default
 	 * @throws UnexpectedBehaviourException
 	 * @throws CoreException
 	 */
-	protected final IPath guessNewProjectLocation(Path examplaryProjectPath, String newProjectName) throws UnexpectedBehaviourException {
+	protected final IPath guessNewProjectLocation(Path examplaryProjectPath, String newProjectName)
+			throws UnexpectedBehaviourException {
 		assert newProjectName != null;
 		try {
 			if (ResourcesPlugin.getWorkspace().getRoot().getProject(newProjectName).exists()) {
 				// just use whatever already specified.
 				// Returned value doesn't make sense in this case -
-				// oee.codegen.ecore.Generator#EclipseHelper#createEMFProject doesn't use it then.
+				// oee.codegen.ecore.Generator#EclipseHelper#createEMFProject doesn't use it
+				// then.
 				return null;
 			}
 			if (examplaryProjectPath == null || !examplaryProjectPath.isAbsolute()) {
@@ -584,7 +602,8 @@ public class GenerateCode extends AbstractHandler {
 
 	}
 
-	protected IPath guessProjectLocation(String projectName, GenEditorGenerator editorGen) throws UnexpectedBehaviourException {
+	protected IPath guessProjectLocation(String projectName, GenEditorGenerator editorGen)
+			throws UnexpectedBehaviourException {
 		if (editorGen.getDomainGenModel() == null) {
 			return null;
 		}

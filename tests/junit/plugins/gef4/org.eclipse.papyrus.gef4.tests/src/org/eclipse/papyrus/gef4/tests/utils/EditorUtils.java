@@ -62,12 +62,12 @@ public class EditorUtils {
 		return result.get();
 	}
 
-	public static DiagramContentPart openDiagram(String projectName, String folder, String[] sourceFileNames, String fileToOpen, String editorID) throws Exception {
-		GEFEditor editorPart = (GEFEditor) openEditor(projectName, folder, sourceFileNames, fileToOpen, editorID);
+	public static DiagramContentPart<?> openDiagram(String projectName, String folder, String[] sourceFileNames, String fileToOpen, String editorID) throws Exception {
+		GEFEditor<?> editorPart = (GEFEditor<?>) openEditor(projectName, folder, sourceFileNames, fileToOpen, editorID);
 		IViewer viewer = editorPart.getViewer();
 		IRootPart<? extends Node> root = viewer.getRootPart();
 		IVisualPart<? extends Node> diagramPart = root.getChildrenUnmodifiable().get(0);
 
-		return (DiagramContentPart) diagramPart;
+		return (DiagramContentPart<?>) diagramPart;
 	}
 }

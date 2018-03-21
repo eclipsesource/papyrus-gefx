@@ -12,14 +12,12 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
-
 import javafx.scene.Node;
 
-public class EmptyContentPart extends NotationContentPart<View, Node> {
+public class EmptyContentPart<MODEL> extends BaseContentPart<MODEL, Node> {
 
-	public EmptyContentPart(View view) {
-		super(view);
+	public EmptyContentPart(MODEL model) {
+		super(model);
 	}
 
 	@Override

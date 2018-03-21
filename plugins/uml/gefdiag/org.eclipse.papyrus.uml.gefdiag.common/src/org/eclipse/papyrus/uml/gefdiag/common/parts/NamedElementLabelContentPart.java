@@ -14,16 +14,15 @@ package org.eclipse.papyrus.uml.gefdiag.common.parts;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
-import org.eclipse.papyrus.gef4.utils.NotationUtil;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 
 /**
  * The Class NamedElementLabelContentPart.
  */
-public class NamedElementLabelContentPart extends LabelContentPart {
+public class NamedElementLabelContentPart extends LabelContentPart<View> {
 
 	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
 
@@ -47,30 +46,29 @@ public class NamedElementLabelContentPart extends LabelContentPart {
 		super.refreshVisualInTransaction(visual);
 	}
 
-	/**
-	 * @see org.eclipse.papyrus.gef4.parts.NotationContentPart#getPadding()
-	 *
-	 * @return
-	 */
-	@Override
-	protected Insets getPadding() {
-		return super.getPadding(); // return new Insets(5); // TODO : fix this. margin of nameLabel shall be set with Class>Label[kind=name]{margin:5;}
-	}
+	// /**
+	// * @see org.eclipse.papyrus.gef4.parts.BaseContentPart#getPadding()
+	// *
+	// * @return
+	// */
+	// @Override
+	// protected Insets getPadding() {
+	// return super.getPadding(); // return new Insets(5); // TODO : fix this. margin of nameLabel shall be set with Class>Label[kind=name]{margin:5;}
+	// }
 
 	@Override
 	protected String getImagePath() {
-		final EObject semanticElement = getElement();
+		final EObject semanticElement = getContent().getElement();
 		if (semanticElement == null) {
 			return null;
 		}
 
-		if (NotationUtil.showElementIcon(getView())) {
+		if (NotationUtil.showElementIcon(getContent())) {
 			return imagePath + "/" + semanticElement.eClass().getName() + ".gif"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
 			return null;
 		}
 	}
-
 
 	/**
 	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#getStyleClass()

@@ -17,7 +17,7 @@ import java.util.Set;
 
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.gef.fx.anchors.DynamicAnchor;
-import org.eclipse.gef.fx.anchors.ProjectionStrategy;
+import org.eclipse.gef.fx.anchors.OrthogonalProjectionStrategy;
 import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.BaseSlidableAnchor;
 import org.eclipse.gmf.runtime.notation.Anchor;
@@ -100,7 +100,7 @@ public class SlidableFxAnchor extends DynamicAnchor {
 	 * Overrides default {@link FXChopBoxAnchor.ComputationStrategy.Impl} with customization of
 	 * the position of the anchor in the host bounds, which is set as a ratio.
 	 */
-	public static class RatioBasedAnchorStrategy extends ProjectionStrategy {
+	public static class RatioBasedAnchorStrategy extends OrthogonalProjectionStrategy {
 
 		private final double myRatioX;
 		private final double myRatioY;

@@ -11,7 +11,7 @@ import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.parts.PartUtils;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 
 import javafx.scene.Node;
@@ -94,8 +94,8 @@ public abstract class AbstractMultiSelectionDragHandler extends AbstractHandler 
 	 */
 	protected IVisualPart<? extends Node> getPrimaryHost() {
 		IVisualPart<? extends Node> host = getHost();
-		if (host instanceof NotationContentPart) {
-			host = ((NotationContentPart<?, ?>) host).getPrimaryContentPart();
+		if (host instanceof BaseContentPart) {
+			host = ((BaseContentPart<?, ?>) host).getPrimaryContentPart();
 		}
 		return host;
 	}

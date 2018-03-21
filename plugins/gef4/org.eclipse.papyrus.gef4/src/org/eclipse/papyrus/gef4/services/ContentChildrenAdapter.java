@@ -10,12 +10,12 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.provider;
+package org.eclipse.papyrus.gef4.services;
 
 import java.util.List;
 
-public interface IContentChildrenProvider<T> {
+public interface ContentChildrenAdapter<MODEL> {
 
-	public List<? extends T> getContentChildren(T parent);
+	public List<? extends MODEL> getContentChildren();
 
 }

@@ -1,4 +1,4 @@
-package org.eclipse.papyrus.uml.gefdiag.common.module;
+package org.eclipse.papyrus.uml.gefdiag.clazz.module;
 
 import java.util.Arrays;
 
@@ -26,9 +26,10 @@ import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class FakePalette implements Palette {
+public class DemoClassPalette implements Palette {
 	@Inject
 	private ElementTypeRegistry registry;
 
@@ -42,10 +43,12 @@ public class FakePalette implements Palette {
 	public Node createPaletteControl() {
 		VBox palette = new VBox();
 
-		Button doCreate = new Button("Do Create");
+		Label paletteLabel = new Label("Palette");
+
+		Button doCreate = new Button("Create class");
 		doCreate.setOnAction(event -> doCreate());
 
-		palette.getChildren().addAll(doCreate);
+		palette.getChildren().addAll(paletteLabel, doCreate);
 
 		return palette;
 	}
@@ -57,7 +60,9 @@ public class FakePalette implements Palette {
 		// - This should still go through the Command Stack and Element Type framework as much as possible (At least for the semantic create and view provider)
 
 		IElementType[] elementTypes = registry.getElementTypes(clientContext);
-		IElementType classType = Arrays.stream(elementTypes).filter(t -> "org.eclipse.papyrus.umldi.Class_Shape".equals(t.getId())).findFirst().orElse(null);
+		IElementType classType = Arrays.stream(elementTypes) //
+				.filter(t -> "org.eclipse.papyrus.umldi.Class_Shape".equals(t.getId())) //
+				.findFirst().orElse(null);
 
 		EObject container = diagram.getElement();
 

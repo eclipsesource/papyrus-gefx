@@ -12,8 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.clazz.module;
 
-import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
-import org.eclipse.gef.mvc.fx.viewer.IViewer;
+import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.palette.Palette;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.clazz.providers.ContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
@@ -24,9 +24,16 @@ public class ClassDiagramModule extends UMLDiagramModule {
 
 	@Override
 	protected void bindIContentPartProvider() {
-		binder().bind(new TypeLiteral<IContentPartProvider>() {
-		}).to(ContentPartProvider.class)
-				.in(AdaptableScopes.typed(IViewer.class));
+		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
+		}).to(ContentPartProvider.class);
+	}
+
+	/**
+	 * @see org.eclipse.papyrus.gef4.module.GEFFxModule#bindPalette()
+	 *
+	 */
+	protected void bindPalette() {
+		bind(Palette.class).to(DemoClassPalette.class);
 	}
 
 }

@@ -12,7 +12,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.FXUtils;
@@ -25,10 +24,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 //FIXME Implement generic IParser (Or injected IParser) to avoid abstract class here
-public abstract class ListItemContentPart extends LabelContentPart implements IPrimaryContentPart {
+public abstract class ListItemContentPart<MODEL> extends LabelContentPart<MODEL> implements IPrimaryContentPart {
 
-	public ListItemContentPart(View view) {
-		super(view);
+	public ListItemContentPart(MODEL model) {
+		super(model);
 	}
 
 	@Override
@@ -59,16 +58,16 @@ public abstract class ListItemContentPart extends LabelContentPart implements IP
 
 	protected void refreshBorder() {
 		BorderStroke stroke = null;
-		final BorderColors borderColors = getBorderColors();
-		final BorderStrokeStyles borderStyles = getBorderStyles();
-		final BorderWidths borderWidths = getBorderWidths();
+		final BorderColors borderColors = getStyleProvider().getBorderColors();
+		final BorderStrokeStyles borderStyles = getStyleProvider().getBorderStyles();
+		final BorderWidths borderWidths = getStyleProvider().getBorderWidths();
 
 		Border border = null;
 		if (borderWidths != null) {
 			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
 					borderStyles.getLeft(),
-					getCornerRadii(), borderWidths,
-					getMargin());
+					getStyleProvider().getCornerRadii(), borderWidths,
+					getStyleProvider().getMargin());
 			border = new Border(stroke);
 		}
 		label.setBorder(border);

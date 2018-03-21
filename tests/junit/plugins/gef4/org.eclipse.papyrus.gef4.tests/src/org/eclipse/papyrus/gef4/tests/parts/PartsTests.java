@@ -25,14 +25,13 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.example.library.editor.LibraryEditor;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.NodeContentPart;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.tests.utils.ColorUtils;
 import org.eclipse.papyrus.gef4.tests.utils.EditorUtils;
 import org.eclipse.papyrus.gef4.utils.SynchronizedLogger;
@@ -57,17 +56,13 @@ public class PartsTests {
 
 	@BeforeClass
 	public static void initEventBroker() {
-		DiagramEventBroker.registerDiagramEventBrokerFactory(new DiagramEventBroker.DiagramEventBrokerFactory() {
-			@Override
-			public DiagramEventBroker createDiagramEventBroker(TransactionalEditingDomain editingDomain) {
-				return new DiagramEventBroker() {
-					// Nothing; but we need this because the constructor is protected
-				};
-			}
+		DiagramEventBroker.registerDiagramEventBrokerFactory(editingDomain -> new DiagramEventBroker() {
+			// Nothing; but we need this because the constructor is protected
 		});
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testNodeFigure() throws Exception {
 		String folder = "platform:/plugin/org.eclipse.papyrus.gef4.tests/models/";
 		String[] fileNames = new String[] {
@@ -75,8 +70,8 @@ public class PartsTests {
 				"Library.librarydiagram"
 		};
 
-		DiagramContentPart diagramPart = EditorUtils.openDiagram("partTets", folder, fileNames, fileNames[1], LibraryEditor.EDITOR_ID);
-		NotationContentPart<? extends View, ? extends Node> firstPerson = (NotationContentPart<?, ?>) diagramPart.getChildrenUnmodifiable().get(0);
+		DiagramContentPart<?> diagramPart = EditorUtils.openDiagram("partTets", folder, fileNames, fileNames[1], LibraryEditor.EDITOR_ID);
+		BaseContentPart<? extends View, ? extends Node> firstPerson = (BaseContentPart<View, ?>) diagramPart.getChildrenUnmodifiable().get(0);
 		Assert.assertThat(firstPerson, instanceOf(NodeContentPart.class));
 
 		Node visual = firstPerson.getVisual();
@@ -84,11 +79,11 @@ public class PartsTests {
 
 		Color defaultLineColor = ColorUtils.fromRGB((int) NotationPackage.Literals.LINE_STYLE__LINE_COLOR.getDefaultValue()); // Default GMF Notation color
 
-		testBorders((NodeContentPart) firstPerson, defaultLineColor);
-		testFill((NodeContentPart) firstPerson, Color.WHITE);
+		testBorders((NodeContentPart<? extends View>) firstPerson, defaultLineColor);
+		testFill((NodeContentPart<? extends View>) firstPerson, Color.WHITE);
 	}
 
-	protected void testFill(NodeContentPart nodePart, Color initialColor) throws Exception {
+	protected void testFill(NodeContentPart<? extends View> nodePart, Color initialColor) throws Exception {
 		Color targetColor = Color.DEEPSKYBLUE;
 
 		VBox vBox = nodePart.getVisual();
@@ -96,17 +91,17 @@ public class PartsTests {
 		Runnable beforeTest = () -> testFillColor(vBox, initialColor);
 		Runnable afterTest = () -> testFillColor(vBox, targetColor);
 
-		EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(nodePart.getView());
-		SetCommand setFillColor = new SetCommand(domain, nodePart.getView(), NotationPackage.Literals.FILL_STYLE__FILL_COLOR, ColorUtils.toRGB(targetColor));
+		EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(nodePart.getContent());
+		SetCommand setFillColor = new SetCommand(domain, nodePart.getContent(), NotationPackage.Literals.FILL_STYLE__FILL_COLOR, ColorUtils.toRGB(targetColor));
 
 		executeAndTest(domain, setFillColor, beforeTest, afterTest);
 	}
 
-	protected void testBorders(NodeContentPart nodePart, Color initialColor) throws Exception {
+	protected void testBorders(NodeContentPart<? extends View> nodePart, Color initialColor) throws Exception {
 		VBox vBox = nodePart.getVisual();
 
-		EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(nodePart.getView());
-		SetCommand setLineColor = new SetCommand(domain, nodePart.getView(), NotationPackage.Literals.LINE_STYLE__LINE_COLOR, 0);
+		EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(nodePart.getContent());
+		SetCommand setLineColor = new SetCommand(domain, nodePart.getContent(), NotationPackage.Literals.LINE_STYLE__LINE_COLOR, 0);
 
 		Runnable beforeTest = () -> testBorderColor(vBox, initialColor);
 		Runnable afterTest = () -> testBorderColor(vBox, Color.BLACK);

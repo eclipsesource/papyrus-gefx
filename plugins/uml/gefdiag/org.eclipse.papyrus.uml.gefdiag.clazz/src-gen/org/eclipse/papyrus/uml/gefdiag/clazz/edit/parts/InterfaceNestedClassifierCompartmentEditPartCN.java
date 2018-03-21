@@ -1,12 +1,10 @@
 
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.DecorationNode;
-import org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart;
+public class InterfaceNestedClassifierCompartmentEditPartCN
+		extends org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.View> {
 
-public class InterfaceNestedClassifierCompartmentEditPartCN extends ListCompartmentContentPart<DecorationNode> {
-
-	public InterfaceNestedClassifierCompartmentEditPartCN(DecorationNode view) {
+	public InterfaceNestedClassifierCompartmentEditPartCN(org.eclipse.gmf.runtime.notation.DecorationNode view) {
 		super(view);
 	}
 

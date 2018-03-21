@@ -1,15 +1,9 @@
 package org.eclipse.papyrus.uml.gefdiag.clazz.providers;
 
-import org.eclipse.gef.mvc.fx.parts.IContentPart;
-import org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider;
-
-import javafx.scene.Node;
-
-public class ContentPartProvider extends AbstractUMLContentPartProvider {
+public class ContentPartProvider extends org.eclipse.papyrus.gef4.gmf.services.AbstractContentPartProvider {
 
 	@Override
-	public IContentPart<? extends Node> createContentPart(
-			org.eclipse.gmf.runtime.notation.View view) {
+	public org.eclipse.gef.mvc.fx.parts.IContentPart<?> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
 		switch (view.getType()) {
 
 		case "Association_TargetMultiplicityLabel":
@@ -722,7 +716,25 @@ public class ContentPartProvider extends AbstractUMLContentPartProvider {
 					(org.eclipse.gmf.runtime.notation.View) view);
 
 		default:
-			return super.createContentPart(view);
+			// System.out.println("View not supported: " + view);
+			return (org.eclipse.gef.mvc.fx.parts.IContentPart<?>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
+				@Override
+				public Object caseDecorationNode(org.eclipse.gmf.runtime.notation.DecorationNode object) {
+					return new org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart(object);
+				}
+
+				@Override
+				public Object caseShape(org.eclipse.gmf.runtime.notation.Shape object) {
+					return new org.eclipse.papyrus.gef4.parts.NodeContentPart<>(object);
+				}
+
+				@Override
+				public Object caseBasicCompartment(org.eclipse.gmf.runtime.notation.BasicCompartment object) {
+					return new org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>(
+							object);
+				}
+			}.doSwitch(view);
+		// return new EmptyContentPart(view);
 		}
 	}
 

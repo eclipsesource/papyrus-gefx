@@ -22,7 +22,7 @@ import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,11 +44,11 @@ import javafx.scene.Node;
  */
 public class BorderItemLocator implements Locator {
 
-	private final NotationContentPart<? extends View, ? extends Node> host;
+	private final BaseContentPart<? extends View, ? extends Node> host;
 
 	private final ChangeListener<Bounds> boundsListener;
 
-	public BorderItemLocator(NotationContentPart<? extends View, ? extends Node> host) {
+	public BorderItemLocator(BaseContentPart<? extends View, ? extends Node> host) {
 		this.host = host;
 		boundsListener = (bounds, oldValue, newValue) -> refreshLayout();
 	}
@@ -77,7 +77,7 @@ public class BorderItemLocator implements Locator {
 		return new Rectangle(0, 0, parentBounds.getWidth(), parentBounds.getHeight()); // Position 0, 0 relative to the parent element
 	}
 
-	protected NotationContentPart<? extends View, ? extends Node> getHost() {
+	protected BaseContentPart<? extends View, ? extends Node> getHost() {
 		return host;
 	}
 
@@ -94,7 +94,7 @@ public class BorderItemLocator implements Locator {
 
 	@Override
 	public void applyLayout(Node node) {
-		View hostView = host.getView();
+		View hostView = host.getContent();
 		if (!(hostView instanceof org.eclipse.gmf.runtime.notation.Node)) {
 			return;
 		}

@@ -14,11 +14,9 @@ package org.eclipse.papyrus.gef4.provider;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
-import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.gmf.runtime.notation.View;
 
-public interface IContentPartProvider {
-	IRootPart<?> createRootPart(Diagram diagram);
+public interface IContentPartProvider<MODEL> {
+	IRootPart<?> createRootPart(MODEL modelRoot);
 
-	IContentPart<?> createContentPart(View view);
+	IContentPart<?> createContentPart(MODEL model);
 }

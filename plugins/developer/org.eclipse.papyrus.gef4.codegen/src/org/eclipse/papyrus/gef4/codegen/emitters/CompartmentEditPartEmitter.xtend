@@ -40,9 +40,9 @@ class CompartmentEditPartEmitter extends AbstractEditPartEmitter {
 	
 	override getExtended(List<Object> arguments) '''
 		«IF (arguments.get(0) as GenCompartment).isListLayout»
-		 extends org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>
+		 extends org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.View>
 		«ELSE»
-		 extends org.eclipse.papyrus.gef4.parts.XYCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>
+		 extends org.eclipse.papyrus.gef4.parts.XYCompartmentContentPart<org.eclipse.gmf.runtime.notation.View>
 		«ENDIF»
 	'''
 	

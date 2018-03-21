@@ -10,7 +10,7 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.utils;
+package org.eclipse.papyrus.gef4.gmf.utils;
 
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.util.URI;

@@ -13,16 +13,14 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
-
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public abstract class ContainerContentPart<V extends View, R extends Region> extends NotationContentPart<V, R> {
+public abstract class ContainerContentPart<MODEL, R extends Region> extends BaseContentPart<MODEL, R> {
 
-	protected ContainerContentPart(final V view) {
-		super(view);
+	protected ContainerContentPart(final MODEL model) {
+		super(model);
 	}
 
 	@Override
@@ -44,13 +42,13 @@ public abstract class ContainerContentPart<V extends View, R extends Region> ext
 
 	protected void refreshLayout() {
 		// Refresh Padding
-		getVisual().setPadding(getPadding());
+		getVisual().setPadding(getStyleProvider().getPadding());
 
 		// Refresh Spacing for VBox and Hbox
 		if (getVisual() instanceof VBox) {
-			((VBox) getVisual()).setSpacing(getSpacing());
+			((VBox) getVisual()).setSpacing(getStyleProvider().getSpacing());
 		} else if (getVisual() instanceof HBox) {
-			((HBox) getVisual()).setSpacing(getSpacing());
+			((HBox) getVisual()).setSpacing(getStyleProvider().getSpacing());
 		}
 	}
 

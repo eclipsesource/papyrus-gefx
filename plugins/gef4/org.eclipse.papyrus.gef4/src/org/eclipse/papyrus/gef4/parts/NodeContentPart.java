@@ -14,7 +14,6 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
 import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
@@ -22,7 +21,6 @@ import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
 import org.eclipse.papyrus.gef4.shapes.PackagePath;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
-import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
 import javafx.beans.value.ChangeListener;
@@ -46,7 +44,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Ellipse;
 
-public class NodeContentPart extends ContainerContentPart<Shape, VBox> implements IPrimaryContentPart {
+public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> implements IPrimaryContentPart {
 
 	public static final int DEFAULT_MIN_WIDTH = 100;
 	public static final int DEFAULT_MIN_HEIGHT = 100;
@@ -59,7 +57,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	 */
 	private ChangeListener<Bounds> boundsShapeListener = (a, b, c) -> refreshShape();
 
-	public NodeContentPart(final Shape view) {
+	public NodeContentPart(final MODEL view) {
 		super(view);
 	}
 
@@ -86,15 +84,15 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 		boolean autoSize = true; // FIXME configure (autoHeight + autoWidth)
 		if (autoSize) {
-			region.setMinWidth(getWidth());
-			region.setMinHeight(getHeight());
+			region.setMinWidth(getStyleProvider().getWidth());
+			region.setMinHeight(getStyleProvider().getHeight());
 			region.setPrefHeight(Region.USE_COMPUTED_SIZE);
 			region.setPrefWidth(Region.USE_COMPUTED_SIZE);
 		} else {
 			region.setMinHeight(Region.USE_COMPUTED_SIZE);
 			region.setMinWidth(Region.USE_COMPUTED_SIZE);
-			region.setPrefHeight(getHeight());
-			region.setPrefWidth(getWidth());
+			region.setPrefHeight(getStyleProvider().getHeight());
+			region.setPrefWidth(getStyleProvider().getWidth());
 		}
 
 		Locator locator = getLocator();
@@ -103,8 +101,8 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		} else {
 			region.setManaged(true); // A non-null locator will typically set this to false. We need to ensure it is true
 
-			region.setLayoutX(getX());
-			region.setLayoutY(getY());
+			region.setLayoutX(getStyleProvider().getX());
+			region.setLayoutY(getStyleProvider().getY());
 		}
 	}
 
@@ -113,13 +111,14 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		final VBox region = getVisual();
 		Paint fill = null;
 		// Background to fill a simple gradient
-		if (null != getBackgroundPaint()) {
-			fill = getBackgroundPaint();
+		if (null != getStyleProvider().getBackgroundPaint()) {
+			fill = getStyleProvider().getBackgroundPaint();
 		} else {
-			fill = new LinearGradient(getBackgroundGradientStartPosition().getX(), getBackgroundGradientStartPosition().getY(), getBackgroundGradientEndPosition().getX(), getBackgroundGradientEndPosition().getY(),
-					true, CycleMethod.NO_CYCLE, new Stop(0, getBackgroundColor2()), new Stop(1, getBackgroundColor1()));
+			fill = new LinearGradient(getStyleProvider().getBackgroundGradientStartPosition().getX(), getStyleProvider().getBackgroundGradientStartPosition().getY(), getStyleProvider().getBackgroundGradientEndPosition().getX(),
+					getStyleProvider().getBackgroundGradientEndPosition().getY(),
+					true, CycleMethod.NO_CYCLE, new Stop(0, getStyleProvider().getBackgroundColor2()), new Stop(1, getStyleProvider().getBackgroundColor1()));
 		}
-		final BackgroundFill backgroundFill = new BackgroundFill(fill, getCornerRadii(), null);
+		final BackgroundFill backgroundFill = new BackgroundFill(fill, getStyleProvider().getCornerRadii(), null);
 		final Background background = new Background(backgroundFill);
 		// set the Background
 		region.setBackground(background);
@@ -127,17 +126,17 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 	@Override
 	protected void refreshEffect() {
-		final Effect effect = getEffect();
-		final DropShadow shadow = getShadow();
+		final Effect effect = getStyleProvider().getEffect();
+		final DropShadow shadow = getStyleProvider().getShadow();
 		if (effect instanceof Reflection) {
 			((Reflection) effect).setInput(shadow);
 			getVisual().setEffect(effect);
 		} else {
 			if (null != shadow) {
-				shadow.setInput(getEffect());
+				shadow.setInput(getStyleProvider().getEffect());
 				getVisual().setEffect(shadow);
 			} else {
-				getVisual().setEffect(getEffect());
+				getVisual().setEffect(getStyleProvider().getEffect());
 			}
 		}
 	}
@@ -150,10 +149,10 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 		boolean labelsUseAllWidth = true;
 
-		final ShapeTypeEnum shapeType = getShapeType();
+		final ShapeTypeEnum shapeType = getStyleProvider().getShapeType();
 		switch (shapeType) {
 		case CORNER_BEND_RECTANGLE:
-			final double cornerBendWidth = getCornerBendWidth();
+			final double cornerBendWidth = getStyleProvider().getCornerBendWidth();
 			setShape(new CornerBendRectanglePath(width, height, cornerBendWidth), false);
 			break;
 
@@ -173,10 +172,10 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			// get the tab dimension of the package
 			for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
 				if (child instanceof LabelContentPart) {
-					LabelContentPart childPart = (LabelContentPart) child;
+					LabelContentPart<?> childPart = (LabelContentPart<?>) child;
 
 					// get the margin
-					final Insets childMargin = childPart.getPadding();
+					final Insets childMargin = childPart.getStyleProvider().getPadding();
 					// get the Label child
 					final Label label = childPart.getVisual();
 					tabWidth = Math.max(label.prefWidth(label.getHeight()) + childMargin.getLeft() + childMargin.getRight(), tabWidth);
@@ -206,7 +205,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 		for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
 			if (child instanceof LabelContentPart) {
-				LabelContentPart childPart = (LabelContentPart) child;
+				LabelContentPart<?> childPart = (LabelContentPart<?>) child;
 				childPart.setUseAllWidth(labelsUseAllWidth);
 			} else {
 				// The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name).
@@ -216,7 +215,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 		}
 
 		// Rotate the figure.
-		region.setRotate(getRotate());
+		region.setRotate(getStyleProvider().getRotate());
 	}
 
 	protected void setShape(javafx.scene.shape.Shape shape, boolean scale) {
@@ -241,8 +240,8 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 	@Override
 	protected void refreshDecoration() {
 		final VBox region = getVisual();
-		final double width = getWidth();
-		final double height = getHeight();
+		final double width = getStyleProvider().getWidth();
+		final double height = getStyleProvider().getHeight();
 
 
 		// Delete cornerBend if exist
@@ -252,7 +251,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			}
 		}
 		// CornerBend
-		if (ShapeTypeEnum.CORNER_BEND_RECTANGLE.equals(getShapeType())) {
+		if (ShapeTypeEnum.CORNER_BEND_RECTANGLE.equals(getStyleProvider().getShapeType())) {
 			for (int i = 0; i < region.getChildren().size(); i++) {
 				if (region.getChildren().get(i) instanceof CornerBendPath) {
 					region.getChildren().remove(i);
@@ -260,9 +259,9 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			}
 
 			// Create the decoration
-			final CornerBendPath cornerBendPath = new CornerBendPath(width, getCornerBendWidth());
+			final CornerBendPath cornerBendPath = new CornerBendPath(width, getStyleProvider().getCornerBendWidth());
 			// Set the Color
-			cornerBendPath.setFill(getCornerBendColor());
+			cornerBendPath.setFill(getStyleProvider().getCornerBendColor());
 			// add it to children of region
 			region.getChildren().add(cornerBendPath);
 		}
@@ -274,7 +273,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			}
 		}
 		// If have double Line. For active Class for example
-		if (hasDoubleBorder() && null == region.getShape()) {
+		if (getStyleProvider().hasDoubleBorder() && null == region.getShape()) {
 			// If double line are not already drawn
 			for (int i = 0; i < region.getChildren().size(); i++) {
 				if (region.getChildren().get(i) instanceof DoubleBorderPane) {
@@ -283,70 +282,24 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 			}
 
 			// Create the decoration
-			final DoubleBorderPane pane = new DoubleBorderPane(region, width, height, getBorderWidths(), getBorderStyles(), getBorderColors(), getDoubleBorderWidths());
+			final DoubleBorderPane pane = new DoubleBorderPane(region, width, height, getStyleProvider().getBorderWidths(), getStyleProvider().getBorderStyles(), getStyleProvider().getBorderColors(), getStyleProvider().getDoubleBorderWidths());
 			region.getChildren().add(pane);
 		}
-	}
-
-	/**
-	 * take into account of the double border on padding.
-	 *
-	 * @return the padding
-	 * @see org.eclipse.papyrus.gef4.parts.NotationContentPart#getPadding()
-	 */
-	@Override
-	protected Insets getPadding() {
-		final Insets padding = super.getPadding();
-		double top = 0;
-		double right = 0;
-		double bottom = 0;
-		double left = 0;
-		// Only if doubleBorder is applied
-		if (hasDoubleBorder() && null == getVisual().getShape()) {
-
-			final BorderStrokeStyles borderStyles = getBorderStyles();
-			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.TOP)) {
-				top = getDoubleBorderWidths().getTop();
-			}
-			// Right
-			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.RIGHT)) {
-				right = getDoubleBorderWidths().getRight();
-			}
-			// Bottom
-			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.BOTTOM)) {
-				bottom = getDoubleBorderWidths().getBottom();
-			}
-			// Left
-			if (borderStyles.isDoubleBorder(BorderStrokeStyles.Position.LEFT)) {
-				left = getDoubleBorderWidths().getLeft();
-			}
-		}
-		return new Insets(padding.getTop() + top, padding.getRight() + right, padding.getBottom() + bottom, padding.getLeft() + left);
-	}
-
-	/**
-	 * Gets the border widths.
-	 *
-	 * @return the border widths
-	 */
-	@Override
-	protected BorderWidths getBorderWidths() {
-		return NotationUtil.getBorderWidths(getView(), 1);
 	}
 
 	@Override
 	protected void refreshBorder() {
 		BorderStroke stroke = null;
-		final BorderColors borderColors = getBorderColors();
-		final BorderStrokeStyles borderStyles = getBorderStyles();
-		final BorderWidths borderWidths = getBorderWidths();
+		final BorderColors borderColors = getStyleProvider().getBorderColors();
+		final BorderStrokeStyles borderStyles = getStyleProvider().getBorderStyles();
+		final BorderWidths borderWidths = getStyleProvider().getBorderWidths();
 
 		Border border = null;
 		if (borderWidths != null) {
 			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
 					borderStyles.getLeft(),
-					getCornerRadii(), borderWidths,
-					getMargin());
+					getStyleProvider().getCornerRadii(), borderWidths,
+					getStyleProvider().getMargin());
 			border = new Border(stroke);
 		}
 		getVisual().setBorder(border);
@@ -354,7 +307,7 @@ public class NodeContentPart extends ContainerContentPart<Shape, VBox> implement
 
 	@Override
 	protected void refreshShadow() {
-		final DropShadow shadow = getShadow();
+		final DropShadow shadow = getStyleProvider().getShadow();
 		if (null != shadow) {
 			getVisual().setEffect(shadow);
 		}

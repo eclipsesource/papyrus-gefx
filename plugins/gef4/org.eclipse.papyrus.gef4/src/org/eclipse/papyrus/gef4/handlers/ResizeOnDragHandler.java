@@ -26,7 +26,7 @@ import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
@@ -221,8 +221,8 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 	@Override
 	protected IVisualPart<? extends Node> getPrimaryHost() {
 		IVisualPart<? extends Node> host = getAnchorageHost();
-		if (host instanceof NotationContentPart) {
-			host = ((NotationContentPart<?, ?>) host).getPrimaryContentPart();
+		if (host instanceof BaseContentPart) {
+			host = ((BaseContentPart<?, ?>) host).getPrimaryContentPart();
 		}
 		return host;
 	}

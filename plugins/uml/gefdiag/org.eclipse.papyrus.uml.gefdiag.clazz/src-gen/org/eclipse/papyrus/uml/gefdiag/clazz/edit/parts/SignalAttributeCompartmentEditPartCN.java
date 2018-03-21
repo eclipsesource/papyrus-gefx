@@ -1,12 +1,10 @@
 
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.DecorationNode;
-import org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart;
+public class SignalAttributeCompartmentEditPartCN
+		extends org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.View> {
 
-public class SignalAttributeCompartmentEditPartCN extends ListCompartmentContentPart<DecorationNode> {
-
-	public SignalAttributeCompartmentEditPartCN(DecorationNode view) {
+	public SignalAttributeCompartmentEditPartCN(org.eclipse.gmf.runtime.notation.DecorationNode view) {
 		super(view);
 	}
 

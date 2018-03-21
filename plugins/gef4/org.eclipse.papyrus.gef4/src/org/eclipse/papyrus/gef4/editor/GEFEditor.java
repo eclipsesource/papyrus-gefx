@@ -24,7 +24,7 @@ import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -47,21 +47,15 @@ import com.google.inject.util.Modules;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-public abstract class GEFEditor extends EditorPart {
+public abstract class GEFEditor<MODEL> extends EditorPart {
 
 	/**
 	 * Set during {@link #init(Diagram)}
 	 */
-	private Diagram diagram;
+	private MODEL diagramRoot;
 
 	private IRootPart<? extends Node> rootPart;
 
@@ -72,6 +66,7 @@ public abstract class GEFEditor extends EditorPart {
 	private ISelectionProviderFactory selectionProviderFactory;
 
 	@Inject
+	@Nullable
 	private Palette palette;
 
 	private ISelectionProvider selectionProvider;
@@ -84,10 +79,10 @@ public abstract class GEFEditor extends EditorPart {
 
 	private final ListChangeListener<IContentPart<? extends Node>> selectionListener;
 
-	public GEFEditor(final Diagram diagram, final Module module) {
+	public GEFEditor(final Class<MODEL> diagramRootClass, final MODEL diagramRoot, final Module module) {
 		this();
 
-		init(diagram, module);
+		init(diagramRootClass, diagramRoot, module);
 	}
 
 	public GEFEditor() {
@@ -104,8 +99,8 @@ public abstract class GEFEditor extends EditorPart {
 		};
 	}
 
-	public void init(final Diagram diagram, final Module module) {
-		if (this.diagram != null) {
+	public void init(Class<MODEL> diagramRootClass, final MODEL diagramRoot, final Module module) {
+		if (this.diagramRoot != null) {
 			throw new IllegalStateException("This editor has already been initialized");
 		}
 
@@ -113,8 +108,8 @@ public abstract class GEFEditor extends EditorPart {
 			throw new IllegalArgumentException("The module is undefined. It must be either passed in the constructor, or the method createModule() must be overridden");
 		}
 
-		this.diagram = diagram;
-		Module diagramModule = Modules.override(module).with(new DiagramModule(this.diagram));
+		this.diagramRoot = diagramRoot;
+		Module diagramModule = Modules.override(module).with(new DiagramModule<>(diagramRootClass, this.diagramRoot));
 
 		final Injector injector = Guice.createInjector(diagramModule);
 		injector.injectMembers(this);
@@ -157,7 +152,7 @@ public abstract class GEFEditor extends EditorPart {
 		selectionProvider = selectionProviderFactory.create(this);
 		rootPart = viewer.getRootPart();
 		if (rootPart instanceof DiagramRootPart) {
-			((DiagramRootPart) rootPart).setDiagram(diagram);
+			((DiagramRootPart<MODEL>) rootPart).setModelRoot(diagramRoot);
 		}
 
 		// Canvas and SceneContainer
@@ -180,8 +175,6 @@ public abstract class GEFEditor extends EditorPart {
 		scene = new Scene(diagramSplitPane);
 		canvas.setScene(scene);
 
-		setSceneColor(Color.ANTIQUEWHITE);
-
 		// Activate
 		domain.activate();
 
@@ -201,17 +194,8 @@ public abstract class GEFEditor extends EditorPart {
 		getSite().setSelectionProvider(selectionProvider);
 	}
 
-	protected final void setSceneColor(Paint paint) {
-		if (viewer != null) {
-			Parent viewerCanvas = viewer.getCanvas();
-			if (viewerCanvas instanceof Region) {
-				((Region) viewerCanvas).setBackground(new Background(new BackgroundFill(paint, null, null)));
-			}
-		}
-	}
-
-	protected final List<Diagram> getContents() {
-		return Collections.singletonList(diagram);
+	protected final List<MODEL> getContents() {
+		return Collections.singletonList(diagramRoot);
 	}
 
 	public final IDomain getDomain() {
@@ -236,8 +220,8 @@ public abstract class GEFEditor extends EditorPart {
 		return ModelUtil.getSelectionModel(viewer);
 	}
 
-	public Diagram getDiagram() {
-		return diagram;
+	public MODEL getModel() {
+		return diagramRoot;
 	}
 
 	public IViewer getViewer() {

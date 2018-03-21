@@ -30,7 +30,7 @@ class DiagramEditPartEmitter extends AbstractEditPartEmitter {
 	'''
 	
 	override getExtended(List<Object> arguments) '''
-	 extends org.eclipse.papyrus.gef4.parts.DiagramContentPart
+	 extends org.eclipse.papyrus.gef4.parts.DiagramContentPart<org.eclipse.gmf.runtime.notation.View>
 	'''
 	
 

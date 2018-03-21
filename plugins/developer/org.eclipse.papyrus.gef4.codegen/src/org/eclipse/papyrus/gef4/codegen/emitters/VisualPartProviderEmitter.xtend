@@ -30,10 +30,10 @@ class VisualPartProviderEmitter implements IEmitter {
 		List<Object> arguments) throws InterruptedException, InvocationTargetException, UnexpectedBehaviourException '''
 		package «(arguments.get(0) as GenEditorGenerator).packageNamePrefix».providers;
 		
-		public class VisualPartProvider extends org.eclipse.papyrus.gef4.provider.AbstractVisualPartProvider{
+		public class ContentPartProvider extends org.eclipse.papyrus.gef4.provider.AbstractContentPartProvider{
 			
 			@Override
-			public org.eclipse.gef4.mvc.parts.IContentPart<javafx.scene.Node, ? extends javafx.scene.Node> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
+			public org.eclipse.gef.mvc.fx.parts.IContentPart<?> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
 				switch (view.getType()) {
 
 				«FOR String element : (arguments.get(1) as HashMap<String, GenCommonBase>).keySet»
@@ -58,7 +58,7 @@ class VisualPartProviderEmitter implements IEmitter {
 				
 				default:
 					// System.out.println("View not supported: " + view);
-					return (org.eclipse.gef4.mvc.parts.IContentPart<javafx.scene.Node, ? extends javafx.scene.Node>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
+					return (org.eclipse.gef.mvc.fx.parts.IContentPart<?>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
 						@Override
 						public Object caseDecorationNode(org.eclipse.gmf.runtime.notation.DecorationNode object) {
 							return new org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart(object);
@@ -66,7 +66,7 @@ class VisualPartProviderEmitter implements IEmitter {
 		
 						@Override
 						public Object caseShape(org.eclipse.gmf.runtime.notation.Shape object) {
-							return new org.eclipse.papyrus.gef4.parts.NodeContentPart(object);
+							return new org.eclipse.papyrus.gef4.parts.NodeContentPart<>(object);
 						}
 		
 						@Override

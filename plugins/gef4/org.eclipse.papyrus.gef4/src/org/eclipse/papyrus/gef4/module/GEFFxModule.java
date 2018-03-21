@@ -27,12 +27,11 @@ import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
 import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
-import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
+import org.eclipse.gef.mvc.fx.providers.DefaultAnchorProvider;
 import org.eclipse.gef.mvc.fx.providers.GeometricOutlineProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
@@ -48,25 +47,66 @@ import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.palette.Palette;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.gef4.parts.ContainerContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 import org.eclipse.papyrus.gef4.provider.CollapseHandlePartProvider;
 import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
-import org.eclipse.papyrus.gef4.provider.IContentChildrenProvider;
-import org.eclipse.papyrus.gef4.provider.NotationContentChildrenProvider;
-import org.eclipse.papyrus.gef4.provider.ProviderBasedContentPartFactory;
+import org.eclipse.papyrus.gef4.services.impl.EmptyAnchorageService;
 import org.eclipse.papyrus.gef4.tools.DefaultToolManager;
 import org.eclipse.papyrus.gef4.tools.ToolManager;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 
-public abstract class GEFFxModule extends MvcFxModule {
+public class GEFFxModule extends MvcFxModule {
+
+	@Override
+	protected void configure() {
+		super.configure();
+
+		// bind selection provider
+		// bindSelectionProvider();
+
+		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class));
+		bindNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ContainerContentPart.class));
+		bindConnectionPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class));
+		bindPrimaryPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IPrimaryContentPart.class));
+		bindCompartmentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CompartmentContentPart.class));
+
+		// define specific policy for affixed Label
+		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
+
+		bindDiagramPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class));
+
+		bindSelectionProviderFactory();
+
+		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractHandlePart.class));
+
+		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
+
+		bindBoundsBehavior();
+
+		bindBoundsModel();
+
+		bindPalette();
+
+		bindToolManager();
+
+
+		// binder().bind(new TypeLiteral<IHandlePartFactory>() {
+		// }).to(SelectionHandlePartFactory.class)
+		// .in(AdaptableScopes.typed(IViewer.class));
+
+
+		// binder().bind(new TypeLiteral<IFeedbackPartFactory>() {
+		// }).to(BoundsFeedbackPartFactory.class)
+		// .in(AdaptableScopes.typed(IViewer.class));
+	}
 
 	@Override
 	protected void bindIViewerAdaptersForContentViewer(
@@ -86,6 +126,7 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.addBinding(AdapterKey
 						.role(ChangeBoundsBehavior.BOUNDS_ROLE))
 				.to(BoundsFeedbackPartFactory.class);
+
 	}
 
 	@Override
@@ -144,7 +185,9 @@ public abstract class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		// Nothing (Most binding moved to PrimaryPartAdapter due to the new propagation mechanism of policies in GEF4)
+		// Most binding moved to PrimaryPartAdapter due to the new propagation mechanism of policies in GEF4
+
+		adapterMapBinder.addBinding(AdapterRoles.fallbackRole()).to(EmptyAnchorageService.class);
 	}
 
 	@Override
@@ -218,54 +261,6 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.to(DiagramRootPart.class).in(AdaptableScopes.typed(IViewer.class));
 	}
 
-	@Override
-	protected void configure() {
-		super.configure();
-
-		bindIContentPartFactory();
-		bindIContentPartProvider();
-
-		// bind selection provider
-		// bindSelectionProvider();
-
-		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), NotationContentPart.class));
-		bindNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ContainerContentPart.class));
-		bindConnectionPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class));
-		bindPrimaryPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IPrimaryContentPart.class));
-		bindCompartmentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CompartmentContentPart.class));
-
-		// define specific policy for affixed Label
-		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
-
-		bindDiagramPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class));
-
-		bindSelectionProviderFactory();
-
-		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractHandlePart.class));
-
-		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
-
-		bindBoundsBehavior();
-
-		bindBoundsModel();
-
-		bindPalette();
-
-		bindDefaultContentChildrenProvider();
-
-		bindToolManager();
-
-
-		// binder().bind(new TypeLiteral<IHandlePartFactory>() {
-		// }).to(SelectionHandlePartFactory.class)
-		// .in(AdaptableScopes.typed(IViewer.class));
-
-
-		// binder().bind(new TypeLiteral<IFeedbackPartFactory>() {
-		// }).to(BoundsFeedbackPartFactory.class)
-		// .in(AdaptableScopes.typed(IViewer.class));
-	}
-
 	protected void bindCompartmentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		// bindHoverBehaviorAsCompartmentPartAdapter(adapterMapBinder);
 		bindCollapseHandleProviderAsCompartmentPartAdapter(adapterMapBinder);
@@ -294,6 +289,11 @@ public abstract class GEFFxModule extends MvcFxModule {
 				.addBinding(
 						AdapterKey.defaultRole())
 				.to(MoveOnDragHandler.class);
+
+		adapterMapBinder
+				.addBinding(
+						AdapterRoles.fallbackRole())
+				.to(DefaultAnchorProvider.class);
 	}
 
 	protected void bindToolManager() {
@@ -321,18 +321,6 @@ public abstract class GEFFxModule extends MvcFxModule {
 	protected void bindIOperationHistory() {
 		// Transactions are handled separately in Papyrus. Do not use the operation history for graphical operations, to avoid conflicts
 		binder().bind(IOperationHistory.class).toInstance(EmptyOperationHistory.INSTANCE);
-	}
-
-	protected abstract void bindIContentPartProvider();
-
-	protected void bindIContentPartFactory() {
-		binder().bind(new TypeLiteral<IContentPartFactory>() {
-		}).to(ProviderBasedContentPartFactory.class);
-	}
-
-	protected void bindDefaultContentChildrenProvider() {
-		binder().bind(new TypeLiteral<IContentChildrenProvider<View>>() {
-		}).to(NotationContentChildrenProvider.class);
 	}
 
 }

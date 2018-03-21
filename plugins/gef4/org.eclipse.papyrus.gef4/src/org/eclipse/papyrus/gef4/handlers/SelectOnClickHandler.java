@@ -23,7 +23,7 @@ import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.HandlerUtil;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 
@@ -56,7 +56,7 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 		IVisualPart<? extends Node> host = getHost();
 
 		IViewer viewer = host.getRoot().getViewer();
-		NotationContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
+		BaseContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
 
 		if (targetPrimaryPart == host) {
 			select(targetPrimaryPart, e);
@@ -78,7 +78,7 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 		IVisualPart<? extends Node> host = getHost();
 
 		IViewer viewer = host.getRoot().getViewer();
-		NotationContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
+		BaseContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
 
 		if (targetPrimaryPart == host) {
 			unselect(targetPrimaryPart, e);

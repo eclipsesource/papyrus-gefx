@@ -12,16 +12,26 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.module;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.eclipse.gmf.runtime.emf.type.core.ClientContextManager;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.module.GEFFxModule;
-import org.eclipse.papyrus.gef4.palette.Palette;
-import org.eclipse.papyrus.gef4.provider.IContentChildrenProvider;
-import org.eclipse.papyrus.uml.gefdiag.common.provider.StereotypeAwareContentChildrenProvider;
+import org.eclipse.gmf.runtime.emf.type.core.IClientContext;
+import org.eclipse.papyrus.gef4.gmf.module.GMFModule;
+import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
 
-import com.google.inject.TypeLiteral;
+import com.google.inject.Provides;
+import com.google.inject.name.Names;
 
-public abstract class UMLDiagramModule extends GEFFxModule {
+public abstract class UMLDiagramModule extends GMFModule {
+
+	/**
+	 * Name of the injected {@link String} property representing the {@link IClientContext} ID
+	 *
+	 * @see {@link Named @Named}
+	 */
+	public static final String CLIENT_CONTEXT_ID = "clientContextID";
 
 	/**
 	 * @see org.eclipse.papyrus.gef4.module.GEFFxModule#configure()
@@ -32,26 +42,28 @@ public abstract class UMLDiagramModule extends GEFFxModule {
 		super.configure();
 
 		bindElementTypesRegistry();
+		configureClientContextID();
 	}
 
-	@Override
-	protected void bindDefaultContentChildrenProvider() {
-		binder().bind(new TypeLiteral<IContentChildrenProvider<View>>() {
-		}).to(StereotypeAwareContentChildrenProvider.class);
-
-	}
-
-	/**
-	 * @see org.eclipse.papyrus.gef4.module.GEFFxModule#bindPalette()
-	 *
-	 */
-	@Override
-	protected void bindPalette() {
-		binder().bind(Palette.class).to(FakePalette.class);
-	}
+	// @Override
+	// protected void bindDefaultContentChildrenProvider() {
+	// binder().bind(new TypeLiteral<ContentChildrenAdapter<View>>() {
+	// }).to(StereotypeAwareContentChildrenProvider.class).in(PartScoped.class);
+	// }
 
 	protected void bindElementTypesRegistry() {
 		binder().bind(ElementTypeRegistry.class).toInstance(ElementTypeRegistry.getInstance());
+	}
+
+	@Provides
+	@Singleton
+	protected IClientContext bindClientContext(@Named(CLIENT_CONTEXT_ID) String clientContextId) {
+		return ClientContextManager.getInstance().getClientContext(clientContextId);
+	}
+
+	protected void configureClientContextID() {
+		// Bind to the default Papyrus Type Context ID
+		binder().bind(String.class).annotatedWith(Names.named(CLIENT_CONTEXT_ID)).toInstance(TypeContext.getDefaultContextId());
 	}
 
 }

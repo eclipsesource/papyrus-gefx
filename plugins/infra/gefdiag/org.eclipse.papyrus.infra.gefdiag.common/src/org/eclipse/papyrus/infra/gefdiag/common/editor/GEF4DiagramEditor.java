@@ -35,14 +35,14 @@ import com.google.inject.Module;
 
 import javafx.scene.Node;
 
-public class GEF4DiagramEditor extends GEFEditor implements IRevealSemanticElement, IRefreshHandlerPart {
+public class GEF4DiagramEditor extends GEFEditor<Diagram> implements IRevealSemanticElement, IRefreshHandlerPart {
 
 	protected boolean disposed = false;
 
 	protected Module module;
 
 	public GEF4DiagramEditor(Diagram diagram, Module module) {
-		super(diagram, module);
+		super(Diagram.class, diagram, module);
 	}
 
 	@Override

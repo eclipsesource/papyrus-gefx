@@ -10,35 +10,44 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.provider;
+package org.eclipse.papyrus.gef4.gmf.services;
 
 import java.util.Map;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.scopes.PartScope;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-
-import javafx.scene.Node;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 
 public class ProviderBasedContentPartFactory implements IContentPartFactory {
 
 	@Inject
-	private IContentPartProvider provider;
-
-	@Inject
 	private Injector injector;
 
+	@Inject
+	private PartScope scope;
+
 	@Override
-	public IContentPart<? extends Node> createContentPart(Object content, Map<Object, Object> contextMap) {
+	public IContentPart<?> createContentPart(Object content, Map<Object, Object> contextMap) {
 		if (content instanceof View) {
-			IContentPart<? extends Node> contentPart = provider.createContentPart((View) content);
-			if (contentPart != null) {
-				injector.injectMembers(contentPart);
+			final View view = (View) content;
+
+			scope.enter(view);
+			try {
+				System.err.println("Retrieving part for " + view.getType());
+				IContentPart<?> contentPart = injector.getInstance(Key.get(new TypeLiteral<IContentPart<?>>() {
+					//
+				}));
+				assert contentPart != null;
+				return contentPart;
+			} finally {
+				scope.exit(view);
 			}
-			return contentPart;
 		}
 		return null;
 	}

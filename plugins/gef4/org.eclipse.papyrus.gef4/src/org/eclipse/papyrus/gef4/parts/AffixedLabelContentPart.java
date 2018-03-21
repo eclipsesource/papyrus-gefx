@@ -12,7 +12,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.layout.AffixedLabelLocator;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
@@ -25,7 +24,7 @@ import javafx.scene.layout.BorderWidths;
 /**
  * The Class AffixedLabelContentPart.
  */
-public class AffixedLabelContentPart extends LabelContentPart implements IPrimaryContentPart {
+public class AffixedLabelContentPart<MODEL> extends LabelContentPart<MODEL> {
 
 	/**
 	 * Instantiates a new affixed label content part.
@@ -33,8 +32,8 @@ public class AffixedLabelContentPart extends LabelContentPart implements IPrimar
 	 * @param view
 	 *            the view
 	 */
-	public AffixedLabelContentPart(final View view) {
-		super(view);
+	public AffixedLabelContentPart(final MODEL model) {
+		super(model);
 		setLocator(new AffixedLabelLocator(this));
 	}
 
@@ -54,16 +53,16 @@ public class AffixedLabelContentPart extends LabelContentPart implements IPrimar
 
 	protected void refreshBorder() {
 		BorderStroke stroke = null;
-		final BorderColors borderColors = getBorderColors();
-		final BorderStrokeStyles borderStyles = getBorderStyles();
-		final BorderWidths borderWidths = getBorderWidths();
+		final BorderColors borderColors = getStyleProvider().getBorderColors();
+		final BorderStrokeStyles borderStyles = getStyleProvider().getBorderStyles();
+		final BorderWidths borderWidths = getStyleProvider().getBorderWidths();
 
 		Border border = null;
 		if (borderWidths != null) {
 			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
 					borderStyles.getLeft(),
-					getCornerRadii(), borderWidths,
-					getMargin());
+					getStyleProvider().getCornerRadii(), borderWidths,
+					getStyleProvider().getMargin());
 			border = new Border(stroke);
 		}
 		label.setBorder(border);

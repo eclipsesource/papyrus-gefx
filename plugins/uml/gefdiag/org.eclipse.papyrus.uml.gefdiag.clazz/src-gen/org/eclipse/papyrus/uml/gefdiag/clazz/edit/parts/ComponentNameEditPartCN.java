@@ -1,12 +1,9 @@
 
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart;
+public class ComponentNameEditPartCN extends org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart {
 
-public class ComponentNameEditPartCN extends NamedElementLabelContentPart {
-
-	public ComponentNameEditPartCN(View view) {
+	public ComponentNameEditPartCN(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);
 	}
 

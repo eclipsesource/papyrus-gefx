@@ -1,6 +1,5 @@
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.utils.FXUtils;
 
 import javafx.geometry.Pos;
@@ -8,12 +7,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.text.TextAlignment;
 
-public class LabelContentPart extends AbstractLabelContentPart<Label> {
+public class LabelContentPart<MODEL> extends AbstractLabelContentPart<MODEL, Label> {
 
 	protected boolean useAllWidth = true;
 
-	public LabelContentPart(View view) {
-		super(view);
+	public LabelContentPart(MODEL model) {
+		super(model);
 	}
 
 	@Override
@@ -33,7 +32,7 @@ public class LabelContentPart extends AbstractLabelContentPart<Label> {
 	 */
 	@Override
 	protected void refreshTextAlignment() {
-		final Pos textAlignment = getTextAlignment();
+		final Pos textAlignment = getStyleProvider().getTextAlignment();
 		getVisual().setAlignment(textAlignment);
 
 		if (useAllWidth) {

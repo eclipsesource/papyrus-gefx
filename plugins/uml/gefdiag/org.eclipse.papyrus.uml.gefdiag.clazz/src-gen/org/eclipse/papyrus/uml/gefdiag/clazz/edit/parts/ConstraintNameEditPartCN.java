@@ -1,12 +1,10 @@
 
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart;
+public class ConstraintNameEditPartCN
+		extends org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart {
 
-public class ConstraintNameEditPartCN extends NamedElementLabelContentPart {
-
-	public ConstraintNameEditPartCN(View view) {
+	public ConstraintNameEditPartCN(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);
 	}
 

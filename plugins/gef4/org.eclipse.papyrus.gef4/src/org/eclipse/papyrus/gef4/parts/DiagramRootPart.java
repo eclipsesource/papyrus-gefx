@@ -13,21 +13,20 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.gef.mvc.fx.parts.LayeredRootPart;
-import org.eclipse.gmf.runtime.notation.Diagram;
 
 import javafx.scene.Group;
 
-public class DiagramRootPart extends LayeredRootPart {
+public class DiagramRootPart<MODEL> extends LayeredRootPart {
 
-	protected Diagram diagram;
+	protected MODEL modelRoot;
 
 	public DiagramRootPart() {
 		super();
 	}
 
-	public DiagramRootPart(Diagram diagram) {
+	public DiagramRootPart(MODEL modelRoot) {
 		this();
-		setDiagram(diagram);
+		setModelRoot(modelRoot);
 	}
 
 	@Override
@@ -35,12 +34,12 @@ public class DiagramRootPart extends LayeredRootPart {
 		super.doActivate();
 	}
 
-	public void setDiagram(Diagram diagram) {
-		this.diagram = diagram;
+	public void setModelRoot(MODEL modelRoot) {
+		this.modelRoot = modelRoot;
 	}
 
-	public Diagram getDiagram() {
-		return diagram;
+	public MODEL getModelRoot() {
+		return modelRoot;
 	}
 
 	@Override

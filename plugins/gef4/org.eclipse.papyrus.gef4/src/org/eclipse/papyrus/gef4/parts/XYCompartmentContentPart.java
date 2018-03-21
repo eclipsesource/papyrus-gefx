@@ -13,17 +13,16 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.DecorationNode;
 import org.eclipse.papyrus.gef4.utils.FXUtils;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 //FIXME: Doesn't properly handle negative coordinates
-public class XYCompartmentContentPart<V extends DecorationNode> extends CompartmentContentPart<V, Pane> {
+public class XYCompartmentContentPart<MODEL> extends CompartmentContentPart<MODEL, Pane> {
 
-	public XYCompartmentContentPart(final V view) {
-		super(view);
+	public XYCompartmentContentPart(final MODEL model) {
+		super(model);
 	}
 
 	@Override

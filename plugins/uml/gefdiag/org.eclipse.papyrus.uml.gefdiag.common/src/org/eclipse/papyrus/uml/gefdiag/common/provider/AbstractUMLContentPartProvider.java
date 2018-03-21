@@ -14,8 +14,8 @@ package org.eclipse.papyrus.uml.gefdiag.common.provider;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.services.AbstractContentPartProvider;
 import org.eclipse.papyrus.gef4.parts.EmptyContentPart;
-import org.eclipse.papyrus.gef4.provider.AbstractContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.common.parts.StereotypeLabelContentPart;
 
 import javafx.scene.Node;

@@ -12,14 +12,13 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.notation.DecorationNode;
 import org.eclipse.papyrus.gef4.utils.FXUtils;
 
 import javafx.scene.layout.VBox;
 
 
-public class ListCompartmentContentPart<V extends DecorationNode> extends CompartmentContentPart<V, VBox> {
-	public ListCompartmentContentPart(final V view) {
+public class ListCompartmentContentPart<MODEL> extends CompartmentContentPart<MODEL, VBox> {
+	public ListCompartmentContentPart(final MODEL view) {
 		super(view);
 	}
 

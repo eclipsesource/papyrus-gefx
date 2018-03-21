@@ -30,7 +30,7 @@ class LinkEditPartEmitter extends AbstractEditPartEmitter {
 	'''
 	
 	override getExtended(List<Object> arguments) '''
-	 extends org.eclipse.papyrus.gef4.parts.ConnectionContentPart<org.eclipse.gmf.runtime.notation.Connector>
+	 extends org.eclipse.papyrus.gef4.parts.ConnectionContentPart<org.eclipse.gmf.runtime.notation.View>
 	'''
 	
 }

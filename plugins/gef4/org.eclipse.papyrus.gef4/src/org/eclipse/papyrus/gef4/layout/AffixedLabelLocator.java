@@ -12,10 +12,12 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.layout;
 
+import javax.inject.Inject;
+
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
@@ -26,12 +28,14 @@ import javafx.scene.Parent;
 
 public class AffixedLabelLocator implements Locator {
 
-	private final NotationContentPart<? extends View, ? extends Node> host;
+	private final BaseContentPart<?, ? extends Node> host;
 
 	private final ListChangeListener<? super Node> childrenListener;
 	private final ChangeListener<Bounds> boundsListener;
 
-	public AffixedLabelLocator(NotationContentPart<? extends View, ? extends Node> host) {
+	private View view;
+
+	public AffixedLabelLocator(BaseContentPart<?, ? extends Node> host) {
 		this.host = host;
 
 		childrenListener = (change) -> refreshChildren(change);
@@ -40,11 +44,15 @@ public class AffixedLabelLocator implements Locator {
 		};
 	}
 
+	@Inject
+	public void setView(View view) {
+		this.view = view;
+	}
+
 	@Override
 	public void applyLayout(Node node) {
 		installChildrenListener(node);
 
-		View view = host.getView();
 		Location location;
 		if (view instanceof org.eclipse.gmf.runtime.notation.Node) {
 			org.eclipse.gmf.runtime.notation.Node nodeView = (org.eclipse.gmf.runtime.notation.Node) view;

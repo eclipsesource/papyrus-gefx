@@ -19,7 +19,7 @@ import java.util.List;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import javafx.scene.Node;
 
@@ -52,8 +52,8 @@ public class MarqueeOnDragHandler extends org.eclipse.gef.mvc.fx.handlers.Marque
 	}
 
 	private IContentPart<? extends Node> getPrimary(IVisualPart<? extends Node> parent) {
-		if (parent instanceof NotationContentPart) {
-			return ((NotationContentPart<?, ?>) parent).getPrimaryContentPart();
+		if (parent instanceof BaseContentPart) {
+			return ((BaseContentPart<?, ?>) parent).getPrimaryContentPart();
 		}
 		if (parent instanceof IContentPart) {
 			return (IContentPart<? extends Node>) parent;

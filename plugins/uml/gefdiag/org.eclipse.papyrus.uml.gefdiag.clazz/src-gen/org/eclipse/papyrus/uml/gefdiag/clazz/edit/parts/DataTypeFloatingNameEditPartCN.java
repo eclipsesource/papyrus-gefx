@@ -1,12 +1,10 @@
 
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
+public class DataTypeFloatingNameEditPartCN
+		extends org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart<org.eclipse.gmf.runtime.notation.View> {
 
-public class DataTypeFloatingNameEditPartCN extends AffixedLabelContentPart {
-
-	public DataTypeFloatingNameEditPartCN(View view) {
+	public DataTypeFloatingNameEditPartCN(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);
 	}
 

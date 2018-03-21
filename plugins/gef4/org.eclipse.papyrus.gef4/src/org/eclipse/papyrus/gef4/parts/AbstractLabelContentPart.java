@@ -13,30 +13,23 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.gmf.runtime.common.ui.services.parser.IParser;
-import org.eclipse.gmf.runtime.common.ui.services.parser.ParserOptions;
-import org.eclipse.gmf.runtime.common.ui.services.parser.ParserService;
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
-import org.eclipse.papyrus.gef4.utils.NotationUtil;
-import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;
-import org.eclipse.papyrus.infra.gmfdiag.common.commands.SemanticAdapter;
+import org.eclipse.papyrus.gef4.services.TextAdapter;
+import org.eclipse.papyrus.gef4.services.style.LabelStyleService;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public abstract class AbstractLabelContentPart<N extends Node> extends NotationContentPart<View, N> {
+public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends BaseContentPart<MODEL, N> {
 
 	private String currentImagePath;
 
 	protected Label label;
 
-	private IParser parser;
-
-	public AbstractLabelContentPart(final View view) {
-		super(view);
+	public AbstractLabelContentPart(final MODEL model) {
+		super(model);
 	}
 
 	@Override
@@ -48,12 +41,16 @@ public abstract class AbstractLabelContentPart<N extends Node> extends NotationC
 		refreshIcon();
 	}
 
-	protected Label getLabelVisual() {
-		return label;
+	protected final TextAdapter getTextService() {
+		return getAdapter(TextAdapter.class);
 	}
 
-	protected TextOverflowEnum getTextOverflow() {
-		return NotationUtil.getTextOverflow(getView());
+	protected LabelStyleService getLabelStyleProvider() {
+		return getAdapter(LabelStyleService.class);
+	}
+
+	protected Label getLabelVisual() {
+		return label;
 	}
 
 	protected void refreshIcon() {
@@ -100,23 +97,16 @@ public abstract class AbstractLabelContentPart<N extends Node> extends NotationC
 	protected abstract void refreshTextAlignment();
 
 	protected void refreshFont() {
-		label.setTextFill(getFontColor());
-		label.setFont(getFont());
+		label.setTextFill(getStyleProvider().getFontColor());
+		label.setFont(getStyleProvider().getFont());
 	}
 
 	protected String getText() {
-		IParser parser = getParser();
-		if (parser != null) {
-			return parser.getPrintString(new SemanticAdapter(getElement(), getView()), ParserOptions.NONE.intValue());
+		TextAdapter textService = getTextService();
+		if (textService != null) {
+			return textService.getText();
 		}
 		return "<No parser>";
-	}
-
-	protected final IParser getParser() {
-		if (parser == null) {
-			parser = ParserService.getInstance().getParser(new SemanticAdapter(getElement(), getView()));
-		}
-		return parser;
 	}
 
 	@Override

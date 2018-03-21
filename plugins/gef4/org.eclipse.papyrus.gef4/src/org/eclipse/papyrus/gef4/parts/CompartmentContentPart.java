@@ -16,12 +16,10 @@ package org.eclipse.papyrus.gef4.parts;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gmf.runtime.notation.DecorationNode;
-import org.eclipse.gmf.runtime.notation.DrawerStyle;
-import org.eclipse.gmf.runtime.notation.NotationPackage;
-import org.eclipse.gmf.runtime.notation.TitleStyle;
 import org.eclipse.papyrus.gef4.Activator;
+import org.eclipse.papyrus.gef4.services.style.CompartmentStyleService;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.FXUtils;
@@ -69,7 +67,7 @@ import javafx.util.Duration;
  * 			<P>
  *            The concrete Pane type
  */
-abstract public class CompartmentContentPart<V extends DecorationNode, P extends Pane> extends ContainerContentPart<V, VBox> {
+abstract public class CompartmentContentPart<MODEL, P extends Pane> extends ContainerContentPart<MODEL, VBox> {
 
 	// A value smaller than 18 will prevent the scrollbars from working properly (Size of the scrollbar arrows)
 	protected static final int MINIMUM_COMPARTMENT_SCROLLPANE_HEIGHT = 20;
@@ -87,8 +85,8 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	// Current state of the "collapsed" property
 	protected SimpleBooleanProperty collapsed = new SimpleBooleanProperty(false);
 
-	public CompartmentContentPart(final V view) {
-		super(view);
+	public CompartmentContentPart(final MODEL model) {
+		super(model);
 	}
 
 	@Override
@@ -122,7 +120,7 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 
 		wrapper.setMinHeight(MINIMUM_COMPARTMENT_HEIGHT);
 
-		refreshCollapsed(false);
+		// refreshCollapsed(false);
 
 		return wrapper;
 	}
@@ -157,14 +155,14 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 
 	protected void refreshTitle() {
 		// Add or remove the Title label
-		if (isShowTitle()) {
+		if (getCompartmentStyleProvider().isShowTitle()) {
 			titleLabel.setVisible(true);
 			titleLabel.managedProperty().unbind();
 			titleLabel.setManaged(true);
 
 			titleLabel.setMaxWidth(Double.MAX_VALUE);
 			titleLabel.setAlignment(Pos.BASELINE_CENTER);
-			titleLabel.setFont(getFont(7));
+			titleLabel.setFont(getStyleProvider().getFont(7));
 			FXUtils.setPadding(titleLabel, 1, 1);
 
 			// Update the Title text
@@ -175,24 +173,6 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 
 			return;
 		}
-	}
-
-	/**
-	 * Whether the title of the compartment should be displayed
-	 *
-	 * Defaults to false
-	 *
-	 * @see {@link #getTitle()}
-	 *
-	 * @return
-	 */
-	protected boolean isShowTitle() {
-		TitleStyle titleStyle = (TitleStyle) getView().getStyle(NotationPackage.eINSTANCE.getTitleStyle());
-		if (titleStyle == null) {
-			return false;
-		}
-
-		return titleStyle.isShowTitle();
 	}
 
 	/**
@@ -210,31 +190,34 @@ abstract public class CompartmentContentPart<V extends DecorationNode, P extends
 	// The primary part is responsible for the general layout. Especially, if the primary part specifies that the node should
 	// extend automatically based on the size of its contents, this scroll bar policy will most likely not be useful
 	protected void refreshScrollBar() {
-		scrollPane.setHbarPolicy(getHorizontalBarPolicy());
-		scrollPane.setVbarPolicy(getVerticalBarPolicy());
+		scrollPane.setHbarPolicy(getStyleProvider().getHorizontalBarPolicy());
+		scrollPane.setVbarPolicy(getStyleProvider().getVerticalBarPolicy());
 	}
 
 	/**
 	 * Refreshes the compartment's collapsed state
 	 */
 	protected void refreshCollapsed(boolean animate) {
-		final DrawerStyle style = (DrawerStyle) getView().getStyle(NotationPackage.eINSTANCE.getDrawerStyle());
-		setCollapsed(style == null ? false : style.isCollapsed(), animate);
+		setCollapsed(getCompartmentStyleProvider().isCollapsed(), animate);
+	}
+
+	protected CompartmentStyleService getCompartmentStyleProvider() {
+		return getAdapter(AdapterKey.get(CompartmentStyleService.class));
 	}
 
 	@Override
 	protected void refreshBorder() {
 		BorderStroke stroke = null;
-		final BorderColors borderColors = getBorderColors();
-		final BorderStrokeStyles borderStyles = getBorderStyles();
-		final BorderWidths borderWidths = getBorderWidths();
+		final BorderColors borderColors = getStyleProvider().getBorderColors();
+		final BorderStrokeStyles borderStyles = getStyleProvider().getBorderStyles();
+		final BorderWidths borderWidths = getStyleProvider().getBorderWidths();
 
 		Border border = null;
 		if (borderWidths != null) {
 			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
 					borderStyles.getLeft(),
-					getCornerRadii(), borderWidths,
-					getMargin());
+					getStyleProvider().getCornerRadii(), borderWidths,
+					getStyleProvider().getMargin());
 			border = new Border(stroke);
 		}
 		wrapper.setBorder(border);

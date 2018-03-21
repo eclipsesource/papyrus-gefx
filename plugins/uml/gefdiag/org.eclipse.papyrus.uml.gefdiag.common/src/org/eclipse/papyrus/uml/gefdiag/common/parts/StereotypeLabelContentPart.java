@@ -20,14 +20,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.StringValueStyle;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
-import org.eclipse.papyrus.gef4.utils.NotationUtil;
 import org.eclipse.papyrus.infra.tools.util.ListHelper;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Stereotype;
 
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 
 /**
@@ -37,7 +39,7 @@ import javafx.scene.control.Label;
  * @author Camille Letavernier
  *
  */
-public class StereotypeLabelContentPart extends LabelContentPart {
+public class StereotypeLabelContentPart extends LabelContentPart<View> {
 
 	/** left Stereotype delimiters ('Guillemets francais'). */
 	public static final String ST_LEFT = String.valueOf("\u00AB"); //$NON-NLS-1$
@@ -80,7 +82,7 @@ public class StereotypeLabelContentPart extends LabelContentPart {
 	}
 
 	protected List<Stereotype> getVisibleStereotypes() {
-		EObject semanticElement = getElement();
+		EObject semanticElement = getContent().getElement();
 
 		List<? extends View> childViews = NotationUtil.getNotationChildren(getPrimaryContentPart());
 		List<String> hiddenStereotypes = childViews
@@ -103,6 +105,11 @@ public class StereotypeLabelContentPart extends LabelContentPart {
 		}
 
 		return Collections.emptyList();
+	}
+
+	@Override
+	public BaseContentPart<View, ? extends Node> getPrimaryContentPart() {
+		return (BaseContentPart<View, ? extends Node>) super.getPrimaryContentPart();
 	}
 
 	protected String getQualifiedStereotypeName(View stereotypeLabelView) {

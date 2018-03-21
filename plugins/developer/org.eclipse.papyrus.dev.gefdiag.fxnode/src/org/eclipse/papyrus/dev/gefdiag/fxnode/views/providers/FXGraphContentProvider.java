@@ -15,11 +15,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -44,10 +43,10 @@ public class FXGraphContentProvider implements ITreeContentProvider {
 			return new Object[] { ((DiagramContentPart) inputElement).getVisual().getScene() };
 		}
 
-		if (inputElement instanceof NotationContentPart) {
-			NotationContentPart<? extends View, ? extends Node> part = (NotationContentPart<?, ?>) inputElement;
+		if (inputElement instanceof BaseContentPart) {
+			BaseContentPart<?, ?> part = (BaseContentPart<?, ?>) inputElement;
 			// Also show anchored parts
-			List<Node> result = new LinkedList<Node>();
+			List<Node> result = new LinkedList<>();
 			result.add(part.getVisual());
 
 			part.getAnchoredsUnmodifiable().stream().forEach(p -> result.add(p.getVisual()));
@@ -65,7 +64,7 @@ public class FXGraphContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof Parent) {
 			Parent parent = (Parent) parentElement;
-			List<Node> children = new ArrayList<Node>(parent.getChildrenUnmodifiable());
+			List<Node> children = new ArrayList<>(parent.getChildrenUnmodifiable());
 			if (parent instanceof Pane) {
 				Pane pane = (Pane) parent;
 				if (pane.getShape() != null) {

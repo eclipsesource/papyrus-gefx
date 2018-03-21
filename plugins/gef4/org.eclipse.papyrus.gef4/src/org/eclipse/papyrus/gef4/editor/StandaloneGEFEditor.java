@@ -18,33 +18,33 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.papyrus.gef4.utils.EditorUtils;
+import org.eclipse.papyrus.infra.ui.util.EditorUtils;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 import com.google.inject.Module;
 
-public abstract class StandaloneGEFEditor extends GEFEditor {
+public abstract class StandaloneGEFEditor<MODEL> extends GEFEditor<MODEL> {
 
 	private ResourceSet resourceSet;
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
-		Diagram diagram = getDiagram(input);
+		MODEL diagram = getDiagramRoot(input);
 		if (diagram == null) {
 			throw new PartInitException("Invalid editor input: " + input);
 		}
-		init(diagram, getModule());
+		init((Class<MODEL>) Diagram.class, diagram, getModule());
 	}
 
 	protected abstract Module getModule();
 
-	protected Diagram getDiagram(IEditorInput input) {
+	protected MODEL getDiagramRoot(IEditorInput input) {
 		URI uri = EditorUtils.getResourceURI(input);
 		if (uri != null) {
-			return loadDiagram(uri);
+			return (MODEL) loadDiagram(uri);
 		}
 		return null;
 	}

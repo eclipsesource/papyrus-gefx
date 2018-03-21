@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.provider.NotationContentChildrenProvider;
+import org.eclipse.papyrus.gef4.gmf.services.NotationContentChildrenProvider;
+
+import com.google.inject.Inject;
 
 /**
  * Filters the child views of this element, removing the Stereotype Views that shouldn't be associated to ContentParts
@@ -30,6 +32,19 @@ import org.eclipse.papyrus.gef4.provider.NotationContentChildrenProvider;
  */
 public class StereotypeAwareContentChildrenProvider extends NotationContentChildrenProvider {
 
+	private final View view;
+
+	@Inject
+	protected StereotypeAwareContentChildrenProvider(View view) {
+		super(view);
+		this.view = view;
+	}
+
+	protected StereotypeAwareContentChildrenProvider() {
+		super(null);
+		throw new IllegalStateException();
+	}
+
 	private static Collection<String> excludedTypes = new HashSet<>();
 	{
 		excludedTypes.add("StereotypeLabel");
@@ -37,16 +52,16 @@ public class StereotypeAwareContentChildrenProvider extends NotationContentChild
 	}
 
 	@Override
-	public List<? extends View> getContentChildren(View parent) {
-		List<? extends View> allVisibleChildren = super.getContentChildren(parent);
+	public List<? extends View> getContentChildren() {
+		List<? extends View> allVisibleChildren = super.getContentChildren();
 
 		List<View> filteredChildren = allVisibleChildren.stream()
 				.filter(
 						(view) -> !excludedTypes.contains(view.getType()))
 				.collect(Collectors.toList());
 
-		if (isPrimaryView(parent)) {
-			addDynamicStereotypeLabelView(parent, filteredChildren);
+		if (isPrimaryView(view)) {
+			addDynamicStereotypeLabelView(view, filteredChildren);
 		}
 
 		return filteredChildren;
@@ -59,32 +74,32 @@ public class StereotypeAwareContentChildrenProvider extends NotationContentChild
 			return;
 		}
 
-//		Node stereotypeLabel = children
-//				.stream()
-//				.filter(view -> "DynamicStereotypeLabel".equals(view.getType()))
-//				.filter(view -> view instanceof Node)
-//				.map(view -> (Node)view)
-//				.findAny()
-//				.orElse(null);
-//
-//		if (stereotypeLabel == null) {
-//			stereotypeLabel = NotationFactory.eINSTANCE.createDecorationNode();
-//			stereotypeLabel.setType("DynamicStereotypeLabel");
-//
-//			EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(parent);
-//			if (domain instanceof TransactionalEditingDomain) {
-//				try {
-//					final Node labelToAdd = stereotypeLabel;
-//					GMFUnsafe.write((TransactionalEditingDomain) domain, () -> NotationUtil.getTransientChildren(parent).add(0, labelToAdd));
-//				} catch (InterruptedException | RollbackException e) {
-//					e.printStackTrace(); // TODO improve log
-//				}
-//			}
-//		}
-//
-//		// Ensure the Stereotype label is always the first element
-//		// FIXME: Add a separate strategy for sorting children
-//		children.add(0, stereotypeLabel);
+		// Node stereotypeLabel = children
+		// .stream()
+		// .filter(view -> "DynamicStereotypeLabel".equals(view.getType()))
+		// .filter(view -> view instanceof Node)
+		// .map(view -> (Node)view)
+		// .findAny()
+		// .orElse(null);
+		//
+		// if (stereotypeLabel == null) {
+		// stereotypeLabel = NotationFactory.eINSTANCE.createDecorationNode();
+		// stereotypeLabel.setType("DynamicStereotypeLabel");
+		//
+		// EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(parent);
+		// if (domain instanceof TransactionalEditingDomain) {
+		// try {
+		// final Node labelToAdd = stereotypeLabel;
+		// GMFUnsafe.write((TransactionalEditingDomain) domain, () -> NotationUtil.getTransientChildren(parent).add(0, labelToAdd));
+		// } catch (InterruptedException | RollbackException e) {
+		// e.printStackTrace(); // TODO improve log
+		// }
+		// }
+		// }
+		//
+		// // Ensure the Stereotype label is always the first element
+		// // FIXME: Add a separate strategy for sorting children
+		// children.add(0, stereotypeLabel);
 	}
 
 	protected boolean isPrimaryView(View view) {

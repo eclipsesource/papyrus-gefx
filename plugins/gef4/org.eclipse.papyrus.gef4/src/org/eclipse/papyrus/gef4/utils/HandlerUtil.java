@@ -15,7 +15,7 @@ package org.eclipse.papyrus.gef4.utils;
 import org.eclipse.gef.mvc.fx.handlers.IHandler;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -29,11 +29,11 @@ public class HandlerUtil {
 	 * @param event
 	 * @return
 	 */
-	public static NotationContentPart<?, ?> getTargetPrimaryPart(IHandler handler, MouseEvent event) {
+	public static BaseContentPart<?, ?> getTargetPrimaryPart(IHandler handler, MouseEvent event) {
 		IViewer viewer = handler.getHost().getRoot().getViewer();
 		IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(event.getTarget());
-		if (targetPart instanceof NotationContentPart) {
-			NotationContentPart<?, ?> targetNotationPart = (NotationContentPart<?, ?>) targetPart;
+		if (targetPart instanceof BaseContentPart) {
+			BaseContentPart<?, ?> targetNotationPart = (BaseContentPart<?, ?>) targetPart;
 			return targetNotationPart.getPrimaryContentPart();
 		}
 		return null;

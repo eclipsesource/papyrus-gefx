@@ -10,7 +10,7 @@
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.utils;
+package org.eclipse.papyrus.gef4.gmf.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,14 @@ import org.eclipse.gmf.runtime.notation.GradientStyle;
 import org.eclipse.gmf.runtime.notation.LineStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.NotationContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
+import org.eclipse.papyrus.gef4.utils.BorderColors;
+import org.eclipse.papyrus.gef4.utils.BorderStrokeStyleEnum;
+import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
+import org.eclipse.papyrus.gef4.utils.ColorUtil;
+import org.eclipse.papyrus.gef4.utils.EffectEnum;
+import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
+import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;
 import org.eclipse.papyrus.infra.emf.appearance.helper.AppearanceHelper;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
 import org.eclipse.papyrus.infra.gmfdiag.common.utils.NamedStyleProperties;
@@ -57,106 +64,57 @@ import javafx.scene.paint.Paint;
 // TODO add default value as attribute of methods ??
 public class NotationUtil {
 
-
 	public static final String VERTICAL_SCROLL_BAR = "verticalScrollBar";
-
-
 
 	public static final String HORIZONTAL_SCROLL_BAR = "horizontalScrollBar";
 
-
-
 	public static final String SCROLL_BAR_NEVER = "never";
-
-
 
 	public static final String SCROLL_BAR_ALWAYS = "always";
 
-
-
 	public static final String SCROLL_BAR_AUTO = "auto";
-
-
 
 	public static final String TEXT_OVERFLOW = "textOverflow";
 
-
-
 	public static final String GRADIENT_COLOR = "gradientColor";
-
-
 
 	public static final String SPACING = "spacing";
 
-
-
 	public static final String IS_CORNER_BEND_RECTANGLE = "isCornerBendRectangle";
-
-
 
 	public static final String SHAPE_TYPE = "shapeType";
 
-
-
 	public static final String ROTATE = "rotate";
-
-
 
 	public static final String PADDING = "padding";
 
-
-
 	public static final String MARGIN = "margin";
-
-
 
 	public static final String BACKGROUND_COLOR = "backgroundColor";
 
-
-
 	public static final String EFFECT = "effect";
-
-
 
 	public static final String DOUBLE_BORDER_WIDTH = "doubleBorderWidth";
 
-
-
 	public static final String CORNER_RADIUS = "cornerRadius";
-
-
 
 	public static final String CORNER_BEND_WIDTH = "cornerBendWidth";
 
-
-
 	public static final String CORNER_BEND_COLOR = "cornerBendColor";
-
-
 
 	public static final String BORDER_WIDTH = "borderWidth";
 
-
-
 	public static final String LINE_DASH_GAP = "lineDashGap";
-
-
 
 	public static final String LINE_DASH_LENGTH = "lineDashLength";
 
-
-
 	public static final String BORDER_COLOR = "borderColor";
 
-
-
 	private static final int[] DEFAULT_CUSTOM_DASH_ARRAY = new int[] { 5, 5 };
-	public static final ImmutableList<Integer> DEFAULT_CUSTOM_DASH = ImmutableList.copyOf(Arrays.stream(DEFAULT_CUSTOM_DASH_ARRAY).boxed().toArray(Integer[]::new));
-
-
+	public static final ImmutableList<Integer> DEFAULT_CUSTOM_DASH = ImmutableList
+			.copyOf(Arrays.stream(DEFAULT_CUSTOM_DASH_ARRAY).boxed().toArray(Integer[]::new));
 
 	public static final String LIGHTNESS = "lightness";
-
 
 	/**
 	 * The NamedStyle property to set the background paint.
@@ -168,7 +126,6 @@ public class NotationUtil {
 	public static final String TARGET_DECORATION = "targetDecoration";
 
 	public static final String ELEMENT_ICON = "elementIcon";
-
 
 	/**
 	 * Apply hsl color lightness to a color.
@@ -190,9 +147,9 @@ public class NotationUtil {
 		return newColor;
 	}
 
-
 	/**
-	 * Gets the background paint apply to the view. see {@link Paint#valueOf(String)}
+	 * Gets the background paint apply to the view. see
+	 * {@link Paint#valueOf(String)}
 	 *
 	 * @param view
 	 *            the view
@@ -206,7 +163,6 @@ public class NotationUtil {
 		}
 		return paint;
 	}
-
 
 	/**
 	 * Gets the background gradient end position.
@@ -235,7 +191,6 @@ public class NotationUtil {
 		}
 		return endPoint;
 	}
-
 
 	/**
 	 * Gets the background gradient start position.
@@ -267,8 +222,6 @@ public class NotationUtil {
 		return startPoint;
 	}
 
-
-
 	/**
 	 * Gets the border color with attributes lineColor and borderColor.
 	 *
@@ -294,7 +247,8 @@ public class NotationUtil {
 			if (colors != null && 1 == colors.size()) {
 				borderColors = new BorderColors(Color.web(colors.get(0)));
 			} else if (colors != null && 4 == colors.size()) {
-				borderColors = new BorderColors(Color.web(colors.get(0)), Color.web(colors.get(1)), Color.web(colors.get(2)), Color.web(colors.get(3)));
+				borderColors = new BorderColors(Color.web(colors.get(0)), Color.web(colors.get(1)),
+						Color.web(colors.get(2)), Color.web(colors.get(3)));
 			}
 		}
 		return null != borderColors ? borderColors : BorderColors.TRANSPARENT;
@@ -315,10 +269,12 @@ public class NotationUtil {
 
 		// TODO take into account lineStyle.
 		// notation Line
-		// final LineStyle style = (LineStyle) view.getStyle(NotationPackage.Literals.LINE_TYPE_STYLE);
+		// final LineStyle style = (LineStyle)
+		// view.getStyle(NotationPackage.Literals.LINE_TYPE_STYLE);
 
 		// Set with borderStyle namedStyle
-		final EList<String> borderStyleList = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE, null);
+		final EList<String> borderStyleList = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE,
+				null);
 		if (null != borderStyleList) {
 			if (1 == borderStyleList.size()) {
 				final BorderStrokeStyleEnum lineStyle = BorderStrokeStyleEnum.getByLiteral(borderStyleList.get(0));
@@ -333,40 +289,55 @@ public class NotationUtil {
 			} else if (4 == borderStyleList.size()) {
 				final BorderStrokeStyleEnum topLineStyle = BorderStrokeStyleEnum.getByLiteral(borderStyleList.get(0));
 				final BorderStrokeStyleEnum rightLineStyle = BorderStrokeStyleEnum.getByLiteral(borderStyleList.get(1));
-				final BorderStrokeStyleEnum bottomLineStyle = BorderStrokeStyleEnum.getByLiteral(borderStyleList.get(2));
+				final BorderStrokeStyleEnum bottomLineStyle = BorderStrokeStyleEnum
+						.getByLiteral(borderStyleList.get(2));
 				final BorderStrokeStyleEnum leftLineStyle = BorderStrokeStyleEnum.getByLiteral(borderStyleList.get(3));
 
-				if (null != topLineStyle && null != rightLineStyle && null != bottomLineStyle && null != leftLineStyle) {
+				if (null != topLineStyle && null != rightLineStyle && null != bottomLineStyle
+						&& null != leftLineStyle) {
 
 					// Custom BorderStrokeStyle with customDash
-					final BorderStrokeStyle customizedStrokeStyle = new BorderStrokeStyle(null, null, null, 10, 0, getCustomStyle(view));
+					final BorderStrokeStyle customizedStrokeStyle = new BorderStrokeStyle(null, null, null, 10, 0,
+							getCustomStyle(view));
 
-					// customized Dash BorderStrokeStyle with namedStyle lineDashLength and lineDashGap
-					final BorderStrokeStyle customizeDashStrokeStyle = new BorderStrokeStyle(null, null, null, 10, 0, getCustomDash(view));
+					// customized Dash BorderStrokeStyle with namedStyle lineDashLength and
+					// lineDashGap
+					final BorderStrokeStyle customizeDashStrokeStyle = new BorderStrokeStyle(null, null, null, 10, 0,
+							getCustomDash(view));
 
 					// Test if its a custom Style then test if its a custom Dash for top
-					final BorderStrokeStyle topBorderStrokeStyle = topLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
-							: topLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle topBorderStrokeStyle = topLineStyle == BorderStrokeStyleEnum.CUSTOM
+							? customizedStrokeStyle
+							: topLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle
+									: topLineStyle.getBorderStrokeStyle();
 					// //Test if its a custom Dash
-					// topBorderStrokeStyle = topLineStyle.equals(BorderStrokeStyleEnum.DASH.getLiteral()) ? customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
+					// topBorderStrokeStyle =
+					// topLineStyle.equals(BorderStrokeStyleEnum.DASH.getLiteral()) ?
+					// customizeDashStrokeStyle : topLineStyle.getBorderStrokeStyle();
 
 					// Test if its a custom Style then test if its a custom Dash for right
-					final BorderStrokeStyle rightBorderStrokeStyle = rightLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
-							: rightLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : rightLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle rightBorderStrokeStyle = rightLineStyle == BorderStrokeStyleEnum.CUSTOM
+							? customizedStrokeStyle
+							: rightLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle
+									: rightLineStyle.getBorderStrokeStyle();
 
 					// Test if its a custom Style then test if its a custom Dash for bottom
-					final BorderStrokeStyle bottomBorderStrokeStyle = bottomLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
-							: bottomLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : bottomLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle bottomBorderStrokeStyle = bottomLineStyle == BorderStrokeStyleEnum.CUSTOM
+							? customizedStrokeStyle
+							: bottomLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle
+									: bottomLineStyle.getBorderStrokeStyle();
 
 					// Test if its a custom Style then test if its a custom Dash for left
-					final BorderStrokeStyle leftBorderStrokeStyle = leftLineStyle == BorderStrokeStyleEnum.CUSTOM ? customizedStrokeStyle
-							: leftLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle : leftLineStyle.getBorderStrokeStyle();
+					final BorderStrokeStyle leftBorderStrokeStyle = leftLineStyle == BorderStrokeStyleEnum.CUSTOM
+							? customizedStrokeStyle
+							: leftLineStyle == BorderStrokeStyleEnum.DASH ? customizeDashStrokeStyle
+									: leftLineStyle.getBorderStrokeStyle();
 
-					borderStyles = new BorderStrokeStyles(topBorderStrokeStyle, rightBorderStrokeStyle, bottomBorderStrokeStyle, leftBorderStrokeStyle);
+					borderStyles = new BorderStrokeStyles(topBorderStrokeStyle, rightBorderStrokeStyle,
+							bottomBorderStrokeStyle, leftBorderStrokeStyle);
 
 					// Set double line
-					borderStyles.setDouble(
-							topLineStyle == BorderStrokeStyleEnum.DOUBLE,
+					borderStyles.setDouble(topLineStyle == BorderStrokeStyleEnum.DOUBLE,
 							rightLineStyle == BorderStrokeStyleEnum.DOUBLE,
 							bottomLineStyle == BorderStrokeStyleEnum.DOUBLE,
 							leftLineStyle == BorderStrokeStyleEnum.DOUBLE);
@@ -377,7 +348,6 @@ public class NotationUtil {
 		return null != borderStyles ? borderStyles : BorderStrokeStyles.SOLID;
 	}
 
-
 	protected static List<Double> getCustomDash(final View view) {
 		final List<Double> customDashList = new ArrayList<>();
 		customDashList.add((double) NotationUtils.getIntValue(view, LINE_DASH_LENGTH, 5));// TODO DEFAULT_VALUE
@@ -385,9 +355,9 @@ public class NotationUtil {
 		return customDashList;
 	}
 
-
 	protected static List<Double> getCustomStyle(final View view) {
-		final int[] customDash = NotationUtils.getIntListValue(view, NamedStyleProperties.LINE_CUSTOM_VALUE, DEFAULT_CUSTOM_DASH_ARRAY);
+		final int[] customDash = NotationUtils.getIntListValue(view, NamedStyleProperties.LINE_CUSTOM_VALUE,
+				DEFAULT_CUSTOM_DASH_ARRAY);
 		final List<Double> customDashList = new ArrayList<>();
 		for (int element : customDash) {
 			customDashList.add((double) element);
@@ -427,7 +397,6 @@ public class NotationUtil {
 		return borderWidths;
 	}
 
-
 	/**
 	 * Gets the color lightness. return -1 if not set.
 	 *
@@ -439,7 +408,6 @@ public class NotationUtil {
 		return NotationUtils.getIntValue(view, LIGHTNESS, -1);
 	}
 
-
 	/**
 	 * Gets the corner bend color.
 	 *
@@ -448,9 +416,9 @@ public class NotationUtil {
 	 * @return the corner bend color
 	 */
 	public static Paint getCornerBendColor(final View view) {
-		return Color.web(NotationUtils.getStringValue(view, CORNER_BEND_COLOR, Color.WHITE.toString()));// TODO MIA DEFAULT_VALUE
+		return Color.web(NotationUtils.getStringValue(view, CORNER_BEND_COLOR, Color.WHITE.toString()));// TODO MIA
+																										// DEFAULT_VALUE
 	}
-
 
 	/**
 	 * Gets the corner bend width.
@@ -464,7 +432,6 @@ public class NotationUtil {
 		final int cornerBendWidth = NotationUtils.getIntValue(view, CORNER_BEND_WIDTH, 20);// TODO MIA DEFAULT_VALUE
 		return cornerBendWidth >= 0 ? cornerBendWidth : 20;
 	}
-
 
 	/**
 	 * Gets the corner radii.
@@ -481,8 +448,10 @@ public class NotationUtil {
 		// get CSS the value of radius Height
 		final double height = NotationUtils.getIntValue(view, NamedStyleProperties.RADIUS_HEIGHT, 0);
 
-		cornerRadii = new CornerRadii(width, height, height, width, width, height, height, width != 0 ? width - 0.01 : 0, false, false, false, false, false, false, false, false);
-		// -0.01 is a fix from a bug from CornerRadii with detect the return one as uniform
+		cornerRadii = new CornerRadii(width, height, height, width, width, height, height,
+				width != 0 ? width - 0.01 : 0, false, false, false, false, false, false, false, false);
+		// -0.01 is a fix from a bug from CornerRadii with detect the return one as
+		// uniform
 
 		// if cornerRadius NamedStyle is implemented
 		final int[] cornerRadius = NotationUtils.getIntListValue(view, CORNER_RADIUS, null);
@@ -492,7 +461,6 @@ public class NotationUtil {
 
 		return cornerRadii;
 	}
-
 
 	/**
 	 * Gets the double border widths.
@@ -507,11 +475,14 @@ public class NotationUtil {
 		// test if node containt a double line.
 		if (hasDoubleBorder(view)) {
 			final int[] borderWidth = NotationUtils.getIntListValue(view, DOUBLE_BORDER_WIDTH, null);
-			final EList<String> borderStyle = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE, null);
+			final EList<String> borderStyle = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE,
+					null);
 
 			if (null != borderWidth && 1 == borderWidth.length) {
 				if (1 == borderStyle.size()) {
-					final int width = borderStyle.get(0).equals(BorderStrokeStyleEnum.DOUBLE.getLiteral()) ? borderWidth[0] : 0;
+					final int width = borderStyle.get(0).equals(BorderStrokeStyleEnum.DOUBLE.getLiteral())
+							? borderWidth[0]
+							: 0;
 					borderWidths = new Insets(width, width, width, width);
 				} else if (4 == borderStyle.size()) {
 					borderWidths = new Insets(
@@ -523,7 +494,8 @@ public class NotationUtil {
 			} else if (null != borderWidth && 4 == borderWidth.length) {
 				if (1 == borderStyle.size()) {
 					final boolean isDouble = borderStyle.get(0).equals(BorderStrokeStyleEnum.DOUBLE.getLiteral());
-					borderWidths = new Insets(isDouble ? borderWidth[0] : 0, isDouble ? borderWidth[1] : 0, isDouble ? borderWidth[2] : 0, isDouble ? borderWidth[3] : 0);
+					borderWidths = new Insets(isDouble ? borderWidth[0] : 0, isDouble ? borderWidth[1] : 0,
+							isDouble ? borderWidth[2] : 0, isDouble ? borderWidth[3] : 0);
 				} else if (4 == borderStyle.size()) {
 					borderWidths = new Insets(
 							borderStyle.get(0).equals(BorderStrokeStyleEnum.DOUBLE.getLiteral()) ? borderWidth[0] : 0,
@@ -538,7 +510,6 @@ public class NotationUtil {
 
 		return borderWidths;
 	}
-
 
 	/**
 	 * Gets the effect.
@@ -578,7 +549,6 @@ public class NotationUtil {
 		return returnedEffect;
 	}
 
-
 	/**
 	 * Gets the fill color.
 	 *
@@ -609,7 +579,6 @@ public class NotationUtil {
 		return color;
 	}
 
-
 	/**
 	 * Gets the gradient color1.
 	 *
@@ -638,7 +607,6 @@ public class NotationUtil {
 		return null != color ? applyLightness(view, color) : getFillColor(view);
 	}
 
-
 	/**
 	 * Gets the margin.
 	 *
@@ -661,7 +629,6 @@ public class NotationUtil {
 		return insets;
 	}
 
-
 	/**
 	 * Gets the opacity.
 	 *
@@ -681,7 +648,6 @@ public class NotationUtil {
 		}
 		return opacity;
 	}
-
 
 	/**
 	 * Gets the padding.
@@ -712,7 +678,6 @@ public class NotationUtil {
 		return insets;
 	}
 
-
 	/**
 	 * Gets the rotate.
 	 *
@@ -724,7 +689,6 @@ public class NotationUtil {
 		// get the CSS value of rotate
 		return NotationUtils.getIntValue(view, ROTATE, 0);
 	}
-
 
 	/**
 	 * Gets the shadow.
@@ -743,7 +707,6 @@ public class NotationUtil {
 		return dropShadow;
 	}
 
-
 	/**
 	 * Gets the shadow color.
 	 *
@@ -752,9 +715,9 @@ public class NotationUtil {
 	 * @return the shadow color
 	 */
 	public static Color getShadowColor(final View view) {
-		return Color.web(NotationUtils.getStringValue(view, NamedStyleProperties.SHADOW_COLOR, Color.BLACK.toString()));// TODO DEFAULT_VALUE
+		return Color.web(NotationUtils.getStringValue(view, NamedStyleProperties.SHADOW_COLOR, Color.BLACK.toString()));// TODO
+																														// DEFAULT_VALUE
 	}
-
 
 	/**
 	 * Gets the shadow width.
@@ -765,10 +728,10 @@ public class NotationUtil {
 	 */
 	public static int getShadowWidth(final View view) {
 		// get the CSS value of shadowWidth
-		final int shadowWidth = NotationUtils.getIntValue(view, NamedStyleProperties.SHADOW_WIDTH, 3);// TODO MIA DEFAULT_VALUE
+		final int shadowWidth = NotationUtils.getIntValue(view, NamedStyleProperties.SHADOW_WIDTH, 3);// TODO MIA
+																										// DEFAULT_VALUE
 		return shadowWidth >= 0 ? shadowWidth : 3;
 	}
-
 
 	/**
 	 * Gets the shape type.
@@ -790,7 +753,8 @@ public class NotationUtil {
 			if (isPackage) {
 				shapeTypeEnum = ShapeTypeEnum.PACKAGE;
 			} else {
-				final boolean isCornerBendRectangle = NotationUtils.getBooleanValue(view, IS_CORNER_BEND_RECTANGLE, false);
+				final boolean isCornerBendRectangle = NotationUtils.getBooleanValue(view, IS_CORNER_BEND_RECTANGLE,
+						false);
 				if (isCornerBendRectangle) {
 					shapeTypeEnum = ShapeTypeEnum.CORNER_BEND_RECTANGLE;
 				} else {
@@ -805,7 +769,6 @@ public class NotationUtil {
 		return shapeTypeEnum;
 	}
 
-
 	/**
 	 * Gets the spacing.
 	 *
@@ -817,9 +780,9 @@ public class NotationUtil {
 		return NotationUtils.getIntValue(view, SPACING, 0);
 	}
 
-
 	/**
-	 * Gets the text alignment. TOP_CENTER, TOP_LEFT and TOP_RIGHT are return for center, left and right.
+	 * Gets the text alignment. TOP_CENTER, TOP_LEFT and TOP_RIGHT are return for
+	 * center, left and right.
 	 *
 	 * @param view
 	 *            the view
@@ -842,7 +805,6 @@ public class NotationUtil {
 		return textAlignment;
 	}
 
-
 	/**
 	 * Checks for double border.
 	 *
@@ -851,7 +813,8 @@ public class NotationUtil {
 	 * @return true, if successful
 	 */
 	public static boolean hasDoubleBorder(final View view) {
-		final EList<String> borderStyleList = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE, null);
+		final EList<String> borderStyleList = NotationUtils.getStringListValue(view, NamedStyleProperties.BORDER_STYLE,
+				null);
 		return null != borderStyleList ? borderStyleList.contains(BorderStrokeStyleEnum.DOUBLE.getLiteral()) : false;
 	}
 
@@ -864,7 +827,6 @@ public class NotationUtil {
 		}
 		return null != textOverflowEnum ? textOverflowEnum : TextOverflowEnum.HIDDEN;
 	}
-
 
 	public static ScrollBarPolicy getVerticalBarPolicy(final View view) {
 
@@ -883,7 +845,6 @@ public class NotationUtil {
 		return scrollBarPolicy;
 
 	}
-
 
 	public static ScrollBarPolicy getHorizontalBarPolicy(final View view) {
 		final String verticalPolicy = NotationUtils.getStringValue(view, HORIZONTAL_SCROLL_BAR, null);
@@ -914,12 +875,14 @@ public class NotationUtil {
 		return targetDecoration;
 	}
 
-	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationChildren(NotationContentPart<? extends View, ? extends Node> part) {
-		return getChildren(part.getView());
+	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationChildren(
+			BaseContentPart<? extends View, ? extends Node> part) {
+		return getChildren(part.getContent());
 	}
 
-	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationTransientChildren(NotationContentPart<? extends View, ? extends Node> part) {
-		return getTransientChildren(part.getView());
+	public static List<org.eclipse.gmf.runtime.notation.Node> getNotationTransientChildren(
+			BaseContentPart<? extends View, ? extends Node> part) {
+		return getTransientChildren(part.getContent());
 	}
 
 	@SuppressWarnings("unchecked") // GMF API is Java 1.4
@@ -957,11 +920,13 @@ public class NotationUtil {
 	//
 	//
 	// public static int getNotationMinHeight(final View view) {
-	// return NotationUtils.getIntValue(view, "minHeight", -1);// TODO MIA DEFAULT_VALUE;
+	// return NotationUtils.getIntValue(view, "minHeight", -1);// TODO MIA
+	// DEFAULT_VALUE;
 	// }
 	//
 	//
 	// public static int getNotationMinWidth(final View view) {
-	// return NotationUtils.getIntValue(view, "minWidth", -1);// TODO MIA DEFAULT_VALUE;
+	// return NotationUtils.getIntValue(view, "minWidth", -1);// TODO MIA
+	// DEFAULT_VALUE;
 	// }
 }
