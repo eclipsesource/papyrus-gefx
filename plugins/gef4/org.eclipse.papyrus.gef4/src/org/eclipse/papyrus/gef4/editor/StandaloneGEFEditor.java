@@ -36,7 +36,7 @@ public abstract class StandaloneGEFEditor<MODEL> extends GEFEditor<MODEL> {
 		if (diagram == null) {
 			throw new PartInitException("Invalid editor input: " + input);
 		}
-		init((Class<MODEL>) Diagram.class, diagram, getModule());
+		init(diagram, getModule());
 	}
 
 	protected abstract Module getModule();

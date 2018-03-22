@@ -16,15 +16,15 @@ import org.eclipse.gef.mvc.fx.parts.LayeredRootPart;
 
 import javafx.scene.Group;
 
-public class DiagramRootPart<MODEL> extends LayeredRootPart {
+public class DiagramRootPart<MODEL_ROOT> extends LayeredRootPart {
 
-	protected MODEL modelRoot;
+	protected MODEL_ROOT modelRoot;
 
 	public DiagramRootPart() {
 		super();
 	}
 
-	public DiagramRootPart(MODEL modelRoot) {
+	public DiagramRootPart(MODEL_ROOT modelRoot) {
 		this();
 		setModelRoot(modelRoot);
 	}
@@ -34,11 +34,11 @@ public class DiagramRootPart<MODEL> extends LayeredRootPart {
 		super.doActivate();
 	}
 
-	public void setModelRoot(MODEL modelRoot) {
+	public void setModelRoot(MODEL_ROOT modelRoot) {
 		this.modelRoot = modelRoot;
 	}
 
-	public MODEL getModelRoot() {
+	public MODEL_ROOT getModelRoot() {
 		return modelRoot;
 	}
 

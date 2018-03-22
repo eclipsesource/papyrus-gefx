@@ -21,16 +21,13 @@ import org.eclipse.gef.mvc.fx.domain.IDomain;
 import org.eclipse.gef.mvc.fx.models.GridModel;
 import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
-import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.papyrus.gef4.module.DiagramModule;
 import org.eclipse.papyrus.gef4.palette.Palette;
-import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -43,21 +40,16 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.util.Modules;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 
-public abstract class GEFEditor<MODEL> extends EditorPart {
+public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
-	/**
-	 * Set during {@link #init(Diagram)}
-	 */
-	private MODEL diagramRoot;
-
-	private IRootPart<? extends Node> rootPart;
+	@Inject
+	private MODEL_ROOT diagramRoot;
 
 	@Inject
 	private IDomain domain;
@@ -79,10 +71,10 @@ public abstract class GEFEditor<MODEL> extends EditorPart {
 
 	private final ListChangeListener<IContentPart<? extends Node>> selectionListener;
 
-	public GEFEditor(final Class<MODEL> diagramRootClass, final MODEL diagramRoot, final Module module) {
+	public GEFEditor(final MODEL_ROOT diagramRoot, final Module module) {
 		this();
 
-		init(diagramRootClass, diagramRoot, module);
+		init(diagramRoot, module);
 	}
 
 	public GEFEditor() {
@@ -99,19 +91,18 @@ public abstract class GEFEditor<MODEL> extends EditorPart {
 		};
 	}
 
-	public void init(Class<MODEL> diagramRootClass, final MODEL diagramRoot, final Module module) {
-		if (this.diagramRoot != null) {
-			throw new IllegalStateException("This editor has already been initialized");
-		}
+	public void init(final MODEL_ROOT diagramRoot, final Module module) {
+		// if (this.diagramRoot != null) {
+		// throw new IllegalStateException("This editor has already been initialized");
+		// }
 
 		if (module == null) {
 			throw new IllegalArgumentException("The module is undefined. It must be either passed in the constructor, or the method createModule() must be overridden");
 		}
 
-		this.diagramRoot = diagramRoot;
-		Module diagramModule = Modules.override(module).with(new DiagramModule<>(diagramRootClass, this.diagramRoot));
+		// this.diagramRoot = diagramRoot;
 
-		final Injector injector = Guice.createInjector(diagramModule);
+		final Injector injector = Guice.createInjector(module);
 		injector.injectMembers(this);
 	}
 
@@ -150,10 +141,6 @@ public abstract class GEFEditor<MODEL> extends EditorPart {
 	public void createPartControl(final Composite parent) {
 		viewer = getDomain().getViewers().values().stream().findFirst().orElseThrow(IllegalStateException::new);
 		selectionProvider = selectionProviderFactory.create(this);
-		rootPart = viewer.getRootPart();
-		if (rootPart instanceof DiagramRootPart) {
-			((DiagramRootPart<MODEL>) rootPart).setModelRoot(diagramRoot);
-		}
 
 		// Canvas and SceneContainer
 		canvas = new FXCanvasEx(parent, SWT.NONE);
@@ -194,7 +181,7 @@ public abstract class GEFEditor<MODEL> extends EditorPart {
 		getSite().setSelectionProvider(selectionProvider);
 	}
 
-	protected final List<MODEL> getContents() {
+	protected final List<MODEL_ROOT> getContents() {
 		return Collections.singletonList(diagramRoot);
 	}
 
@@ -220,7 +207,7 @@ public abstract class GEFEditor<MODEL> extends EditorPart {
 		return ModelUtil.getSelectionModel(viewer);
 	}
 
-	public MODEL getModel() {
+	public MODEL_ROOT getModel() {
 		return diagramRoot;
 	}
 

@@ -24,6 +24,9 @@ import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 
+/**
+ * Abstract module to be extended by GMF/UML Diagram Editors
+ */
 public abstract class UMLDiagramModule extends GMFModule {
 
 	/**

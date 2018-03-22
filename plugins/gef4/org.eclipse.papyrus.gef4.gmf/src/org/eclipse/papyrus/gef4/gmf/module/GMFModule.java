@@ -12,9 +12,11 @@ import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef.mvc.fx.behaviors.AbstractBehavior;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramRootPart;
 import org.eclipse.papyrus.gef4.gmf.scope.ViewPartScope;
 import org.eclipse.papyrus.gef4.gmf.services.EditingDomainTransactionService;
 import org.eclipse.papyrus.gef4.gmf.services.GMFConnectionService;
@@ -54,9 +56,10 @@ import com.google.inject.multibindings.MapBinder;
 import javafx.scene.Node;
 
 /**
- *
- * @noreference
- * @noextend
+ * <p>
+ * Abstract module to be extended by specific diagram editors based on
+ * GMF/Notation.
+ * </p>
  */
 public abstract class GMFModule extends AbstractModule {
 
@@ -74,6 +77,10 @@ public abstract class GMFModule extends AbstractModule {
 		bindConnectionAdapters(AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class));
 
 		bindIContentPartProvider();
+
+		binder().bind(IRootPart.class).to(NotationDiagramRootPart.class);
+
+		bindAnchorageService();
 	}
 
 	protected void bindScope() {
@@ -88,7 +95,12 @@ public abstract class GMFModule extends AbstractModule {
 	}
 
 	protected void bindConnectionAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
+		// Nothing yet
 		mapBinder.addBinding(AdapterKey.defaultRole()).to(GMFConnectionService.class);
+	}
+
+	protected void bindAnchorageService() {
+		// binder().bind(AnchorageService.class).to(GMFConnectionService.class);
 	}
 
 	protected void bindStyleAdapters() {

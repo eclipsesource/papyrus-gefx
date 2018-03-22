@@ -16,13 +16,11 @@ package org.eclipse.papyrus.gef4.module;
 
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.gef.common.adapt.AdapterKey;
-import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.behaviors.ContentBehavior;
 import org.eclipse.gef.mvc.fx.behaviors.GridBehavior;
 import org.eclipse.gef.mvc.fx.behaviors.HoverBehavior;
-import org.eclipse.gef.mvc.fx.domain.IDomain;
 import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
 import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
@@ -31,7 +29,6 @@ import org.eclipse.gef.mvc.fx.providers.DefaultAnchorProvider;
 import org.eclipse.gef.mvc.fx.providers.GeometricOutlineProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
-import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
@@ -52,10 +49,10 @@ import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.gef4.parts.ContainerContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
-import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.provider.CollapseHandlePartProvider;
 import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
+import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.impl.EmptyAnchorageService;
 import org.eclipse.papyrus.gef4.tools.DefaultToolManager;
 import org.eclipse.papyrus.gef4.tools.ToolManager;
@@ -187,7 +184,8 @@ public class GEFFxModule extends MvcFxModule {
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		// Most binding moved to PrimaryPartAdapter due to the new propagation mechanism of policies in GEF4
 
-		adapterMapBinder.addBinding(AdapterRoles.fallbackRole()).to(EmptyAnchorageService.class);
+		adapterMapBinder.addBinding(AdapterRoles.fallbackRole()).to(AnchorageService.class);
+		binder().bind(AnchorageService.class).to(EmptyAnchorageService.class);
 	}
 
 	@Override
@@ -250,15 +248,6 @@ public class GEFFxModule extends MvcFxModule {
 	protected void bindSelectionProviderFactory() {
 		binder().bind(ISelectionProviderFactory.class).to(
 				SelectionProviderFactory.class);
-	}
-
-	@Override
-	protected void bindRootPartAsContentViewerAdapter(
-			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-
-		adapterMapBinder
-				.addBinding(AdapterKey.role(IDomain.CONTENT_VIEWER_ROLE))
-				.to(DiagramRootPart.class).in(AdaptableScopes.typed(IViewer.class));
 	}
 
 	protected void bindCompartmentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
