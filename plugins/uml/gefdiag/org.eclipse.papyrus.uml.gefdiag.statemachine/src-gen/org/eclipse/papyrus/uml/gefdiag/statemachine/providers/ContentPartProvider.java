@@ -1,8 +1,5 @@
 package org.eclipse.papyrus.uml.gefdiag.statemachine.providers;
 
-import org.eclipse.papyrus.gef4.gmf.parts.ShapeContentPart;
-import org.eclipse.papyrus.gef4.gmf.parts.StructureCompartmentContentPart;
-
 public class ContentPartProvider
 		extends org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider {
 
@@ -15,13 +12,13 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Connector) view);
 		case "Pseudostate_ExitPointFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateExitPointFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Constraint_BodyLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ConstraintBodyEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Trigger_DeferrableTriggerLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.DeferrableTriggerEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Pseudostate_JunctionShape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateJunctionEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -30,28 +27,28 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Transition_InternalTransitionLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.InternalTransitionEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "State_Shape_TN":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.StateEditPartTN(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Pseudostate_ForkFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateForkNameEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "FinalState_FloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.FinalStateFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "State_NameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.StateNameEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_JoinFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateJoinFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Constraint_ConstrainedElementEdge":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ConstraintConstrainedElementEditPart(
 					(org.eclipse.gmf.runtime.notation.Connector) view);
 		case "Pseudostate_ForkStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateForkStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Constraint_Shape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ConstraintEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -60,10 +57,10 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "Pseudostate_ShallowHistoryFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateShallowHistoryFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_EntryPointStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateEntryPointStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_DeepHistoryShape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateDeepHistoryEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -72,10 +69,10 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Pseudostate_InitialFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateInitialFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_ExitPointStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateExitPointStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_ChoiceShape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateChoiceEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -87,37 +84,37 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "State_FloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.StateFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_InitialShape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateInitialEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Pseudostate_InitialStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateInitialStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Behavior_EntryBehaviorLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.EntryStateBehaviorEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "StateMachine_NameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.StateMachineNameEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Constraint_NameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ConstraintNameLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "State_RegionCompartment":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.StateCompartmentEditPart(
 					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "Constraint_KeywordLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ContextLinkAppliedStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_DeepHistoryStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateDeepHistoryStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Region_Shape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.RegionEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Pseudostate_TerminateFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateTerminateFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Transition_Edge":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.TransitionEditPart(
 					(org.eclipse.gmf.runtime.notation.Connector) view);
@@ -129,22 +126,22 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Pseudostate_ShallowHistoryStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateShallowHistoryStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_TerminateStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateTerminateStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Transition_NameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.TransitionNameEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_EntryPointFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateEntryPointFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "State_NameLabel_TN":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.StateNameEditPartTN(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_ChoiceFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateChoiceFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Region_SubvertexCompartment":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.RegionCompartmentEditPart(
 					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
@@ -153,19 +150,19 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Comment_BodyLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.CommentBodyEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_JoinStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateJoinStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "FinalState_StereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.FinalStateStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_TerminateShape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateTerminateEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Behavior_ExitBehaviorLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ExitStateBehaviorEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "StateMachine_Shape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.StateMachineEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -174,7 +171,7 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "ConnectionPointReference_StereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ConnectionPointReferenceStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Comment_Shape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.CommentEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -183,28 +180,28 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Connector) view);
 		case "Generalization_StereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.GeneralizationStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Behavior_DoActivityBehaviorLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.DoActivityStateBehaviorStateEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Pseudostate_JunctionStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateJunctionStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Generalization_Edge":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.GeneralizationEditPart(
 					(org.eclipse.gmf.runtime.notation.Connector) view);
 		case "Pseudostate_JunctionFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateJunctionFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Transition_GuardLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.TransitionGuardEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "ConnectionPointReference_NameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ConnectionPointReferenceNameEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_ChoiceStereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateChoiceStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_ForkShape":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateForkEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -213,13 +210,13 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Transition_StereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.TransitionStereotypeEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Pseudostate_DeepHistoryFloatingNameLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateDeepHistoryFloatingLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 
 		default:
-			System.out.println("View not supported: " + view);
+			// System.out.println("View not supported: " + view);
 			return (org.eclipse.gef.mvc.fx.parts.IContentPart<?>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
 				@Override
 				public Object caseDecorationNode(org.eclipse.gmf.runtime.notation.DecorationNode object) {
@@ -228,12 +225,12 @@ public class ContentPartProvider
 
 				@Override
 				public Object caseShape(org.eclipse.gmf.runtime.notation.Shape object) {
-					return new ShapeContentPart(object);
+					return new org.eclipse.papyrus.gef4.parts.NodeContentPart<>(object);
 				}
 
 				@Override
 				public Object caseBasicCompartment(org.eclipse.gmf.runtime.notation.BasicCompartment object) {
-					return new StructureCompartmentContentPart(
+					return new org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>(
 							object);
 				}
 			}.doSwitch(view);

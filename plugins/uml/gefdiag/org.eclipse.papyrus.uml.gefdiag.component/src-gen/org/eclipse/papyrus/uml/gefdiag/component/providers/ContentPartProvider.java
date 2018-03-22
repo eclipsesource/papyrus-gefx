@@ -53,7 +53,7 @@ public class ContentPartProvider
 			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.ComponentCompositeCompartmentEditPart(
 					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "Interface_Shape_CN":
-			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.InterfaceEditPart(
+			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.RectangleInterfaceEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Comment_Shape_CN":
 			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.CommentEditPart(
@@ -155,7 +155,7 @@ public class ContentPartProvider
 			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.ModelNameEditPart(
 					(org.eclipse.gmf.runtime.notation.View) view);
 		case "Interface_ClassifierShape_CN":
-			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.InterfaceEditPart(
+			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.RectangleInterfaceEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
 		case "Usage_StereotypeLabel":
 			return new org.eclipse.papyrus.uml.gefdiag.component.edit.parts.UsageAppliedStereotypeEditPart(
