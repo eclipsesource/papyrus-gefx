@@ -1,8 +1,11 @@
+
 package org.eclipse.papyrus.uml.gefdiag.composite.edit.parts;
 
-public class TimeConstraintNameEditPart extends org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart {
+public class TimeConstraintNameEditPart
+		extends org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart {
 
 	public TimeConstraintNameEditPart(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);
 	}
+
 }

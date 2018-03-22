@@ -14,15 +14,15 @@ package org.eclipse.papyrus.uml.gefdiag.common.parts;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
-import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 
 import javafx.scene.control.Label;
 
 /**
  * The Class NamedElementLabelContentPart.
  */
-public class NamedElementLabelContentPart extends LabelContentPart<View> {
+public class NamedElementLabelContentPart extends NotationLabelContentPart {
 
 	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
 

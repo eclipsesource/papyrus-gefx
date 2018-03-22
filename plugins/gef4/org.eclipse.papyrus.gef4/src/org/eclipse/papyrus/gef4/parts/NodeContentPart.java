@@ -69,6 +69,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	@Override
 	protected void refreshVisualInTransaction(final VBox visual) {
 		refreshBorder();
+		refreshBackground();
 
 		refreshBounds();
 		refreshShape();

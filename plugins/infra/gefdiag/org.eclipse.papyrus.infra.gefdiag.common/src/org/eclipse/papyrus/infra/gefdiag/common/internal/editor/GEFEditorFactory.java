@@ -14,8 +14,10 @@ package org.eclipse.papyrus.infra.gefdiag.common.internal.editor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gmf.runtime.notation.Diagram;
@@ -74,7 +76,18 @@ public class GEFEditorFactory extends AbstractEditorFactory {
 		for (IConfigurationElement configElement : config) {
 			try {
 				String type = configElement.getAttribute("type");
-				Module module = (Module) configElement.createExecutableExtension("module");
+
+				Object checkModule = configElement.createExecutableExtension("module");
+				assert checkModule instanceof Module;
+
+				Supplier<Module> module = () -> {
+					try {
+						return (Module) configElement.createExecutableExtension("module");
+					} catch (CoreException ex) {
+						Activator.log().error(ex);
+						return null;
+					}
+				};
 				String imagePath = configElement.getAttribute("image");
 				String label = configElement.getAttribute("label");
 

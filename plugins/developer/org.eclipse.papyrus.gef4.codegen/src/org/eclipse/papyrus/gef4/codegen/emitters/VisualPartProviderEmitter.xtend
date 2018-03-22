@@ -30,7 +30,7 @@ class VisualPartProviderEmitter implements IEmitter {
 		List<Object> arguments) throws InterruptedException, InvocationTargetException, UnexpectedBehaviourException '''
 		package «(arguments.get(0) as GenEditorGenerator).packageNamePrefix».providers;
 		
-		public class ContentPartProvider extends org.eclipse.papyrus.gef4.provider.AbstractContentPartProvider{
+		public class ContentPartProvider extends org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider{
 			
 			@Override
 			public org.eclipse.gef.mvc.fx.parts.IContentPart<?> createContentPart(org.eclipse.gmf.runtime.notation.View view) {

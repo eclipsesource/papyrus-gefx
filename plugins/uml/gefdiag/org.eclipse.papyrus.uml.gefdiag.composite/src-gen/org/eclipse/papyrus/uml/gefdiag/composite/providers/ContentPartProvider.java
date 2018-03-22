@@ -1,541 +1,1024 @@
 package org.eclipse.papyrus.uml.gefdiag.composite.providers;
 
-import org.eclipse.gef.mvc.fx.parts.IContentPart;
-import org.eclipse.gmf.runtime.notation.Connector;
-import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
-import org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider;
-
-import javafx.scene.Node;
-
-public class ContentPartProvider extends AbstractUMLContentPartProvider {
+public class ContentPartProvider
+		extends org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider {
 
 	@Override
-	public IContentPart<? extends Node> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
+	public org.eclipse.gef.mvc.fx.parts.IContentPart<?> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
 		switch (view.getType()) {
-		case "3082":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3081":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3080":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5142":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationNameEditPart(view);
-		case "6111":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StringExpressionFloatingLabelEditPart(view);
-		case "5143":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationStereotypeLabelEditPart(view);
-		case "6110":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralUnlimitedNaturalFloatingLabelEditPart(view);
-		case "6113":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeExpressionFloatingLabelEditPart(view);
-		case "6112":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueExpressionFloatingLabelEditPart(view);
-		case "6115":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationFloatingLabelEditPart(view);
-		case "6114":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExpressionFloatingLabelEditPart(view);
-		case "3088":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ParameterEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3087":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3086":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3085":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3084":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3083":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "6106":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralBooleanFloatingLabelEditPart(view);
-		case "6105":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeEventFloatingLabelEditPart(view);
-		case "6108":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralNullFloatingLabelEditPart(view);
-		case "6107":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralIntegerFloatingLabelEditPart(view);
-		case "6109":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralStringFloatingLabelEditPart(view);
-		case "3093":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5151":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationNameEditPart(view);
-		case "3092":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5152":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationStereotypeLabelEditPart(view);
-		case "3091":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "6001":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentRealizationNameEditPart(view);
-		case "6003":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SubstitutionNameEditPart(view);
-		case "5156":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeNameEditPart(view);
-		case "6002":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceRealizationNameEditPart(view);
-		case "6005":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ManifestationNameEditPart(view);
-		case "5158":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeNameEditPart(view);
-		case "6004":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RealizationNameEditPart(view);
-		case "3097":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3096":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3095":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3094":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "6117":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationIntervalFloatingLabelEditPart(view);
-		case "6116":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeIntervalFloatingLabelEditPart(view);
-		case "6119":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InstanceValueFloatingLabelEditPart(view);
-		case "6118":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalFloatingLabelEditPart(view);
-		case "5162":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactNameEditPart(view);
-		case "5163":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemNameEditPart(view);
-		case "5164":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalNameEditPart(view);
-		case "5165":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseNameEditPart(view);
-		case "5166":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEventNameEditPart(view);
-		case "5167":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CallEventNameEditPart(view);
-		case "5168":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AnyReceiveEventNameEditPart(view);
-		case "6016":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceRealizationAppliedStereotypeEditPart(view);
-		case "6015":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentRealizationAppliedStereotypeEditPart(view);
-		case "5160":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorNameEditPart(view);
-		case "5161":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationNameEditPart(view);
-		case "5159":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceNameEditPart(view);
-		case "6007":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UsageNameEditPart(view);
-		case "6006":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AbstractionNameEditPart(view);
-		case "6009":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DependencyNameEditPart(view);
-		case "6008":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentNameEditPart(view);
-		case "6021":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UsageAppliedStereotypeEditPart(view);
-		case "6020":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AbstractionAppliedStereotypeEditPart(view);
-		case "6023":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DependencyAppliedStereotypeEditPart(view);
-		case "6022":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentAppliedStereotypeEditPart(view);
-		case "6025":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorAppliedStereotypeEditPart(view);
-		case "5178":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralBooleanNameEditPart(view);
-		case "6024":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.GeneralizationAppliedStereotypeEditPart(view);
-		case "5179":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralIntegerNameEditPart(view);
-		case "6027":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RoleBindingRoleNameEditPart(view);
-		case "2100":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StringExpressionEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5171":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ChangeEventNameEditPart(view);
-		case "5172":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeEventNameEditPart(view);
-		case "6018":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RealizationAppliedStereotypeEditPart(view);
-		case "6017":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SubstitutionAppliedStereotypeEditPart(view);
-		case "6019":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ManifestationAppliedStereotypeEditPart(view);
-		case "5184":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueExpressionNameEditPart(view);
-		case "6032":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationFlowAppliedStereotypeEditPart(view);
-		case "5185":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeExpressionNameEditPart(view);
-		case "6031":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationFlowConveyedLabelEditPart(view);
-		case "6034":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ParameterAppliedStereotypeEditPart(view);
-		case "5186":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExpressionNameEditPart(view);
-		case "6033":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ParameterNameEditPart(view);
-		case "5187":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationNameEditPart(view);
-		case "5188":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeIntervalNameEditPart(view);
-		case "6036":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintSpecificationEditPart(view);
-		case "5189":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationIntervalNameEditPart(view);
-		case "6035":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintSpecificationEditPart(view);
-		case "6038":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintSpecificationEditPart(view);
-		case "6037":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintSpecificationEditPart(view);
-		case "2111":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2110":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5180":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralNullNameEditPart(view);
-		case "5181":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralStringNameEditPart(view);
-		case "5182":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralUnlimitedNaturalNameEditPart(view);
-		case "6030":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RepresentationTagLabelEditPart(view);
-		case "5183":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StringExpressionNameEditPart(view);
-		case "2108":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InstanceValueEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2107":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2106":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationIntervalEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2105":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeIntervalEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2104":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2103":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExpressionEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2102":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeExpressionEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2101":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueExpressionEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "6029":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PortAppliedStereotypeEditPart(view);
-		case "6028":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RoleBindingAppliedStereotypeEditPart(view);
-		case "2109":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5195":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintNameEditPart(view);
-		case "5196":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintNameEditPart(view);
-		case "5197":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintNameEditPart(view);
-		case "5198":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationRoleNameEditPartCN(view);
-		case "5190":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalNameEditPart(view);
-		case "5191":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InstanceValueNameEditPart(view);
-		case "5192":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentBodyEditPart(view);
-		case "5193":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintNameEditPart(view);
-		case "5194":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintNameEditPart(view);
-		case "2114":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2113":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2112":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "6039":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintSpecificationEditPart(view);
-		case "6054":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartFloatingLabelEditPartCN(view);
-		case "6053":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.BehaviorPortFloatingLabelEditPart(view);
-		case "6056":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationUseFloatingLabelEditPartCN(view);
-		case "6055":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationRoleFloatingLabelEditPartCN(view);
-		case "3101":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyEditPartCLN(view);
-		case "6050":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorNameEditPart(view);
-		case "6052":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorMultiplicityTargetEditPart(view);
-		case "6051":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorMultiplicitySourceEditPart(view);
-		case "7033":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeAttributeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "7034":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeOperationCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "3102":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OperationEditPartCLN(view);
-		case "7048":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationEnumerationLiteralCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "6079":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeFloatingLabelEditPart(view);
-		case "3121":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.BehaviorPortEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3120":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3119":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3118":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3117":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3116":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3115":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationRoleEditPartCN((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "6087":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeFloatingLabelEditPart(view);
-		case "6086":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeFloatingLabelEditPart(view);
-		case "6089":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeFloatingLabelEditPart(view);
-		case "6088":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeFloatingLabelEditPart(view);
-		case "6081":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeFloatingLabelEditPart(view);
-		case "6080":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeFloatingLabelEditPart(view);
-		case "6083":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeFloatingLabelEditPart(view);
-		case "6082":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeFloatingLabelEditPart(view);
-		case "6085":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeFloatingLabelEditPart(view);
-		case "6084":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeFloatingLabelEditPart(view);
-		case "7066":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "6098":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemFloatingLabelEditPart(view);
-		case "7065":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "6097":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactFloatingLabelEditPart(view);
-		case "7068":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "7067":
-		case "7054":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "6099":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalFloatingLabelEditPart(view);
-		case "7069":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "6090":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeFloatingLabelEditPart(view);
-		case "6092":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeFloatingLabelEditPart(view);
-		case "6091":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceFloatingLabelEditPart(view);
-		case "6094":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeFloatingLabelEditPart(view);
-		case "6093":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationFloatingLabelEditPart(view);
-		case "7064":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "6096":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationFloatingLabelEditPart(view);
-		case "7063":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "6095":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorFloatingLabelEditPart(view);
-		case "7077":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartCompartmentEditPartCN((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "4001":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LinkDescriptorEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4002":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentAnnotatedElementEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4003":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintConstrainedElementEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "2067":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2066":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2065":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "7071":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "2064":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "7070":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "2063":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "7073":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "2062":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "7072":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "2061":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "7075":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeCompartmentEditPart((org.eclipse.gmf.runtime.notation.DecorationNode) view);
-		case "2060":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2070":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "4010":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DependencyEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4011":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SubstitutionEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4012":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ManifestationEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4013":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "2078":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2077":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2076":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2075":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2073":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2072":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2071":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2069":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2068":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "4004":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentRealizationEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4005":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceRealizationEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4006":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RealizationEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4007":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AbstractionEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4008":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UsageEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4009":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "2081":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2080":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "4020":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RepresentationEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4021":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationFlowEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4022":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.BehaviorPortLinkEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "5112":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeNameEditPart(view);
-		case "5113":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeNameEditPart(view);
-		case "5114":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeNameEditPart(view);
-		case "2089":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeEventEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2088":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ChangeEventEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2085":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AnyReceiveEventEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2084":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CallEventEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2083":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEventEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2082":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
+
+		case "Node_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InstanceValue_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InstanceValueFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Comment_AnnotatedElementEdge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentAnnotatedElementEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "IntervalConstraint_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Node_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "StateMachine_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "CallEvent_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CallEventNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Comment_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "AnyReceiveEvent_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AnyReceiveEventNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Property_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InformationItem_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Usage_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UsageEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "ExecutionEnvironment_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "PrimitiveType_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "CallEvent_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CallEventFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Connector_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Class_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Signal_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "InformationFlow_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationFlowNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Property_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Dependency_RoleBindingStereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RoleBindingAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "CallEvent_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CallEventEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "PrimitiveType_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Artifact_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "OpaqueBehavior_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "StateMachine_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InformationItem_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralUnlimitedNatural_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralUnlimitedNaturalNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "StringExpression_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StringExpressionFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralInteger_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralIntegerFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InteractionConstraint_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "ConnectableElement_CollaborationRoleNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationRoleNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Actor_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Usage_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UsageNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interaction_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "UseCase_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "SignalEvent_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEventEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Connector_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "FunctionBehavior_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "IntervalConstraint_BodyLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintSpecificationEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationConstraint_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "InstanceValue_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InstanceValueEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "LiteralNull_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralNullEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "IntervalConstraint_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Usage_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UsageAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Node_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "InformationFlow_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationFlowAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_OperationCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeOperationCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "ProtocolStateMachine_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "AnyReceiveEvent_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AnyReceiveEventFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interval_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Constraint_BodyLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintSpecificationEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ProtocolStateMachine_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InformationItem_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Manifestation_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ManifestationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Device_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "ComponentRealization_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentRealizationAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Manifestation_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ManifestationAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InformationItem_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ExecutionEnvironment_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeConstraint_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Property_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartEditPartCN(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "InteractionConstraint_BodyLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintSpecificationEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "IntervalConstraint_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interface_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "StateMachine_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Comment_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Dependency_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DependencyAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Device_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interval_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Artifact_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralUnlimitedNatural_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralUnlimitedNaturalEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "OpaqueExpression_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueExpressionFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Port_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PortEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Activity_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ExecutionEnvironment_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Node_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Device_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralUnlimitedNatural_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralUnlimitedNaturalFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationConstraint_BodyLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintSpecificationEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Constraint_BodyLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintSpecificationEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Abstraction_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AbstractionEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Collaboration_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "DataType_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ProtocolStateMachine_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Node_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Connector_TargetMultiplicityLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorMultiplicityTargetEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Artifact_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Expression_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExpressionFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Duration_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "PrimitiveType_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "TimeObservation_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Substitution_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SubstitutionAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interface_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ProtocolStateMachine_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "TimeObservation_EventEdge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationEventEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Class_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeExpression_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeExpressionNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeConstraint_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Node_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationConstraint_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Substitution_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SubstitutionEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Class_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Artifact_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InteractionConstraint_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "IntervalConstraint_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "FunctionBehavior_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "StringExpression_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StringExpressionNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Enumeration_LiteralCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationEnumerationLiteralCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "DataType_AttributeCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeAttributeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "LiteralInteger_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralIntegerNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationInterval_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationIntervalNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InterfaceRealization_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceRealizationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Dependency_RoleBindingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RoleBindingRoleNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Port_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PortAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interaction_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Activity_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationConstraint_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Comment_BodyLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentBodyEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ChangeEvent_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ChangeEventEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "DurationInterval_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationIntervalFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeConstraint_BodyLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintSpecificationEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Dependency_RoleBindingEdge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RoleBindingEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "CollaborationUse_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationUseNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "FunctionBehavior_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "TimeConstraint_BodyLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintSpecificationEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DeploymentSpecification_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ConnectableElement_CollaborationRoleShape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationRoleEditPartCN(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Device_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "LiteralNull_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralNullNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Collaboration_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Deployment_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "InformationFlow_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationFlowEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Comment_BodyLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CommentBodyEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ExecutionEnvironment_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Component_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "TimeExpression_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeExpressionEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "OpaqueBehavior_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Class_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Signal_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Representation_KeywordLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RepresentationTagLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Collaboration_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Expression_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExpressionEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Activity_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Actor_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Generalization_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.GeneralizationAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Class_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Port_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PortNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InterfaceRealization_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceRealizationAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Generalization_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.GeneralizationEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Collaboration_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Signal_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Connector_SourceMultiplicityLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorMultiplicitySourceEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InformationFlow_ConveyedLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationFlowConveyedLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Collaboration_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Dependency_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DependencyEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "LiteralBoolean_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralBooleanNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Device_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Actor_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interface_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Parameter_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ParameterNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Enumeration_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "InteractionConstraint_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Dependency_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DependencyNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "OpaqueBehavior_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "OpaqueExpression_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueExpressionNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Realization_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RealizationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Manifestation_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ManifestationEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Connector_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConnectorEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Component_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "DeploymentSpecification_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "ProtocolStateMachine_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Operation_OperationLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OperationEditPartCLN(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Artifact_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Interaction_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "StateMachine_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Duration_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Actor_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Constraint_ConstrainedElementEdge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintConstrainedElementEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Constraint_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Abstraction_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AbstractionAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Component_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Node_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "ChangeEvent_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ChangeEventFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "UseCase_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Realization_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RealizationEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Interaction_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "AnyReceiveEvent_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AnyReceiveEventEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Component_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Constraint_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeEvent_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeEventEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "PrimitiveType_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Property_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interaction_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "StringExpression_PackagedElementShape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StringExpressionEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "CollaborationUse_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationUseFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ProtocolStateMachine_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralString_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralStringEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "OpaqueBehavior_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralInteger_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralIntegerEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "InteractionConstraint_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationObservation_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationStereotypeLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeEvent_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeEventNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Signal_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "OpaqueExpression_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueExpressionEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "DurationConstraint_BodyLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintSpecificationEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_OperationCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeOperationCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Collaboration_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "IntervalConstraint_BodyLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalConstraintSpecificationEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ComponentRealization_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentRealizationEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "LiteralBoolean_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralBooleanFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralString_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralStringNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Actor_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralNull_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralNullFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "FunctionBehavior_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Parameter_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ParameterAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Component_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "TimeObservation_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationStereotypeLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Enumeration_LiteralCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationEnumerationLiteralCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "UseCase_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Duration_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "InterfaceRealization_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceRealizationEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Device_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "DurationConstraint_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationConstraintNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "CollaborationUse_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationUseEditPartCN(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "TimeConstraint_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "EnumerationLiteral_LiteralLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationLiteralEditPartCLN(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "DurationInterval_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationIntervalEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "OpaqueBehavior_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Interaction_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "FunctionBehavior_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "UseCase_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Interval_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.IntervalNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DeploymentSpecification_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "StateMachine_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Abstraction_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AbstractionNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "StateMachine_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "OpaqueBehavior_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Enumeration_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Device_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Constraint_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Enumeration_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "PrimitiveType_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ProtocolStateMachine_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DeploymentSpecification_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Component_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Interaction_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Enumeration_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interface_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Parameter_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ParameterEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Artifact_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Deployment_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DeploymentSpecification_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Component_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Signal_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Collaboration_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Port_BehaviorFloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.BehaviorPortFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InformationItem_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeInterval_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeIntervalFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "LiteralBoolean_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralBooleanEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Activity_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Interaction_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Property_AttributeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyEditPartCLN(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Link_DescriptorEdge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LinkDescriptorEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "Expression_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExpressionNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "SignalEvent_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEventFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Activity_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "ProtocolStateMachine_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Constraint_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ConstraintNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Interface_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Activity_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "LiteralString_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralStringFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ChangeEvent_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ChangeEventNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "CompositeStructure":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CompositeStructureDiagramEditPart((org.eclipse.gmf.runtime.notation.Diagram) view);
-		case "2079":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ArtifactEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "4015":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.GeneralizationEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4017":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RoleBindingEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4018":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationEventEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "4019":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationEventEditPart((org.eclipse.gmf.runtime.notation.Connector) view);
-		case "5120":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeNameEditPart(view);
-		case "5121":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeNameEditPart(view);
-		case "5122":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeNameEditPart(view);
-		case "5123":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeNameEditPart(view);
-		case "5124":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeNameEditPart(view);
-		case "5125":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PortNameEditPart(view);
-		case "2099":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralUnlimitedNaturalEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3066":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationLiteralEditPartCLN(view);
-		case "2098":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralStringEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2097":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralNullEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2096":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralIntegerEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2095":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.LiteralBooleanEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2094":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "2093":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5115":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeNameEditPart(view);
-		case "5116":
-		case "5132":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeNameEditPart(view);
-		case "5117":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeNameEditPart(view);
-		case "5118":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeNameEditPart(view);
-		case "5119":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationNameEditPart(view);
-		case "3071":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationUseEditPartCN((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3070":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartEditPartCN((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "6100":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseFloatingLabelEditPart(view);
-		case "6102":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CallEventFloatingLabelEditPart(view);
-		case "6101":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEventFloatingLabelEditPart(view);
-		case "6104":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ChangeEventFloatingLabelEditPart(view);
-		case "6103":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.AnyReceiveEventFloatingLabelEditPart(view);
-		case "3079":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3078":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3077":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3076":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3075":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3074":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ProtocolStateMachineCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3073":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3072":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "3069":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PortEditPart((org.eclipse.gmf.runtime.notation.Shape) view);
-		case "5126":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PropertyPartNameEditPartCN(view);
-		case "5127":
-			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationUseNameEditPart(view);
-		case "StereotypeCommentLink":
-			return new ConnectionContentPart<Connector>((Connector) view);
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CompositeStructureDiagramEditPart(
+					(org.eclipse.gmf.runtime.notation.Diagram) view);
+		case "InteractionConstraint_BodyLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InteractionConstraintSpecificationEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DeploymentSpecification_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentSpecificationFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "FunctionBehavior_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Representation_Edge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RepresentationEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "DurationObservation_EventEdge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationEventEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "FunctionBehavior_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Port_BehaviorShape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.BehaviorPortEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Node_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.NodeCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeInterval_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeIntervalNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_AttributeCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeAttributeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Component_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ConnectableElement_CollaborationRoleFloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationRoleFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Realization_StereotypeLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.RealizationAppliedStereotypeEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Deployment_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeploymentNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationObservation_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DurationObservation_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DurationObservationEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Port_BehaviorEdge":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.BehaviorPortLinkEditPart(
+					(org.eclipse.gmf.runtime.notation.Connector) view);
+		case "TimeExpression_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeExpressionFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "FunctionBehavior_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.FunctionBehaviorCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeEvent_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeEventFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeInterval_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeIntervalEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Class_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Collaboration_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.CollaborationCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ExecutionEnvironment_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Device_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DeviceCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Enumeration_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "Class_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeConstraint_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeConstraintNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Signal_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "PrimitiveType_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PrimitiveTypeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "TimeObservation_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.TimeObservationEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "OpaqueBehavior_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "InformationItem_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InformationItemEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "StateMachine_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ExecutionEnvironment_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "UseCase_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "OpaqueBehavior_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.OpaqueBehaviorCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Actor_NameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActorNameEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ExecutionEnvironment_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "UseCase_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.UseCaseEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "StateMachine_Shape_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.StateMachineCompositeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "ComponentRealization_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ComponentRealizationNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "SignalEvent_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SignalEventNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "ExecutionEnvironment_StructureCompartment_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ExecutionEnvironmentCompositeCompartmentEditPartCN(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Interface_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InterfaceNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Enumeration_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.EnumerationFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "DataType_Shape":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.DataTypeEditPart(
+					(org.eclipse.gmf.runtime.notation.Shape) view);
+		case "InstanceValue_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.InstanceValueNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Activity_FloatingNameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeFloatingLabelEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Substitution_NameLabel":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.SubstitutionNameEditPart(
+					(org.eclipse.gmf.runtime.notation.View) view);
+		case "Activity_StructureCompartment":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ActivityCompositeCompartmentEditPart(
+					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
+		case "Class_FloatingNameLabel_CN":
+			return new org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ClassCompositeFloatingLabelEditPartCN(
+					(org.eclipse.gmf.runtime.notation.View) view);
+
 		default:
-			return super.createContentPart(view);
+			// System.out.println("View not supported: " + view);
+			return (org.eclipse.gef.mvc.fx.parts.IContentPart<?>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
+				@Override
+				public Object caseDecorationNode(org.eclipse.gmf.runtime.notation.DecorationNode object) {
+					return new org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart(object);
+				}
+
+				@Override
+				public Object caseShape(org.eclipse.gmf.runtime.notation.Shape object) {
+					return new org.eclipse.papyrus.gef4.parts.NodeContentPart<>(object);
+				}
+
+				@Override
+				public Object caseBasicCompartment(org.eclipse.gmf.runtime.notation.BasicCompartment object) {
+					return new org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>(
+							object);
+				}
+			}.doSwitch(view);
+		// return new EmptyContentPart(view);
 		}
 	}
+
 }

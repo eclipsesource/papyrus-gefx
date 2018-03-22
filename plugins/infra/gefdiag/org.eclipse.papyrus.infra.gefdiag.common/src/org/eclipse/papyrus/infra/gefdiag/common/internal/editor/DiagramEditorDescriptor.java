@@ -12,6 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.infra.gefdiag.common.internal.editor;
 
+import java.util.function.Supplier;
+
 import org.eclipse.swt.graphics.Image;
 
 import com.google.inject.Module;
@@ -19,13 +21,13 @@ import com.google.inject.Module;
 class DiagramEditorDescriptor {
 	private final String type;
 
-	private final Module module;
+	private final Supplier<Module> module;
 
 	private final Image image;
 
 	private final String label;
 
-	public DiagramEditorDescriptor(String type, Module module, Image image, String label) {
+	public DiagramEditorDescriptor(String type, Supplier<Module> module, Image image, String label) {
 		super();
 		this.type = type;
 		this.module = module;
@@ -38,7 +40,7 @@ class DiagramEditorDescriptor {
 	}
 
 	public Module getModule() {
-		return module;
+		return module.get();
 	}
 
 	public Image getImage() {

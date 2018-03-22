@@ -12,7 +12,7 @@
       domainFileExtension="uml"
       dynamicTemplates="true"
       templateDirectory="/org.eclipse.papyrus.def/xtend/"
-      copyrightText="Copyright (c) 2016 CEA LIST.&#xD;&#xA;&#xD;&#xA;All rights reserved. This program and the accompanying materials&#xD;&#xA;are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA;which accompanies this distribution, and is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA; CEA LIST - Initial API and implementation"
+      copyrightText="Copyright (c) 2014-2018 CEA LIST, EclipseSource and others.&#xD;&#xA;&#xD;&#xA;All rights reserved. This program and the accompanying materials&#xD;&#xA;are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA;which accompanies this distribution, and is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA; CEA LIST - Initial API and implementation"
       pluginDirectory="/org.eclipse.papyrus.uml.gefdiag.composite/src-gen">
     <diagram
         visualID="1000"
@@ -31,6 +31,7 @@
           href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Diagram"/>
       <elementType
           xsi:type="gmfgen:MetamodelType"
+          uniqueIdentifier="org.eclipse.papyrus.umldi.Package_CompositeStructureDiagram"
           displayName="CompositeStructureDiagram"
           definedExternally="true"
           editHelperClassName="PackageEditHelper"/>
@@ -45,6 +46,10 @@
           xsi:type="gmfgen:CustomBehaviour"
           key="org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.DRAG_DROP_ROLE"
           editPolicyQualifiedClassName="org.eclipse.papyrus.uml.diagram.composite.custom.edit.policies.CustomDiagramDragDropEditPolicy"/>
+      <behaviour
+          xsi:type="gmfgen:CustomBehaviour"
+          key="org.eclipse.papyrus.infra.gmfdiag.common.editpolicies.AbstractShowHideRelatedLinkEditPolicy.SHOW_HIDE_RELATED_LINK_ROLE"
+          editPolicyQualifiedClassName="org.eclipse.papyrus.uml.diagram.composite.custom.edit.policies.ShowHideRelatedLinkEditPolicy"/>
       <domainDiagramElement
           href="../../../plugin/org.eclipse.uml2.uml/model/UML.genmodel#//uml/Package"/>
       <childNodes
@@ -59,6 +64,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:NotationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Port_BehaviorShape"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -132,6 +138,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Port_Shape"
             definedExternally="true"
             editHelperClassName="PortEditHelper"/>
         <viewmap
@@ -268,7 +275,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
-            uniqueIdentifier="org.eclipse.papyrus.uml.diagram.composite.Parameter_3088"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Parameter_Shape"
             displayName="Parameter"
             definedExternally="true"
             editHelperClassName="ParameterEditHelper"/>
@@ -389,6 +396,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Property_Shape"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -514,7 +522,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
-            uniqueIdentifier="org.eclipse.papyrus.uml.diagram.composite.CollaborationRole_3115"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.ConnectableElement_CollaborationRoleShape"
             displayName="CollaborationRole"
             definedExternally="true"
             editHelperClassName="CollaborationRoleEditHelper"/>
@@ -609,6 +617,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.CollaborationUse_Shape"
             definedExternally="true"
             editHelperClassName="CollaborationUseEditHelper"/>
         <viewmap
@@ -704,6 +713,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Activity_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.0/@elementType"/>
         <viewmap
@@ -818,6 +828,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Interaction_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.1/@elementType"/>
         <viewmap
@@ -932,6 +943,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.ProtocolStateMachine_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.2/@elementType"/>
         <viewmap
@@ -1046,6 +1058,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.StateMachine_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.3/@elementType"/>
         <viewmap
@@ -1160,6 +1173,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.FunctionBehavior_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.4/@elementType"/>
         <viewmap
@@ -1274,6 +1288,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.OpaqueBehavior_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.5/@elementType"/>
         <viewmap
@@ -1388,6 +1403,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Component_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.6/@elementType"/>
         <viewmap
@@ -1502,6 +1518,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Device_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.7/@elementType"/>
         <viewmap
@@ -1616,6 +1633,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.ExecutionEnvironment_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.8/@elementType"/>
         <viewmap
@@ -1730,6 +1748,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Node_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.9/@elementType"/>
         <viewmap
@@ -1844,6 +1863,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Class_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.10/@elementType"/>
         <viewmap
@@ -1957,6 +1977,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Collaboration_Shape_CN"
             definedExternally="true"
             editHelperClassName="CollaborationEditHelper"/>
         <viewmap
@@ -2057,6 +2078,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Interface_Shape_CN"
             definedExternally="true"
             editHelperClassName="InterfaceEditHelper"/>
         <viewmap
@@ -2153,6 +2175,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.PrimitiveType_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.13/@elementType"/>
         <viewmap
@@ -2251,6 +2274,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Enumeration_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.14/@elementType"/>
         <viewmap
@@ -2348,6 +2372,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DataType_Shape_CN"
             definedExternally="true"
             metamodelType="/0/@diagram/@topLevelNodes.15/@elementType"/>
         <viewmap
@@ -2444,6 +2469,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Actor_Shape_CN"
             definedExternally="true"
             editHelperClassName="ActorEditHelper"/>
         <viewmap
@@ -2532,6 +2558,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DeploymentSpecification_Shape_CN"
             definedExternally="true"
             editHelperClassName="DeploymentSpecificationEditHelper"/>
         <viewmap
@@ -2620,6 +2647,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Artifact_Shape_CN"
             definedExternally="true"
             editHelperClassName="ArtifactEditHelper"/>
         <viewmap
@@ -2708,6 +2736,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.InformationItem_Shape_CN"
             definedExternally="true"
             editHelperClassName="InformationItemEditHelper"/>
         <viewmap
@@ -2811,6 +2840,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Signal_Shape_CN"
             definedExternally="true"
             editHelperClassName="SignalEditHelper"/>
         <viewmap
@@ -2899,6 +2929,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.UseCase_Shape_CN"
             definedExternally="true"
             editHelperClassName="UseCaseEditHelper"/>
         <viewmap
@@ -2987,6 +3018,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Comment_Shape_CN"
             displayName="Comment"
             definedExternally="true"
             editHelperClassName="CommentEditHelper"/>
@@ -3048,6 +3080,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DurationConstraint_Shape_CN"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -3132,6 +3165,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.TimeConstraint_Shape_CN"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -3216,6 +3250,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.IntervalConstraint_Shape_CN"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -3300,6 +3335,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.InteractionConstraint_Shape_CN"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -3384,6 +3420,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Constraint_Shape_CN"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -3470,6 +3507,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Property_AttributeLabel"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -3515,6 +3553,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Operation_OperationLabel"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -3560,6 +3599,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.EnumerationLiteral_LiteralLabel"
             definedExternally="true"
             editHelperClassName="EnumerationLiteralEditHelper"/>
         <viewmap
@@ -3605,6 +3645,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Activity_Shape"
             definedExternally="true"
             editHelperClassName="ActivityEditHelper"/>
         <viewmap
@@ -3722,6 +3763,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Interaction_Shape"
             definedExternally="true"
             editHelperClassName="InteractionEditHelper"/>
         <viewmap
@@ -3839,6 +3881,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.ProtocolStateMachine_Shape"
             definedExternally="true"
             editHelperClassName="ProtocolStateMachineEditHelper"/>
         <viewmap
@@ -3956,6 +3999,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.StateMachine_Shape"
             definedExternally="true"
             editHelperClassName="StateMachineEditHelper"/>
         <viewmap
@@ -4073,6 +4117,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.FunctionBehavior_Shape"
             definedExternally="true"
             editHelperClassName="FunctionBehaviorEditHelper"/>
         <viewmap
@@ -4186,6 +4231,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.OpaqueBehavior_Shape"
             definedExternally="true"
             editHelperClassName="OpaqueBehaviorEditHelper"/>
         <viewmap
@@ -4299,6 +4345,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Component_Shape"
             definedExternally="true"
             editHelperClassName="ComponentEditHelper"/>
         <viewmap
@@ -4412,6 +4459,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Device_Shape"
             definedExternally="true"
             editHelperClassName="DeviceEditHelper"/>
         <viewmap
@@ -4525,6 +4573,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.ExecutionEnvironment_Shape"
             definedExternally="true"
             editHelperClassName="ExecutionEnvironmentEditHelper"/>
         <viewmap
@@ -4638,6 +4687,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Node_Shape"
             definedExternally="true"
             editHelperClassName="NodeEditHelper"/>
         <viewmap
@@ -4751,6 +4801,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Class_Shape"
             definedExternally="true"
             editHelperClassName="ClassEditHelper"/>
         <viewmap
@@ -4867,6 +4918,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Collaboration_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.17/@elementType"/>
         <viewmap
@@ -4966,6 +5018,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Interface_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.18/@elementType"/>
         <viewmap
@@ -5061,6 +5114,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.PrimitiveType_Shape"
             definedExternally="true"
             editHelperClassName="PrimitiveTypeEditHelper"/>
         <viewmap
@@ -5158,6 +5212,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Enumeration_Shape"
             definedExternally="true"
             editHelperClassName="EnumerationEditHelper"/>
         <viewmap
@@ -5254,6 +5309,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DataType_Shape"
             definedExternally="true"
             editHelperClassName="DataTypeEditHelper"/>
         <viewmap
@@ -5349,6 +5405,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Actor_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.22/@elementType"/>
         <viewmap
@@ -5436,6 +5493,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DeploymentSpecification_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.23/@elementType"/>
         <viewmap
@@ -5523,6 +5581,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Artifact_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.24/@elementType"/>
         <viewmap
@@ -5610,6 +5669,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.InformationItem_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.25/@elementType"/>
         <viewmap
@@ -5712,6 +5772,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Signal_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.26/@elementType"/>
         <viewmap
@@ -5799,6 +5860,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.UseCase_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.27/@elementType"/>
         <viewmap
@@ -5886,6 +5948,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.SignalEvent_Shape"
             definedExternally="true"
             editHelperClassName="SignalEventEditHelper"/>
         <viewmap
@@ -5973,6 +6036,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.CallEvent_Shape"
             definedExternally="true"
             editHelperClassName="CallEventEditHelper"/>
         <viewmap
@@ -6060,6 +6124,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.AnyReceiveEvent_Shape"
             definedExternally="true"
             editHelperClassName="AnyReceiveEventEditHelper"/>
         <viewmap
@@ -6147,6 +6212,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.ChangeEvent_Shape"
             definedExternally="true"
             editHelperClassName="ChangeEventEditHelper"/>
         <viewmap
@@ -6234,6 +6300,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.TimeEvent_Shape"
             definedExternally="true"
             editHelperClassName="TimeEventEditHelper"/>
         <viewmap
@@ -6321,6 +6388,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DurationObservation_Shape"
             definedExternally="true"
             editHelperClassName="DurationObservationEditHelper"/>
         <viewmap
@@ -6431,6 +6499,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.TimeObservation_Shape"
             definedExternally="true"
             editHelperClassName="TimeObservationEditHelper"/>
         <viewmap
@@ -6541,6 +6610,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.LiteralBoolean_Shape"
             definedExternally="true"
             editHelperClassName="LiteralBooleanEditHelper"/>
         <viewmap
@@ -6628,6 +6698,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.LiteralInteger_Shape"
             definedExternally="true"
             editHelperClassName="LiteralIntegerEditHelper"/>
         <viewmap
@@ -6715,6 +6786,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.LiteralNull_Shape"
             definedExternally="true"
             editHelperClassName="LiteralNullEditHelper"/>
         <viewmap
@@ -6802,6 +6874,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.LiteralString_Shape"
             definedExternally="true"
             editHelperClassName="LiteralStringEditHelper"/>
         <viewmap
@@ -6889,6 +6962,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.LiteralUnlimitedNatural_Shape"
             definedExternally="true"
             editHelperClassName="LiteralUnlimitedNaturalEditHelper"/>
         <viewmap
@@ -6976,6 +7050,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.StringExpression_PackagedElementShape"
             definedExternally="true"
             editHelperClassName="StringExpressionEditHelper"/>
         <viewmap
@@ -7063,6 +7138,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.OpaqueExpression_Shape"
             definedExternally="true"
             editHelperClassName="OpaqueExpressionEditHelper"/>
         <viewmap
@@ -7150,6 +7226,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.TimeExpression_Shape"
             definedExternally="true"
             editHelperClassName="TimeExpressionEditHelper"/>
         <viewmap
@@ -7237,6 +7314,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Expression_Shape"
             definedExternally="true"
             editHelperClassName="ExpressionEditHelper"/>
         <viewmap
@@ -7324,6 +7402,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Duration_Shape"
             definedExternally="true"
             editHelperClassName="DurationEditHelper"/>
         <viewmap
@@ -7411,6 +7490,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.TimeInterval_Shape"
             definedExternally="true"
             editHelperClassName="TimeIntervalEditHelper"/>
         <viewmap
@@ -7498,6 +7578,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DurationInterval_Shape"
             definedExternally="true"
             editHelperClassName="DurationIntervalEditHelper"/>
         <viewmap
@@ -7585,6 +7666,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Interval_Shape"
             definedExternally="true"
             editHelperClassName="IntervalEditHelper"/>
         <viewmap
@@ -7672,6 +7754,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.InstanceValue_Shape"
             definedExternally="true"
             editHelperClassName="InstanceValueEditHelper"/>
         <viewmap
@@ -7759,6 +7842,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Comment_Shape"
             definedExternally="true"
             metamodelType="/0/@diagram/@childNodes.28/@elementType"/>
         <viewmap
@@ -7818,6 +7902,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DurationConstraint_Shape"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -7901,6 +7986,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.TimeConstraint_Shape"
             definedExternally="true"
             editHelperClassName="TimeConstraintEditHelper"/>
         <viewmap
@@ -7985,6 +8071,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.IntervalConstraint_Shape"
             definedExternally="true"
             editHelperClassName="IntervalConstraintEditHelper"/>
         <viewmap
@@ -8069,6 +8156,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.InteractionConstraint_Shape"
             definedExternally="true"
             editHelperClassName="InteractionConstraintEditHelper"/>
         <viewmap
@@ -8153,6 +8241,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Constraint_Shape"
             definedExternally="true"
             editHelperClassName="ConstraintEditHelper"/>
         <viewmap
@@ -8236,6 +8325,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:NotationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Port_BehaviorEdge"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -8259,6 +8349,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:NotationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Link_DescriptorEdge"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -8274,6 +8365,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Comment_AnnotatedElementEdge"
             displayName="CommentAnnotatedElement"
             definedExternally="true"/>
         <viewmap
@@ -8295,6 +8387,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Constraint_ConstrainedElementEdge"
             displayName="ConstraintConstrainedElement"
             definedExternally="true"/>
         <viewmap
@@ -8316,6 +8409,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.ComponentRealization_Edge"
             definedExternally="true"
             editHelperClassName="ComponentRealizationEditHelper"/>
         <viewmap
@@ -8404,6 +8498,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.InterfaceRealization_Edge"
             definedExternally="true"
             editHelperClassName="InterfaceRealizationEditHelper"/>
         <viewmap
@@ -8492,6 +8587,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Substitution_Edge"
             definedExternally="true"
             editHelperClassName="SubstitutionEditHelper"/>
         <viewmap
@@ -8580,6 +8676,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Realization_Edge"
             definedExternally="true"
             editHelperClassName="RealizationEditHelper"/>
         <viewmap
@@ -8668,6 +8765,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Manifestation_Edge"
             definedExternally="true"
             editHelperClassName="ManifestationEditHelper"/>
         <viewmap
@@ -8757,6 +8855,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Abstraction_Edge"
             definedExternally="true"
             editHelperClassName="AbstractionEditHelper"/>
         <viewmap
@@ -8846,6 +8945,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Usage_Edge"
             definedExternally="true"
             editHelperClassName="UsageEditHelper"/>
         <viewmap
@@ -8934,6 +9034,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Deployment_Edge"
             definedExternally="true"
             editHelperClassName="DeploymentEditHelper"/>
         <viewmap
@@ -9023,7 +9124,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
-            uniqueIdentifier="org.eclipse.papyrus.uml.diagram.composite.RoleBinding_4017"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Dependency_RoleBindingEdge"
             displayName="RoleBinding"
             definedExternally="true"
             editHelperClassName="RoleBindingEditHelper"/>
@@ -9110,6 +9211,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Dependency_Edge"
             definedExternally="true"
             editHelperClassName="DependencyEditHelper"/>
         <viewmap
@@ -9199,6 +9301,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Connector_Edge"
             definedExternally="true"
             editHelperClassName="ConnectorEditHelper"/>
         <viewmap
@@ -9343,6 +9446,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Generalization_Edge"
             definedExternally="true"
             editHelperClassName="GeneralizationEditHelper"/>
         <viewmap
@@ -9401,6 +9505,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.TimeObservation_EventEdge"
             displayName="TimeObservationEvent"
             definedExternally="true"/>
         <viewmap
@@ -9422,6 +9527,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.DurationObservation_EventEdge"
             displayName="DurationObservationEvent"
             definedExternally="true"/>
         <viewmap
@@ -9443,7 +9549,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:SpecializationType"
-            uniqueIdentifier="org.eclipse.papyrus.uml.diagram.composite.Representation_4020"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.Representation_Edge"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -9485,6 +9591,7 @@
             href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Edge"/>
         <elementType
             xsi:type="gmfgen:MetamodelType"
+            uniqueIdentifier="org.eclipse.papyrus.umldi.InformationFlow_Edge"
             definedExternally="true"/>
         <viewmap
             xsi:type="gmfgen:FigureViewmap"
@@ -9531,7 +9638,7 @@
           </viewmap>
           <behaviour
               xsi:type="gmfgen:CustomBehaviour"
-              key="org.eclipse.papyrus.uml.diagram.composite.custom.edit.policies.AbstractCustomLabelEditPolicy.SPECIFIC_NAME_LABEL_POLICY"
+              key="org.eclipse.papyrus.infra.gmfdiag.common.editpolicies.IMaskManagedLabelEditPolicy.MASK_MANAGED_LABEL_EDIT_POLICY"
               editPolicyQualifiedClassName="org.eclipse.papyrus.uml.diagram.composite.custom.edit.policies.InformationFlowCustomLabelEditPolicy"/>
         </labels>
         <labels
@@ -9555,6 +9662,28 @@
               viewPattern="&lt;&lt;{0}>>"
               editorPattern="&lt;&lt;{0}>>"
               editPattern="&lt;&lt;{0}>>">
+            <metaFeatures
+                href="../../../plugin/org.eclipse.uml2.uml/model/UML.genmodel#//uml/NamedElement/name"/>
+          </modelFacet>
+        </labels>
+        <labels
+            visualID="6010"
+            editPartClassName="InformationFlowNameEditPart"
+            itemSemanticEditPolicyClassName="InformationFlowNameSemanticEditPolicy">
+          <diagramRunTimeClass
+              href="../../../plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation/Node"/>
+          <viewmap
+              xsi:type="gmfgen:ParentAssignedViewmap"
+              getterName="getNameLabel"
+              figureQualifiedClassName="org.eclipse.papyrus.infra.gmfdiag.common.figure.node.PapyrusWrappingLabel">
+            <attributes
+                xsi:type="gmfgen:LabelOffsetAttributes"
+                y="40"/>
+          </viewmap>
+          <modelFacet
+              xsi:type="gmfgen:FeatureLabelModelFacet"
+              parser="/0/@labelParsers/@implementations.1"
+              editPattern="">
             <metaFeatures
                 href="../../../plugin/org.eclipse.uml2.uml/model/UML.genmodel#//uml/NamedElement/name"/>
           </modelFacet>
@@ -10617,312 +10746,6 @@
             key="org.eclipse.papyrus.infra.gmfdiag.common.editpolicies.BorderDisplayEditPolicy.BORDER_DISPLAY_EDITPOLICY"
             editPolicyQualifiedClassName="org.eclipse.papyrus.infra.gmfdiag.common.editpolicies.BorderDisplayEditPolicy"/>
       </compartments>
-      <palette>
-        <groups
-            title="Nodes"
-            description="Nodes"
-            largeIconPath="platform:/plugin/org.eclipse.gmf.runtime.diagram.ui/icons/group.gif"
-            smallIconPath="platform:/plugin/org.eclipse.gmf.runtime.diagram.ui/icons/group.gif"
-            createMethodName="createNodesGroup"
-            id="&quot;composite.group.nodes&quot;">
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Class"
-              description="Create new Class"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Class.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Class.gif"
-              createMethodName="createClassCreationTool"
-              id="&quot;composite.tool.class&quot;"
-              genNodes="/0/@diagram/@topLevelNodes.10 /0/@diagram/@childNodes.16"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Property"
-              description="Create new Property"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Property.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Property.gif"
-              createMethodName="createPropertyCreationTool"
-              id="&quot;composite.tool.property&quot;"
-              genNodes="/0/@diagram/@childNodes.3"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Port"
-              description="Create new Port"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Port.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Port.gif"
-              createMethodName="createPortCreationTool"
-              id="&quot;composite.tool.port&quot;"
-              genNodes="/0/@diagram/@childNodes.1"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Collaboration"
-              description="Create new Collaboration"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Collaboration.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Collaboration.gif"
-              createMethodName="createCollaborationCreationTool"
-              id="&quot;composite.tool.collaboration&quot;"
-              genNodes="/0/@diagram/@childNodes.17 /0/@diagram/@topLevelNodes.11"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="CollaborationRole"
-              description="Create new CollaborationRole"
-              largeIconPath="icons/obj16/CollaborationRole.gif"
-              smallIconPath="icons/obj16/CollaborationRole.gif"
-              createMethodName="createCollaborationRoleCreationTool"
-              id="&quot;composite.tool.collaborationrole&quot;"
-              genNodes="/0/@diagram/@childNodes.4"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="CollaborationUse"
-              description="Create new CollaborationUse"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/CollaborationUse.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/CollaborationUse.gif"
-              createMethodName="createCollaborationUseCreationTool"
-              id="&quot;composite.tool.collaborationuse&quot;"
-              genNodes="/0/@diagram/@childNodes.5"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Comment"
-              description="Create new Comment"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Comment.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Comment.gif"
-              createMethodName="createCommentCreationTool"
-              id="&quot;composite.tool.comment&quot;"
-              genNodes="/0/@diagram/@childNodes.28 /0/@diagram/@topLevelNodes.43"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Constraint"
-              description="Create new Constraint"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Constraint.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Constraint.gif"
-              createMethodName="createConstraintCreationTool"
-              id="&quot;composite.tool.constraint&quot;"
-              genNodes="/0/@diagram/@topLevelNodes.48 /0/@diagram/@childNodes.33"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="TimeObservation"
-              description="Create new TimeObservation"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/TimeObservation.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/TimeObservation.gif"
-              createMethodName="createTimeObservationCreationTool"
-              id="&quot;composite.tool.timeobservation&quot;"
-              genNodes="/0/@diagram/@topLevelNodes.28"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="DurationObservation"
-              description="Create new DurationObservation"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/DurationObservation.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/DurationObservation.gif"
-              createMethodName="createDurationObservationCreationTool"
-              id="&quot;composite.tool.durationobservation&quot;"
-              genNodes="/0/@diagram/@topLevelNodes.27"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="InformationItem"
-              description="Create new InformationItem"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/InformationItem.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/InformationItem.gif"
-              createMethodName="createInformationItemCreationTool"
-              id="&quot;composite.tool.informationitem&quot;"
-              genNodes="/0/@diagram/@childNodes.25 /0/@diagram/@topLevelNodes.19"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Parameter"
-              description="Create new Parameter"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Parameter.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Parameter.gif"
-              createMethodName="createParameterCreationTool"
-              id="&quot;composite.tool.parameter&quot;"
-              genNodes="/0/@diagram/@childNodes.2"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Activity"
-              description="Create new Activity"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Activity.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Activity.gif"
-              createMethodName="createActivityCreationTool"
-              id="&quot;composite.tool.activity&quot;"
-              genNodes="/0/@diagram/@childNodes.6 /0/@diagram/@topLevelNodes.0"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Interaction"
-              description="Create new Interaction"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Interaction.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Interaction.gif"
-              createMethodName="createInteractionCreationTool"
-              id="&quot;composite.tool.interaction&quot;"
-              genNodes="/0/@diagram/@childNodes.7 /0/@diagram/@topLevelNodes.1"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="ProtocolStateMachine"
-              description="Create new ProtocolStateMachine"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/ProtocolStateMachine.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/ProtocolStateMachine.gif"
-              createMethodName="createProtocolStateMachineCreationTool"
-              id="&quot;composite.tool.protocolstatemachine&quot;"
-              genNodes="/0/@diagram/@childNodes.8 /0/@diagram/@topLevelNodes.2"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="StateMachine"
-              description="Create new StateMachine"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/StateMachine.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/StateMachine.gif"
-              createMethodName="createStateMachineCreationTool"
-              id="&quot;composite.tool.statemachine&quot;"
-              genNodes="/0/@diagram/@childNodes.9 /0/@diagram/@topLevelNodes.3"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="FunctionBehavior"
-              description="Create new FunctionBehavior"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/FunctionBehavior.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/FunctionBehavior.gif"
-              createMethodName="createFunctionBehaviorCreationTool"
-              id="&quot;composite.tool.functionbehavior&quot;"
-              genNodes="/0/@diagram/@childNodes.10 /0/@diagram/@topLevelNodes.4"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="OpaqueBehavior"
-              description="Create new OpaqueBehavior"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/OpaqueBehavior.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/OpaqueBehavior.gif"
-              createMethodName="createOpaqueBehaviorCreationTool"
-              id="&quot;composite.tool.opaquebehavior&quot;"
-              genNodes="/0/@diagram/@childNodes.11 /0/@diagram/@topLevelNodes.5"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="StringExpression"
-              description="Create new StringExpression"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/StringExpression.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/StringExpression.gif"
-              createMethodName="createStringExpressionCreationTool"
-              id="&quot;composite.tool.stringExpression&quot;"
-              genNodes="/0/@diagram/@topLevelNodes.34"/>
-        </groups>
-        <groups
-            title="Edges"
-            description="Edges"
-            largeIconPath="platform:/plugin/org.eclipse.gmf.runtime.diagram.ui/icons/group.gif"
-            smallIconPath="platform:/plugin/org.eclipse.gmf.runtime.diagram.ui/icons/group.gif"
-            createMethodName="createEdgesGroup"
-            id="&quot;composite.group.edges&quot;">
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Link"
-              description="Create new Link (Comment / Constraint)"
-              largeIconPath="icons/obj16/Link.gif"
-              smallIconPath="icons/obj16/Link.gif"
-              createMethodName="createLinkCreationTool"
-              id="&quot;composite.tool.link&quot;"
-              genLinks="/0/@diagram/@links.2 /0/@diagram/@links.3 /0/@diagram/@links.16 /0/@diagram/@links.17"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Connector"
-              description="Create new Connector"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Connector.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Connector.gif"
-              createMethodName="createConnectorCreationTool"
-              id="&quot;composite.tool.connector&quot;"
-              genLinks="/0/@diagram/@links.14"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="RoleBinding"
-              description="Create new RoleBinding"
-              largeIconPath="icons/obj16/CollaborationRoleBinding.gif"
-              smallIconPath="icons/obj16/CollaborationRoleBinding.gif"
-              createMethodName="createRoleBindingCreationTool"
-              id="&quot;composite.tool.rolebinding&quot;"
-              genLinks="/0/@diagram/@links.12"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Generalization"
-              description="Create new Generalization"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Generalization.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Generalization.gif"
-              createMethodName="createGeneralizationCreationTool"
-              id="&quot;composite.tool.generalization&quot;"
-              genLinks="/0/@diagram/@links.15"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Realization"
-              description="Create new Realization"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Realization.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Realization.gif"
-              createMethodName="createRealizationCreationTool"
-              id="&quot;composite.tool.realization&quot;"
-              genLinks="/0/@diagram/@links.7"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Substitution"
-              description="Create new Substitution"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Substitution.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Substitution.gif"
-              createMethodName="createSubstitutionCreationTool"
-              id="&quot;composite.tool.substitution&quot;"
-              genLinks="/0/@diagram/@links.6"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Abstraction"
-              description="Create new Abstraction"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Abstraction.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Abstraction.gif"
-              createMethodName="createAbstractionCreationTool"
-              id="&quot;composite.tool.abstraction&quot;"
-              genLinks="/0/@diagram/@links.9"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Usage"
-              description="Create new Usage"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Usage.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Usage.gif"
-              createMethodName="createUsageCreationTool"
-              id="&quot;composite.tool.usage&quot;"
-              genLinks="/0/@diagram/@links.10"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Dependency"
-              description="Create new Dependency"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Dependency.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Dependency.gif"
-              createMethodName="createDependencyCreationTool"
-              id="&quot;composite.tool.dependency&quot;"
-              genLinks="/0/@diagram/@links.13"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Representation"
-              description="Create new representation for an InformationItem"
-              largeIconPath="icons/obj16/Representation.gif"
-              smallIconPath="icons/obj16/Representation.gif"
-              createMethodName="createRepresentationCreationTool"
-              id="&quot;composite.tool.representation&quot;"
-              genLinks="/0/@diagram/@links.18"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="InformationFlow"
-              description="Create new InformationFlow"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/InformationFlow.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/InformationFlow.gif"
-              createMethodName="createInformationFlowCreationTool"
-              id="&quot;composite.tool.informationflow&quot;"
-              genLinks="/0/@diagram/@links.19"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Manifestation"
-              description="Create new Manifestation"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Manifestation.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Manifestation.gif"
-              createMethodName="createManifestationCreationTool"
-              id="&quot;composite.tool.manifestation&quot;"
-              genLinks="/0/@diagram/@links.8"/>
-          <entries
-              xsi:type="gmfgen:ToolEntry"
-              title="Deployment"
-              description="Create new Deployment"
-              largeIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Deployment.gif"
-              smallIconPath="platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16/Deployment.gif"
-              createMethodName="createDeploymentCreationTool"
-              id="&quot;composite.tool.deployment&quot;"
-              genLinks="/0/@diagram/@links.11"/>
-        </groups>
-      </palette>
       <preferencePages
           xsi:type="gmfgen:GenStandardPreferencePage"
           iD="org.eclipse.uml2.uml.diagram.general"
@@ -10942,18 +10765,13 @@
             iD="org.eclipse.uml2.uml.diagram.printing"
             name="Printing"
             kind="Printing"/>
-        <children
-            xsi:type="gmfgen:GenStandardPreferencePage"
-            iD="org.eclipse.uml2.uml.diagram.rulersAndGrid"
-            name="Rulers And Grid"
-            kind="RulersAndGrid"/>
       </preferencePages>
     </diagram>
     <plugin
         iD="org.eclipse.papyrus.uml.diagram.composite"
         name="Papyrus Composite Structure Diagram "
         provider="Eclipse Modeling Project"
-        version="1.2.0.qualifier">
+        version="3.0.0.qualifier">
       <requiredPlugins>org.eclipse.draw2d</requiredPlugins>
       <requiredPlugins>org.eclipse.gmf.runtime.draw2d.ui</requiredPlugins>
     </plugin>
@@ -11042,7 +10860,7 @@
           uses="/0/@diagram/@topLevelNodes.0/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.1/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.2/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.3/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.4/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.5/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.13/@labels.0/@modelFacet /0/@diagram/@childNodes.36/@labelModelFacet /0/@diagram/@topLevelNodes.14/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.15/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.6/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.7/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.8/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.9/@labels.0/@modelFacet /0/@diagram/@childNodes.1/@labels.0/@modelFacet /0/@diagram/@childNodes.3/@labels.0/@modelFacet /0/@diagram/@childNodes.5/@labels.0/@modelFacet /0/@diagram/@childNodes.6/@labels.0/@modelFacet /0/@diagram/@childNodes.7/@labels.0/@modelFacet /0/@diagram/@childNodes.8/@labels.0/@modelFacet /0/@diagram/@childNodes.9/@labels.0/@modelFacet /0/@diagram/@childNodes.10/@labels.0/@modelFacet /0/@diagram/@childNodes.11/@labels.0/@modelFacet /0/@diagram/@childNodes.19/@labels.0/@modelFacet /0/@diagram/@childNodes.20/@labels.0/@modelFacet /0/@diagram/@childNodes.21/@labels.0/@modelFacet /0/@diagram/@childNodes.12/@labels.0/@modelFacet /0/@diagram/@childNodes.13/@labels.0/@modelFacet /0/@diagram/@childNodes.14/@labels.0/@modelFacet /0/@diagram/@childNodes.15/@labels.0/@modelFacet /0/@diagram/@childNodes.17/@labels.0/@modelFacet /0/@diagram/@childNodes.22/@labels.0/@modelFacet /0/@diagram/@childNodes.23/@labels.0/@modelFacet /0/@diagram/@childNodes.24/@labels.0/@modelFacet /0/@diagram/@childNodes.25/@labels.0/@modelFacet /0/@diagram/@childNodes.26/@labels.0/@modelFacet /0/@diagram/@childNodes.27/@labels.0/@modelFacet /0/@diagram/@childNodes.18/@labels.0/@modelFacet /0/@diagram/@childNodes.16/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.10/@labels.0/@modelFacet /0/@diagram/@childNodes.34/@labelModelFacet /0/@diagram/@childNodes.35/@labelModelFacet /0/@diagram/@topLevelNodes.11/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.12/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.16/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.17/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.18/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.19/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.20/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.21/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.22/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.23/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.24/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.25/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.26/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.29/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.30/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.31/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.32/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.33/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.34/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.35/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.36/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.37/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.38/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.39/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.40/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.41/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.42/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.44/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.45/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.46/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.47/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.48/@labels.0/@modelFacet /0/@diagram/@links.4/@labels.0/@modelFacet /0/@diagram/@links.5/@labels.0/@modelFacet /0/@diagram/@links.6/@labels.0/@modelFacet /0/@diagram/@links.7/@labels.0/@modelFacet /0/@diagram/@links.8/@labels.0/@modelFacet /0/@diagram/@links.9/@labels.0/@modelFacet /0/@diagram/@links.10/@labels.0/@modelFacet /0/@diagram/@links.11/@labels.0/@modelFacet /0/@diagram/@links.13/@labels.0/@modelFacet /0/@diagram/@childNodes.4/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.28/@labels.0/@modelFacet /0/@diagram/@topLevelNodes.27/@labels.0/@modelFacet /0/@diagram/@childNodes.2/@labels.0/@modelFacet /0/@diagram/@childNodes.29/@labels.0/@modelFacet /0/@diagram/@childNodes.30/@labels.0/@modelFacet /0/@diagram/@childNodes.31/@labels.0/@modelFacet /0/@diagram/@childNodes.33/@labels.0/@modelFacet /0/@diagram/@childNodes.32/@labels.0/@modelFacet /0/@diagram/@links.14/@labels.1/@modelFacet /0/@diagram/@links.14/@labels.2/@modelFacet /0/@diagram/@links.14/@labels.3/@modelFacet /0/@diagram/@childNodes.0/@labels.0/@modelFacet /0/@diagram/@childNodes.3/@labels.1/@modelFacet /0/@diagram/@childNodes.4/@labels.1/@modelFacet /0/@diagram/@childNodes.5/@labels.1/@modelFacet /0/@diagram/@childNodes.6/@labels.1/@modelFacet /0/@diagram/@childNodes.7/@labels.1/@modelFacet /0/@diagram/@childNodes.8/@labels.1/@modelFacet /0/@diagram/@childNodes.9/@labels.1/@modelFacet /0/@diagram/@childNodes.10/@labels.1/@modelFacet /0/@diagram/@childNodes.11/@labels.1/@modelFacet /0/@diagram/@childNodes.12/@labels.1/@modelFacet /0/@diagram/@childNodes.13/@labels.1/@modelFacet /0/@diagram/@childNodes.14/@labels.1/@modelFacet /0/@diagram/@childNodes.15/@labels.1/@modelFacet /0/@diagram/@childNodes.16/@labels.1/@modelFacet /0/@diagram/@childNodes.17/@labels.1/@modelFacet /0/@diagram/@childNodes.18/@labels.1/@modelFacet /0/@diagram/@childNodes.19/@labels.1/@modelFacet /0/@diagram/@childNodes.20/@labels.1/@modelFacet /0/@diagram/@childNodes.21/@labels.1/@modelFacet /0/@diagram/@childNodes.22/@labels.1/@modelFacet /0/@diagram/@childNodes.23/@labels.1/@modelFacet /0/@diagram/@childNodes.24/@labels.1/@modelFacet /0/@diagram/@childNodes.25/@labels.1/@modelFacet /0/@diagram/@childNodes.26/@labels.1/@modelFacet /0/@diagram/@childNodes.27/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.0/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.1/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.2/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.3/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.4/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.5/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.6/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.7/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.8/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.9/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.10/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.11/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.12/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.13/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.14/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.15/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.16/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.17/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.18/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.19/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.20/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.21/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.22/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.23/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.24/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.25/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.26/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.29/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.30/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.31/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.32/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.33/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.34/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.35/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.36/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.37/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.38/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.39/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.40/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.41/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.42/@labels.1/@modelFacet"/>
       <implementations
           xsi:type="gmfgen:CustomParser"
-          uses="/0/@diagram/@links.4/@labels.1/@modelFacet /0/@diagram/@links.5/@labels.1/@modelFacet /0/@diagram/@links.6/@labels.1/@modelFacet /0/@diagram/@links.7/@labels.1/@modelFacet /0/@diagram/@links.8/@labels.1/@modelFacet /0/@diagram/@links.9/@labels.1/@modelFacet /0/@diagram/@links.10/@labels.1/@modelFacet /0/@diagram/@links.11/@labels.1/@modelFacet /0/@diagram/@links.13/@labels.1/@modelFacet /0/@diagram/@links.15/@labels.0/@modelFacet /0/@diagram/@links.14/@labels.0/@modelFacet /0/@diagram/@links.12/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.28/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.27/@labels.1/@modelFacet /0/@diagram/@childNodes.1/@labels.1/@modelFacet /0/@diagram/@links.19/@labels.1/@modelFacet /0/@diagram/@childNodes.2/@labels.1/@modelFacet"
+          uses="/0/@diagram/@links.4/@labels.1/@modelFacet /0/@diagram/@links.5/@labels.1/@modelFacet /0/@diagram/@links.6/@labels.1/@modelFacet /0/@diagram/@links.7/@labels.1/@modelFacet /0/@diagram/@links.8/@labels.1/@modelFacet /0/@diagram/@links.9/@labels.1/@modelFacet /0/@diagram/@links.10/@labels.1/@modelFacet /0/@diagram/@links.11/@labels.1/@modelFacet /0/@diagram/@links.13/@labels.1/@modelFacet /0/@diagram/@links.15/@labels.0/@modelFacet /0/@diagram/@links.14/@labels.0/@modelFacet /0/@diagram/@links.12/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.28/@labels.1/@modelFacet /0/@diagram/@topLevelNodes.27/@labels.1/@modelFacet /0/@diagram/@childNodes.1/@labels.1/@modelFacet /0/@diagram/@links.19/@labels.1/@modelFacet /0/@diagram/@childNodes.2/@labels.1/@modelFacet /0/@diagram/@links.19/@labels.2/@modelFacet"
           qualifiedName="org.eclipse.papyrus.uml.diagram.common.parser.stereotype.AppliedStereotypeParser"/>
       <implementations
           xsi:type="gmfgen:CustomParser"
@@ -11196,7 +11014,7 @@
         comment="Name"
         role="Name"
         iconPathRole="platform:/plugin/org.eclipse.papyrus.uml.diagram.common/icons/label_role/name.png"
-        linkLabels="/0/@diagram/@links.4/@labels.0 /0/@diagram/@links.5/@labels.0 /0/@diagram/@links.6/@labels.0 /0/@diagram/@links.7/@labels.0 /0/@diagram/@links.8/@labels.0 /0/@diagram/@links.9/@labels.0 /0/@diagram/@links.10/@labels.0 /0/@diagram/@links.11/@labels.0 /0/@diagram/@links.12/@labels.0 /0/@diagram/@links.13/@labels.0 /0/@diagram/@links.14/@labels.1"
+        linkLabels="/0/@diagram/@links.4/@labels.0 /0/@diagram/@links.5/@labels.0 /0/@diagram/@links.6/@labels.0 /0/@diagram/@links.7/@labels.0 /0/@diagram/@links.8/@labels.0 /0/@diagram/@links.9/@labels.0 /0/@diagram/@links.10/@labels.0 /0/@diagram/@links.11/@labels.0 /0/@diagram/@links.12/@labels.0 /0/@diagram/@links.13/@labels.0 /0/@diagram/@links.14/@labels.1 /0/@diagram/@links.19/@labels.2"
         externalNodeLabels="/0/@diagram/@childNodes.1/@labels.0 /0/@diagram/@childNodes.2/@labels.0 /0/@diagram/@topLevelNodes.27/@labels.0 /0/@diagram/@topLevelNodes.28/@labels.0"/>
     <extensionNodes
         xsi:type="papyrusgmfgenextension:LabelVisibilityPreference"
@@ -11222,4 +11040,1092 @@
         iconPathRole="platform:/plugin/org.eclipse.papyrus.uml.diagram.common/icons/label_role/MultiplicityHandler.gif"
         linkLabels="/0/@diagram/@links.14/@labels.2"/>
   </papyrusgmfgenextension:PapyrusExtensionRootNode>
+  <papyrusgmfgenextension:VisualIDOverride
+      genView="/0/@diagram"
+      visualID="Package_CompositeStructureDiagram">
+    <child
+        genView="/0/@diagram/@childNodes.34"
+        visualID="Property_AttributeLabel"/>
+    <child
+        genView="/0/@diagram/@childNodes.35"
+        visualID="Operation_OperationLabel"/>
+    <child
+        genView="/0/@diagram/@childNodes.36"
+        visualID="EnumerationLiteral_LiteralLabel"/>
+    <child
+        genView="/0/@diagram/@childNodes.1"
+        visualID="Port_Shape">
+      <child
+          genView="/0/@diagram/@childNodes.1/@labels.0"
+          visualID="Port_NameLabel"/>
+      <child
+          genView="/0/@diagram/@childNodes.1/@labels.1"
+          visualID="Port_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.2"
+        visualID="Parameter_Shape">
+      <child
+          genView="/0/@diagram/@childNodes.2/@labels.0"
+          visualID="Parameter_NameLabel"/>
+      <child
+          genView="/0/@diagram/@childNodes.2/@labels.1"
+          visualID="Parameter_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.0"
+        visualID="Port_BehaviorShape">
+      <child
+          genView="/0/@diagram/@childNodes.0/@labels.0"
+          visualID="Port_BehaviorFloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.3"
+        visualID="Property_Shape">
+      <child
+          genView="/0/@diagram/@childNodes.3/@labels.0"
+          visualID="Property_NameLabel"/>
+      <child
+          genView="/0/@diagram/@childNodes.3/@labels.1"
+          visualID="Property_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.4"
+        visualID="ConnectableElement_CollaborationRoleShape">
+      <child
+          genView="/0/@diagram/@childNodes.4/@labels.0"
+          visualID="ConnectableElement_CollaborationRoleNameLabel"/>
+      <child
+          genView="/0/@diagram/@childNodes.4/@labels.1"
+          visualID="ConnectableElement_CollaborationRoleFloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.5"
+        visualID="CollaborationUse_Shape">
+      <child
+          genView="/0/@diagram/@childNodes.5/@labels.0"
+          visualID="CollaborationUse_NameLabel"/>
+      <child
+          genView="/0/@diagram/@childNodes.5/@labels.1"
+          visualID="CollaborationUse_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.6"
+        visualID="Activity_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.6/@labels.0"
+          visualID="Activity_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.6/@labels.1"
+          visualID="Activity_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.7"
+        visualID="Interaction_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.7/@labels.0"
+          visualID="Interaction_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.7/@labels.1"
+          visualID="Interaction_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.8"
+        visualID="ProtocolStateMachine_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.8/@labels.0"
+          visualID="ProtocolStateMachine_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.8/@labels.1"
+          visualID="ProtocolStateMachine_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.9"
+        visualID="StateMachine_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.9/@labels.0"
+          visualID="StateMachine_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.9/@labels.1"
+          visualID="StateMachine_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.10"
+        visualID="FunctionBehavior_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.10/@labels.0"
+          visualID="FunctionBehavior_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.10/@labels.1"
+          visualID="FunctionBehavior_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.11"
+        visualID="OpaqueBehavior_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.11/@labels.0"
+          visualID="OpaqueBehavior_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.11/@labels.1"
+          visualID="OpaqueBehavior_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.12"
+        visualID="Component_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.12/@labels.0"
+          visualID="Component_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.12/@labels.1"
+          visualID="Component_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.13"
+        visualID="Device_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.13/@labels.0"
+          visualID="Device_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.13/@labels.1"
+          visualID="Device_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.14"
+        visualID="ExecutionEnvironment_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.14/@labels.0"
+          visualID="ExecutionEnvironment_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.14/@labels.1"
+          visualID="ExecutionEnvironment_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.15"
+        visualID="Node_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.15/@labels.0"
+          visualID="Node_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.15/@labels.1"
+          visualID="Node_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.16"
+        visualID="Class_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.16/@labels.0"
+          visualID="Class_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.16/@labels.1"
+          visualID="Class_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.17"
+        visualID="Collaboration_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.17/@labels.0"
+          visualID="Collaboration_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.17/@labels.1"
+          visualID="Collaboration_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.18"
+        visualID="Interface_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.18/@labels.0"
+          visualID="Interface_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.18/@labels.1"
+          visualID="Interface_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.19"
+        visualID="PrimitiveType_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.19/@labels.0"
+          visualID="PrimitiveType_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.19/@labels.1"
+          visualID="PrimitiveType_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.20"
+        visualID="Enumeration_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.20/@labels.0"
+          visualID="Enumeration_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.20/@labels.1"
+          visualID="Enumeration_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.21"
+        visualID="DataType_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.21/@labels.0"
+          visualID="DataType_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.21/@labels.1"
+          visualID="DataType_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.22"
+        visualID="Actor_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.22/@labels.0"
+          visualID="Actor_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.22/@labels.1"
+          visualID="Actor_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.23"
+        visualID="DeploymentSpecification_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.23/@labels.0"
+          visualID="DeploymentSpecification_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.23/@labels.1"
+          visualID="DeploymentSpecification_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.24"
+        visualID="Artifact_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.24/@labels.0"
+          visualID="Artifact_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.24/@labels.1"
+          visualID="Artifact_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.25"
+        visualID="InformationItem_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.25/@labels.0"
+          visualID="InformationItem_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.25/@labels.1"
+          visualID="InformationItem_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.26"
+        visualID="Signal_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.26/@labels.0"
+          visualID="Signal_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.26/@labels.1"
+          visualID="Signal_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.27"
+        visualID="UseCase_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.27/@labels.0"
+          visualID="UseCase_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.27/@labels.1"
+          visualID="UseCase_FloatingNameLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.28"
+        visualID="Comment_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.28/@labels.0"
+          visualID="Comment_BodyLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.29"
+        visualID="DurationConstraint_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.29/@labels.0"
+          visualID="DurationConstraint_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.29/@labels.1"
+          visualID="DurationConstraint_BodyLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.30"
+        visualID="TimeConstraint_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.30/@labels.0"
+          visualID="TimeConstraint_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.30/@labels.1"
+          visualID="TimeConstraint_BodyLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.31"
+        visualID="IntervalConstraint_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.31/@labels.0"
+          visualID="IntervalConstraint_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.31/@labels.1"
+          visualID="IntervalConstraint_BodyLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.32"
+        visualID="InteractionConstraint_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.32/@labels.0"
+          visualID="InteractionConstraint_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.32/@labels.1"
+          visualID="InteractionConstraint_BodyLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@childNodes.33"
+        visualID="Constraint_Shape_CN">
+      <child
+          genView="/0/@diagram/@childNodes.33/@labels.0"
+          visualID="Constraint_NameLabel_CN"/>
+      <child
+          genView="/0/@diagram/@childNodes.33/@labels.1"
+          visualID="Constraint_BodyLabel_CN"/>
+    </child>
+    <child
+        genView="/0/@diagram/@compartments.0"
+        visualID="DataType_AttributeCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.1"
+        visualID="DataType_OperationCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.2"
+        visualID="DataType_AttributeCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.3"
+        visualID="DataType_OperationCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.4"
+        visualID="Enumeration_LiteralCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.5"
+        visualID="Enumeration_LiteralCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.6"
+        visualID="Activity_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.7"
+        visualID="Interaction_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.8"
+        visualID="ProtocolStateMachine_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.9"
+        visualID="StateMachine_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.10"
+        visualID="FunctionBehavior_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.11"
+        visualID="OpaqueBehavior_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.12"
+        visualID="Component_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.13"
+        visualID="Device_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.14"
+        visualID="ExecutionEnvironment_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.15"
+        visualID="Node_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.16"
+        visualID="Class_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.17"
+        visualID="Collaboration_StructureCompartment_CN"/>
+    <child
+        genView="/0/@diagram/@compartments.18"
+        visualID="Activity_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.19"
+        visualID="Interaction_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.20"
+        visualID="ProtocolStateMachine_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.21"
+        visualID="StateMachine_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.22"
+        visualID="FunctionBehavior_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.23"
+        visualID="OpaqueBehavior_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.24"
+        visualID="Component_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.25"
+        visualID="Device_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.26"
+        visualID="ExecutionEnvironment_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.27"
+        visualID="Node_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.28"
+        visualID="Class_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.29"
+        visualID="Collaboration_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@compartments.30"
+        visualID="Property_StructureCompartment"/>
+    <child
+        genView="/0/@diagram/@topLevelNodes.0"
+        visualID="Activity_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.0/@labels.0"
+          visualID="Activity_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.0/@labels.1"
+          visualID="Activity_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.1"
+        visualID="Interaction_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.1/@labels.0"
+          visualID="Interaction_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.1/@labels.1"
+          visualID="Interaction_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.2"
+        visualID="ProtocolStateMachine_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.2/@labels.0"
+          visualID="ProtocolStateMachine_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.2/@labels.1"
+          visualID="ProtocolStateMachine_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.3"
+        visualID="StateMachine_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.3/@labels.0"
+          visualID="StateMachine_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.3/@labels.1"
+          visualID="StateMachine_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.4"
+        visualID="FunctionBehavior_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.4/@labels.0"
+          visualID="FunctionBehavior_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.4/@labels.1"
+          visualID="FunctionBehavior_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.5"
+        visualID="OpaqueBehavior_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.5/@labels.0"
+          visualID="OpaqueBehavior_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.5/@labels.1"
+          visualID="OpaqueBehavior_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.6"
+        visualID="Component_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.6/@labels.0"
+          visualID="Component_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.6/@labels.1"
+          visualID="Component_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.7"
+        visualID="Device_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.7/@labels.0"
+          visualID="Device_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.7/@labels.1"
+          visualID="Device_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.8"
+        visualID="ExecutionEnvironment_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.8/@labels.0"
+          visualID="ExecutionEnvironment_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.8/@labels.1"
+          visualID="ExecutionEnvironment_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.9"
+        visualID="Node_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.9/@labels.0"
+          visualID="Node_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.9/@labels.1"
+          visualID="Node_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.10"
+        visualID="Class_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.10/@labels.0"
+          visualID="Class_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.10/@labels.1"
+          visualID="Class_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.11"
+        visualID="Collaboration_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.11/@labels.0"
+          visualID="Collaboration_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.11/@labels.1"
+          visualID="Collaboration_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.12"
+        visualID="Interface_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.12/@labels.0"
+          visualID="Interface_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.12/@labels.1"
+          visualID="Interface_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.13"
+        visualID="PrimitiveType_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.13/@labels.0"
+          visualID="PrimitiveType_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.13/@labels.1"
+          visualID="PrimitiveType_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.14"
+        visualID="Enumeration_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.14/@labels.0"
+          visualID="Enumeration_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.14/@labels.1"
+          visualID="Enumeration_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.15"
+        visualID="DataType_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.15/@labels.0"
+          visualID="DataType_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.15/@labels.1"
+          visualID="DataType_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.16"
+        visualID="Actor_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.16/@labels.0"
+          visualID="Actor_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.16/@labels.1"
+          visualID="Actor_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.17"
+        visualID="DeploymentSpecification_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.17/@labels.0"
+          visualID="DeploymentSpecification_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.17/@labels.1"
+          visualID="DeploymentSpecification_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.18"
+        visualID="Artifact_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.18/@labels.0"
+          visualID="Artifact_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.18/@labels.1"
+          visualID="Artifact_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.19"
+        visualID="InformationItem_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.19/@labels.0"
+          visualID="InformationItem_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.19/@labels.1"
+          visualID="InformationItem_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.20"
+        visualID="Signal_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.20/@labels.0"
+          visualID="Signal_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.20/@labels.1"
+          visualID="Signal_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.21"
+        visualID="UseCase_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.21/@labels.0"
+          visualID="UseCase_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.21/@labels.1"
+          visualID="UseCase_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.22"
+        visualID="SignalEvent_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.22/@labels.0"
+          visualID="SignalEvent_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.22/@labels.1"
+          visualID="SignalEvent_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.23"
+        visualID="CallEvent_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.23/@labels.0"
+          visualID="CallEvent_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.23/@labels.1"
+          visualID="CallEvent_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.24"
+        visualID="AnyReceiveEvent_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.24/@labels.0"
+          visualID="AnyReceiveEvent_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.24/@labels.1"
+          visualID="AnyReceiveEvent_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.25"
+        visualID="ChangeEvent_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.25/@labels.0"
+          visualID="ChangeEvent_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.25/@labels.1"
+          visualID="ChangeEvent_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.26"
+        visualID="TimeEvent_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.26/@labels.0"
+          visualID="TimeEvent_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.26/@labels.1"
+          visualID="TimeEvent_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.27"
+        visualID="DurationObservation_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.27/@labels.0"
+          visualID="DurationObservation_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.27/@labels.1"
+          visualID="DurationObservation_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.28"
+        visualID="TimeObservation_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.28/@labels.0"
+          visualID="TimeObservation_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.28/@labels.1"
+          visualID="TimeObservation_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.29"
+        visualID="LiteralBoolean_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.29/@labels.0"
+          visualID="LiteralBoolean_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.29/@labels.1"
+          visualID="LiteralBoolean_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.30"
+        visualID="LiteralInteger_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.30/@labels.0"
+          visualID="LiteralInteger_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.30/@labels.1"
+          visualID="LiteralInteger_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.31"
+        visualID="LiteralNull_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.31/@labels.0"
+          visualID="LiteralNull_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.31/@labels.1"
+          visualID="LiteralNull_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.32"
+        visualID="LiteralString_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.32/@labels.0"
+          visualID="LiteralString_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.32/@labels.1"
+          visualID="LiteralString_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.33"
+        visualID="LiteralUnlimitedNatural_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.33/@labels.0"
+          visualID="LiteralUnlimitedNatural_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.33/@labels.1"
+          visualID="LiteralUnlimitedNatural_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.34"
+        visualID="StringExpression_PackagedElementShape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.34/@labels.0"
+          visualID="StringExpression_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.34/@labels.1"
+          visualID="StringExpression_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.35"
+        visualID="OpaqueExpression_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.35/@labels.0"
+          visualID="OpaqueExpression_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.35/@labels.1"
+          visualID="OpaqueExpression_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.36"
+        visualID="TimeExpression_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.36/@labels.0"
+          visualID="TimeExpression_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.36/@labels.1"
+          visualID="TimeExpression_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.37"
+        visualID="Expression_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.37/@labels.0"
+          visualID="Expression_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.37/@labels.1"
+          visualID="Expression_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.38"
+        visualID="Duration_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.38/@labels.0"
+          visualID="Duration_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.38/@labels.1"
+          visualID="Duration_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.39"
+        visualID="TimeInterval_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.39/@labels.0"
+          visualID="TimeInterval_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.39/@labels.1"
+          visualID="TimeInterval_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.40"
+        visualID="DurationInterval_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.40/@labels.0"
+          visualID="DurationInterval_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.40/@labels.1"
+          visualID="DurationInterval_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.41"
+        visualID="Interval_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.41/@labels.0"
+          visualID="Interval_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.41/@labels.1"
+          visualID="Interval_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.42"
+        visualID="InstanceValue_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.42/@labels.0"
+          visualID="InstanceValue_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.42/@labels.1"
+          visualID="InstanceValue_FloatingNameLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.43"
+        visualID="Comment_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.43/@labels.0"
+          visualID="Comment_BodyLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.44"
+        visualID="DurationConstraint_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.44/@labels.0"
+          visualID="DurationConstraint_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.44/@labels.1"
+          visualID="DurationConstraint_BodyLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.45"
+        visualID="TimeConstraint_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.45/@labels.0"
+          visualID="TimeConstraint_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.45/@labels.1"
+          visualID="TimeConstraint_BodyLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.46"
+        visualID="IntervalConstraint_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.46/@labels.0"
+          visualID="IntervalConstraint_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.46/@labels.1"
+          visualID="IntervalConstraint_BodyLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.47"
+        visualID="InteractionConstraint_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.47/@labels.0"
+          visualID="InteractionConstraint_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.47/@labels.1"
+          visualID="InteractionConstraint_BodyLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@topLevelNodes.48"
+        visualID="Constraint_Shape">
+      <child
+          genView="/0/@diagram/@topLevelNodes.48/@labels.0"
+          visualID="Constraint_NameLabel"/>
+      <child
+          genView="/0/@diagram/@topLevelNodes.48/@labels.1"
+          visualID="Constraint_BodyLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.0"
+        visualID="Port_BehaviorEdge"/>
+    <child
+        genView="/0/@diagram/@links.1"
+        visualID="Link_DescriptorEdge"/>
+    <child
+        genView="/0/@diagram/@links.2"
+        visualID="Comment_AnnotatedElementEdge"/>
+    <child
+        genView="/0/@diagram/@links.3"
+        visualID="Constraint_ConstrainedElementEdge"/>
+    <child
+        genView="/0/@diagram/@links.4"
+        visualID="ComponentRealization_Edge">
+      <child
+          genView="/0/@diagram/@links.4/@labels.0"
+          visualID="ComponentRealization_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.4/@labels.1"
+          visualID="ComponentRealization_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.5"
+        visualID="InterfaceRealization_Edge">
+      <child
+          genView="/0/@diagram/@links.5/@labels.0"
+          visualID="InterfaceRealization_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.5/@labels.1"
+          visualID="InterfaceRealization_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.6"
+        visualID="Substitution_Edge">
+      <child
+          genView="/0/@diagram/@links.6/@labels.0"
+          visualID="Substitution_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.6/@labels.1"
+          visualID="Substitution_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.7"
+        visualID="Realization_Edge">
+      <child
+          genView="/0/@diagram/@links.7/@labels.0"
+          visualID="Realization_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.7/@labels.1"
+          visualID="Realization_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.8"
+        visualID="Manifestation_Edge">
+      <child
+          genView="/0/@diagram/@links.8/@labels.0"
+          visualID="Manifestation_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.8/@labels.1"
+          visualID="Manifestation_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.9"
+        visualID="Abstraction_Edge">
+      <child
+          genView="/0/@diagram/@links.9/@labels.0"
+          visualID="Abstraction_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.9/@labels.1"
+          visualID="Abstraction_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.10"
+        visualID="Usage_Edge">
+      <child
+          genView="/0/@diagram/@links.10/@labels.0"
+          visualID="Usage_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.10/@labels.1"
+          visualID="Usage_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.11"
+        visualID="Deployment_Edge">
+      <child
+          genView="/0/@diagram/@links.11/@labels.0"
+          visualID="Deployment_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.11/@labels.1"
+          visualID="Deployment_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.12"
+        visualID="Dependency_RoleBindingEdge">
+      <child
+          genView="/0/@diagram/@links.12/@labels.0"
+          visualID="Dependency_RoleBindingNameLabel"/>
+      <child
+          genView="/0/@diagram/@links.12/@labels.1"
+          visualID="Dependency_RoleBindingStereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.13"
+        visualID="Dependency_Edge">
+      <child
+          genView="/0/@diagram/@links.13/@labels.0"
+          visualID="Dependency_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.13/@labels.1"
+          visualID="Dependency_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.14"
+        visualID="Connector_Edge">
+      <child
+          genView="/0/@diagram/@links.14/@labels.0"
+          visualID="Connector_StereotypeLabel"/>
+      <child
+          genView="/0/@diagram/@links.14/@labels.1"
+          visualID="Connector_NameLabel"/>
+      <child
+          genView="/0/@diagram/@links.14/@labels.2"
+          visualID="Connector_SourceMultiplicityLabel"/>
+      <child
+          genView="/0/@diagram/@links.14/@labels.3"
+          visualID="Connector_TargetMultiplicityLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.15"
+        visualID="Generalization_Edge">
+      <child
+          genView="/0/@diagram/@links.15/@labels.0"
+          visualID="Generalization_StereotypeLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.16"
+        visualID="TimeObservation_EventEdge"/>
+    <child
+        genView="/0/@diagram/@links.17"
+        visualID="DurationObservation_EventEdge"/>
+    <child
+        genView="/0/@diagram/@links.18"
+        visualID="Representation_Edge">
+      <child
+          genView="/0/@diagram/@links.18/@labels.0"
+          visualID="Representation_KeywordLabel"/>
+    </child>
+    <child
+        genView="/0/@diagram/@links.19"
+        visualID="InformationFlow_Edge">
+      <child
+          genView="/0/@diagram/@links.19/@labels.0"
+          visualID="InformationFlow_ConveyedLabel"/>
+      <child
+          genView="/0/@diagram/@links.19/@labels.1"
+          visualID="InformationFlow_StereotypeLabel"/>
+      <child
+          genView="/0/@diagram/@links.19/@labels.2"
+          visualID="InformationFlow_NameLabel"/>
+    </child>
+  </papyrusgmfgenextension:VisualIDOverride>
 </xmi:XMI>

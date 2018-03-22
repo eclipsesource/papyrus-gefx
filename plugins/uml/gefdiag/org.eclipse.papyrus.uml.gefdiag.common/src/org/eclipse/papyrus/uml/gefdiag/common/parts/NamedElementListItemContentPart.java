@@ -11,12 +11,12 @@ package org.eclipse.papyrus.uml.gefdiag.common.parts;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.ListItemContentPart;
+import org.eclipse.papyrus.gef4.gmf.parts.NotationListItemContentPart;
 
 /**
  * The Class NamedElementListItemContentPart.
  */
-public class NamedElementListItemContentPart extends ListItemContentPart<View> {
+public class NamedElementListItemContentPart extends NotationListItemContentPart {
 
 	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
 

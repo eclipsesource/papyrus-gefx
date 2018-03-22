@@ -1,3 +1,4 @@
+
 package org.eclipse.papyrus.uml.gefdiag.composite.edit.parts;
 
 public class EnumerationNameEditPart extends org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart {
@@ -5,4 +6,5 @@ public class EnumerationNameEditPart extends org.eclipse.papyrus.uml.gefdiag.com
 	public EnumerationNameEditPart(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);
 	}
+
 }

@@ -30,7 +30,7 @@ class NodeEditPartEmitter extends AbstractEditPartEmitter {
 	'''
 	
 	override getExtended(List<Object> arguments) '''
-	 extends org.eclipse.papyrus.gef4.parts.NodeContentPart<org.eclipse.gmf.runtime.notation.View>
+	 extends org.eclipse.papyrus.gef4.gmf.parts.ShapeContentPart
 	'''
 	
 
