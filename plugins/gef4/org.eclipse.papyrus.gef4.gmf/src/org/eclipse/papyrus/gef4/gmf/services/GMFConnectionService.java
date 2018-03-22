@@ -21,6 +21,9 @@ import com.google.common.collect.SetMultimap;
 
 import javafx.scene.Node;
 
+/**
+ * An {@link AnchorageService} implementation for GMF {@link Edge} Anchors
+ */
 public class GMFConnectionService extends ActivatableBound<IVisualPart<?>> implements AnchorageService {
 
 	private DiagramEventBroker eventBroker;

@@ -25,7 +25,6 @@ import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
 import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
-import org.eclipse.gef.mvc.fx.providers.DefaultAnchorProvider;
 import org.eclipse.gef.mvc.fx.providers.GeometricOutlineProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
@@ -278,11 +277,6 @@ public class GEFFxModule extends MvcFxModule {
 				.addBinding(
 						AdapterKey.defaultRole())
 				.to(MoveOnDragHandler.class);
-
-		adapterMapBinder
-				.addBinding(
-						AdapterRoles.fallbackRole())
-				.to(DefaultAnchorProvider.class);
 	}
 
 	protected void bindToolManager() {

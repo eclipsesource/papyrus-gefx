@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
+import org.eclipse.gmf.runtime.diagram.core.listener.NotificationListener;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
@@ -29,11 +30,14 @@ import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.services.ContentChildrenAdapter;
 import org.eclipse.papyrus.gef4.utils.ActivatableBound;
 
-public class NotationContentChildrenProvider extends ActivatableBound<BaseContentPart<? extends View, ?>> implements ContentChildrenAdapter<View> {
+public class NotationContentChildrenProvider extends ActivatableBound<BaseContentPart<? extends View, ?>>
+		implements ContentChildrenAdapter<View> {
 
 	private final View view;
 
 	private DiagramEventBroker eventBroker;
+
+	private NotificationListener listener;
 
 	@Inject
 	protected NotationContentChildrenProvider(View view) {
@@ -53,9 +57,19 @@ public class NotationContentChildrenProvider extends ActivatableBound<BaseConten
 		Stream<? extends View> nodesAndEdges;
 
 		if (view instanceof Diagram) {
+			// XXX It seems that Edges in Papyrus are created in two-steps. Initially,
+			// the Edge is present but no connected to source/target.
+			// We have two ways around this issue: 1) Let this provider install a listener
+			// on the Edges directly, and refresh
+			// its children when edges become connected; 2) Return visible unconnected
+			// Nodes, create an EditPart for it, and let this edit part
+			// deal with source and targets. Currently, we choose Option 2, which is easier
+			// and probably more flexible (But may result in an EditPart with a hidden
+			// Figure; it's unclear whether this would be an issue)
 			nodesAndEdges = Stream.concat(nodes,
-					NotationUtil.getEdges(view).stream().filter(
-							(e) -> e.getSource() != null && e.getSource().isVisible() && e.getTarget() != null && e.getTarget().isVisible()));
+					NotationUtil.getEdges(view).stream()
+							.filter((e) -> (e.getSource() == null || e.getSource().isVisible())
+									&& (e.getTarget() == null || e.getTarget().isVisible())));
 		} else {
 			nodesAndEdges = nodes;
 		}
@@ -69,12 +83,14 @@ public class NotationContentChildrenProvider extends ActivatableBound<BaseConten
 		}
 
 		if (view instanceof Diagram) {
-			if (msg.getFeature() == NotationPackage.Literals.DIAGRAM__PERSISTED_EDGES || msg.getFeature() == NotationPackage.Literals.DIAGRAM__TRANSIENT_EDGES) {
+			if (msg.getFeature() == NotationPackage.Literals.DIAGRAM__PERSISTED_EDGES
+					|| msg.getFeature() == NotationPackage.Literals.DIAGRAM__TRANSIENT_EDGES) {
 				return true;
 			}
 		}
 
-		if (msg.getFeature() == NotationPackage.Literals.VIEW__PERSISTED_CHILDREN || msg.getFeature() == NotationPackage.Literals.VIEW__TRANSIENT_CHILDREN) {
+		if (msg.getFeature() == NotationPackage.Literals.VIEW__PERSISTED_CHILDREN
+				|| msg.getFeature() == NotationPackage.Literals.VIEW__TRANSIENT_CHILDREN) {
 			return true;
 		}
 
@@ -83,16 +99,17 @@ public class NotationContentChildrenProvider extends ActivatableBound<BaseConten
 
 	@Override
 	protected void doActivate() {
-		eventBroker.addNotificationListener(view, msg -> {
+		listener = msg -> {
 			if (childrenChanged(msg)) {
 				getAdaptable().updateContentChildren();
 			}
-		});
+		};
+		eventBroker.addNotificationListener(view, listener);
 	}
 
 	@Override
 	protected void doDeactivate() {
-
+		eventBroker.removeNotificationListener(view, listener);
 	}
 
 }

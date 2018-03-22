@@ -16,6 +16,7 @@ import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.module.anchors.RatioAnchorProvider;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramRootPart;
 import org.eclipse.papyrus.gef4.gmf.scope.ViewPartScope;
 import org.eclipse.papyrus.gef4.gmf.services.EditingDomainTransactionService;
@@ -81,6 +82,13 @@ public abstract class GMFModule extends AbstractModule {
 		binder().bind(IRootPart.class).to(NotationDiagramRootPart.class);
 
 		bindAnchorageService();
+
+		bindAnchorProviders();
+	}
+
+	protected void bindAnchorProviders() {
+		AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class).addBinding(AdapterRoles.fallbackRole())
+				.to(RatioAnchorProvider.class);
 	}
 
 	protected void bindScope() {
@@ -211,6 +219,10 @@ public abstract class GMFModule extends AbstractModule {
 	}
 
 	protected void bindDefaultContentChildrenProvider() {
+		AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class).addBinding(AdapterRoles.fallbackRole())
+				.to(new TypeLiteral<ContentChildrenAdapter<View>>() {
+				});
+
 		binder().bind(new TypeLiteral<ContentChildrenAdapter<View>>() {
 		}).to(NotationContentChildrenProvider.class);
 	}

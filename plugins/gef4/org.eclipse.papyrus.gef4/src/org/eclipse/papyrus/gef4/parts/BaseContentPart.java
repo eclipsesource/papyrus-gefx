@@ -14,6 +14,7 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -333,7 +334,7 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	 * @return the (never null) content children provider for this content part. Defaults to NotationContentChildrenProvider.getInstance()
 	 */
 	protected final ContentChildrenAdapter<MODEL> getContentChildrenAdapter() {
-		return contentChildrenAdapter;
+		return this.contentChildrenAdapter;
 	}
 
 	@Inject
@@ -364,19 +365,19 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 
 	@Override
 	public void doDetachFromContentAnchorage(Object contentAnchorage, String role) {
-		contentAnchorages.put(contentAnchorage, role);
+		contentAnchorages.remove(contentAnchorage, role);
 	}
 
 	public void updateAnchorages() {
 		SetMultimap<?, String> anchorages = doGetContentAnchorages();
 		SetMultimap<?, String> notationAnchorages = getAnchorageService().getModelAnchorages();
-		for (Map.Entry<?, String> entry : notationAnchorages.entries()) {
+		for (Map.Entry<?, String> entry : new HashSet<>(notationAnchorages.entries())) {
 			if (!anchorages.containsEntry(entry.getKey(), entry.getValue())) {
 				attachToContentAnchorage(entry.getKey(), entry.getValue());
 			}
 		}
 
-		for (Map.Entry<?, String> entry : anchorages.entries()) {
+		for (Map.Entry<?, String> entry : new HashSet<>(anchorages.entries())) {
 			if (!notationAnchorages.containsEntry(entry.getKey(), entry.getValue())) {
 				detachFromContentAnchorage(entry.getKey(), entry.getValue());
 			}
