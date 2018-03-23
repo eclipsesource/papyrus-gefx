@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GEFx GMF
 Bundle-SymbolicName: org.eclipse.papyrus.gef4.gmf
-Bundle-Version: 0.0.1.qualifier
+Bundle-Version: 0.2.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.papyrus.gef4;bundle-version="0.2.0";visibility:=reexport,
@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.papyrus.gef4;bundle-version="0.2.0";visibility:=reex
  org.eclipse.gef.common,
  org.eclipse.fx.core;bundle-version="3.0.0",
  org.eclipse.papyrus.infra.emf.appearance
-Export-Package: org.eclipse.papyrus.gef4.gmf.module,
+Export-Package: org.eclipse.papyrus.gef4.gmf.editor,
+ org.eclipse.papyrus.gef4.gmf.module,
  org.eclipse.papyrus.gef4.gmf.parts,
  org.eclipse.papyrus.gef4.gmf.services,
  org.eclipse.papyrus.gef4.gmf.style,

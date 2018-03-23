@@ -20,7 +20,7 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.example.library.editor.LibraryEditor;
-import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
+import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramContentPart;
 import org.eclipse.papyrus.gef4.tests.utils.EditorUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class EditorTests {
 
 		List<IContentPart<? extends Node>> viewerContents = viewer.getRootPart().getContentPartChildren();
 
-		DiagramContentPart diagramPart = (DiagramContentPart) viewerContents.get(0);
+		NotationDiagramContentPart diagramPart = (NotationDiagramContentPart) viewerContents.get(0);
 
 		List<IVisualPart<? extends Node>> diagramContents = diagramPart.getChildrenUnmodifiable();
 

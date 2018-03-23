@@ -1,6 +1,7 @@
 package org.eclipse.papyrus.gef4.example.library.diagram.providers;
 
-public class ContentPartProvider extends org.eclipse.papyrus.gef4.gmf.services.AbstractContentPartProvider {
+public class ContentPartProvider
+		extends org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider {
 
 	@Override
 	public org.eclipse.gef.mvc.fx.parts.IContentPart<?> createContentPart(org.eclipse.gmf.runtime.notation.View view) {
@@ -17,13 +18,13 @@ public class ContentPartProvider extends org.eclipse.papyrus.gef4.gmf.services.A
 					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "50002":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.PersonLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "50001":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.LibraryLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "50003":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.BookLabelEditPart(
-					view);
+					(org.eclipse.gmf.runtime.notation.View) view);
 		case "10002":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.PersonEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);

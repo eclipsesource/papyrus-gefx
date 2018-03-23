@@ -41,8 +41,8 @@ public class GEF4DiagramEditor extends GEFEditor<Diagram> implements IRevealSema
 
 	protected Module module;
 
-	public GEF4DiagramEditor(Diagram diagram, Module module) {
-		super(diagram, module);
+	public GEF4DiagramEditor(Module module) {
+		super(module);
 	}
 
 	@Override

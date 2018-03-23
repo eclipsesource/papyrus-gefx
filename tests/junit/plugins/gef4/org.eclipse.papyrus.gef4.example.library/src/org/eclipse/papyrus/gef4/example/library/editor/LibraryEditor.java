@@ -1,18 +1,20 @@
 package org.eclipse.papyrus.gef4.example.library.editor;
 
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.papyrus.gef4.editor.StandaloneGEFEditor;
+import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.gef4.example.library.module.LibraryModule;
+import org.eclipse.papyrus.gef4.gmf.editor.StandaloneGMFEditor;
 
 import com.google.inject.Module;
+import com.google.inject.util.Modules;
 
-public class LibraryEditor extends StandaloneGEFEditor {
+public class LibraryEditor extends StandaloneGMFEditor {
 
 	public static final String EDITOR_ID = "org.eclipse.papyrus.gef4.example.library.editor";
 
 	@Override
-	protected Module getModule() {
-		return new LibraryModule();
+	protected Module getModule(Diagram diagram) {
+		return Modules.override(super.getModule(diagram)).with(new LibraryModule());
 	}
 
 	@Override

@@ -12,13 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.editor;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.papyrus.infra.ui.util.EditorUtils;
+import org.eclipse.papyrus.gef4.module.GEFFxModule;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -36,18 +32,14 @@ public abstract class StandaloneGEFEditor<MODEL> extends GEFEditor<MODEL> {
 		if (diagram == null) {
 			throw new PartInitException("Invalid editor input: " + input);
 		}
-		init(diagram, getModule());
+		init(getModule(diagram));
 	}
 
-	protected abstract Module getModule();
-
-	protected MODEL getDiagramRoot(IEditorInput input) {
-		URI uri = EditorUtils.getResourceURI(input);
-		if (uri != null) {
-			return (MODEL) loadDiagram(uri);
-		}
-		return null;
+	protected Module getModule(MODEL diagramRoot) {
+		return new GEFFxModule();
 	}
+
+	protected abstract MODEL getDiagramRoot(IEditorInput input);
 
 	protected ResourceSet createResourceSet() {
 		TransactionalEditingDomain editingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
@@ -59,16 +51,6 @@ public abstract class StandaloneGEFEditor<MODEL> extends GEFEditor<MODEL> {
 			resourceSet = createResourceSet();
 		}
 		return resourceSet;
-	}
-
-	protected Diagram loadDiagram(URI uri) {
-		Resource inputResource = getResourceSet().getResource(uri, true);
-		for (EObject rootElement : inputResource.getContents()) {
-			if (rootElement instanceof Diagram) {
-				return (Diagram) rootElement;
-			}
-		}
-		return null;
 	}
 
 }

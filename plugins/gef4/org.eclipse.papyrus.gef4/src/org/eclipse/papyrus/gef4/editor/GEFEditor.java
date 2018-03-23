@@ -71,10 +71,10 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
 	private final ListChangeListener<IContentPart<? extends Node>> selectionListener;
 
-	public GEFEditor(final MODEL_ROOT diagramRoot, final Module module) {
+	public GEFEditor(final Module module) {
 		this();
 
-		init(diagramRoot, module);
+		init(module);
 	}
 
 	public GEFEditor() {
@@ -91,16 +91,10 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 		};
 	}
 
-	public void init(final MODEL_ROOT diagramRoot, final Module module) {
-		// if (this.diagramRoot != null) {
-		// throw new IllegalStateException("This editor has already been initialized");
-		// }
-
+	public void init(final Module module) {
 		if (module == null) {
 			throw new IllegalArgumentException("The module is undefined. It must be either passed in the constructor, or the method createModule() must be overridden");
 		}
-
-		// this.diagramRoot = diagramRoot;
 
 		final Injector injector = Guice.createInjector(module);
 		injector.injectMembers(this);

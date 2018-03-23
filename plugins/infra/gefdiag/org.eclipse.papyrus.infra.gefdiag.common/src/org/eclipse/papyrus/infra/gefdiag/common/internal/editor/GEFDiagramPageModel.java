@@ -57,7 +57,7 @@ public class GEFDiagramPageModel implements IEditorModel {
 
 	@Override
 	public IEditorPart createIEditorPart() throws PartInitException {
-		return new GEF4DiagramEditor(diagram, Modules.override(new GEFFxModule()).with(new NotationDiagramModule(diagram), descriptor.getModule()));
+		return new GEF4DiagramEditor(Modules.override(new GEFFxModule()).with(new NotationDiagramModule(diagram), descriptor.getModule()));
 	}
 
 	@Override
