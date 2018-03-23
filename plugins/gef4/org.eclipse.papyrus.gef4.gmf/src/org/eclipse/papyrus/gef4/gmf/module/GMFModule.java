@@ -103,7 +103,6 @@ public abstract class GMFModule extends AbstractModule {
 	}
 
 	protected void bindConnectionAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
-		// Nothing yet
 		mapBinder.addBinding(AdapterKey.defaultRole()).to(GMFConnectionService.class);
 	}
 

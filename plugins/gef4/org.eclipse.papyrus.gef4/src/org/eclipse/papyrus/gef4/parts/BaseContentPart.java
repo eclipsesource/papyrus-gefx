@@ -395,7 +395,7 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 			doAttachToAnchorageVisual(anchorage, role);
 		}
 
-		refreshVisual();
+		refreshVisual(); // XXX This shouldn't be synchronous
 	}
 
 }

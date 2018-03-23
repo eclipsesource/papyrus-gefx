@@ -12,13 +12,17 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.nodes.Connection;
+import org.eclipse.gef.geometry.planar.Point;
+import org.eclipse.gef.mvc.fx.parts.IBendableContentPart.BendPoint;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.providers.IAnchorProvider;
 import org.eclipse.papyrus.gef4.decorations.DecorationFactory;
+import org.eclipse.papyrus.gef4.services.ConnectionService;
 import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
 
 import javafx.scene.Node;
@@ -61,6 +65,25 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 		super.refreshVisualInTransaction(connection);
 
 		refreshDecorations();
+		refreshBendpoints();
+	}
+
+	// TODO: Currently we only focus on visuals. For interactions, to rely on GEFx's BendConnectionPolicy,
+	// we may need to implement IBendableContentPart later on.
+	protected void refreshBendpoints() {
+		getVisual().removeAllControlPoints();
+		int i = 0;
+		for (BendPoint bendpoint : getContentBendPoints()) {
+			getVisual().addControlPoint(i++, getPosition(bendpoint));
+		}
+	}
+
+	protected Point getPosition(BendPoint modelBendpoint) {
+		return modelBendpoint.getPosition();
+	}
+
+	public List<BendPoint> getContentBendPoints() {
+		return getAdapter(ConnectionService.class).getModelBendpoints();
 	}
 
 	protected void refreshDecorations() {

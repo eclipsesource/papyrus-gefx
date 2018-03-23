@@ -126,7 +126,7 @@ public class DiagramContentPart<MODEL> extends BaseContentPart<MODEL, Pane> {
 	@Override
 	protected void doAddChildVisual(IVisualPart<? extends Node> child, int index) {
 		if (child.getVisual() != null) {
-			getVisual().getChildren().add(child.getVisual());
+			getVisual().getChildren().add(index, child.getVisual());
 		}
 	}
 

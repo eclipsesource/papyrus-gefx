@@ -33,7 +33,7 @@ public class RatioAnchor extends AbstractAnchor {
 			hostBoundsInScene = parent.localToScene(hostBoundsInParent);
 		}
 
-		// The location of the host in this anchor's parent coordinates
+		// The location of the host in the anchored's local coordinates
 		Point2D hostLocationInAnchored = key.getAnchored().sceneToLocal(hostBoundsInScene.getMinX(),
 				hostBoundsInScene.getMinY());
 

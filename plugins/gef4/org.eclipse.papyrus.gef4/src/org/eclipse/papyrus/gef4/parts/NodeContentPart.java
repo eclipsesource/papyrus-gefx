@@ -317,7 +317,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	@Override
 	protected void doAddChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
-			getVisual().getChildren().add(child.getVisual());
+			getVisual().getChildren().add(index, child.getVisual());
 		}
 	}
 

@@ -375,7 +375,7 @@ abstract public class CompartmentContentPart<MODEL, P extends Pane> extends Cont
 	protected void doAddChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		final Node childVisual = child.getVisual();
 		if (null != childVisual && null != compartment) {
-			compartment.getChildren().add(childVisual);
+			compartment.getChildren().add(index, childVisual);
 		}
 	}
 

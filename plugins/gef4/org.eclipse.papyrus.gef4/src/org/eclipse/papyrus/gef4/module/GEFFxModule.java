@@ -52,7 +52,9 @@ import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.provider.CollapseHandlePartProvider;
 import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
+import org.eclipse.papyrus.gef4.services.ConnectionService;
 import org.eclipse.papyrus.gef4.services.impl.EmptyAnchorageService;
+import org.eclipse.papyrus.gef4.services.impl.EmptyConnectionService;
 import org.eclipse.papyrus.gef4.tools.DefaultToolManager;
 import org.eclipse.papyrus.gef4.tools.ToolManager;
 
@@ -204,6 +206,9 @@ public class GEFFxModule extends MvcFxModule {
 				.addBinding(
 						AdapterKey.role(DefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
 				.to(GeometricOutlineProvider.class);
+
+		adapterMapBinder.addBinding(AdapterRoles.fallbackRole()).to(ConnectionService.class);
+		binder().bind(ConnectionService.class).to(EmptyConnectionService.class);
 	}
 
 	protected void bindNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
