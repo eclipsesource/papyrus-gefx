@@ -61,17 +61,17 @@ class VisualPartProviderEmitter implements IEmitter {
 					return (org.eclipse.gef.mvc.fx.parts.IContentPart<?>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
 						@Override
 						public Object caseDecorationNode(org.eclipse.gmf.runtime.notation.DecorationNode object) {
-							return new org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart(object);
+							return new org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart(object);
 						}
 		
 						@Override
 						public Object caseShape(org.eclipse.gmf.runtime.notation.Shape object) {
-							return new org.eclipse.papyrus.gef4.parts.NodeContentPart<>(object);
+							return new org.eclipse.papyrus.gef4.gmf.parts.ShapeContentPart(object);
 						}
 		
 						@Override
 						public Object caseBasicCompartment(org.eclipse.gmf.runtime.notation.BasicCompartment object) {
-							return new org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>(object);
+							return new org.eclipse.papyrus.gef4.gmf.parts.NotationListCompartmentContentPart(object);
 						}
 					}.doSwitch(view);
 				// return new EmptyContentPart(view);

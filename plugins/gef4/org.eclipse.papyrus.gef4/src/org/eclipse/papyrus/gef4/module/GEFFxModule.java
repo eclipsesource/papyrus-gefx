@@ -49,12 +49,14 @@ import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.gef4.parts.ContainerContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
+import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.provider.CollapseHandlePartProvider;
 import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ConnectionService;
 import org.eclipse.papyrus.gef4.services.impl.EmptyAnchorageService;
 import org.eclipse.papyrus.gef4.services.impl.EmptyConnectionService;
+import org.eclipse.papyrus.gef4.services.impl.EmptyImageService;
 import org.eclipse.papyrus.gef4.tools.DefaultToolManager;
 import org.eclipse.papyrus.gef4.tools.ToolManager;
 
@@ -75,6 +77,7 @@ public class GEFFxModule extends MvcFxModule {
 		bindConnectionPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class));
 		bindPrimaryPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IPrimaryContentPart.class));
 		bindCompartmentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CompartmentContentPart.class));
+		bindLabelPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), LabelContentPart.class));
 
 		// define specific policy for affixed Label
 		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
@@ -236,6 +239,12 @@ public class GEFFxModule extends MvcFxModule {
 		adapterMapBinder
 				.addBinding(AdapterKey.defaultRole())
 				.to(CollapseOnClickHandler.class);
+	}
+
+	protected void bindLabelPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(
+				AdapterRoles.fallbackRole())
+				.to(EmptyImageService.class);
 	}
 
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {

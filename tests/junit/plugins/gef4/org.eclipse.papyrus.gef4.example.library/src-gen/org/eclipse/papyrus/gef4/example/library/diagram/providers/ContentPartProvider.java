@@ -1,5 +1,8 @@
 package org.eclipse.papyrus.gef4.example.library.diagram.providers;
 
+import org.eclipse.papyrus.gef4.gmf.parts.NotationListCompartmentContentPart;
+import org.eclipse.papyrus.gef4.gmf.parts.ShapeContentPart;
+
 public class ContentPartProvider
 		extends org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider {
 
@@ -18,13 +21,13 @@ public class ContentPartProvider
 					(org.eclipse.gmf.runtime.notation.DecorationNode) view);
 		case "50002":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.PersonLabelEditPart(
-					(org.eclipse.gmf.runtime.notation.View) view);
+					view);
 		case "50001":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.LibraryLabelEditPart(
-					(org.eclipse.gmf.runtime.notation.View) view);
+					view);
 		case "50003":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.BookLabelEditPart(
-					(org.eclipse.gmf.runtime.notation.View) view);
+					view);
 		case "10002":
 			return new org.eclipse.papyrus.gef4.example.library.diagram.edit.parts.PersonEditPart(
 					(org.eclipse.gmf.runtime.notation.Shape) view);
@@ -40,18 +43,17 @@ public class ContentPartProvider
 			return (org.eclipse.gef.mvc.fx.parts.IContentPart<?>) new org.eclipse.gmf.runtime.notation.util.NotationSwitch() {
 				@Override
 				public Object caseDecorationNode(org.eclipse.gmf.runtime.notation.DecorationNode object) {
-					return new org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart(object);
+					return new org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart(object);
 				}
 
 				@Override
 				public Object caseShape(org.eclipse.gmf.runtime.notation.Shape object) {
-					return new org.eclipse.papyrus.gef4.parts.NodeContentPart<>(object);
+					return new ShapeContentPart(object);
 				}
 
 				@Override
 				public Object caseBasicCompartment(org.eclipse.gmf.runtime.notation.BasicCompartment object) {
-					return new org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>(
-							object);
+					return new NotationListCompartmentContentPart(object);
 				}
 			}.doSwitch(view);
 		// return new EmptyContentPart(view);

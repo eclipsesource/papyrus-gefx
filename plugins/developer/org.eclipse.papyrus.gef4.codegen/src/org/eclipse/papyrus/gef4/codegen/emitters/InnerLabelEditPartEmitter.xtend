@@ -30,7 +30,7 @@ class InnerLabelEditPartEmitter extends AbstractEditPartEmitter {
 	'''
 	
 	override getExtended(List<Object> arguments) '''
-	 extends org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart
+	 extends org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart
 	'''
 	
 }
