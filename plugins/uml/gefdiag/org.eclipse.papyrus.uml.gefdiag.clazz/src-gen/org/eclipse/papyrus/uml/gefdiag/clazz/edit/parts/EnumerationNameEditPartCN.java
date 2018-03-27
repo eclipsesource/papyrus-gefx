@@ -1,8 +1,7 @@
 
 package org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts;
 
-public class EnumerationNameEditPartCN
-		extends org.eclipse.papyrus.uml.gefdiag.common.parts.NamedElementLabelContentPart {
+public class EnumerationNameEditPartCN extends org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart {
 
 	public EnumerationNameEditPartCN(org.eclipse.gmf.runtime.notation.View view) {
 		super(view);

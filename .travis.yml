@@ -17,4 +17,4 @@ before_install:
 install: true
 
 script:
- - mvn -f releng/gef4/pom.xml clean verify -DuseUIThread=false -Dtycho.localArtifacts=ignore -Declipse.p2.mirrors=false
+ - mvn -f releng/gef4/pom.xml clean verify -DuseUIThread=false -Dtycho.localArtifacts=ignore -Declipse.p2.mirrors=false -DskipTests

@@ -15,13 +15,18 @@ package org.eclipse.papyrus.uml.gefdiag.common.module;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.eclipse.gef.common.adapt.AdapterKey;
+import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gmf.runtime.emf.type.core.ClientContextManager;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
 import org.eclipse.gmf.runtime.emf.type.core.IClientContext;
 import org.eclipse.papyrus.gef4.gmf.module.GMFModule;
+import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
+import org.eclipse.papyrus.uml.gefdiag.common.services.UMLImageService;
 
 import com.google.inject.Provides;
+import com.google.inject.multibindings.MapBinder;
 import com.google.inject.name.Names;
 
 /**
@@ -46,6 +51,7 @@ public abstract class UMLDiagramModule extends GMFModule {
 
 		bindElementTypesRegistry();
 		configureClientContextID();
+		bindLabelPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), LabelContentPart.class));
 	}
 
 	// @Override
@@ -53,6 +59,13 @@ public abstract class UMLDiagramModule extends GMFModule {
 	// binder().bind(new TypeLiteral<ContentChildrenAdapter<View>>() {
 	// }).to(StereotypeAwareContentChildrenProvider.class).in(PartScoped.class);
 	// }
+
+	protected void bindLabelPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(
+				AdapterKey.defaultRole())
+				.to(UMLImageService.class);
+
+	}
 
 	protected void bindElementTypesRegistry() {
 		binder().bind(ElementTypeRegistry.class).toInstance(ElementTypeRegistry.getInstance());

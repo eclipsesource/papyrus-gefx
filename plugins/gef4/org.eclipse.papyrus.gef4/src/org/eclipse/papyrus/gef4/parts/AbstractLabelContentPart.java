@@ -14,6 +14,7 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
+import org.eclipse.papyrus.gef4.services.ImageService;
 import org.eclipse.papyrus.gef4.services.TextAdapter;
 import org.eclipse.papyrus.gef4.services.style.LabelStyleService;
 
@@ -41,12 +42,16 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 		refreshIcon();
 	}
 
-	protected final TextAdapter getTextService() {
+	protected TextAdapter getTextService() {
 		return getAdapter(TextAdapter.class);
 	}
 
 	protected LabelStyleService getLabelStyleProvider() {
 		return getAdapter(LabelStyleService.class);
+	}
+
+	protected ImageService getImageService() {
+		return getAdapter(ImageService.class);
 	}
 
 	protected Label getLabelVisual() {
@@ -78,7 +83,7 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 	}
 
 	protected String getImagePath() {
-		return null;
+		return getImageService().getImagePath();
 	}
 
 	protected void refreshLabel() {

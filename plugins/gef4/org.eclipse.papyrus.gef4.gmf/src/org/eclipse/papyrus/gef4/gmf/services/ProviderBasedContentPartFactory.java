@@ -39,7 +39,6 @@ public class ProviderBasedContentPartFactory implements IContentPartFactory {
 
 			scope.enter(view);
 			try {
-				System.err.println("Retrieving part for " + view.getType());
 				IContentPart<?> contentPart = injector.getInstance(Key.get(new TypeLiteral<IContentPart<?>>() {
 					//
 				}));
