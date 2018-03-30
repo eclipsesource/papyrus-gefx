@@ -23,6 +23,9 @@ import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.NumberExpression;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -70,12 +73,9 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	protected void refreshVisualInTransaction(final VBox visual) {
 		refreshBorder();
 		refreshBackground();
-
 		refreshBounds();
 		refreshShape();
 
-		refreshBounds();
-		refreshShape();
 		super.refreshVisualInTransaction(visual);
 
 	}
@@ -142,76 +142,79 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 		}
 	}
 
+	private ShapeTypeEnum currentShapeType;
+
 	protected void refreshShape() {
 		final VBox region = getVisual();
 
-		final double width = region.getLayoutBounds().getWidth();
-		final double height = region.getLayoutBounds().getHeight();
-
-		boolean labelsUseAllWidth = true;
-
 		final ShapeTypeEnum shapeType = getStyleProvider().getShapeType();
-		switch (shapeType) {
-		case CORNER_BEND_RECTANGLE:
-			final double cornerBendWidth = getStyleProvider().getCornerBendWidth();
-			setShape(new CornerBendRectanglePath(width, height, cornerBendWidth), false);
-			break;
+		if (shapeType != currentShapeType) {
+			this.currentShapeType = shapeType;
 
-		case OVAL:
-			// Check if ellipse is aldready instanciate.
-			if (!(region.getShape() instanceof Ellipse)) {
-				Ellipse ellipse = new Ellipse(10, 10); // Size doesn't matter, it will be resized to match the region's. We still need a size, otherwise the Ellipse is not drawn at all
-				ellipse.setFill(region.getBackground().getFills().get(0).getFill());
-				ellipse.setStroke(region.getBorder().getStrokes().get(0).getBottomStroke());
-				setShape(ellipse, true);
+			boolean labelsUseAllWidth = true;
+
+			switch (shapeType) {
+			case CORNER_BEND_RECTANGLE:
+				final NumberExpression width = region.widthProperty();
+				final NumberExpression height = region.heightProperty();
+
+				final double cornerBendWidth = getStyleProvider().getCornerBendWidth();
+				setShape(new CornerBendRectanglePath(width, height, cornerBendWidth), false);
+				break;
+
+			case OVAL:
+				// Check if ellipse is aldready instanciate.
+				if (!(region.getShape() instanceof Ellipse)) {
+					Ellipse ellipse = new Ellipse(10, 10); // Size doesn't matter, it will be resized to match the region's. We still need a size, otherwise the Ellipse is not drawn at all
+					ellipse.setFill(region.getBackground().getFills().get(0).getFill());
+					ellipse.setStroke(region.getBorder().getStrokes().get(0).getBottomStroke());
+					setShape(ellipse, true);
+				}
+				break;
+			case PACKAGE:
+				// get the tab dimension of the package (As an Observable value, see Issue #9)
+
+				NumberExpression tabHeight = new SimpleDoubleProperty(0);
+				NumberExpression tabWidth = new SimpleDoubleProperty(60); // TODO CSS minTabWidth
+
+				for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
+					if (child instanceof LabelContentPart) {
+						LabelContentPart<?> childPart = (LabelContentPart<?>) child;
+
+						// get the margin
+						final Insets childMargin = childPart.getStyleProvider().getPadding();
+						// get the Label child
+						final Label label = childPart.getVisual();
+						tabWidth = Bindings.max(tabWidth, label.widthProperty().add(childMargin.getLeft()).add(childMargin.getRight()));
+						tabHeight = Bindings.add(tabHeight, label.heightProperty().add(childMargin.getBottom()).add(childMargin.getTop()));
+					} else {
+						break; // The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name). Labels below other children are ignored (e.g. Label, Compartment, Label)
+					}
+				}
+
+				tabHeight = Bindings.max(10, tabHeight);
+
+				// create package shape
+				final PackagePath packageShape = new PackagePath(region.widthProperty(), region.heightProperty(), tabWidth, tabHeight, 35, 35);
+				setShape(packageShape, false);
+
+				labelsUseAllWidth = false;
+				break;
+			default:
+				// Rectangle case (Might be rounded)
+				region.setShape(null);
+				break;
 			}
-			break;
-		case PACKAGE:
-			double tabWidth = 60;// TODO nameStyle minPackageTabSize
-			double tabHeight = 0;
 
-			// get the tab dimension of the package
 			for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
 				if (child instanceof LabelContentPart) {
 					LabelContentPart<?> childPart = (LabelContentPart<?>) child;
-
-					// get the margin
-					final Insets childMargin = childPart.getStyleProvider().getPadding();
-					// get the Label child
-					final Label label = childPart.getVisual();
-					tabWidth = Math.max(label.prefWidth(label.getHeight()) + childMargin.getLeft() + childMargin.getRight(), tabWidth);
-					tabHeight += Math.max(label.getHeight() + childMargin.getBottom() + childMargin.getTop(), tabHeight);
+					childPart.setUseAllWidth(labelsUseAllWidth);
 				} else {
-					break; // The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name). Labels below other children are ignored (e.g. Label, Compartment, Label)
+					// The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name).
+					// Labels below other children are ignored (e.g. Label, Compartment, Label)
+					break;
 				}
-			}
-
-			// create package shape
-			final PackagePath packageShape = new PackagePath(width, height, tabWidth, tabHeight, 35, 35);
-			setShape(packageShape, false);
-			//
-			// packageShape.getLayoutBounds();
-			// region.getLayoutBounds();
-			//
-			// break;
-
-			labelsUseAllWidth = false;
-			// region.setShape(null);
-			break;
-		default:
-			// Rectangle case (Might be rounded)
-			region.setShape(null);
-			break;
-		}
-
-		for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
-			if (child instanceof LabelContentPart) {
-				LabelContentPart<?> childPart = (LabelContentPart<?>) child;
-				childPart.setUseAllWidth(labelsUseAllWidth);
-			} else {
-				// The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name).
-				// Labels below other children are ignored (e.g. Label, Compartment, Label)
-				break;
 			}
 		}
 
@@ -250,21 +253,6 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 			if (region.getChildren().get(i) instanceof CornerBendPath) {
 				region.getChildren().remove(i);
 			}
-		}
-		// CornerBend
-		if (ShapeTypeEnum.CORNER_BEND_RECTANGLE.equals(getStyleProvider().getShapeType())) {
-			for (int i = 0; i < region.getChildren().size(); i++) {
-				if (region.getChildren().get(i) instanceof CornerBendPath) {
-					region.getChildren().remove(i);
-				}
-			}
-
-			// Create the decoration
-			final CornerBendPath cornerBendPath = new CornerBendPath(width, getStyleProvider().getCornerBendWidth());
-			// Set the Color
-			cornerBendPath.setFill(getStyleProvider().getCornerBendColor());
-			// add it to children of region
-			region.getChildren().add(cornerBendPath);
 		}
 
 		// Delete ActiveLine if exist
@@ -317,6 +305,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	@Override
 	protected void doAddChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
+			this.currentShapeType = null; // Force a shape refresh XXX Find a better way to do that, e.g. listening on the children
 			getVisual().getChildren().add(index, child.getVisual());
 		}
 	}
@@ -327,6 +316,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 		if (childVisual == null) {
 			return;
 		}
+		this.currentShapeType = null; // Force a shape refresh XXX Find a better way to do that, e.g. listening on the children
 		getVisual().getChildren().remove(childVisual);
 	}
 

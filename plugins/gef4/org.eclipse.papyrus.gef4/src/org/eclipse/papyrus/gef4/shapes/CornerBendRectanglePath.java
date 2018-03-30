@@ -12,9 +12,12 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.shapes;
 
+import javafx.beans.binding.NumberExpression;
+import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.VLineTo;
 
 /**
  * The Class CornerBendRectanglePath. A Rectangle Path set with a bendedCorner à the top right. First implementation don't take into accound of percent.
@@ -22,10 +25,10 @@ import javafx.scene.shape.Path;
 public class CornerBendRectanglePath extends Path {
 
 	private double cornerWidth;
-	private double width;
-	private double height;
+	private NumberExpression width;
+	private NumberExpression height;
 
-	public CornerBendRectanglePath(double width, double height, double cornerBendWidth) {
+	public CornerBendRectanglePath(NumberExpression width, NumberExpression height, double cornerBendWidth) {
 		this.cornerWidth = cornerBendWidth;
 		this.width = width;
 		this.height = height;
@@ -37,12 +40,18 @@ public class CornerBendRectanglePath extends Path {
 		// TopLeft
 		getElements().add(new MoveTo(0, 0));
 
-		getElements().add(new LineTo(width - cornerWidth, 0));
-		getElements().add(new LineTo(width, cornerWidth));
+		HLineTo hLineToCorner = new HLineTo();
+		hLineToCorner.xProperty().bind(width.subtract(cornerWidth));
+		getElements().add(hLineToCorner);
+		LineTo cornerDiagonalLine = new LineTo();
+		cornerDiagonalLine.xProperty().bind(width);
+		cornerDiagonalLine.setY(cornerWidth);
+		getElements().add(cornerDiagonalLine);
 
-		// getElements().add(new MoveTo(width, cornerWidth));
-		getElements().add(new LineTo(width, height));
-		getElements().add(new LineTo(0, height));
-		getElements().add(new LineTo(0, 0));
+		VLineTo cornerToBottom = new VLineTo();
+		cornerToBottom.yProperty().bind(height);
+		getElements().add(cornerToBottom);
+		getElements().add(new HLineTo(0));
+		getElements().add(new VLineTo(0));
 	}
 }
