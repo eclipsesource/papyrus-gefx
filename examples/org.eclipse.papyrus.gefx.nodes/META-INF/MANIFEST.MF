@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FX Nodes
+Bundle-SymbolicName: org.eclipse.papyrus.gefx.nodes
+Bundle-Version: 0.0.1.qualifier
+Automatic-Module-Name: org.eclipse.papyrus.gefx.nodes
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
