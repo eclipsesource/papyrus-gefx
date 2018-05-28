@@ -9,6 +9,7 @@ import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
+import org.eclipse.gmf.runtime.notation.Size;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
@@ -309,7 +310,7 @@ public class NotationStyleService extends AbstractNotationStyleService implement
 		View view = getView();
 		FontStyle fontStyle = (FontStyle) view.getStyle(NotationPackage.eINSTANCE.getFontStyle());
 		if (fontStyle == null) {
-			return "Segoe UI"; //$NON-NLS-1$ //
+			return "Roboto"; //$NON-NLS-1$ //
 		}
 
 		return fontStyle.getFontName();
@@ -393,7 +394,15 @@ public class NotationStyleService extends AbstractNotationStyleService implement
 		return null;
 	}
 
-	// May be null
+	/**
+	 * <p>
+	 * Returns the Bounds for the current view (Corresponding to its
+	 * LocationConstraint). Note that if the location constraint is a simple Size or
+	 * Location, they will be converted to Bounds for convenience.
+	 * </p>
+	 *
+	 * @return
+	 */
 	public Bounds getBounds() {
 		final LayoutConstraint constraint = getLayout();
 		if (constraint instanceof Bounds) {
@@ -405,6 +414,14 @@ public class NotationStyleService extends AbstractNotationStyleService implement
 			bounds.setY(((Location) constraint).getY());
 			bounds.setWidth(-1);
 			bounds.setHeight(-1);
+
+			return bounds;
+		} else if (constraint instanceof Size) {
+			final Bounds bounds = NotationFactory.eINSTANCE.createBounds();
+			bounds.setX(0);
+			bounds.setY(0);
+			bounds.setWidth(((Size) constraint).getWidth());
+			bounds.setHeight(((Size) constraint).getHeight());
 
 			return bounds;
 		}
@@ -427,12 +444,12 @@ public class NotationStyleService extends AbstractNotationStyleService implement
 	@Override
 	public double getHeight() {
 		final Bounds bounds = getBounds();
-		return Math.max(20, bounds == null ? 0 : bounds.getHeight());
+		return bounds == null ? 0 : Math.max(20, bounds.getHeight());
 	}
 
 	@Override
 	public double getWidth() {
 		final Bounds bounds = getBounds();
-		return Math.max(20, bounds == null ? 0 : bounds.getWidth());
+		return bounds == null ? 0 : Math.max(20, bounds.getWidth());
 	}
 }

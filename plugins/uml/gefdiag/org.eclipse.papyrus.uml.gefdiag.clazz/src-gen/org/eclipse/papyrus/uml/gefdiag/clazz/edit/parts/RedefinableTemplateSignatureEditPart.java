@@ -5,7 +5,6 @@ public class RedefinableTemplateSignatureEditPart extends org.eclipse.papyrus.ge
 
 	public RedefinableTemplateSignatureEditPart(org.eclipse.gmf.runtime.notation.Shape view) {
 		super(view);
-		setLocator(new org.eclipse.papyrus.gef4.layout.BorderItemLocator(this));
 	}
 
 }

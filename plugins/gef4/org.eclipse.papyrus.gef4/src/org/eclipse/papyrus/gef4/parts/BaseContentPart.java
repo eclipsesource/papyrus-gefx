@@ -52,8 +52,6 @@ import javafx.scene.Parent;
  */
 public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractContentPart<N> implements IAdaptable {
 
-	/** @deprecated Locator is deprecated */
-	@Deprecated
 	private Locator locator;
 
 	private ContentChildrenAdapter<MODEL> contentChildrenAdapter;
@@ -312,9 +310,8 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	 * Sets the locator for this ContentPart
 	 *
 	 * @param locator
-	 * @deprecated Locator is deprecated
 	 */
-	@Deprecated
+	@Inject(optional = true)
 	public void setLocator(Locator locator) {
 		this.locator = locator;
 	}
@@ -322,9 +319,7 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	/**
 	 *
 	 * @return the active Locator for this ContentPart
-	 * @deprecated Locator is deprecated
 	 */
-	@Deprecated
 	public Locator getLocator() {
 		return locator;
 	}

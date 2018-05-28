@@ -16,17 +16,14 @@ import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.IGeometry;
 import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.geometry.planar.Polyline;
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.layout.BorderItemLocator;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import javafx.geometry.Bounds;
-import javafx.scene.Node;
 
 public class TemplateLocator extends BorderItemLocator {
 
-	public TemplateLocator(BaseContentPart<? extends View, ? extends Node> host) {
-		super(host);
+	public TemplateLocator() {
+		super();
 	}
 
 	@Override

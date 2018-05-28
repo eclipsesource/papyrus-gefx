@@ -12,7 +12,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.papyrus.gef4.layout.AffixedLabelLocator;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 
@@ -34,7 +33,7 @@ public class AffixedLabelContentPart<MODEL> extends LabelContentPart<MODEL> {
 	 */
 	public AffixedLabelContentPart(final MODEL model) {
 		super(model);
-		setLocator(new AffixedLabelLocator(this));
+		// Locator is required; for now it is handled by the GMF subclass
 	}
 
 	@Override

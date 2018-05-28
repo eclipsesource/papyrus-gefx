@@ -12,12 +12,18 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.composite.module;
 
+import org.eclipse.gef.common.adapt.AdapterKey;
+import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.layout.BorderItemLocator;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
+import org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.ParameterEditPart;
+import org.eclipse.papyrus.uml.gefdiag.composite.edit.parts.PortEditPart;
 import org.eclipse.papyrus.uml.gefdiag.composite.providers.ContentPartProvider;
 
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.MapBinder;
 
 public class CompositeDiagramModule extends UMLDiagramModule {
 
@@ -25,6 +31,25 @@ public class CompositeDiagramModule extends UMLDiagramModule {
 	protected void bindIContentPartProvider() {
 		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
 		}).to(ContentPartProvider.class);
+	}
+
+	@Override
+	protected void configure() {
+		super.configure();
+		bindNodeLocators();
+	}
+
+	protected void bindNodeLocators() {
+		bindPortLocator(AdapterMaps.getAdapterMapBinder(binder(), PortEditPart.class));
+		bindParameterLocator(AdapterMaps.getAdapterMapBinder(binder(), ParameterEditPart.class));
+	}
+
+	protected void bindPortLocator(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(BorderItemLocator.class);
+	}
+
+	protected void bindParameterLocator(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(BorderItemLocator.class);
 	}
 
 }

@@ -25,6 +25,7 @@ import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.gef4.editor.GEFEditor;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.infra.emf.utils.EMFHelper;
+import org.eclipse.papyrus.infra.gefdiag.common.Activator;
 import org.eclipse.papyrus.infra.gmfdiag.common.handler.IRefreshHandlerPart;
 import org.eclipse.papyrus.infra.gmfdiag.common.handler.RefreshHandler;
 import org.eclipse.papyrus.infra.widgets.util.IRevealSemanticElement;
@@ -47,9 +48,15 @@ public class GEF4DiagramEditor extends GEFEditor<Diagram> implements IRevealSema
 
 	@Override
 	public void createPartControl(Composite parent) {
-		super.createPartControl(parent);
-
-		RefreshHandler.register(this);
+		try {
+			super.createPartControl(parent);
+			RefreshHandler.register(this);
+		} catch (Throwable t) {
+			// Exceptions/Errors on initialization can break the entire Papyrus multi-editor.
+			// We don't want that; so just catch & log everything (Especially since we use Assertions,
+			// which cause Errors; not Exceptions).
+			Activator.log().error(t);
+		}
 	}
 
 	@Override

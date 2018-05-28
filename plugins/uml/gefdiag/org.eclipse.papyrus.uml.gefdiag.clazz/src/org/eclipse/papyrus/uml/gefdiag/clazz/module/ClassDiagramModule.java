@@ -12,13 +12,19 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.clazz.module;
 
+import org.eclipse.gef.common.adapt.AdapterKey;
+import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.palette.Palette;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.RedefinableTemplateSignatureEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.TemplateSignatureEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.providers.ContentPartProvider;
+import org.eclipse.papyrus.uml.gefdiag.common.locator.TemplateLocator;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
 
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.MapBinder;
 
 public class ClassDiagramModule extends UMLDiagramModule {
 
@@ -26,6 +32,17 @@ public class ClassDiagramModule extends UMLDiagramModule {
 	protected void bindIContentPartProvider() {
 		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
 		}).to(ContentPartProvider.class);
+
+		bindNodeLocators();
+	}
+
+	protected void bindNodeLocators() {
+		bindTemplateParameterLocator(AdapterMaps.getAdapterMapBinder(binder(), TemplateSignatureEditPart.class));
+		bindTemplateParameterLocator(AdapterMaps.getAdapterMapBinder(binder(), RedefinableTemplateSignatureEditPart.class));
+	}
+
+	protected void bindTemplateParameterLocator(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(TemplateLocator.class);
 	}
 
 	/**

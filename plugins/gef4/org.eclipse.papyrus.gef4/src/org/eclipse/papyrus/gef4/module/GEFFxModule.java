@@ -50,7 +50,6 @@ import org.eclipse.papyrus.gef4.parts.ContainerContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
-import org.eclipse.papyrus.gef4.provider.CollapseHandlePartProvider;
 import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ConnectionService;
@@ -272,8 +271,9 @@ public class GEFFxModule extends MvcFxModule {
 	 * @param adapterMapBinder
 	 */
 	protected void bindCollapseHandleProviderAsCompartmentPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(AdapterKey.role(HoverHandlePartFactory.ROLE))
-				.to(CollapseHandlePartProvider.class);
+		// XXX Move to GMF Module
+		// adapterMapBinder.addBinding(AdapterKey.role(HoverHandlePartFactory.ROLE))
+		// .to(CollapseHandlePartProvider.class);
 	}
 
 	protected void bindHoverBehaviorAsCompartmentPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {

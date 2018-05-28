@@ -13,6 +13,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import org.eclipse.fx.core.Subscription;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
@@ -96,7 +97,13 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 			region.setPrefWidth(getStyleProvider().getWidth());
 		}
 
+		refreshLocator();
+	}
+
+	protected void refreshLocator() {
 		Locator locator = getLocator();
+		final VBox region = getVisual();
+
 		if (locator != null) {
 			locator.applyLayout(region);
 		} else {
@@ -143,12 +150,15 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	}
 
 	private ShapeTypeEnum currentShapeType;
+	private Subscription currentShapeSubscription;
 
 	protected void refreshShape() {
 		final VBox region = getVisual();
 
 		final ShapeTypeEnum shapeType = getStyleProvider().getShapeType();
 		if (shapeType != currentShapeType) {
+			Subscription.disposeIfExists(currentShapeSubscription);
+			currentShapeSubscription = null;
 			this.currentShapeType = shapeType;
 
 			boolean labelsUseAllWidth = true;
@@ -236,7 +246,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 			// Adding or Modifying
 			region.setShape(shape);
 			region.setScaleShape(scale);
-			region.setCenterShape(false);
+			region.setCenterShape(true);
 		}
 	}
 

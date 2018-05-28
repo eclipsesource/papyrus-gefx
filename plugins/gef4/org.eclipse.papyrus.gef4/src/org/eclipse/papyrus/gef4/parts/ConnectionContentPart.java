@@ -130,7 +130,12 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 
 	@Override
 	protected void doAttachToAnchorageVisual(IVisualPart<?> anchorage, String role) {
-		IAnchor anchor = anchorage.getAdapter(IAnchorProvider.class).get(this, role);
+		IAnchorProvider adapter = anchorage.getAdapter(IAnchorProvider.class);
+		if (adapter == null) {
+			String error = String.format("Unable to anchor part %s to anchorage %s (Role: %s)", this.getClass().getSimpleName(), anchorage.getClass().getSimpleName(), role);
+			throw new IllegalStateException(error);
+		}
+		IAnchor anchor = adapter.get(this, role);
 		switch (role) {
 		case SOURCE:
 			getVisual().setStartAnchor(anchor);

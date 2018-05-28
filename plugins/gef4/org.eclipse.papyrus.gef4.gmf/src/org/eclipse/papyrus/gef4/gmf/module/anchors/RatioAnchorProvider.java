@@ -38,8 +38,7 @@ public class RatioAnchorProvider extends DefaultAnchorProvider {
 				}
 			}
 		}
-		throw new IllegalStateException();
-		// return super.get(anchoredPart, role);
+		return super.get(anchoredPart, role);
 	}
 
 	private IAnchor getAnchorFromTerminal(IVisualPart<? extends Node> anchoredPart, String anchorTerminal) {

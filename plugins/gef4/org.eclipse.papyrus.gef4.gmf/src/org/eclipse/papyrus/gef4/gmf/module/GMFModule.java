@@ -70,6 +70,7 @@ public abstract class GMFModule extends AbstractModule {
 
 		bindIContentPartFactory();
 		bindDefaultContentChildrenProvider();
+		bindSpecificContentChildrenProviders();
 
 		bindScope();
 
@@ -224,6 +225,15 @@ public abstract class GMFModule extends AbstractModule {
 
 		binder().bind(new TypeLiteral<ContentChildrenAdapter<View>>() {
 		}).to(NotationContentChildrenProvider.class);
+	}
+
+	protected void bindSpecificContentChildrenProviders() {
+		// Sub-modules may override for each specific ContentPart. Otherwise,
+		// #bindDefaultContentChildrenProvider will be used.
+		// Example:
+		// AdapterMaps.getAdapterMapBinder(binder(),
+		// MySpecificContentPart.class).addBinding(AdapterKey.defaultRole())
+		// .to(MySpecificContentChildrenProvider.class);
 	}
 
 	protected abstract void bindIContentPartProvider();

@@ -5,7 +5,6 @@ public class PseudostateEntryPointEditPart extends org.eclipse.papyrus.gef4.gmf.
 
 	public PseudostateEntryPointEditPart(org.eclipse.gmf.runtime.notation.Shape view) {
 		super(view);
-		setLocator(new org.eclipse.papyrus.gef4.layout.BorderItemLocator(this));
 	}
 
 }

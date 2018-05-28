@@ -12,9 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.layout;
 
-import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.geometry.planar.Point;
-import org.eclipse.gef.mvc.fx.parts.IContentPart;
 
 import javafx.scene.Node;
 
@@ -24,12 +22,7 @@ import javafx.scene.Node;
  * This is useful e.g. nodes that require a specific position (Such as border items or overlapping elements)
  *
  * @author Camille Letavernier
- *
- * @deprecated Use Anchorages/Anchored & {@link IAnchor} instead
- * @see IContentPart#getAnchoragesUnmodifiable()
- * @see IContentPart#getAnchoredsUnmodifiable()
  */
-@Deprecated
 public interface Locator {
 
 	/**

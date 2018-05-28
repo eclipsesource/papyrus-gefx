@@ -12,8 +12,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.layout;
 
-import javax.inject.Inject;
-
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
@@ -28,15 +26,16 @@ import javafx.scene.Parent;
 
 public class AffixedLabelLocator implements Locator {
 
-	private final BaseContentPart<?, ? extends Node> host;
+	private final BaseContentPart<?, ?> host;
 
 	private final ListChangeListener<? super Node> childrenListener;
 	private final ChangeListener<Bounds> boundsListener;
 
 	private View view;
 
-	public AffixedLabelLocator(BaseContentPart<?, ? extends Node> host) {
+	public AffixedLabelLocator(BaseContentPart<? extends View, ?> host) {
 		this.host = host;
+		setView(host.getContent());
 
 		childrenListener = (change) -> refreshChildren(change);
 		boundsListener = (bounds, oldValue, newValue) -> {
@@ -44,8 +43,7 @@ public class AffixedLabelLocator implements Locator {
 		};
 	}
 
-	@Inject
-	public void setView(View view) {
+	private void setView(View view) {
 		this.view = view;
 	}
 
@@ -76,7 +74,7 @@ public class AffixedLabelLocator implements Locator {
 		node.setLayoutY(y);
 	}
 
-	// We need a specific listener for Labels, because Labels are modified) during rendering
+	// We need a specific listener for Labels, because Labels are modified during rendering
 	protected void refreshChildren(Change<? extends Node> listChange) {
 		while (listChange.next()) {
 			for (Node newChild : listChange.getAddedSubList()) {

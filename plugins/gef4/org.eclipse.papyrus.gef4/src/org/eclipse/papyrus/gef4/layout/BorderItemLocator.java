@@ -42,14 +42,11 @@ import javafx.scene.Node;
  * @author Camille Letavernier
  *
  */
-public class BorderItemLocator implements Locator {
-
-	private final BaseContentPart<? extends View, ? extends Node> host;
+public class BorderItemLocator extends AbstractLocator<BaseContentPart<? extends View, ?>> {
 
 	private final ChangeListener<Bounds> boundsListener;
 
-	public BorderItemLocator(BaseContentPart<? extends View, ? extends Node> host) {
-		this.host = host;
+	public BorderItemLocator() {
 		boundsListener = (bounds, oldValue, newValue) -> refreshLayout();
 	}
 
@@ -61,6 +58,7 @@ public class BorderItemLocator implements Locator {
 	 * @return
 	 */
 	protected final IGeometry getConstraint(Dimension nodeSize) {
+		BaseContentPart<? extends View, ?> host = getAdaptable();
 		if (host.getParent() == null) {
 			return new Rectangle(0, 0, 0, 0);
 		}
@@ -77,11 +75,8 @@ public class BorderItemLocator implements Locator {
 		return new Rectangle(0, 0, parentBounds.getWidth(), parentBounds.getHeight()); // Position 0, 0 relative to the parent element
 	}
 
-	protected BaseContentPart<? extends View, ? extends Node> getHost() {
-		return host;
-	}
-
 	private void refreshLayout() {
+		BaseContentPart<? extends View, ?> host = getAdaptable();
 		if (host.getLocator() == this) {
 			host.refreshVisual();
 		} else { // I'm not active anymore; remove the listener and do nothing
@@ -94,7 +89,7 @@ public class BorderItemLocator implements Locator {
 
 	@Override
 	public void applyLayout(Node node) {
-		View hostView = host.getContent();
+		View hostView = getAdaptable().getContent();
 		if (!(hostView instanceof org.eclipse.gmf.runtime.notation.Node)) {
 			return;
 		}
