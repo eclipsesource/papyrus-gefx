@@ -1,10 +1,11 @@
 target "GEFx for Papyrus" with requirements source
 
-location "http://download.eclipse.org/releases/oxygen" {
-	
+location "http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/oxygen" {
 	/** Papyrus */
-	org.eclipse.papyrus.sdk.feature.feature.group [3.3.0,4.0.0)
-	
+	org.eclipse.papyrus.sdk.feature.feature.group [3.4.0,4.0.0)
+}
+
+location "http://download.eclipse.org/releases/oxygen" {
 	/** GEFx */
 	org.eclipse.gef.common.sdk.feature.group [5.0.0,6.0.0)
 	org.eclipse.gef.fx.sdk.feature.group [5.0.2,6.0.0)
@@ -25,6 +26,6 @@ location "http://download.eclipse.org/releases/oxygen" {
 	org.eclipse.gmf.runtime.notation.feature.group [1.11.0,2.0.0)
 }
 
-location "http://download.eclipse.org/efxclipse/runtime-released/3.1.0/site/" {
-	org.eclipse.fx.ui.di.interopt [3.1.0,4.0.0) //FIXME: Is this available in the Oxygen train?
+location "http://download.eclipse.org/efxclipse/runtime-released/3.2.0/site/" {
+	org.eclipse.fx.ui.di.interopt [3.2.0,4.0.0) //FIXME: Is this available in the Oxygen train?
 }

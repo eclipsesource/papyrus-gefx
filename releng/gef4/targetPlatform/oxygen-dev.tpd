@@ -4,7 +4,7 @@ include "oxygen.tpd"
 
 
 location "https://hudson.eclipse.org/papyrus/job/Papyrus-Oxygen-Developer/lastSuccessfulBuild/artifact/repository/" {
-	org.eclipse.papyrus.gmfgenextension [2.0.0,3.0.0)
+	org.eclipse.papyrus.gmfgenextension lazy
 }
 
 location "http://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases-3.3.1a" {

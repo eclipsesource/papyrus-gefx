@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="GEFx for Papyrus" sequenceNumber="1521819947">
+<target name="GEFx for Papyrus" sequenceNumber="1527498626">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.papyrus.sdk.feature.feature.group" version="3.3.0.201803070847"/>
+      <unit id="org.eclipse.papyrus.sdk.feature.feature.group" version="3.4.0.201805210649"/>
+      <repository location="http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/oxygen"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.gef.common.sdk.feature.group" version="5.0.0.201711130301"/>
       <unit id="org.eclipse.gef.fx.sdk.feature.group" version="5.0.2.201711130301"/>
       <unit id="org.eclipse.gef.geometry.sdk.feature.group" version="5.0.2.201711130301"/>
       <unit id="org.eclipse.gef.mvc.sdk.feature.group" version="5.0.2.201711130301"/>
       <unit id="org.eclipse.fx.runtime.min.feature.feature.group" version="3.0.0.201705220748"/>
       <unit id="org.eclipse.fx.core" version="3.0.0.201705220600"/>
-      <unit id="org.eclipse.platform.feature.group" version="4.7.3.v20180301-0715"/>
-      <unit id="org.eclipse.jdt.annotation" version="2.1.100.v20170511-1408"/>
+      <unit id="org.eclipse.platform.feature.group" version="4.7.3.v20180330-0640"/>
+      <unit id="org.eclipse.jdt.annotation" version="2.1.150.v20180322-1206"/>
       <unit id="org.eclipse.emf.feature.group" version="2.13.0.v20170609-0928"/>
       <unit id="org.eclipse.gmf.runtime.sdk.feature.group" version="1.11.0.201706061437"/>
       <unit id="org.eclipse.gmf.runtime.notation.feature.group" version="1.11.0.201706061354"/>
       <repository location="http://download.eclipse.org/releases/oxygen"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.fx.ui.di.interopt" version="3.1.0.201712060700"/>
-      <repository location="http://download.eclipse.org/efxclipse/runtime-released/3.1.0/site/"/>
+      <unit id="org.eclipse.fx.ui.di.interopt" version="3.2.0.201803260600"/>
+      <repository location="http://download.eclipse.org/efxclipse/runtime-released/3.2.0/site/"/>
     </location>
   </locations>
 </target>
