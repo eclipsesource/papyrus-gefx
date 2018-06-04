@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2016 CEA LIST and others.
+ * Copyright (c) 2018 EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,15 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.services;
 
-import java.util.List;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
-public interface ContentChildrenAdapter<MODEL> {
+public interface HelperProviderParticipant<T> extends HelperProvider<T> {
 
-	public List<? extends MODEL> getContentChildren();
+	double getPriority(IVisualPart<?> part);
 
 }

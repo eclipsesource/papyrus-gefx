@@ -27,11 +27,12 @@ import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
-import org.eclipse.papyrus.gef4.services.ContentChildrenAdapter;
-import org.eclipse.papyrus.gef4.utils.ActivatableBound;
+import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
+import org.eclipse.papyrus.gef4.utils.AbstractActivatable;
 
-public class NotationContentChildrenProvider extends ActivatableBound<BaseContentPart<? extends View, ?>>
-		implements ContentChildrenAdapter<View> {
+public class NotationContentChildrenProvider extends AbstractActivatable implements ContentChildrenProvider<View> {
+
+	private final BaseContentPart<? extends View, ?> part;
 
 	private final View view;
 
@@ -40,9 +41,10 @@ public class NotationContentChildrenProvider extends ActivatableBound<BaseConten
 	private NotificationListener listener;
 
 	@Inject
-	protected NotationContentChildrenProvider(View view) {
-		assert view != null;
-		this.view = view;
+	public NotationContentChildrenProvider(BaseContentPart<? extends View, ?> part) {
+		assert part != null && part.getContent() != null;
+		this.part = part;
+		this.view = part.getContent();
 	}
 
 	@Inject
@@ -101,7 +103,7 @@ public class NotationContentChildrenProvider extends ActivatableBound<BaseConten
 	protected void doActivate() {
 		listener = msg -> {
 			if (childrenChanged(msg)) {
-				getAdaptable().updateContentChildren();
+				part.updateContentChildren();
 			}
 		};
 		eventBroker.addNotificationListener(view, listener);

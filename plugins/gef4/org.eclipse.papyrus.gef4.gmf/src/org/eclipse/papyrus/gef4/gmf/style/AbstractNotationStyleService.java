@@ -1,3 +1,15 @@
+/*****************************************************************************
+ * Copyright (c) 2018 EclipseSource and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
+ *
+ *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.style;
 
 import javax.inject.Inject;
@@ -9,13 +21,19 @@ import org.eclipse.gmf.runtime.diagram.core.listener.NotificationListener;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
-import org.eclipse.papyrus.gef4.utils.ActivatableBound;
+import org.eclipse.papyrus.gef4.utils.AbstractActivatable;
 
-public class AbstractNotationStyleService extends ActivatableBound<BaseContentPart<View, ?>> {
+public abstract class AbstractNotationStyleService extends AbstractActivatable {
 
 	private TransactionalEditingDomain editingDomain;
 	private DiagramEventBroker eventBroker;
 	private NotificationListener notificationListener;
+	private final BaseContentPart<? extends View, ?> part;
+
+	@Inject
+	public AbstractNotationStyleService(BaseContentPart<? extends View, ?> part) {
+		this.part = part;
+	}
 
 	@Inject
 	protected void initializeEditingDomain(TransactionalEditingDomain editingDomain, DiagramEventBroker eventBroker) {
@@ -23,11 +41,15 @@ public class AbstractNotationStyleService extends ActivatableBound<BaseContentPa
 		this.editingDomain = editingDomain;
 	}
 
+	protected BaseContentPart<? extends View, ?> getPart() {
+		return this.part;
+	}
+
 	private View view;
 
 	protected View getView() {
 		if (this.view == null) {
-			this.view = getAdaptable().getContent();
+			this.view = getPart().getContent();
 		}
 		return this.view;
 	}
@@ -66,20 +88,20 @@ public class AbstractNotationStyleService extends ActivatableBound<BaseContentPa
 
 		// FIXME: This listener is difficult to extend in subclasses
 		return msg -> {
-			if (!isActive() || !getAdaptable().isActive()) {
+			if (!isActive() || !getPart().isActive()) {
 				return;
 			}
 
 			if (!(msg.isTouch())) {
 				if (childrenChanged(msg)) {
 					// FIXME move to Content Adapter
-					getAdaptable().updateContentChildren();
+					getPart().updateContentChildren();
 				}
 				// FIXME: Do not refresh immediately. If we use a ThreadSafeDiagramEventBroker,
 				// this will happen synchronously
 				// (The command execution will not complete until the view is fully refreshed)
 				// Rather mark the view as "needing refresh" and schedule a refresh runnable
-				getAdaptable().refreshVisual();
+				getPart().refreshVisual();
 			}
 		};
 	}

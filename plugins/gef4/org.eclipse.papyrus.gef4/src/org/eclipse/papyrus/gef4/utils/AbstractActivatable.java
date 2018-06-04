@@ -14,12 +14,10 @@ package org.eclipse.papyrus.gef4.utils;
 
 import org.eclipse.gef.common.activate.ActivatableSupport;
 import org.eclipse.gef.common.activate.IActivatable;
-import org.eclipse.gef.common.adapt.IAdaptable;
-import org.eclipse.gef.common.adapt.IAdaptable.Bound;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 
-public abstract class ActivatableBound<BOUND extends IAdaptable> extends Bound.Impl<BOUND> implements IActivatable {
+public abstract class AbstractActivatable implements IActivatable {
 
 	private ActivatableSupport acs = new ActivatableSupport(this);
 

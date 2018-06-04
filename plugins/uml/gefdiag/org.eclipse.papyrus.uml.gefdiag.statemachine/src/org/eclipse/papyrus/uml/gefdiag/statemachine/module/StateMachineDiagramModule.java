@@ -12,11 +12,15 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.statemachine.module;
 
-import org.eclipse.gef.common.adapt.AdapterKey;
-import org.eclipse.gef.common.adapt.inject.AdapterMaps;
+import java.util.Optional;
+
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
 import org.eclipse.papyrus.gef4.layout.BorderItemLocator;
+import org.eclipse.papyrus.gef4.layout.Locator;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
+import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
 import org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.ConnectionPointReferenceEditPart;
 import org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateEntryPointEditPart;
@@ -24,15 +28,9 @@ import org.eclipse.papyrus.uml.gefdiag.statemachine.edit.parts.PseudostateExitPo
 import org.eclipse.papyrus.uml.gefdiag.statemachine.providers.ContentPartProvider;
 
 import com.google.inject.TypeLiteral;
-import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 
 public class StateMachineDiagramModule extends UMLDiagramModule {
-
-	@Override
-	protected void configure() {
-		super.configure();
-		bindNodeLocators();
-	}
 
 	@Override
 	protected void bindIContentPartProvider() {
@@ -40,22 +38,16 @@ public class StateMachineDiagramModule extends UMLDiagramModule {
 		}).to(ContentPartProvider.class);
 	}
 
-	protected void bindNodeLocators() {
-		bindEntryPointLocator(AdapterMaps.getAdapterMapBinder(binder(), PseudostateEntryPointEditPart.class));
-		bindExitPointLocator(AdapterMaps.getAdapterMapBinder(binder(), PseudostateExitPointEditPart.class));
-		bindExitPointLocator(AdapterMaps.getAdapterMapBinder(binder(), ConnectionPointReferenceEditPart.class));
-	}
+	@Override
+	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
+		super.bindLocators(locators);
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY,
+				PseudostateEntryPointEditPart.class, PseudostateExitPointEditPart.class, ConnectionPointReferenceEditPart.class) {
 
-
-	protected void bindEntryPointLocator(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(BorderItemLocator.class);
-	}
-
-	protected void bindExitPointLocator(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(BorderItemLocator.class);
-	}
-
-	protected void bindConnectionPointReferenceLocator(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(BorderItemLocator.class);
+			@Override
+			protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				return Optional.of(new BorderItemLocator(basePart));
+			}
+		});
 	}
 }

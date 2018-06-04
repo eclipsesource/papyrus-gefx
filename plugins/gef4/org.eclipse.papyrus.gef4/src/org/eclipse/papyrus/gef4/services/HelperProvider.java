@@ -10,18 +10,26 @@
  *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.gmf.editor.provider;
+package org.eclipse.papyrus.gef4.services;
 
-import java.util.function.Function;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
-import org.eclipse.gef.mvc.fx.providers.DefaultAnchorProvider;
-import org.eclipse.gmf.runtime.notation.Anchor;
-import org.eclipse.gmf.runtime.notation.IdentityAnchor;
+/**
+ * <p>
+ * A generic factory to instantiate helpers that are bound to a {@link IVisualPart}
+ * </p>
+ */
+public interface HelperProvider<T> {
 
-public abstract class TerminalAnchorProvider extends DefaultAnchorProvider {
-
-	protected <T> String getAnchorTerminal(T connectionElement, Function<T, Anchor> anchorSide) {
-		Anchor anchor = anchorSide.apply(connectionElement);
-		return anchor instanceof IdentityAnchor ? ((IdentityAnchor) anchor).getId() : null;
-	}
+	/**
+	 * <p>
+	 * Return an instance of T for this VisualPart.
+	 * </p>
+	 *
+	 * @param part
+	 *
+	 * @return
+	 * 		An instance of T
+	 */
+	T get(IVisualPart<?> part);
 }

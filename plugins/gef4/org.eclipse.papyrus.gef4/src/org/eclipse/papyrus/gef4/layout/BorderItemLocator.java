@@ -12,6 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.layout;
 
+import javax.inject.Inject;
+
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.IGeometry;
 import org.eclipse.gef.geometry.planar.Line;
@@ -19,6 +22,7 @@ import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.geometry.planar.Polygon;
 import org.eclipse.gef.geometry.planar.Polyline;
 import org.eclipse.gef.geometry.planar.Rectangle;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
@@ -42,12 +46,27 @@ import javafx.scene.Node;
  * @author Camille Letavernier
  *
  */
-public class BorderItemLocator extends AbstractLocator<BaseContentPart<? extends View, ?>> {
+public class BorderItemLocator implements Locator {
 
 	private final ChangeListener<Bounds> boundsListener;
+	private BaseContentPart<? extends View, ?> part;
 
-	public BorderItemLocator() {
+	@Inject
+	public BorderItemLocator(IVisualPart<?> visualPart) {
+		this.part = getBasePartChecked(visualPart);
 		boundsListener = (bounds, oldValue, newValue) -> refreshLayout();
+	}
+
+	@SuppressWarnings("unchecked") // Checks are done in the body
+	private static BaseContentPart<? extends View, ?> getBasePartChecked(IVisualPart<?> visualPart) {
+		Assert.isLegal(visualPart instanceof BaseContentPart, "BorderItemLocator can only be used with a BaseContentPart<View, ?>");
+		BaseContentPart<?, ?> basePart = (BaseContentPart<?, ?>) visualPart;
+		Assert.isLegal(basePart.getContent() instanceof View, "BorderItemLocator can only be used with a BaseContentPart<View, ?>");
+		return (BaseContentPart<? extends View, ?>) basePart;
+	}
+
+	protected BaseContentPart<? extends View, ?> getPart() {
+		return this.part;
 	}
 
 	/**
@@ -58,7 +77,7 @@ public class BorderItemLocator extends AbstractLocator<BaseContentPart<? extends
 	 * @return
 	 */
 	protected final IGeometry getConstraint(Dimension nodeSize) {
-		BaseContentPart<? extends View, ?> host = getAdaptable();
+		BaseContentPart<? extends View, ?> host = getPart();
 		if (host.getParent() == null) {
 			return new Rectangle(0, 0, 0, 0);
 		}
@@ -76,7 +95,7 @@ public class BorderItemLocator extends AbstractLocator<BaseContentPart<? extends
 	}
 
 	private void refreshLayout() {
-		BaseContentPart<? extends View, ?> host = getAdaptable();
+		BaseContentPart<? extends View, ?> host = getPart();
 		if (host.getLocator() == this) {
 			host.refreshVisual();
 		} else { // I'm not active anymore; remove the listener and do nothing
@@ -89,7 +108,7 @@ public class BorderItemLocator extends AbstractLocator<BaseContentPart<? extends
 
 	@Override
 	public void applyLayout(Node node) {
-		View hostView = getAdaptable().getContent();
+		View hostView = getPart().getContent();
 		if (!(hostView instanceof org.eclipse.gmf.runtime.notation.Node)) {
 			return;
 		}

@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.services.NotationContentChildrenProvider;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import com.google.inject.Inject;
 
@@ -35,9 +36,9 @@ public class StereotypeAwareContentChildrenProvider extends NotationContentChild
 	private final View view;
 
 	@Inject
-	protected StereotypeAwareContentChildrenProvider(View view) {
-		super(view);
-		this.view = view;
+	protected StereotypeAwareContentChildrenProvider(BaseContentPart<? extends View, ?> part) {
+		super(part);
+		this.view = part.getContent();
 	}
 
 	protected StereotypeAwareContentChildrenProvider() {

@@ -15,6 +15,8 @@ package org.eclipse.papyrus.gef4.parts;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.nodes.Connection;
 import org.eclipse.gef.geometry.planar.Point;
@@ -23,6 +25,7 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.providers.IAnchorProvider;
 import org.eclipse.papyrus.gef4.decorations.DecorationFactory;
 import org.eclipse.papyrus.gef4.services.ConnectionService;
+import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
 
 import javafx.scene.Node;
@@ -39,6 +42,8 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 
 	private EdgeStyleService edgeStyleService;
 
+	private ConnectionService connectionService;
+
 	public ConnectionContentPart(MODEL model) {
 		super(model);
 
@@ -53,10 +58,12 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 		return new Connection();
 	}
 
-	protected EdgeStyleService getEdgeStyleProvider() {
-		if (this.edgeStyleService == null) {
-			this.edgeStyleService = getAdapter(EdgeStyleService.class);
-		}
+	@Inject
+	public void setEdgeStyleService(HelperProvider<EdgeStyleService> provider) {
+		this.edgeStyleService = provider.get(this);
+	}
+
+	protected EdgeStyleService getEdgeStyleService() {
 		return this.edgeStyleService;
 	}
 
@@ -82,18 +89,27 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 		return modelBendpoint.getPosition();
 	}
 
+	@Inject
+	public void setConnectionService(HelperProvider<ConnectionService> connectionService) {
+		this.connectionService = connectionService.get(this);
+	}
+
+	protected ConnectionService getConnectionService() {
+		return this.connectionService;
+	}
+
 	public List<BendPoint> getContentBendPoints() {
-		return getAdapter(ConnectionService.class).getModelBendpoints();
+		return getConnectionService().getModelBendpoints();
 	}
 
 	protected void refreshDecorations() {
 		Connection connection = getVisual();
 
-		String sourceDecorationName = getEdgeStyleProvider().getSourceDecoration();
+		String sourceDecorationName = getEdgeStyleService().getSourceDecoration();
 		Shape sourceDecoration = getDecoration(sourceDecorationName);
 		connection.setStartDecoration(sourceDecoration);
 
-		String targetDecorationName = getEdgeStyleProvider().getTargetDecoration();
+		String targetDecorationName = getEdgeStyleService().getTargetDecoration();
 		Shape targetDecoration = getDecoration(targetDecorationName);
 		connection.setEndDecoration(targetDecoration);
 

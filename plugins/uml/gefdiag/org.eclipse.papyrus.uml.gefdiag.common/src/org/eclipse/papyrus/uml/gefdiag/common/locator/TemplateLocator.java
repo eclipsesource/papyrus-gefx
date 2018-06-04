@@ -12,18 +12,22 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.locator;
 
+import javax.inject.Inject;
+
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.IGeometry;
 import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.geometry.planar.Polyline;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.layout.BorderItemLocator;
 
 import javafx.geometry.Bounds;
 
 public class TemplateLocator extends BorderItemLocator {
 
-	public TemplateLocator() {
-		super();
+	@Inject
+	public TemplateLocator(IVisualPart<?> visualPart) {
+		super(visualPart);
 	}
 
 	@Override

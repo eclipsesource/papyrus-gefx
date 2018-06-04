@@ -14,6 +14,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.module;
 
+import java.util.Optional;
+
+import javax.inject.Singleton;
+
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
@@ -25,6 +29,7 @@ import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
 import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.providers.GeometricOutlineProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
@@ -40,6 +45,7 @@ import org.eclipse.papyrus.gef4.handlers.MoveOnDragHandler;
 import org.eclipse.papyrus.gef4.handlers.ResizeOnDragHandler;
 import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
+import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.palette.Palette;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
@@ -53,16 +59,24 @@ import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ConnectionService;
-import org.eclipse.papyrus.gef4.services.impl.EmptyAnchorageService;
-import org.eclipse.papyrus.gef4.services.impl.EmptyConnectionService;
+import org.eclipse.papyrus.gef4.services.HelperProvider;
+import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.gef4.services.impl.EmptyImageService;
+import org.eclipse.papyrus.gef4.services.impl.HelperProviderImpl;
+import org.eclipse.papyrus.gef4.services.style.CompartmentStyleService;
+import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
+import org.eclipse.papyrus.gef4.services.style.LabelStyleService;
+import org.eclipse.papyrus.gef4.services.style.StyleService;
 import org.eclipse.papyrus.gef4.tools.DefaultToolManager;
 import org.eclipse.papyrus.gef4.tools.ToolManager;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 
 public class GEFFxModule extends MvcFxModule {
+
+	public static final double DEFAULT_PRIORITY = Double.MIN_VALUE;
 
 	@Override
 	protected void configure() {
@@ -106,6 +120,90 @@ public class GEFFxModule extends MvcFxModule {
 		// binder().bind(new TypeLiteral<IFeedbackPartFactory>() {
 		// }).to(BoundsFeedbackPartFactory.class)
 		// .in(AdaptableScopes.typed(IViewer.class));
+
+		bindLocators();
+		bindStyleServices();
+		bindEdgeStyleServices();
+		bindCompartmentStyleServices();
+		bindLabelStyleServices();
+		bindConnectionService();
+		bindAnchorageService();
+	}
+
+	private void bindAnchorageService() {
+		binder().bind(new TypeLiteral<HelperProvider<AnchorageService>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<AnchorageService>>() {
+			// Type literal
+		}).in(Singleton.class);
+	}
+
+	private void bindConnectionService() {
+		binder().bind(new TypeLiteral<HelperProvider<ConnectionService>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<ConnectionService>>() {
+			// Type literal
+		}).in(Singleton.class);
+	}
+
+	private void bindCompartmentStyleServices() {
+		binder().bind(new TypeLiteral<HelperProvider<LabelStyleService>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<LabelStyleService>>() {
+			// Type literal
+		}).in(Singleton.class);
+	}
+
+	private void bindLabelStyleServices() {
+		binder().bind(new TypeLiteral<HelperProvider<CompartmentStyleService>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<CompartmentStyleService>>() {
+			// Type literal
+		}).in(Singleton.class);
+	}
+
+	private void bindEdgeStyleServices() {
+		binder().bind(new TypeLiteral<HelperProvider<EdgeStyleService>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<EdgeStyleService>>() {
+			// Type literal
+		}).in(Singleton.class);
+	}
+
+	private void bindStyleServices() {
+		binder().bind(new TypeLiteral<HelperProvider<StyleService>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<StyleService>>() {
+			// Type literal
+		}).in(Singleton.class);
+	}
+
+	protected void bindLocators() {
+		binder().bind(new TypeLiteral<HelperProvider<Optional<Locator>>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<Optional<Locator>>>() {
+			// Type literal
+		}).in(Singleton.class);
+
+		Multibinder<HelperProviderParticipant<Optional<Locator>>> participants = Multibinder.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<Optional<Locator>>>() {
+			// Type literal
+		});
+
+		participants.addBinding().to(EmptyLocatorParticipant.class);
+	}
+
+	static class EmptyLocatorParticipant implements HelperProviderParticipant<Optional<Locator>> {
+
+		@Override
+		public Optional<Locator> get(IVisualPart<?> part) {
+			return Optional.empty();
+		}
+
+		@Override
+		public double getPriority(IVisualPart<?> part) {
+			return DEFAULT_PRIORITY;
+		}
+
 	}
 
 	@Override
@@ -186,9 +284,6 @@ public class GEFFxModule extends MvcFxModule {
 
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		// Most binding moved to PrimaryPartAdapter due to the new propagation mechanism of policies in GEF4
-
-		adapterMapBinder.addBinding(AdapterRoles.fallbackRole()).to(AnchorageService.class);
-		binder().bind(AnchorageService.class).to(EmptyAnchorageService.class);
 	}
 
 	@Override
@@ -208,9 +303,6 @@ public class GEFFxModule extends MvcFxModule {
 				.addBinding(
 						AdapterKey.role(DefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER))
 				.to(GeometricOutlineProvider.class);
-
-		adapterMapBinder.addBinding(AdapterRoles.fallbackRole()).to(ConnectionService.class);
-		binder().bind(ConnectionService.class).to(EmptyConnectionService.class);
 	}
 
 	protected void bindNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {

@@ -13,7 +13,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import javax.inject.Inject;
+
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
+import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.ImageService;
 import org.eclipse.papyrus.gef4.services.TextAdapter;
 import org.eclipse.papyrus.gef4.services.style.LabelStyleService;
@@ -28,6 +31,8 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 	private String currentImagePath;
 
 	protected Label label;
+
+	private LabelStyleService labelStyleService;
 
 	public AbstractLabelContentPart(final MODEL model) {
 		super(model);
@@ -46,8 +51,13 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 		return getAdapter(TextAdapter.class);
 	}
 
-	protected LabelStyleService getLabelStyleProvider() {
-		return getAdapter(LabelStyleService.class);
+	@Inject
+	public void setLabelStyleService(HelperProvider<LabelStyleService> provider) {
+		this.labelStyleService = provider.get(this);
+	}
+
+	protected LabelStyleService getLabelStyleService() {
+		return labelStyleService;
 	}
 
 	protected ImageService getImageService() {

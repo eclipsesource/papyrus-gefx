@@ -12,6 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.module;
 
+import java.util.Optional;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -21,12 +23,16 @@ import org.eclipse.gmf.runtime.emf.type.core.ClientContextManager;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
 import org.eclipse.gmf.runtime.emf.type.core.IClientContext;
 import org.eclipse.papyrus.gef4.gmf.module.GMFModule;
+import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
+import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
 import org.eclipse.papyrus.uml.gefdiag.common.services.UMLImageService;
 
 import com.google.inject.Provides;
+import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 
 /**
@@ -41,6 +47,8 @@ public abstract class UMLDiagramModule extends GMFModule {
 	 */
 	public static final String CLIENT_CONTEXT_ID = "clientContextID";
 
+	public static final double DEFAULT_PRIORITY = GMFModule.DEFAULT_PRIORITY + 1;
+
 	/**
 	 * @see org.eclipse.papyrus.gef4.module.GEFFxModule#configure()
 	 *
@@ -52,6 +60,8 @@ public abstract class UMLDiagramModule extends GMFModule {
 		bindElementTypesRegistry();
 		configureClientContextID();
 		bindLabelPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), LabelContentPart.class));
+
+		configureLocators();
 	}
 
 	// @Override
@@ -80,6 +90,18 @@ public abstract class UMLDiagramModule extends GMFModule {
 	protected void configureClientContextID() {
 		// Bind to the default Papyrus Type Context ID
 		binder().bind(String.class).annotatedWith(Names.named(CLIENT_CONTEXT_ID)).toInstance(TypeContext.getDefaultContextId());
+	}
+
+	protected void configureLocators() {
+		Multibinder<HelperProviderParticipant<Optional<Locator>>> locators = Multibinder.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<Optional<Locator>>>() {
+			// Type literal
+		});
+
+		bindLocators(locators);
+	}
+
+	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
+		// Subclasses may override
 	}
 
 }

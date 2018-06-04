@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IAdaptable;
@@ -26,7 +27,8 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
-import org.eclipse.papyrus.gef4.services.ContentChildrenAdapter;
+import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
+import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.TransactionService;
 import org.eclipse.papyrus.gef4.services.style.StyleService;
 import org.eclipse.papyrus.gef4.utils.SynchronizedLogger;
@@ -54,7 +56,9 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 
 	private Locator locator;
 
-	private ContentChildrenAdapter<MODEL> contentChildrenAdapter;
+	private StyleService styleService;
+
+	private ContentChildrenProvider<MODEL> contentChildrenAdapter;
 
 	private boolean visualCreated = false;
 
@@ -72,13 +76,20 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 
 	private TransactionService transactionService;
 
+	private AnchorageService anchorageService;
+
 	public BaseContentPart(MODEL content) {
 		Assert.isNotNull(content);
 		setContent(content);
 	}
 
+	@Inject
+	public void setStyleProvider(HelperProvider<StyleService> styleServiceProvider) {
+		this.styleService = styleServiceProvider.get(this);
+	}
+
 	protected StyleService getStyleProvider() {
-		return getAdapter(StyleService.class);
+		return styleService;
 	}
 
 	/**
@@ -309,10 +320,20 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	/**
 	 * Sets the locator for this ContentPart
 	 *
-	 * @param locator
+	 * @param locatorFactory
 	 */
-	@Inject(optional = true)
-	public void setLocator(Locator locator) {
+	@Inject
+	public void setLocator(HelperProvider<Optional<Locator>> locatorFactory) {
+		setLocator(locatorFactory.get(this).orElse(null));
+	}
+
+	/**
+	 * Sets the locator for this ContentPart
+	 *
+	 * @param locator
+	 *            the locator
+	 */
+	protected void setLocator(Locator locator) {
 		this.locator = locator;
 	}
 
@@ -328,14 +349,13 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	 *
 	 * @return the (never null) content children provider for this content part. Defaults to NotationContentChildrenProvider.getInstance()
 	 */
-	protected final ContentChildrenAdapter<MODEL> getContentChildrenAdapter() {
+	protected final ContentChildrenProvider<MODEL> getContentChildrenAdapter() {
 		return this.contentChildrenAdapter;
 	}
 
 	@Inject
-	protected void setContentChildrenAdapter(ContentChildrenAdapter<MODEL> provider) {
-		assert provider != null;
-		this.contentChildrenAdapter = provider;
+	protected void setContentChildrenAdapter(HelperProvider<ContentChildrenProvider<MODEL>> provider) {
+		this.contentChildrenAdapter = provider.get(this);
 	}
 
 	@Inject
@@ -379,8 +399,13 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 		}
 	}
 
+	@Inject
+	public void setAnchorageService(HelperProvider<AnchorageService> provider) {
+		this.anchorageService = provider.get(this);
+	}
+
 	protected AnchorageService getAnchorageService() {
-		return getAdapter(AnchorageService.class);
+		return anchorageService;
 	}
 
 	public void updateAnchors() {

@@ -13,12 +13,14 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.Activator;
+import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.style.CompartmentStyleService;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
@@ -84,6 +86,8 @@ abstract public class CompartmentContentPart<MODEL, P extends Pane> extends Cont
 
 	// Current state of the "collapsed" property
 	protected SimpleBooleanProperty collapsed = new SimpleBooleanProperty(false);
+
+	private CompartmentStyleService compartmentStyleService;
 
 	public CompartmentContentPart(final MODEL model) {
 		super(model);
@@ -201,8 +205,13 @@ abstract public class CompartmentContentPart<MODEL, P extends Pane> extends Cont
 		setCollapsed(getCompartmentStyleProvider().isCollapsed(), animate);
 	}
 
+	@Inject
+	public void setCompartmentStyleService(HelperProvider<CompartmentStyleService> provider) {
+		this.compartmentStyleService = provider.get(this);
+	}
+
 	protected CompartmentStyleService getCompartmentStyleProvider() {
-		return getAdapter(AdapterKey.get(CompartmentStyleService.class));
+		return compartmentStyleService;
 	}
 
 	@Override

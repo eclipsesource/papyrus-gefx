@@ -10,26 +10,25 @@
  *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.gmf.style;
+package org.eclipse.papyrus.gef4.gmf.utils;
 
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
-import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
 
-public class ConnectorStyleProvider extends AbstractNotationStyleService implements EdgeStyleService {
+public class GMFPartUtil {
 
-	public ConnectorStyleProvider(BaseContentPart<? extends View, ?> part) {
-		super(part);
+	@SuppressWarnings("unchecked") // Checked in the body
+	public static BaseContentPart<? extends View, ?> getBasePart(IVisualPart<?> part) {
+		if (false == part instanceof BaseContentPart) {
+			return null;
+		}
+		BaseContentPart<?, ?> basePart = (BaseContentPart<?, ?>) part;
+		return basePart.getContent() instanceof View ? (BaseContentPart<? extends View, ?>) part : null;
 	}
 
-	@Override
-	public String getSourceDecoration() {
-		return NotationUtil.getSourceDecoration(getView());
+	public static boolean isBaseNotationPart(IVisualPart<?> part) {
+		return getBasePart(part) != null;
 	}
 
-	@Override
-	public String getTargetDecoration() {
-		return NotationUtil.getTargetDecoration(getView());
-	}
 }

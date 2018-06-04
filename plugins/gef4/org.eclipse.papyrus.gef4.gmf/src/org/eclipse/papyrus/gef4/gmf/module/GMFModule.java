@@ -1,4 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2018 EclipseSource and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
+ *
+ *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.module;
+
+import java.util.Optional;
 
 import javax.inject.Singleton;
 
@@ -17,8 +31,13 @@ import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.module.anchors.RatioAnchorProvider;
+import org.eclipse.papyrus.gef4.gmf.parts.ConnectorContentPart;
+import org.eclipse.papyrus.gef4.gmf.parts.FloatingLabelContentPart;
+import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramRootPart;
+import org.eclipse.papyrus.gef4.gmf.parts.ShapeContentPart;
 import org.eclipse.papyrus.gef4.gmf.scope.ViewPartScope;
+import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
 import org.eclipse.papyrus.gef4.gmf.services.EditingDomainTransactionService;
 import org.eclipse.papyrus.gef4.gmf.services.GMFConnectionService;
 import org.eclipse.papyrus.gef4.gmf.services.NotationContentChildrenProvider;
@@ -31,19 +50,28 @@ import org.eclipse.papyrus.gef4.gmf.style.NotationLabelStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.style.NotationStyleService;
 import org.eclipse.papyrus.gef4.gmf.style.ShapeStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.utils.AdapterUtil;
+import org.eclipse.papyrus.gef4.gmf.utils.GMFPartUtil;
+import org.eclipse.papyrus.gef4.layout.AffixedLabelLocator;
+import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.module.AdapterRoles;
-import org.eclipse.papyrus.gef4.parts.AbstractLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
-import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
-import org.eclipse.papyrus.gef4.parts.NodeContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.gef4.scopes.PartScope;
 import org.eclipse.papyrus.gef4.scopes.PartScoped;
-import org.eclipse.papyrus.gef4.services.ContentChildrenAdapter;
+import org.eclipse.papyrus.gef4.services.AnchorageService;
+import org.eclipse.papyrus.gef4.services.ConnectionService;
+import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
+import org.eclipse.papyrus.gef4.services.HelperProvider;
+import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.gef4.services.TransactionService;
+import org.eclipse.papyrus.gef4.services.impl.HelperProviderImpl;
+import org.eclipse.papyrus.gef4.services.style.CompartmentStyleService;
+import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
+import org.eclipse.papyrus.gef4.services.style.LabelStyleService;
+import org.eclipse.papyrus.gef4.services.style.StyleService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -53,6 +81,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 
 import javafx.scene.Node;
 
@@ -64,17 +93,18 @@ import javafx.scene.Node;
  */
 public abstract class GMFModule extends AbstractModule {
 
+	public static final double DEFAULT_PRIORITY = 1;
+
 	@Override
 	protected void configure() {
 		bind(TransactionService.class).to(EditingDomainTransactionService.class);
 
 		bindIContentPartFactory();
 		bindDefaultContentChildrenProvider();
-		bindSpecificContentChildrenProviders();
 
 		bindScope();
 
-		bindStyleAdapters();
+		bindStyleServices();
 		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class));
 		bindConnectionAdapters(AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class));
 
@@ -85,6 +115,18 @@ public abstract class GMFModule extends AbstractModule {
 		bindAnchorageService();
 
 		bindAnchorProviders();
+
+		bindContentChildrenProvider();
+
+		configureLocators();
+	}
+
+	private void bindContentChildrenProvider() {
+		binder().bind(new TypeLiteral<HelperProvider<ContentChildrenProvider<View>>>() {
+			// Type literal
+		}).to(new TypeLiteral<HelperProviderImpl<ContentChildrenProvider<View>>>() {
+			// Type literal
+		}).in(Singleton.class);
 	}
 
 	protected void bindAnchorProviders() {
@@ -105,35 +147,112 @@ public abstract class GMFModule extends AbstractModule {
 
 	protected void bindConnectionAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
 		mapBinder.addBinding(AdapterKey.defaultRole()).to(GMFConnectionService.class);
+
+		Multibinder.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<ConnectionService>>() {
+			// Type literal
+		}).addBinding().toInstance(new AbstractGMFProviderParticipant<ConnectionService>(0) {
+
+			@Override
+			protected ConnectionService doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				GMFConnectionService gmfConnectionService = new GMFConnectionService();
+				gmfConnectionService.setAdaptable(basePart);
+				return gmfConnectionService;
+			}
+
+		});
 	}
 
-	protected void bindAnchorageService() {
-		// binder().bind(AnchorageService.class).to(GMFConnectionService.class);
+	private void bindAnchorageService() {
+		Multibinder.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<AnchorageService>>() {
+			// Type literal
+		}).addBinding().toInstance(new AbstractGMFProviderParticipant<AnchorageService>(0) {
+
+			@Override
+			protected AnchorageService doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				GMFConnectionService gmfConnectionService = new GMFConnectionService();
+				gmfConnectionService.setAdaptable(basePart);
+				return gmfConnectionService;
+			}
+
+		});
 	}
 
-	protected void bindStyleAdapters() {
+	protected void bindStyleServices() {
+		Multibinder<HelperProviderParticipant<StyleService>> styleBinder = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<StyleService>>() {
+					// Type literal
+				});
 
-		// FIXME Find a proper way to override generic adapters in more specific classes
-		// Currently, we use this "fallbackRole", but this can only work on one level
+		// Install a generic style provider on all parts
+		styleBinder.addBinding().toInstance(new AbstractGMFProviderParticipant<StyleService>(0) {
 
-		// Install a generic style provider on all parts (With a custom role so it's not
-		// the default if another one is present)
-		AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class).addBinding(AdapterRoles.fallbackRole())
-				.to(NotationStyleService.class);
+			@Override
+			public StyleService doCreateInstance(BaseContentPart<? extends View, ?> part) {
+				return new NotationStyleService(part);
+			}
+
+		});
 
 		// Override the StyleService just for the NodeContentPart
-		AdapterMaps.getAdapterMapBinder(binder(), NodeContentPart.class).addBinding(AdapterKey.defaultRole())
-				.to(ShapeStyleProvider.class);
+		styleBinder.addBinding()
+				.toInstance(new AbstractGMFProviderParticipant<StyleService>(1, ShapeContentPart.class) {
+					@Override
+					protected StyleService doCreateInstance(BaseContentPart<? extends View, ?> part) {
+						return new ShapeStyleProvider(part);
+					}
+				});
 
-		AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class).addBinding(AdapterKey.defaultRole())
-				.to(DiagramStyleProvider.class);
+		styleBinder.addBinding()
+				.toInstance(new AbstractGMFProviderParticipant<StyleService>(1, NotationDiagramContentPart.class) {
+					@Override
+					protected StyleService doCreateInstance(BaseContentPart<? extends View, ?> part) {
+						return new DiagramStyleProvider(part);
+					}
+				});
 
-		AdapterMaps.getAdapterMapBinder(binder(), AbstractLabelContentPart.class).addBinding(AdapterKey.defaultRole())
-				.to(NotationLabelStyleProvider.class);
-		AdapterMaps.getAdapterMapBinder(binder(), CompartmentContentPart.class).addBinding(AdapterKey.defaultRole())
-				.to(DecorationNodeStyleProvider.class);
-		AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class).addBinding(AdapterKey.defaultRole())
-				.to(ConnectorStyleProvider.class);
+		Multibinder<HelperProviderParticipant<LabelStyleService>> labelStyleBinder = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<LabelStyleService>>() {
+					// Type Literal
+				});
+
+		labelStyleBinder.addBinding().toInstance(new AbstractGMFProviderParticipant<LabelStyleService>(0) {
+
+			@Override
+			protected LabelStyleService doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				return new NotationLabelStyleProvider(basePart);
+			}
+
+		});
+
+		Multibinder<HelperProviderParticipant<CompartmentStyleService>> compartmentStyleBinder = Multibinder
+				.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<CompartmentStyleService>>() {
+					// Type Literal
+				});
+
+		compartmentStyleBinder.addBinding().toInstance(new AbstractGMFProviderParticipant<CompartmentStyleService>(0,
+				CompartmentContentPart.class::isInstance) {
+
+			@Override
+			protected CompartmentStyleService doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				return new DecorationNodeStyleProvider(basePart);
+			}
+
+		});
+
+		Multibinder<HelperProviderParticipant<EdgeStyleService>> edgeStyleBinder = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<EdgeStyleService>>() {
+					// Type Literal
+				});
+
+		edgeStyleBinder.addBinding().toInstance(
+				new AbstractGMFProviderParticipant<EdgeStyleService>(0, ConnectorContentPart.class::isInstance) {
+
+					@Override
+					protected EdgeStyleService doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+						return new ConnectorStyleProvider(basePart);
+					}
+
+				});
 	}
 
 	static class InstallAdaptersBehavior extends AbstractBehavior {
@@ -144,18 +263,18 @@ public abstract class GMFModule extends AbstractModule {
 			BaseContentPart<?, ?> host = (BaseContentPart<?, ?>) getHost();
 			if (host.getContent() instanceof View) {
 				View view = (View) host.getContent();
-				AdapterUtil.setModelAdapters(view, findSemanticElement((BaseContentPart<View, ?>) host), host);
+				AdapterUtil.setModelAdapters(view, findSemanticElement(GMFPartUtil.getBasePart(host)), host);
 			}
 		}
 
-		protected EObject findSemanticElement(BaseContentPart<View, ?> host) {
+		protected EObject findSemanticElement(BaseContentPart<? extends View, ?> host) {
 			final EObject element = host.getContent().getElement();
 			if (element == null) {
 				if (this instanceof IPrimaryContentPart) {
 					return null; // Do not go beyond the Primary part
 				}
 
-				final BaseContentPart<View, ? extends Node> parent = host.getParentBaseContentPart();
+				final BaseContentPart<? extends View, ? extends Node> parent = host.getParentBaseContentPart();
 				if (parent != null) {
 					return findSemanticElement(parent);
 				}
@@ -219,21 +338,41 @@ public abstract class GMFModule extends AbstractModule {
 	}
 
 	protected void bindDefaultContentChildrenProvider() {
-		AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class).addBinding(AdapterRoles.fallbackRole())
-				.to(new TypeLiteral<ContentChildrenAdapter<View>>() {
+
+		Multibinder<HelperProviderParticipant<ContentChildrenProvider<View>>> contentChildrenBinder = Multibinder
+				.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<ContentChildrenProvider<View>>>() {
+					// Type Literal
 				});
 
-		binder().bind(new TypeLiteral<ContentChildrenAdapter<View>>() {
-		}).to(NotationContentChildrenProvider.class);
+		contentChildrenBinder.addBinding()
+				.toInstance(new AbstractGMFProviderParticipant<ContentChildrenProvider<View>>(0) {
+
+					@Override
+					protected ContentChildrenProvider<View> doCreateInstance(
+							BaseContentPart<? extends View, ?> basePart) {
+						return new NotationContentChildrenProvider(basePart);
+					}
+				});
 	}
 
-	protected void bindSpecificContentChildrenProviders() {
-		// Sub-modules may override for each specific ContentPart. Otherwise,
-		// #bindDefaultContentChildrenProvider will be used.
-		// Example:
-		// AdapterMaps.getAdapterMapBinder(binder(),
-		// MySpecificContentPart.class).addBinding(AdapterKey.defaultRole())
-		// .to(MySpecificContentChildrenProvider.class);
+	private void configureLocators() {
+		Multibinder<HelperProviderParticipant<Optional<Locator>>> locators = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<Optional<Locator>>>() {
+					// Type literal
+				});
+
+		bindLocators(locators);
+	}
+
+	private void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY,
+				FloatingLabelContentPart.class) {
+
+			@Override
+			protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				return Optional.of(new AffixedLabelLocator(basePart));
+			}
+		});
 	}
 
 	protected abstract void bindIContentPartProvider();

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2018 EclipseSource and others.
+ * Copyright (c) 2016 CEA LIST and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,15 +7,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
+ *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.services.style;
+package org.eclipse.papyrus.gef4.services;
 
-//TODO support multiple decorations
-public interface EdgeStyleService {
+import java.util.List;
 
-	String getSourceDecoration();
+public interface ContentChildrenProvider<MODEL> {
 
-	String getTargetDecoration();
+	public List<? extends MODEL> getContentChildren();
+
 }

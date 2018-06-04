@@ -10,18 +10,30 @@
  *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.gmf.editor.provider;
+package org.eclipse.papyrus.gef4.services;
 
-import java.util.function.Function;
+import javax.inject.Inject;
 
-import org.eclipse.gef.mvc.fx.providers.DefaultAnchorProvider;
-import org.eclipse.gmf.runtime.notation.Anchor;
-import org.eclipse.gmf.runtime.notation.IdentityAnchor;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
-public abstract class TerminalAnchorProvider extends DefaultAnchorProvider {
+import com.google.inject.Injector;
 
-	protected <T> String getAnchorTerminal(T connectionElement, Function<T, Anchor> anchorSide) {
-		Anchor anchor = anchorSide.apply(connectionElement);
-		return anchor instanceof IdentityAnchor ? ((IdentityAnchor) anchor).getId() : null;
+public abstract class AbstractProviderParticipant<T> implements HelperProviderParticipant<T> {
+
+	private Injector injector;
+
+	@Inject
+	public void setInjector(Injector injector) {
+		this.injector = injector;
 	}
+
+	@Override
+	public T get(IVisualPart<?> part) {
+		T instance = createInstance(part);
+		injector.injectMembers(instance);
+		return instance;
+	}
+
+	protected abstract T createInstance(IVisualPart<?> part);
+
 }

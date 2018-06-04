@@ -1,3 +1,15 @@
+/*****************************************************************************
+ * Copyright (c) 2018 EclipseSource and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
+ *
+ *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.style;
 
 import org.eclipse.emf.ecore.EObject;
@@ -35,6 +47,10 @@ import javafx.scene.text.Font;
 
 public class NotationStyleService extends AbstractNotationStyleService implements StyleService {
 
+	public NotationStyleService(BaseContentPart<? extends View, ?> part) {
+		super(part);
+	}
+
 	protected EObject findSemanticElement() {
 		final EObject element = getView().getElement();
 		if (element == null) {
@@ -42,7 +58,7 @@ public class NotationStyleService extends AbstractNotationStyleService implement
 				return null; // Do not go beyond the Primary part
 			}
 
-			final BaseContentPart<View, ? extends Node> parent = getAdaptable().getParentBaseContentPart();
+			final BaseContentPart<? extends View, ? extends Node> parent = getPart().getParentBaseContentPart();
 			if (parent != null) {
 				return parent.getContent().getElement();
 			}
