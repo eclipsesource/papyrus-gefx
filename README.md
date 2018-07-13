@@ -1,12 +1,12 @@
 # Papyrus GEFx Integration
 
-The focus of this project is to integrate a GEFx Editor (Currently based on the GEF 5.x branch, available in Eclipse/Oxygen) with GMF Runtime and Papyrus
+The focus of this project is to integrate a GEFx Editor (Currently based on the GEF 5.x branch, available in Eclipse/Photon) with GMF Runtime and Papyrus
 
 The idea is to provide an editor based on GEFx and JavaFX, while retaining the compatibility with existing Papyrus models (Semantic + Notation, CSS, Properties View, Model Explorer, GMF Genmodel...)
 
 ## Dependencies
 
-The project depends on GEFx (Currently, 5.0.2 / Oxygen.3), Papyrus 3.x (Currently, 3.3.0, Oxygen.3) and E(fx)clipse (3.0.0, Oxygen.3)
+The project depends on GEFx (Currently, 5.0.2 / Photon.0), Papyrus 4.x (Currently, 4.0.0, Photon.0) and E(fx)clipse (3.3.0, Photon.0)
 
 ## Project status
 

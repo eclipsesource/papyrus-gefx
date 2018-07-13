@@ -161,7 +161,7 @@
 						<artifact>
 							<groupId>org.eclipse.papyrus</groupId>
 							<artifactId>org.eclipse.papyrus.gef4.releng</artifactId>
-							<classifier>targetPlatform/oxygen</classifier>
+							<classifier>targetPlatform/photon</classifier>
 							<version>0.0.1-SNAPSHOT</version>
 						</artifact>
 					</target>

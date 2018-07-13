@@ -1,9 +1,9 @@
 target "GEFx for Papyrus - Developers Platform" with requirements source
 
-include "oxygen.tpd"
+include "photon.tpd"
 
 
-location "https://hudson.eclipse.org/papyrus/job/Papyrus-Oxygen-Developer/lastSuccessfulBuild/artifact/repository/" {
+location "http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/photon" {
 	org.eclipse.papyrus.gmfgenextension lazy
 }
 
