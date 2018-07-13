@@ -21,6 +21,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
@@ -29,7 +30,7 @@ public class AffixedLabelLocator implements Locator {
 	private final BaseContentPart<?, ?> host;
 
 	private final ListChangeListener<? super Node> childrenListener;
-	private final ChangeListener<Bounds> boundsListener;
+	protected final ChangeListener<Bounds> boundsListener;
 
 	private View view;
 
@@ -64,14 +65,17 @@ public class AffixedLabelLocator implements Locator {
 			return;
 		}
 
-		int x = location.getX();
-		int y = location.getY();
+		Point2D position = getLocationInParent(location);
 
 		node.setManaged(false);
 		host.getVisual().autosize();
 
-		node.setLayoutX(x);
-		node.setLayoutY(y);
+		node.setLayoutX(position.getX());
+		node.setLayoutY(position.getY());
+	}
+
+	protected Point2D getLocationInParent(Location location) {
+		return new Point2D(location.getX(), location.getY());
 	}
 
 	// We need a specific listener for Labels, because Labels are modified during rendering

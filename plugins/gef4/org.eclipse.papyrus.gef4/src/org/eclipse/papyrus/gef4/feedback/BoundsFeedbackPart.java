@@ -24,6 +24,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+//FIXME For now, this is installed on all nodes, including floating labels
+//Floating labels may use a different coordinates system, so they should get specific feedback
 public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 
 	private final IVisualPart<? extends Node> host;
@@ -88,11 +90,21 @@ public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 		visual.setEffect(EffectsUtil.BOUNDS_FEEDBACK_EFFECT);
 
 		if (newBounds.getHeight() > 0) {
-			visual.setHeight(Math.max(newBounds.getHeight(), ((Region) host.getVisual()).getMinHeight()));
+			if (host.getVisual() instanceof Region) {
+				// FIXME There should be a better way to take layout constraints into account
+				visual.setHeight(Math.max(newBounds.getHeight(), ((Region) host.getVisual()).getMinHeight()));
+			} else {
+				visual.setHeight(newBounds.getHeight());
+			}
 		}
 
 		if (newBounds.getWidth() > 0) {
-			visual.setWidth(Math.max(newBounds.getWidth(), ((Region) host.getVisual()).getMinWidth()));
+			if (host.getVisual() instanceof Region) {
+				// FIXME There should be a better way to take layout constraints into account
+				visual.setWidth(Math.max(newBounds.getWidth(), ((Region) host.getVisual()).getMinWidth()));
+			} else {
+				visual.setWidth(newBounds.getWidth());
+			}
 		}
 
 		// refresh rotate

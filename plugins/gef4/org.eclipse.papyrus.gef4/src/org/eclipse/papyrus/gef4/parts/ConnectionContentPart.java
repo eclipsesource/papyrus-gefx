@@ -28,11 +28,12 @@ import org.eclipse.papyrus.gef4.services.ConnectionService;
 import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
 
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
-public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connection> implements IPrimaryContentPart {
+public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> implements IPrimaryContentPart {
 
 	/** Role for Connection source anchorage */
 	public static final String SOURCE = "source";
@@ -44,6 +45,8 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 
 	private ConnectionService connectionService;
 
+	private Connection connection;
+
 	public ConnectionContentPart(MODEL model) {
 		super(model);
 
@@ -54,8 +57,9 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 	}
 
 	@Override
-	protected Connection doCreateVisual() {
-		return new Connection();
+	protected Group doCreateVisual() {
+		this.connection = new Connection();
+		return new Group(connection);
 	}
 
 	@Inject
@@ -68,8 +72,8 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 	}
 
 	@Override
-	protected void refreshVisualInTransaction(Connection connection) {
-		super.refreshVisualInTransaction(connection);
+	protected void refreshVisualInTransaction(Group group) {
+		super.refreshVisualInTransaction(group);
 
 		refreshDecorations();
 		refreshBendpoints();
@@ -78,10 +82,10 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 	// TODO: Currently we only focus on visuals. For interactions, to rely on GEFx's BendConnectionPolicy,
 	// we may need to implement IBendableContentPart later on.
 	protected void refreshBendpoints() {
-		getVisual().removeAllControlPoints();
+		connection.removeAllControlPoints();
 		int i = 0;
 		for (BendPoint bendpoint : getContentBendPoints()) {
-			getVisual().addControlPoint(i++, getPosition(bendpoint));
+			connection.addControlPoint(i++, getPosition(bendpoint));
 		}
 	}
 
@@ -98,13 +102,16 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 		return this.connectionService;
 	}
 
+	@Override
+	protected List<? extends MODEL> getContentChildren() {
+		return super.getContentChildren();
+	}
+
 	public List<BendPoint> getContentBendPoints() {
 		return getConnectionService().getModelBendpoints();
 	}
 
 	protected void refreshDecorations() {
-		Connection connection = getVisual();
-
 		String sourceDecorationName = getEdgeStyleService().getSourceDecoration();
 		Shape sourceDecoration = getDecoration(sourceDecorationName);
 		connection.setStartDecoration(sourceDecoration);
@@ -154,10 +161,10 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 		IAnchor anchor = adapter.get(this, role);
 		switch (role) {
 		case SOURCE:
-			getVisual().setStartAnchor(anchor);
+			connection.setStartAnchor(anchor);
 			break;
 		case TARGET:
-			getVisual().setEndAnchor(anchor);
+			connection.setEndAnchor(anchor);
 			break;
 		default:
 			throw new IllegalStateException("Cannot attach to anchor with role <" + role + ">.");
@@ -179,9 +186,9 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 	protected void doDetachFromAnchorageVisual(
 			IVisualPart<? extends Node> anchorage, String role) {
 		if (SOURCE.equals(role)) {
-			getVisual().setStartPoint(getVisual().getStartPoint());
+			connection.setStartPoint(connection.getStartPoint());
 		} else if (TARGET.equals(role)) {
-			getVisual().setEndPoint(getVisual().getEndPoint());
+			connection.setEndPoint(connection.getEndPoint());
 		} else {
 			throw new IllegalStateException(
 					"Cannot detach from anchor with role <" + role + ">.");
@@ -191,13 +198,19 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Connect
 	@Override
 	protected void doAddChildVisual(IVisualPart<? extends Node> child, int index) {
 		// Floating labels attached to the edge
-		// Nothing yet
+		Node childVisual = child.getVisual();
+		if (childVisual != null) {
+			getVisual().getChildren().add(index, childVisual);
+		}
 	}
 
 	@Override
 	protected void doRemoveChildVisual(IVisualPart<? extends Node> child, int index) {
 		// Floating labels attached to the edge
-		// Nothing yet
+		Node childVisual = child.getVisual();
+		if (childVisual != null) {
+			getVisual().getChildren().remove(childVisual);
+		}
 	}
 
 	@Override

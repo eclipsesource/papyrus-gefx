@@ -13,6 +13,7 @@
 package org.eclipse.papyrus.gef4.gmf.module;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import javax.inject.Singleton;
 
@@ -29,6 +30,7 @@ import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.module.anchors.RatioAnchorProvider;
 import org.eclipse.papyrus.gef4.gmf.parts.ConnectorContentPart;
@@ -52,8 +54,10 @@ import org.eclipse.papyrus.gef4.gmf.style.ShapeStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.utils.AdapterUtil;
 import org.eclipse.papyrus.gef4.gmf.utils.GMFPartUtil;
 import org.eclipse.papyrus.gef4.layout.AffixedLabelLocator;
+import org.eclipse.papyrus.gef4.layout.ConnectionLabelLocator;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.module.AdapterRoles;
+import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
@@ -373,6 +377,28 @@ public abstract class GMFModule extends AbstractModule {
 				return Optional.of(new AffixedLabelLocator(basePart));
 			}
 		});
+
+		locators.addBinding().toInstance(
+				new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY + .3, connectionLabelMatcher()) {
+					@Override
+					protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+						return Optional.of(new ConnectionLabelLocator(basePart));
+					}
+				});
+	}
+
+	/**
+	 * <p>
+	 * A Predicate matching {@link AffixedLabelContentPart} owned by a Connector.
+	 * </p>
+	 */
+	private static Predicate<BaseContentPart<? extends View, ?>> connectionLabelMatcher() {
+		return part -> {
+			if (part instanceof AffixedLabelContentPart) {
+				return part.getContent().eContainer() instanceof Edge;
+			}
+			return false;
+		};
 	}
 
 	protected abstract void bindIContentPartProvider();

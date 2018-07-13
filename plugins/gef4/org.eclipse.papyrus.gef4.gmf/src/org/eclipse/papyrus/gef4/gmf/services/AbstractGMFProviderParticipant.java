@@ -13,7 +13,7 @@
 package org.eclipse.papyrus.gef4.gmf.services;
 
 import java.util.Arrays;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.fx.core.observable.FXObservableUtil;
@@ -31,10 +31,10 @@ import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
  */
 public abstract class AbstractGMFProviderParticipant<T> extends AbstractProviderParticipant<T> {
 
-	private static final Function<IVisualPart<?>, Boolean> ANY_MATCHER = any -> true;
+	private static final Predicate<BaseContentPart<? extends View, ?>> ANY_MATCHER = any -> true;
 
 	private double priority;
-	private Function<IVisualPart<?>, Boolean> matcher;
+	private Predicate<BaseContentPart<? extends View, ?>> matcher;
 
 	public AbstractGMFProviderParticipant(double priority) {
 		this(priority, ANY_MATCHER);
@@ -52,14 +52,16 @@ public abstract class AbstractGMFProviderParticipant<T> extends AbstractProvider
 				.anyMatch(c -> c.isInstance(instance)));
 	}
 
-	public AbstractGMFProviderParticipant(double priority, Function<IVisualPart<?>, Boolean> matcher) {
+	public AbstractGMFProviderParticipant(double priority, Predicate<BaseContentPart<? extends View, ?>> matcher) {
 		this.priority = priority;
 		this.matcher = matcher;
 	}
 
 	@Override
 	public double getPriority(IVisualPart<?> part) {
-		return GMFPartUtil.isBaseNotationPart(part) && matcher.apply(part) ? priority : Double.NaN;
+		return GMFPartUtil.isBaseNotationPart(part) && matcher.test(GMFPartUtil.getBasePart(part)) //
+				? priority //
+				: Double.NaN;
 	}
 
 	@Override

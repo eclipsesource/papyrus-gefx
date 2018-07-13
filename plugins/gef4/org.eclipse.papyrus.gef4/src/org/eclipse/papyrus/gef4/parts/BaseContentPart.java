@@ -273,7 +273,7 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 		refreshVisual();
 	}
 
-	protected final List<? extends MODEL> getContentChildren() {
+	protected List<? extends MODEL> getContentChildren() {
 		return getContentChildrenAdapter().getContentChildren();
 	}
 
