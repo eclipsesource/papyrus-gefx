@@ -6,7 +6,7 @@ The idea is to provide an editor based on GEFx and JavaFX, while retaining the c
 
 ## Dependencies
 
-The project depends on GEFx (Currently, 5.0.2 / Photon.0), Papyrus 4.x (Currently, 4.0.0, Photon.0) and E(fx)clipse (3.3.0, Photon.0)
+The project depends on GEFx (Currently, 5.0.2 / Photon.0 or 2018-09), Papyrus 4.x (Currently, [4.0.0, 4.1.0], Photon.0 or 2018-09) and E(fx)clipse ([3.3.0, 3.4.0], Photon.0 or 2018-09)
 
 ## Project status
 

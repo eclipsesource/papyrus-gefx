@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/mbarbero/fr.obeo.releng.targetplatform -->
-<target name="GEFx for Papyrus" sequenceNumber="1531472496">
+<target name="GEFx for Papyrus" sequenceNumber="1538571582">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.papyrus.sdk.feature.feature.group" version="4.0.0.201806130934"/>
-      <repository location="http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/photon"/>
+      <unit id="org.eclipse.papyrus.sdk.feature.feature.group" version="4.1.0.201809120950"/>
+      <repository location="http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/2018-09"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.gef.common.sdk.feature.group" version="5.0.0.201805280201"/>
       <unit id="org.eclipse.gef.fx.sdk.feature.group" version="5.0.2.201805280201"/>
       <unit id="org.eclipse.gef.geometry.sdk.feature.group" version="5.0.2.201805280201"/>
       <unit id="org.eclipse.gef.mvc.sdk.feature.group" version="5.0.2.201805280201"/>
-      <unit id="org.eclipse.fx.runtime.min.feature.feature.group" version="3.3.0.201805280500"/>
-      <unit id="org.eclipse.fx.core" version="3.3.0.201805280600"/>
-      <unit id="org.eclipse.platform.feature.group" version="4.8.0.v20180611-0656"/>
-      <unit id="org.eclipse.jdt.annotation" version="2.2.0.v20180417-0931"/>
-      <unit id="org.eclipse.emf.feature.group" version="2.14.0.v20180529-1144"/>
+      <unit id="org.eclipse.fx.runtime.min.feature.feature.group" version="3.3.0.201809010500"/>
+      <unit id="org.eclipse.fx.core" version="3.3.0.201809010600"/>
+      <unit id="org.eclipse.platform.feature.group" version="4.9.0.v20180906-1121"/>
+      <unit id="org.eclipse.jdt.annotation" version="2.2.100.v20180905-0314"/>
+      <unit id="org.eclipse.emf.feature.group" version="2.15.0.v20180905-1732"/>
       <unit id="org.eclipse.gmf.runtime.sdk.feature.group" version="1.12.0.201806010809"/>
       <unit id="org.eclipse.gmf.runtime.notation.feature.group" version="1.12.0.201805221301"/>
-      <repository location="http://download.eclipse.org/releases/photon"/>
+      <repository location="http://download.eclipse.org/releases/2018-09"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="org.eclipse.fx.ui.di.interopt" version="3.3.0.201805280847"/>
-      <repository location="http://download.eclipse.org/efxclipse/runtime-released/3.3.0/site/"/>
+      <unit id="org.eclipse.fx.ui.di.interopt" version="3.3.0.201809010600"/>
+      <repository location="http://download.eclipse.org/efxclipse/runtime-released/3.4.0/site/"/>
     </location>
   </locations>
 </target>
