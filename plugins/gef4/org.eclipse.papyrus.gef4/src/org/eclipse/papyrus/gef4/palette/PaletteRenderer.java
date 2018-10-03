@@ -10,8 +10,15 @@
  *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.tools;
+package org.eclipse.papyrus.gef4.palette;
 
-public interface DeleteElementTool extends Tool {
+import javafx.scene.Node;
+
+/**
+ * A {@link PaletteRenderer} can render the control ({@link Node}) for the current diagram
+ */
+public interface PaletteRenderer {
+
+	Node createPaletteControl();
 
 }

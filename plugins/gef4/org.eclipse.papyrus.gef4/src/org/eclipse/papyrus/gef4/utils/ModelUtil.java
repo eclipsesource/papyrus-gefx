@@ -80,8 +80,9 @@ public class ModelUtil {
 	}
 
 	public static SelectionModel getSelectionModel(IViewer viewer) {
-		return viewer.getAdapter(new TypeToken<SelectionModel>() {
+		SelectionModel selectionModel = viewer.getAdapter(new TypeToken<SelectionModel>() {
 			// Nothing
 		});
+		return selectionModel;
 	}
 }

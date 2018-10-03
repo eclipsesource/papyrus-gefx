@@ -25,6 +25,9 @@ import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.behaviors.ContentBehavior;
 import org.eclipse.gef.mvc.fx.behaviors.GridBehavior;
 import org.eclipse.gef.mvc.fx.behaviors.HoverBehavior;
+import org.eclipse.gef.mvc.fx.domain.HistoricizingDomain;
+import org.eclipse.gef.mvc.fx.domain.IDomain;
+import org.eclipse.gef.mvc.fx.gestures.IHandlerResolver;
 import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
 import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
@@ -37,6 +40,7 @@ import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPartFactory;
+import org.eclipse.papyrus.gef4.gestures.ToolHandlerResolver;
 import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.handlers.AffixedLabelMoveOnDragHandler;
 import org.eclipse.papyrus.gef4.handlers.CollapseOnClickHandler;
@@ -47,7 +51,7 @@ import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.palette.Palette;
+import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
@@ -81,9 +85,6 @@ public class GEFFxModule extends MvcFxModule {
 	@Override
 	protected void configure() {
 		super.configure();
-
-		// bind selection provider
-		// bindSelectionProvider();
 
 		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class));
 		bindNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), ContainerContentPart.class));
@@ -128,9 +129,39 @@ public class GEFFxModule extends MvcFxModule {
 		bindLabelStyleServices();
 		bindConnectionService();
 		bindAnchorageService();
+
+		bindCreateNodeGesture();
 	}
 
-	private void bindAnchorageService() {
+	@Override
+	protected void bindIHandlerResolver() {
+		binder().bind(IHandlerResolver.class).to(ToolHandlerResolver.class);
+	}
+
+
+	protected void bindCreateNodeGesture() {
+		// binder().bind(CreateNodeGesture.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.gef.mvc.fx.MvcFxModule#bindIDomainAdapters(com.google.inject.multibindings.MapBinder)
+	 */
+	@Override
+	protected void bindIDomainAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindIDomainAdapters(adapterMapBinder);
+	}
+
+	protected void bindToolPolicies(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		// adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ActiveToolPolicy.class);
+	}
+
+	protected void bindToolManager() {
+		binder().bind(ToolManager.class).to(DefaultToolManager.class).in(Singleton.class);
+	}
+
+	protected void bindAnchorageService() {
 		binder().bind(new TypeLiteral<HelperProvider<AnchorageService>>() {
 			// Type literal
 		}).to(new TypeLiteral<HelperProviderImpl<AnchorageService>>() {
@@ -236,6 +267,15 @@ public class GEFFxModule extends MvcFxModule {
 
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(HoverOnHoverHandler.class);
+	}
+
+	@Override
+	protected void bindIDomain() {
+		// FIXME This is a workaround to avoid accidentally instantiating several Domains/Viewers/Selection models
+		// however, we should clarify the scope of the selection model in case of multiple viewers/domains, for
+		// injected elements that are not bound to a Part (e.g. a Palette).
+		// Multiple domains/viewers in the same injector are not a use case yet, so using Singletons is the simplest solution
+		binder().bind(IDomain.class).to(HistoricizingDomain.class).in(Singleton.class);
 	}
 
 	@Override
@@ -355,7 +395,6 @@ public class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindCompartmentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		// bindHoverBehaviorAsCompartmentPartAdapter(adapterMapBinder);
 		bindCollapseHandleProviderAsCompartmentPartAdapter(adapterMapBinder);
 	}
 
@@ -385,12 +424,8 @@ public class GEFFxModule extends MvcFxModule {
 				.to(MoveOnDragHandler.class);
 	}
 
-	protected void bindToolManager() {
-		binder().bind(ToolManager.class).to(DefaultToolManager.class);
-	}
-
 	protected void bindPalette() {
-		binder().bind(Palette.class).toInstance(() -> null);
+		binder().bind(PaletteRenderer.class).toInstance(() -> null);
 	}
 
 	protected void bindBoundsBehavior() {

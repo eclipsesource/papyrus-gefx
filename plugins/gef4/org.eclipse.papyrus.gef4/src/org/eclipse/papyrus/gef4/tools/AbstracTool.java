@@ -12,8 +12,19 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.tools;
 
-public interface CreateElementTool extends Tool {
+import org.eclipse.gef.mvc.fx.domain.IDomain;
+import org.eclipse.papyrus.gef4.utils.ActivatableBound;
 
-	String getElementTypeID();
+public abstract class AbstracTool extends ActivatableBound<IDomain> implements Tool {
+
+	@Override
+	protected void doActivate() {
+		// Subclasses may override
+	}
+
+	@Override
+	protected void doDeactivate() {
+		// Subclasses may override
+	}
 
 }

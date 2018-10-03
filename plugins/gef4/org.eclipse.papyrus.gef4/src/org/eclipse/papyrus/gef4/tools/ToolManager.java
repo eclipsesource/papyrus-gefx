@@ -12,13 +12,13 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.tools;
 
-import javafx.beans.property.Property;
+import javafx.beans.binding.ObjectExpression;
 
 public interface ToolManager {
-	public void setTool(Tool activeTool);
+	public void setActiveTool(Tool activeTool);
 
 	public Tool getActiveTool();
 
-	public Property<Tool> activeToolProperty();
+	public ObjectExpression<Tool> activeToolProperty();
 
 }

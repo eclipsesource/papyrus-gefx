@@ -55,7 +55,7 @@ public class NotationContentChildrenProvider extends AbstractActivatable impleme
 
 	@Override
 	public List<? extends View> getContentChildren() {
-		Stream<Node> nodes = NotationUtil.getChildren(view).stream().filter(c -> c.isVisible());
+		Stream<Node> nodes = NotationUtil.getChildren(view).stream().filter(View::isVisible);
 		Stream<? extends View> nodesAndEdges;
 
 		if (view instanceof Diagram) {

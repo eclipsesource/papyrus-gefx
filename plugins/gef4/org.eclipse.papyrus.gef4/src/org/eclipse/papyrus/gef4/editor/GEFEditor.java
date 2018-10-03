@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fx.core.ThreadSynchronize;
+import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.fx.swt.canvas.FXCanvasEx;
 import org.eclipse.gef.mvc.fx.domain.IDomain;
 import org.eclipse.gef.mvc.fx.models.GridModel;
@@ -27,7 +29,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.papyrus.gef4.palette.Palette;
+import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -45,6 +47,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
+import javafx.scene.layout.Region;
 
 public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
@@ -59,7 +62,10 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
 	@Inject
 	@Nullable
-	private Palette palette;
+	private PaletteRenderer palette;
+
+	@Inject
+	private ThreadSynchronize threadSync;
 
 	private ISelectionProvider selectionProvider;
 
@@ -87,7 +93,10 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 			} else {
 				selection = StructuredSelection.EMPTY;
 			}
-			getSite().getSelectionProvider().setSelection(selection);
+			if (getSite().getSelectionProvider() != null) {
+				// May be null during initialization
+				getSite().getSelectionProvider().setSelection(selection);
+			}
 		};
 	}
 
@@ -133,7 +142,7 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = getDomain().getViewers().values().stream().findFirst().orElseThrow(IllegalStateException::new);
+		viewer = getDomain().getAdapter(AdapterKey.get(IViewer.class, IDomain.CONTENT_VIEWER_ROLE));
 		selectionProvider = selectionProviderFactory.create(this);
 
 		// Canvas and SceneContainer
@@ -141,16 +150,13 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
 		SplitPane diagramSplitPane = new SplitPane();
 
-		// VBox palette = new VBox();
-		// palette.setMinWidth(120);
-		// palette.setMaxWidth(350);
-		// palette.getChildren().addAll(new Label("Palette"), new Button("Item 1"), new Button("Item 2"));
-
 		diagramSplitPane.getItems().add(viewer.getCanvas());
 
 		Node paletteNode = palette.createPaletteControl();
 		if (paletteNode != null) {
 			diagramSplitPane.getItems().add(paletteNode);
+			// Do it a little bit later, since the initial layout pass may overwrite our values
+			threadSync.asyncExec(() -> this.optimizePalettePosition(diagramSplitPane));
 		}
 
 		scene = new Scene(diagramSplitPane);
@@ -173,6 +179,28 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 			selectionProvider.setSelection(new StructuredSelection(viewer.getRootPart().getChildrenUnmodifiable().get(0)));
 		}
 		getSite().setSelectionProvider(selectionProvider);
+	}
+
+	protected void optimizePalettePosition(SplitPane diagramSplitPane) {
+		if (diagramSplitPane.getItems().size() != 2) {
+			// Expected is diagram on the left, palette on the right.
+			// If we get anything else, skip this
+			return;
+		}
+		double totalWidth = diagramSplitPane.getWidth();
+		Node paletteNode = diagramSplitPane.getItems().get(1);
+		if (paletteNode instanceof Region) {
+			Region palette = (Region) paletteNode;
+			// FIXME: The palette pref width is not correct because it doesn't take scrollbars into account
+			// We should get a proper way to compute optimal width (Maybe delegating to the palette renderer
+			// directly). Also note that if the palette renderer uses a ListView, pref width may change based
+			// on palette scrolling, because ListView is a virtual flow (But we really just care about "acceptable defaults")
+			// For now, we just use a hard coded workaround here; but it should really be the responsibility
+			// of the palette Region to provide appropriate pref width.
+			double scrollbarExtra = 40;
+			double paletteWidth = palette.prefWidth(diagramSplitPane.getHeight()) + scrollbarExtra;
+			diagramSplitPane.setDividerPositions(1 - paletteWidth / totalWidth);
+		}
 	}
 
 	protected final List<MODEL_ROOT> getContents() {

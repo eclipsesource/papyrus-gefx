@@ -12,9 +12,16 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.parts;
 
+import javax.inject.Inject;
+
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.gef4.parts.DiagramRootPart;
 
 public class NotationDiagramRootPart extends DiagramRootPart<Diagram> {
+
+	@Inject
+	public NotationDiagramRootPart(Diagram diagram) {
+		super(diagram);
+	}
 
 }

@@ -84,20 +84,33 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	protected void refreshBounds() {
 		final VBox region = getVisual();
 
-		boolean autoSize = true; // FIXME configure (autoHeight + autoWidth)
-		if (autoSize) {
+		if (isAutoWidth()) {
 			region.setMinWidth(getStyleProvider().getWidth());
-			region.setMinHeight(getStyleProvider().getHeight());
-			region.setPrefHeight(Region.USE_COMPUTED_SIZE);
 			region.setPrefWidth(Region.USE_COMPUTED_SIZE);
 		} else {
-			region.setMinHeight(Region.USE_COMPUTED_SIZE);
 			region.setMinWidth(Region.USE_COMPUTED_SIZE);
-			region.setPrefHeight(getStyleProvider().getHeight());
 			region.setPrefWidth(getStyleProvider().getWidth());
 		}
 
+		if (isAutoHeight()) {
+			region.setMinHeight(getStyleProvider().getHeight());
+			region.setPrefHeight(Region.USE_COMPUTED_SIZE);
+		} else {
+			region.setMinHeight(Region.USE_COMPUTED_SIZE);
+			region.setPrefHeight(getStyleProvider().getHeight());
+		}
+
 		refreshLocator();
+	}
+
+	protected boolean isAutoWidth() {
+		// TODO Configure
+		return true;
+	}
+
+	protected boolean isAutoHeight() {
+		// TODO Configure
+		return true;
 	}
 
 	protected void refreshLocator() {

@@ -12,8 +12,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.editor;
 
+import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.domain.IDomain;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -26,7 +28,7 @@ public class SelectionProviderFactory implements ISelectionProviderFactory {
 
 	@Override
 	public ISelectionProvider create(IWorkbenchPart workbenchPart) {
-		return new ViewerSelectionProvider(domain.getViewers().values().stream().findFirst().orElseThrow(IllegalStateException::new));
+		return new ViewerSelectionProvider(domain.getAdapter(AdapterKey.get(IViewer.class, IDomain.CONTENT_VIEWER_ROLE)));
 	}
 
 }

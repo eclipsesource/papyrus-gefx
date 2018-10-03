@@ -1,0 +1,37 @@
+/** Stylesheet for the Palette Renderer, close to the GEF/GMF palette style */
+
+.header {
+	-fx-padding: 5;
+}
+
+.list-view,
+.list-view .list-cell {
+	-fx-background-color: white;	
+}
+
+.button {
+	-fx-background-color: white;
+	-fx-background-radius: 0;
+	-fx-padding: 0;
+}
+
+.titled-pane:expanded .title {
+	-fx-background-color: #f3f3f2;
+	-fx-background-radius: 0;
+}
+
+.button {
+	-fx-padding: 2;
+}
+
+.button:hover {
+	-fx-background-color: #fce4b3; /* GEF Peach color */
+}
+
+.button:active {
+	-fx-background-color: #cfe3fa; /* GEF Blue color */
+}
+
+.button:hover:active {
+	-fx-background-color: #d4e8ff; /* Lighter GEF Blue color */
+}
