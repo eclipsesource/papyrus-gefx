@@ -26,8 +26,14 @@ import org.eclipse.papyrus.gef4.gmf.module.GMFModule;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
+import org.eclipse.papyrus.gef4.services.LabelService;
 import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
 import org.eclipse.papyrus.uml.gefdiag.common.services.UMLImageService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.CommentLabelService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.NamedElementLabelService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.OperationLabelService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.PropertyLabelService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.SlotLabelService;
 
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
@@ -41,13 +47,22 @@ import com.google.inject.name.Names;
 public abstract class UMLDiagramModule extends GMFModule {
 
 	/**
+	 * The priority used for generic UML Elements
+	 */
+	public static final double DEFAULT_UML_PRIORITY = GMFModule.MAX_GMF_PRIORITY + 1;
+
+	/**
+	 * The highest priority level used by this Module. Modules that want to specialize this module
+	 * should use values higher than this.
+	 */
+	public static final double MAX_UML_PRIORITY = DEFAULT_UML_PRIORITY + 9;
+
+	/**
 	 * Name of the injected {@link String} property representing the {@link IClientContext} ID
 	 *
 	 * @see {@link Named @Named}
 	 */
 	public static final String CLIENT_CONTEXT_ID = "clientContextID";
-
-	public static final double DEFAULT_PRIORITY = GMFModule.DEFAULT_PRIORITY + 1;
 
 	/**
 	 * @see org.eclipse.papyrus.gef4.module.GEFFxModule#configure()
@@ -62,13 +77,38 @@ public abstract class UMLDiagramModule extends GMFModule {
 		bindLabelPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), LabelContentPart.class));
 
 		configureLocators();
+
+		Multibinder<HelperProviderParticipant<LabelService>> labelProviders = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<LabelService>>() {
+					// Type literal
+				});
+
+		configureLabelProviders(labelProviders);
 	}
 
-	// @Override
-	// protected void bindDefaultContentChildrenProvider() {
-	// binder().bind(new TypeLiteral<ContentChildrenAdapter<View>>() {
-	// }).to(StereotypeAwareContentChildrenProvider.class).in(PartScoped.class);
-	// }
+	protected void configureLabelProviders(Multibinder<HelperProviderParticipant<LabelService>> labelProviders) {
+		// Named element
+		labelProviders.addBinding().toInstance(new NamedElementLabelService(DEFAULT_UML_PRIORITY));
+
+		// Comments
+		labelProviders.addBinding().toInstance(new CommentLabelService(DEFAULT_UML_PRIORITY));
+
+
+		//
+		// Specific Named Elements (Higher priority than NamedElement)
+		//
+
+		final double SPECIFIC_NAMED_ELEMENTS_PRIORITY = DEFAULT_UML_PRIORITY + 1;
+
+		// Slot
+		labelProviders.addBinding().toInstance(new SlotLabelService(SPECIFIC_NAMED_ELEMENTS_PRIORITY));
+
+		// Property
+		labelProviders.addBinding().toInstance(new PropertyLabelService(SPECIFIC_NAMED_ELEMENTS_PRIORITY));
+
+		// Operation
+		labelProviders.addBinding().toInstance(new OperationLabelService(SPECIFIC_NAMED_ELEMENTS_PRIORITY));
+	}
 
 	protected void bindLabelPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(

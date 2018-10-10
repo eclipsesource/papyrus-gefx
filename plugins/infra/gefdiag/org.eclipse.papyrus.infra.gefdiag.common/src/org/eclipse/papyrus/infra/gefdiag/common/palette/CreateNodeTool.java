@@ -181,7 +181,9 @@ public class CreateNodeTool extends AbstracTool {
 		@Override
 		public void endDrag(MouseEvent e, Dimension delta) {
 			doCreate(e, delta);
-			CreateNodeTool.this.deactivate();
+			if (!e.isShortcutDown()) {
+				CreateNodeTool.this.deactivate();
+			}
 		}
 
 		@Override

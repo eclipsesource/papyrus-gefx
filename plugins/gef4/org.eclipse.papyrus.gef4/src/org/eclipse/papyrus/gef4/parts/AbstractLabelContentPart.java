@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
 import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.ImageService;
-import org.eclipse.papyrus.gef4.services.TextAdapter;
+import org.eclipse.papyrus.gef4.services.LabelService;
 import org.eclipse.papyrus.gef4.services.style.LabelStyleService;
 
 import javafx.scene.Node;
@@ -34,6 +34,8 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 
 	private LabelStyleService labelStyleService;
 
+	private LabelService labelService;
+
 	public AbstractLabelContentPart(final MODEL model) {
 		super(model);
 	}
@@ -47,8 +49,13 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 		refreshIcon();
 	}
 
-	protected TextAdapter getTextService() {
-		return getAdapter(TextAdapter.class);
+	@Inject
+	public void setLabelService(HelperProvider<LabelService> provider) {
+		this.labelService = provider.get(this);
+	}
+
+	protected LabelService getLabelService() {
+		return this.labelService;
 	}
 
 	@Inject
@@ -117,11 +124,11 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 	}
 
 	protected String getText() {
-		TextAdapter textService = getTextService();
-		if (textService != null) {
-			return textService.getText();
+		LabelService labelService = getLabelService();
+		if (labelService != null) {
+			return labelService.getText();
 		}
-		return "<No parser>";
+		return "<Missing label service>";
 	}
 
 	@Override

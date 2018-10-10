@@ -32,6 +32,9 @@ import com.google.inject.multibindings.Multibinder;
 
 public class StateMachineDiagramModule extends UMLDiagramModule {
 
+	public static final double DEFAULT_STATE_PRIORITY = UMLDiagramModule.MAX_UML_PRIORITY + 1;
+	public static final double MAX_STATE_PRIORITY = DEFAULT_STATE_PRIORITY + 9;
+
 	@Override
 	protected void bindIContentPartProvider() {
 		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
@@ -41,7 +44,7 @@ public class StateMachineDiagramModule extends UMLDiagramModule {
 	@Override
 	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
 		super.bindLocators(locators);
-		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY,
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_STATE_PRIORITY,
 				PseudostateEntryPointEditPart.class, PseudostateExitPointEditPart.class, ConnectionPointReferenceEditPart.class) {
 
 			@Override

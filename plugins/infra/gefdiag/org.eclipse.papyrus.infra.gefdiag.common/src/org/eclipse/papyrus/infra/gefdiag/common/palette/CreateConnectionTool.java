@@ -256,7 +256,12 @@ public class CreateConnectionTool extends AbstracTool {
 			try {
 				doCreate(e, delta);
 			} finally {
-				CreateConnectionTool.this.deactivate();
+				if (!e.isShortcutDown()) {
+					CreateConnectionTool.this.deactivate();
+				} else {
+					// Reset the tool without disabling it
+					CreateConnectionTool.this.sourcePart = null;
+				}
 			}
 		}
 

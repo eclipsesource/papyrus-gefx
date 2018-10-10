@@ -65,6 +65,7 @@ import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ConnectionService;
 import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
+import org.eclipse.papyrus.gef4.services.LabelService;
 import org.eclipse.papyrus.gef4.services.impl.EmptyImageService;
 import org.eclipse.papyrus.gef4.services.impl.HelperProviderImpl;
 import org.eclipse.papyrus.gef4.services.style.CompartmentStyleService;
@@ -80,7 +81,7 @@ import com.google.inject.multibindings.Multibinder;
 
 public class GEFFxModule extends MvcFxModule {
 
-	public static final double DEFAULT_PRIORITY = Double.MIN_VALUE;
+	public static final double DEFAULT_GEFX_PRIORITY = Double.MIN_VALUE;
 
 	@Override
 	protected void configure() {
@@ -123,6 +124,7 @@ public class GEFFxModule extends MvcFxModule {
 		// .in(AdaptableScopes.typed(IViewer.class));
 
 		bindLocators();
+		bindLabelService();
 		bindStyleServices();
 		bindEdgeStyleServices();
 		bindCompartmentStyleServices();
@@ -161,6 +163,34 @@ public class GEFFxModule extends MvcFxModule {
 		binder().bind(ToolManager.class).to(DefaultToolManager.class).in(Singleton.class);
 	}
 
+	protected void bindLabelService() {
+		binder().bind(new TypeLiteral<HelperProvider<LabelService>>() {
+			// Type Literal
+		}).to(new TypeLiteral<HelperProviderImpl<LabelService>>() {
+			// Type Literal
+		}).in(Singleton.class);
+
+		Multibinder<HelperProviderParticipant<LabelService>> labelProviders = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<LabelService>>() {
+					// Type literal
+				});
+
+		labelProviders.addBinding().toInstance(new HelperProviderParticipant<LabelService>() {
+
+			private LabelService noLabelProvider = () -> "<Missing label provider>";
+
+			@Override
+			public LabelService get(IVisualPart<?> part) {
+				return noLabelProvider;
+			}
+
+			@Override
+			public double getPriority(IVisualPart<?> part) {
+				return DEFAULT_GEFX_PRIORITY;
+			}
+		});
+	}
+
 	protected void bindAnchorageService() {
 		binder().bind(new TypeLiteral<HelperProvider<AnchorageService>>() {
 			// Type literal
@@ -178,17 +208,17 @@ public class GEFFxModule extends MvcFxModule {
 	}
 
 	private void bindCompartmentStyleServices() {
-		binder().bind(new TypeLiteral<HelperProvider<LabelStyleService>>() {
+		binder().bind(new TypeLiteral<HelperProvider<CompartmentStyleService>>() {
 			// Type literal
-		}).to(new TypeLiteral<HelperProviderImpl<LabelStyleService>>() {
+		}).to(new TypeLiteral<HelperProviderImpl<CompartmentStyleService>>() {
 			// Type literal
 		}).in(Singleton.class);
 	}
 
 	private void bindLabelStyleServices() {
-		binder().bind(new TypeLiteral<HelperProvider<CompartmentStyleService>>() {
+		binder().bind(new TypeLiteral<HelperProvider<LabelStyleService>>() {
 			// Type literal
-		}).to(new TypeLiteral<HelperProviderImpl<CompartmentStyleService>>() {
+		}).to(new TypeLiteral<HelperProviderImpl<LabelStyleService>>() {
 			// Type literal
 		}).in(Singleton.class);
 	}
@@ -232,7 +262,7 @@ public class GEFFxModule extends MvcFxModule {
 
 		@Override
 		public double getPriority(IVisualPart<?> part) {
-			return DEFAULT_PRIORITY;
+			return DEFAULT_GEFX_PRIORITY;
 		}
 
 	}

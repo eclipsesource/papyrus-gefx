@@ -30,6 +30,9 @@ import com.google.inject.multibindings.Multibinder;
 
 public class ComponentDiagramModule extends UMLDiagramModule {
 
+	public static final double DEFAULT_COMPONENT_PRIORITY = UMLDiagramModule.MAX_UML_PRIORITY + 1;
+	public static final double MAX_COMPONENT_PRIORITY = DEFAULT_COMPONENT_PRIORITY + 9;
+
 	@Override
 	protected void bindIContentPartProvider() {
 		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
@@ -39,7 +42,7 @@ public class ComponentDiagramModule extends UMLDiagramModule {
 	@Override
 	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
 		super.bindLocators(locators);
-		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY,
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_COMPONENT_PRIORITY,
 				PortEditPart.class) {
 
 			@Override

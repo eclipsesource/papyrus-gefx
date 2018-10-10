@@ -43,7 +43,6 @@ import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
 import org.eclipse.papyrus.gef4.gmf.services.EditingDomainTransactionService;
 import org.eclipse.papyrus.gef4.gmf.services.GMFConnectionService;
 import org.eclipse.papyrus.gef4.gmf.services.NotationContentChildrenProvider;
-import org.eclipse.papyrus.gef4.gmf.services.ParserTextAdapter;
 import org.eclipse.papyrus.gef4.gmf.services.ProviderBasedContentPartFactory;
 import org.eclipse.papyrus.gef4.gmf.style.ConnectorStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.style.DecorationNodeStyleProvider;
@@ -97,7 +96,8 @@ import javafx.scene.Node;
  */
 public abstract class GMFModule extends AbstractModule {
 
-	public static final double DEFAULT_PRIORITY = 1;
+	public static final double DEFAULT_GMF_PRIORITY = 1;
+	public static final double MAX_GMF_PRIORITY = 9;
 
 	@Override
 	protected void configure() {
@@ -146,7 +146,6 @@ public abstract class GMFModule extends AbstractModule {
 
 	protected void bindContentPartAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
 		bindModelAdapters(mapBinder);
-		bindTextAdapter(mapBinder);
 	}
 
 	protected void bindConnectionAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
@@ -311,10 +310,6 @@ public abstract class GMFModule extends AbstractModule {
 		return contentPart;
 	}
 
-	protected void bindTextAdapter(MapBinder<AdapterKey<?>, Object> mapBinder) {
-		mapBinder.addBinding(AdapterKey.defaultRole()).to(ParserTextAdapter.class);
-	}
-
 	@Provides
 	@Singleton
 	protected DiagramEventBroker getEventBroker(TransactionalEditingDomain editingDomain) {
@@ -369,7 +364,7 @@ public abstract class GMFModule extends AbstractModule {
 	}
 
 	private void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
-		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY,
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_GMF_PRIORITY,
 				FloatingLabelContentPart.class) {
 
 			@Override
@@ -378,13 +373,13 @@ public abstract class GMFModule extends AbstractModule {
 			}
 		});
 
-		locators.addBinding().toInstance(
-				new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY + .3, connectionLabelMatcher()) {
-					@Override
-					protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
-						return Optional.of(new ConnectionLabelLocator(basePart));
-					}
-				});
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(
+				DEFAULT_GMF_PRIORITY + .3, connectionLabelMatcher()) {
+			@Override
+			protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				return Optional.of(new ConnectionLabelLocator(basePart));
+			}
+		});
 	}
 
 	/**

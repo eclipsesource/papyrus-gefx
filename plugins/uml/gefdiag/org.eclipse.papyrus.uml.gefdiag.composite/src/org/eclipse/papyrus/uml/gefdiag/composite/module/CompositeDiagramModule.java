@@ -31,6 +31,9 @@ import com.google.inject.multibindings.Multibinder;
 
 public class CompositeDiagramModule extends UMLDiagramModule {
 
+	public static final double DEFAULT_COMPOSITE_PRIORITY = UMLDiagramModule.MAX_UML_PRIORITY + 1;
+	public static final double MAX_COMPOSITE_PRIORITY = DEFAULT_COMPOSITE_PRIORITY + 9;
+
 	@Override
 	protected void bindIContentPartProvider() {
 		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
@@ -40,7 +43,7 @@ public class CompositeDiagramModule extends UMLDiagramModule {
 	@Override
 	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
 		super.bindLocators(locators);
-		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY,
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_COMPOSITE_PRIORITY,
 				PortEditPart.class, ParameterEditPart.class) {
 
 			@Override

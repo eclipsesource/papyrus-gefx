@@ -7,11 +7,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
+ *   EclipseSource - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.services;
+package org.eclipse.papyrus.uml.gefdiag.common.services.label;
 
-public interface TextAdapter {
-	public String getText();
+import org.eclipse.uml2.uml.Comment;
+
+public class CommentLabelService extends AbstractUMLLabelServiceParticipant<Comment> {
+
+	public CommentLabelService(double priority) {
+		super(priority, Comment.class);
+	}
+
+	@Override
+	protected String getLabel(Comment comment) {
+		return comment.getBody();
+	}
+
+
 }

@@ -45,7 +45,8 @@ import com.google.inject.multibindings.Multibinder;
 
 public class ClassDiagramModule extends UMLDiagramModule {
 
-	public static final double DEFAULT_PRIORITY = UMLDiagramModule.DEFAULT_PRIORITY + 1;
+	public static final double DEFAULT_CLASS_PRIORITY = UMLDiagramModule.MAX_UML_PRIORITY + 1;
+	public static final double MAX_CLASS_PRIORITY = DEFAULT_CLASS_PRIORITY + 9;
 
 	@Override
 	protected void configure() {
@@ -62,7 +63,7 @@ public class ClassDiagramModule extends UMLDiagramModule {
 	@Override
 	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
 		super.bindLocators(locators);
-		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_PRIORITY,
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_CLASS_PRIORITY,
 				TemplateSignatureEditPart.class, RedefinableTemplateSignatureEditPart.class) {
 
 			@Override
