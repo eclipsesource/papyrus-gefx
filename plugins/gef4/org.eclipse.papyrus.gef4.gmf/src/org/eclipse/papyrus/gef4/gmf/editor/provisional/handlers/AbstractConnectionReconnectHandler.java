@@ -11,7 +11,7 @@
  *  Michael Golubev (Montages) - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
 
 import java.util.Optional;
 

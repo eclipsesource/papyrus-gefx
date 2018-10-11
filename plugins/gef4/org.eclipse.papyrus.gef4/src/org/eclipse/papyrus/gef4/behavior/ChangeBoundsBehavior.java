@@ -19,19 +19,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.behaviors.AbstractBehavior;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPart;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 
 import javafx.collections.MapChangeListener;
 import javafx.scene.Node;
 
-public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeListener<IVisualPart<? extends Node>, Bounds> {
+public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeListener<IVisualPart<? extends Node>, Rectangle> {
 
 	public static final String BOUNDS_ROLE = "bounds";
 
@@ -50,8 +50,8 @@ public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeL
 		updateFeedback(Collections.emptyMap(), boundsModel.getManagedElements());
 	}
 
-	protected List<IVisualPart<? extends Node>> extractTargets(Map<IVisualPart<? extends Node>, Bounds> managedElements) {
-		return new ArrayList<IVisualPart<? extends Node>>(managedElements.keySet());
+	protected List<IVisualPart<? extends Node>> extractTargets(Map<IVisualPart<? extends Node>, Rectangle> managedElements) {
+		return new ArrayList<>(managedElements.keySet());
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeL
 	}
 
 	@Override
-	public void onChanged(MapChangeListener.Change<? extends IVisualPart<? extends Node>, ? extends Bounds> change) {
+	public void onChanged(MapChangeListener.Change<? extends IVisualPart<? extends Node>, ? extends Rectangle> change) {
 		IVisualPart<? extends Node> modifiedPart = change.getKey();
 		if (modifiedPart == getHost()) {
 			IFeedbackPartFactory feedbackPartFactory = getFeedbackPartFactory(modifiedPart.getViewer());
@@ -84,13 +84,13 @@ public class ChangeBoundsBehavior extends AbstractBehavior implements MapChangeL
 		}
 	}
 
-	protected void updateFeedback(IFeedbackPart<? extends Node> feedbackPart, Bounds bounds) {
+	protected void updateFeedback(IFeedbackPart<? extends Node> feedbackPart, Rectangle bounds) {
 		if (feedbackPart instanceof BoundsFeedbackPart) {
 			((BoundsFeedbackPart) feedbackPart).updateBounds(bounds);
 		}
 	}
 
-	private void updateFeedback(Map<IVisualPart<? extends Node>, Bounds> oldSelection, Map<IVisualPart<? extends Node>, Bounds> newSelection) {
+	private void updateFeedback(Map<IVisualPart<? extends Node>, Rectangle> oldSelection, Map<IVisualPart<? extends Node>, Rectangle> newSelection) {
 		List<IVisualPart<? extends Node>> partsToRemove = new LinkedList<>();
 		List<IVisualPart<? extends Node>> partsToUpdate = new LinkedList<>();
 		List<IVisualPart<? extends Node>> partsToCreate = new LinkedList<>();

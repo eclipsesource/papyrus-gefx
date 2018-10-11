@@ -25,7 +25,7 @@ import javafx.scene.Node;
 
 public class MarqueeOnDragHandler extends org.eclipse.gef.mvc.fx.handlers.MarqueeOnDragHandler {
 	@Override
-	protected List<IContentPart<? extends Node>> getParts(List nodes) {
+	protected List<IContentPart<? extends Node>> getParts(List<Node> nodes) {
 		List<IContentPart<? extends Node>> allParts = super.getParts(nodes);
 
 		List<IContentPart<? extends Node>> result = new LinkedList<IContentPart<? extends Node>>();

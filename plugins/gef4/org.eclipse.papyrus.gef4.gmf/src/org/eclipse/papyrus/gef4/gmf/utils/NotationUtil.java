@@ -29,7 +29,6 @@ import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyleEnum;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
-import org.eclipse.papyrus.gef4.utils.ColorUtil;
 import org.eclipse.papyrus.gef4.utils.EffectEnum;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;

@@ -15,7 +15,6 @@ package org.eclipse.papyrus.gef4.feedback;
 
 import org.eclipse.gef.mvc.fx.parts.AbstractFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.EffectsUtil;
 
@@ -30,7 +29,7 @@ public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 
 	private final IVisualPart<? extends Node> host;
 
-	private Bounds newBounds;// Absolute bounds
+	private org.eclipse.gef.geometry.planar.Rectangle newBounds;// Absolute bounds
 
 	/**
 	 * Instantiates a new bounds feedback part.
@@ -40,7 +39,7 @@ public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 	 * @param newBounds
 	 *            the new bounds in relative.
 	 */
-	public BoundsFeedbackPart(final IVisualPart<? extends Node> host, final Bounds newBounds) {
+	public BoundsFeedbackPart(final IVisualPart<? extends Node> host, final org.eclipse.gef.geometry.planar.Rectangle newBounds) {
 		this.host = host;
 
 		newBounds.setX(BoundsUtil.getAbsoluteX(host) + getDeltaX(newBounds));
@@ -50,7 +49,7 @@ public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 	}
 
 	// Update feedback while resizing or moving
-	public void updateBounds(final Bounds newBounds) {
+	public void updateBounds(final org.eclipse.gef.geometry.planar.Rectangle newBounds) {
 
 		newBounds.setX(BoundsUtil.getAbsoluteX(host) + getDeltaX(newBounds));
 		newBounds.setY(BoundsUtil.getAbsoluteY(host) + getDeltaY(newBounds));
@@ -60,11 +59,11 @@ public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 		refreshVisual();
 	}
 
-	protected int getDeltaY(final Bounds newBounds) {
+	protected int getDeltaY(final org.eclipse.gef.geometry.planar.Rectangle newBounds) {
 		return (int) (newBounds.getY() - host.getVisual().getLayoutY());
 	}
 
-	protected int getDeltaX(final Bounds newBounds) {
+	protected int getDeltaX(final org.eclipse.gef.geometry.planar.Rectangle newBounds) {
 		return (int) (newBounds.getX() - host.getVisual().getLayoutX());
 	}
 

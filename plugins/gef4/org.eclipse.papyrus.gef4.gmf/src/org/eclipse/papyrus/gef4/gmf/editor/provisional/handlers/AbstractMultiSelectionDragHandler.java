@@ -10,7 +10,7 @@
  *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
 
 import java.util.List;
 import java.util.function.Consumer;

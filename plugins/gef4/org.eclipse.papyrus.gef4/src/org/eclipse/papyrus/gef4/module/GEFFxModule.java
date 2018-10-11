@@ -29,7 +29,6 @@ import org.eclipse.gef.mvc.fx.domain.HistoricizingDomain;
 import org.eclipse.gef.mvc.fx.domain.IDomain;
 import org.eclipse.gef.mvc.fx.gestures.IHandlerResolver;
 import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
-import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
@@ -41,18 +40,12 @@ import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPartFactory;
 import org.eclipse.papyrus.gef4.gestures.ToolHandlerResolver;
-import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
-import org.eclipse.papyrus.gef4.handlers.AffixedLabelMoveOnDragHandler;
-import org.eclipse.papyrus.gef4.handlers.CollapseOnClickHandler;
 import org.eclipse.papyrus.gef4.handlers.MarqueeOnDragHandler;
-import org.eclipse.papyrus.gef4.handlers.MoveOnDragHandler;
-import org.eclipse.papyrus.gef4.handlers.ResizeOnDragHandler;
 import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
-import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
@@ -94,16 +87,9 @@ public class GEFFxModule extends MvcFxModule {
 		bindCompartmentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CompartmentContentPart.class));
 		bindLabelPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), LabelContentPart.class));
 
-		// define specific policy for affixed Label
-		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
-
 		bindDiagramPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class));
 
 		bindSelectionProviderFactory();
-
-		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractHandlePart.class));
-
-		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
 
 		bindBoundsBehavior();
 
@@ -339,11 +325,6 @@ public class GEFFxModule extends MvcFxModule {
 				.to(GridBehavior.class);
 	}
 
-	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder
-				.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragHandler.class); // FIXME this shouldn't be installed on all handle parts (e.g. this will be installed on connection's bendpoints and anchors)
-	}
-
 	@Override
 	protected void bindHoverHandlePartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		// Disable parent
@@ -396,23 +377,10 @@ public class GEFFxModule extends MvcFxModule {
 		// Disable hover on handles
 	}
 
-	protected void bindCollapseHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder
-				.addBinding(AdapterKey.defaultRole())
-				.to(CollapseOnClickHandler.class);
-	}
-
 	protected void bindLabelPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(
 				AdapterRoles.fallbackRole())
 				.to(EmptyImageService.class);
-	}
-
-	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-
-		adapterMapBinder.addBinding(
-				AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
-				.to(AffixedLabelMoveOnDragHandler.class);
 	}
 
 	protected void bindDiagramPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -447,11 +415,6 @@ public class GEFFxModule extends MvcFxModule {
 				.addBinding(
 						AdapterKey.defaultRole())
 				.to(SelectOnClickHandler.class);
-
-		adapterMapBinder
-				.addBinding(
-						AdapterKey.defaultRole())
-				.to(MoveOnDragHandler.class);
 	}
 
 	protected void bindPalette() {

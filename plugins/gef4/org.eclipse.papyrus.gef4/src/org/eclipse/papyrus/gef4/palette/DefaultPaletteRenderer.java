@@ -65,7 +65,7 @@ public class DefaultPaletteRenderer implements PaletteRenderer {
 		FXBindings.bindContent(paletteContents.getChildren(), paletteDescriptor.getDrawers(), DrawerNode::new);
 
 		paletteRoot.getChildren().addAll(paletteHeader, paletteContents);
-		paletteRoot.getStylesheets().add(getClass().getResource("palette.css").toExternalForm());
+		paletteRoot.getStylesheets().add(DefaultPaletteRenderer.class.getResource("palette.css").toExternalForm());
 
 		return paletteRoot;
 	}

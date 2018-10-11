@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gmf.runtime.notation.Bounds;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -36,7 +36,7 @@ public class BoundsFeedbackPartFactory implements IFeedbackPartFactory {
 		List<IFeedbackPart<? extends Node>> result = new ArrayList<>(targets.size());
 
 		for (IVisualPart<? extends Node> target : targets) {
-			Bounds newBounds = (Bounds) contextMap.get(target);
+			Rectangle newBounds = (Rectangle) contextMap.get(target);
 			BoundsFeedbackPart boundsFeedbackPart = new BoundsFeedbackPart(target, newBounds);
 			injector.injectMembers(boundsFeedbackPart);
 			result.add(boundsFeedbackPart);

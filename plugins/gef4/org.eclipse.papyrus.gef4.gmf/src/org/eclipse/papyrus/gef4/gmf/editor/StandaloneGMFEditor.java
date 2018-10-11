@@ -15,6 +15,8 @@ package org.eclipse.papyrus.gef4.gmf.editor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.gef4.editor.StandaloneGEFEditor;
 import org.eclipse.papyrus.gef4.gmf.module.NotationDiagramModule;
@@ -25,6 +27,8 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 
 public abstract class StandaloneGMFEditor extends StandaloneGEFEditor<Diagram> {
+
+	private ResourceSet resourceSet;
 
 	@Override
 	protected Diagram getDiagramRoot(IEditorInput input) {
@@ -38,6 +42,18 @@ public abstract class StandaloneGMFEditor extends StandaloneGEFEditor<Diagram> {
 	@Override
 	protected Module getModule(Diagram diagramRoot) {
 		return Modules.override(super.getModule(diagramRoot)).with(new NotationDiagramModule(diagramRoot));
+	}
+
+	protected ResourceSet createResourceSet() {
+		TransactionalEditingDomain editingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
+		return editingDomain.getResourceSet();
+	}
+
+	protected ResourceSet getResourceSet() {
+		if (resourceSet == null) {
+			resourceSet = createResourceSet();
+		}
+		return resourceSet;
 	}
 
 	protected Diagram loadDiagram(URI uri) {

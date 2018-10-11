@@ -10,7 +10,7 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.layout;
+package org.eclipse.papyrus.gef4.gmf.locators;
 
 import javax.inject.Inject;
 
@@ -26,6 +26,7 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import javafx.beans.value.ChangeListener;

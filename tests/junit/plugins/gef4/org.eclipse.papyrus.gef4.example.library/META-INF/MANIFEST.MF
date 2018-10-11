@@ -26,3 +26,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Description: Standalone editor plug-in,
   used as both an Example and a Test case for the GEF4/GMF Connector
 Import-Package: org.eclipse.papyrus.uml.gefdiag.common.provider
+Automatic-Module-Name: org.eclipse.papyrus.gef4.example.library

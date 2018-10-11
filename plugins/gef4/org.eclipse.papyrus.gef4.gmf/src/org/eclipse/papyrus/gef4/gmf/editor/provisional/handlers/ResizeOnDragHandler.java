@@ -10,10 +10,11 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.handlers.CursorSupport;
 import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.parts.AbstractSegmentHandlePart;
@@ -22,7 +23,6 @@ import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
-import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
@@ -56,19 +56,19 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 		propagate(e, delta, policy -> policy.drag(e, delta));
 
 		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
-		final Bounds newBounds = computeNewBounds(getBounds(), delta);
+		final Rectangle newBounds = computeNewBounds(getBounds(), delta);
 		if (newBounds == null) { // If the host element doesn't have bounds (e.g. Connections)
 			return;
 		}
 		boundsModel.addManagedElement(getPrimaryHost(), newBounds);
 	}
 
-	protected Bounds computeNewBounds(final Bounds bounds, final Dimension delta) {
+	protected Rectangle computeNewBounds(final Bounds bounds, final Dimension delta) {
 		if (bounds == null) {
 			return null;
 		}
 
-		final Bounds newBounds = NotationFactory.eINSTANCE.createBounds();
+		final Rectangle newBounds = new Rectangle();
 
 		final int xOffset = toPixels(delta.getWidth());
 		final int yOffset = toPixels(delta.getHeight());
@@ -143,8 +143,6 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 		return -1;
 	}
 
-
-
 	@Override
 	public void startDrag(final MouseEvent e) {
 		// Nothing
@@ -166,17 +164,20 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 
 		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 
-		final Bounds newBounds = computeNewBounds(bounds, delta);
+		final Rectangle newBounds = computeNewBounds(bounds, delta);
 		if (newBounds == null) {
 			boundsModel.removeManagedElement(getPrimaryHost());
 			return;
 		}
 
-		final SetRequest setXRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__X, newBounds.getX());
-		final SetRequest setYRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__Y, newBounds.getY());
-		final SetRequest setWidthRequest = new SetRequest(bounds, NotationPackage.Literals.SIZE__WIDTH, newBounds.getWidth());
-		final SetRequest setHeightRequest = new SetRequest(bounds, NotationPackage.Literals.SIZE__HEIGHT, newBounds.getHeight());
-
+		final SetRequest setXRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__X,
+				(int) newBounds.getX());
+		final SetRequest setYRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__Y,
+				(int) newBounds.getY());
+		final SetRequest setWidthRequest = new SetRequest(bounds, NotationPackage.Literals.SIZE__WIDTH,
+				(int) newBounds.getWidth());
+		final SetRequest setHeightRequest = new SetRequest(bounds, NotationPackage.Literals.SIZE__HEIGHT,
+				(int) newBounds.getHeight());
 
 		final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(bounds);
 		if (provider != null) {
@@ -186,7 +187,8 @@ public class ResizeOnDragHandler extends AbstractMultiSelectionDragHandler imple
 			resizeCommand.add(provider.getEditCommand(setWidthRequest));
 			resizeCommand.add(provider.getEditCommand(setHeightRequest));
 
-			AdapterFactoryEditingDomain.getEditingDomainFor(bounds).getCommandStack().execute(new GMFtoEMFCommandWrapper(resizeCommand));
+			AdapterFactoryEditingDomain.getEditingDomainFor(bounds).getCommandStack()
+					.execute(new GMFtoEMFCommandWrapper(resizeCommand));
 		}
 
 		boundsModel.removeManagedElement(getPrimaryHost());

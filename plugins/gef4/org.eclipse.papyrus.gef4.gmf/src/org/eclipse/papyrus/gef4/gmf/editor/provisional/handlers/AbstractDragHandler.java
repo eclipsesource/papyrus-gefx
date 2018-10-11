@@ -11,7 +11,7 @@
  *
  *****************************************************************************/
 
-package org.eclipse.papyrus.gef4.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
 
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;

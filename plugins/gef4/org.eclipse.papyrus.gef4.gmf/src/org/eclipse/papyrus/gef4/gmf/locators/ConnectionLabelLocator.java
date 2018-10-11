@@ -10,7 +10,7 @@
  *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.layout;
+package org.eclipse.papyrus.gef4.gmf.locators;
 
 import java.util.LinkedList;
 import java.util.Map;

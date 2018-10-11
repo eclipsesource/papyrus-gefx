@@ -15,8 +15,8 @@ package org.eclipse.papyrus.uml.gefdiag.composite.module;
 import java.util.Optional;
 
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.locators.BorderItemLocator;
 import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
-import org.eclipse.papyrus.gef4.layout.BorderItemLocator;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;

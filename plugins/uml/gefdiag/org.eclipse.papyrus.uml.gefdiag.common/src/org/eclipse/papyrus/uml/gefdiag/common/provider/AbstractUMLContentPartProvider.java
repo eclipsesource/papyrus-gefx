@@ -31,7 +31,7 @@ public abstract class AbstractUMLContentPartProvider extends AbstractContentPart
 		case "DynamicStereotypeLabel":
 			return new StereotypeLabelContentPart(view);
 		case "compartment_shape_display":
-			return new EmptyContentPart(view);
+			return new EmptyContentPart<>(view);
 		}
 		return null;
 	}

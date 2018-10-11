@@ -10,7 +10,7 @@
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.utils;
+package org.eclipse.papyrus.gef4.gmf.utils;
 
 import java.util.ArrayList;
 import java.util.List;

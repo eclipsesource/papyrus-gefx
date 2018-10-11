@@ -25,6 +25,7 @@ import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef.mvc.fx.behaviors.AbstractBehavior;
+import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
@@ -32,6 +33,12 @@ import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.AffixedLabelMoveOnDragHandler;
+import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.CollapseOnClickHandler;
+import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.MoveOnDragHandler;
+import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.ResizeOnDragHandler;
+import org.eclipse.papyrus.gef4.gmf.locators.AffixedLabelLocator;
+import org.eclipse.papyrus.gef4.gmf.locators.ConnectionLabelLocator;
 import org.eclipse.papyrus.gef4.gmf.module.anchors.RatioAnchorProvider;
 import org.eclipse.papyrus.gef4.gmf.parts.ConnectorContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.FloatingLabelContentPart;
@@ -52,8 +59,7 @@ import org.eclipse.papyrus.gef4.gmf.style.NotationStyleService;
 import org.eclipse.papyrus.gef4.gmf.style.ShapeStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.utils.AdapterUtil;
 import org.eclipse.papyrus.gef4.gmf.utils.GMFPartUtil;
-import org.eclipse.papyrus.gef4.layout.AffixedLabelLocator;
-import org.eclipse.papyrus.gef4.layout.ConnectionLabelLocator;
+import org.eclipse.papyrus.gef4.handle.CollapseHandlePart;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.module.AdapterRoles;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
@@ -123,6 +129,12 @@ public abstract class GMFModule extends AbstractModule {
 		bindContentChildrenProvider();
 
 		configureLocators();
+
+		bindPrimaryPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IPrimaryContentPart.class));
+		// define specific policy for affixed Label
+		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
+		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractHandlePart.class));
+		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
 	}
 
 	private void bindContentChildrenProvider() {
@@ -295,31 +307,19 @@ public abstract class GMFModule extends AbstractModule {
 	@Provides
 	@PartScoped
 	protected View getView(Diagram diagram) {
-		return diagram; // Scoped value; See PartScope
+		return diagram; // Scoped value; See PartScope //TODO Rename ViewScope
 	}
 
-	private int partsNumber;
-	private long totalPartsCreationTime;
-
 	@Provides
-	@PartScoped
+	@PartScoped // TODO Rename ViewScope
 	IContentPart<?> createPart(View view, IContentPartProvider<View> provider, Injector injector) {
-		long begin = System.nanoTime();
 		IContentPart<?> contentPart = provider.createContentPart(view);
 		if (contentPart == null) {
 			System.err.println("Unable to create a part for View: " + view.getType());
 			return null;
 		}
+		// TODO Initialize part scope before injecting the part
 		injector.injectMembers(contentPart);
-		long end = System.nanoTime();
-		partsNumber++;
-		totalPartsCreationTime += end - begin;
-
-//		System.out.println("---");
-//		System.out.println("Parts: " + partsNumber);
-//		System.out.println("Time: " + TimeUnit.NANOSECONDS.toMicros(end - begin) + " µs");
-//		System.out.println("AvgTime: " + TimeUnit.NANOSECONDS.toMicros(totalPartsCreationTime / partsNumber) + " µs");
-//		System.out.println("Total time: " + TimeUnit.NANOSECONDS.toMillis(totalPartsCreationTime) + "ms");
 		return contentPart;
 	}
 
@@ -407,6 +407,30 @@ public abstract class GMFModule extends AbstractModule {
 			}
 			return false;
 		};
+	}
+
+	protected void bindPrimaryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveOnDragHandler.class);
+	}
+
+	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
+				.to(AffixedLabelMoveOnDragHandler.class);
+	}
+
+	protected void bindCollapseHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CollapseOnClickHandler.class);
+	}
+
+	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragHandler.class); // FIXME this shouldn't be
+																								// installed on all
+																								// handle parts (e.g.
+																								// this will be
+																								// installed on
+																								// connection's
+																								// bendpoints and
+																								// anchors)
 	}
 
 	protected abstract void bindIContentPartProvider();

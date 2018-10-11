@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
+ * Copyright (c) 2015 - 2018 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,30 +8,24 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  EclipseSource
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.utils;
 
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gmf.runtime.notation.DrawerStyle;
-import org.eclipse.gmf.runtime.notation.NotationPackage;
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
+import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 
 import javafx.scene.Node;
 
 /**
- * List of utility methods related to GMF Compartments
- *
- * @author Camille Letavernier
+ * List of utility methods related to Compartments
  *
  */
 public class CompartmentUtils {
 
 	/**
-	 * Returns the nearest ContentPart representing a CollapsablePart {@link DrawerStyle}
-	 *
-	 * Since DecorationNodes are sometimes used as Compartments,
+	 * Returns the nearest ContentPart representing a Collapsable Part
 	 *
 	 * @param currentPart
 	 * @return
@@ -39,13 +33,7 @@ public class CompartmentUtils {
 	public static IVisualPart<? extends Node> getCollapsablePart(IVisualPart<? extends Node> currentPart) {
 		IVisualPart<? extends Node> part = currentPart;
 		while (part != null) {
-			View notationModel = NotationHelper.findView(currentPart);
-			if (notationModel == null) {
-				part = part.getParent();
-				continue;
-			}
-
-			if (notationModel.getStyle(NotationPackage.eINSTANCE.getDrawerStyle()) != null) {
+			if (part instanceof CompartmentContentPart) {
 				return part;
 			}
 

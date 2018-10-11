@@ -10,7 +10,7 @@
  *  Camille Letavernier (EclipseSource) cletavernier@eclipsesource.com - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
 
 import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;

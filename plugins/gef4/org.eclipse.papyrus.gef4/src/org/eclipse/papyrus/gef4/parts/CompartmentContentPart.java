@@ -17,7 +17,6 @@ import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.services.HelperProvider;
@@ -25,7 +24,6 @@ import org.eclipse.papyrus.gef4.services.style.CompartmentStyleService;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.FXUtils;
-import org.eclipse.papyrus.gef4.utils.VisualPartUtil;
 
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -66,7 +64,7 @@ import javafx.util.Duration;
  * @param <V>The
  *            kind of notation::View (Extending DecorationNode)
  * @param
- * 			<P>
+ * 		<P>
  *            The concrete Pane type
  */
 abstract public class CompartmentContentPart<MODEL, P extends Pane> extends ContainerContentPart<MODEL, VBox> {
@@ -118,7 +116,7 @@ abstract public class CompartmentContentPart<MODEL, P extends Pane> extends Cont
 		VBox.setVgrow(wrapper, Priority.ALWAYS);
 
 		// Set stylesheet to hide viewport child which can't
-		scrollPane.getStylesheets().add(URI.createPlatformPluginURI(VisualPartUtil.VIEWPORT_SCROLL_PANE_STYLE, false).toPlatformString(false));
+		scrollPane.getStylesheets().add(CompartmentContentPart.class.getResource("scrollPane.css").toExternalForm());
 
 		wrapper.getChildren().addAll(titleLabel, scrollPane);
 
@@ -409,6 +407,10 @@ abstract public class CompartmentContentPart<MODEL, P extends Pane> extends Cont
 			return;
 		}
 		compartment.getChildren().remove(childVisual);
+	}
+
+	public boolean isCollapsed() {
+		return compartmentStyleService.isCollapsed();
 	}
 
 }

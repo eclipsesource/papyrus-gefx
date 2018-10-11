@@ -38,6 +38,7 @@ public class BoundsUtil {
 	 *            the host
 	 * @return the absolute x
 	 */
+	// FIXME Use JavaFX Conversions; don't try to translate manually
 	public static final int getAbsoluteX(final IVisualPart<?> host) {
 
 		int x = (int) ((Node) host.getVisual()).getLayoutX();
@@ -59,6 +60,7 @@ public class BoundsUtil {
 	 *            the host
 	 * @return the absolute y
 	 */
+	// FIXME Use JavaFX Conversion; don't try to translate manually
 	public static final int getAbsoluteY(final IVisualPart<?> host) {
 
 		int y = (int) ((Node) host.getVisual()).getLayoutY();

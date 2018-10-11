@@ -10,10 +10,13 @@
  *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.fx.core.log.Logger;
+import org.eclipse.fx.core.log.LoggerCreator;
 import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
@@ -24,7 +27,6 @@ import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
@@ -42,18 +44,18 @@ import javafx.scene.input.MouseEvent;
  */
 public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHandler implements IOnDragHandler {
 
+	static Logger logger = LoggerCreator.createLogger(AffixedLabelMoveOnDragHandler.class);
+
 	/**
 	 * Called on Drag.
 	 *
-	 * @param e
-	 *            the e
-	 * @param delta
-	 *            the delta
-	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#drag(javafx.scene.input.MouseEvent, org.eclipse.gef4.geometry.planar.Dimension)
+	 * @param e     the e
+	 * @param delta the delta
+	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#drag(javafx.scene.input.MouseEvent,
+	 *      org.eclipse.gef4.geometry.planar.Dimension)
 	 */
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
-
 
 		propagate(e, delta, policy -> policy.drag(e, delta));
 
@@ -72,7 +74,7 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 
 		final Node visual = getPrimaryHost().getVisual();
 
-		final Bounds newBounds = NotationFactory.eINSTANCE.createBounds();
+		final Rectangle newBounds = new Rectangle();
 
 		newBounds.setX(newLocation.getX());
 		newBounds.setY(newLocation.getY());
@@ -83,13 +85,10 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 		boundsModel.addManagedElement(getPrimaryHost(), newBounds);
 	}
 
-
-
 	/**
 	 * Called on Press.
 	 *
-	 * @param e
-	 *            the e
+	 * @param e the e
 	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#press(javafx.scene.input.MouseEvent)
 	 */
 	@Override
@@ -100,8 +99,7 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 	/**
 	 * coverte the position from double to pixels.
 	 *
-	 * @param pos
-	 *            the pos
+	 * @param pos the pos
 	 * @return the int
 	 */
 	protected final int toPixels(final double pos) {
@@ -111,11 +109,10 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 	/**
 	 * Called on Release.
 	 *
-	 * @param e
-	 *            the e
-	 * @param delta
-	 *            the delta
-	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#release(javafx.scene.input.MouseEvent, org.eclipse.gef4.geometry.planar.Dimension)
+	 * @param e     the e
+	 * @param delta the delta
+	 * @see org.eclipse.gef4.mvc.fx.policies.AbstractFXOnDragPolicy#release(javafx.scene.input.MouseEvent,
+	 *      org.eclipse.gef4.geometry.planar.Dimension)
 	 */
 	@Override
 	public void endDrag(final MouseEvent e, final Dimension delta) {
@@ -133,13 +130,15 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 			location = NotationFactory.eINSTANCE.createLocation();
 			final View hostView = NotationHelper.findView(getHost());
 			if (hostView instanceof org.eclipse.gmf.runtime.notation.Node) {
-				final SetRequest setRequest = new SetRequest(hostView, NotationPackage.Literals.NODE__LAYOUT_CONSTRAINT, location);
+				final SetRequest setRequest = new SetRequest(hostView, NotationPackage.Literals.NODE__LAYOUT_CONSTRAINT,
+						location);
 
 				final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(hostView);
 				if (provider != null) {
 					final CompositeCommand command = new CompositeCommand("Create Constraint");
 					command.add(provider.getEditCommand(setRequest));
-					AdapterFactoryEditingDomain.getEditingDomainFor(hostView).getCommandStack().execute(new GMFtoEMFCommandWrapper(command));
+					AdapterFactoryEditingDomain.getEditingDomainFor(hostView).getCommandStack()
+							.execute(new GMFtoEMFCommandWrapper(command));
 				}
 
 			}
@@ -151,8 +150,10 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 			return;
 		}
 
-		final SetRequest setXRequest = new SetRequest(location, NotationPackage.Literals.LOCATION__X, newLocation.getX());
-		final SetRequest setYRequest = new SetRequest(location, NotationPackage.Literals.LOCATION__Y, newLocation.getY());
+		final SetRequest setXRequest = new SetRequest(location, NotationPackage.Literals.LOCATION__X,
+				newLocation.getX());
+		final SetRequest setYRequest = new SetRequest(location, NotationPackage.Literals.LOCATION__Y,
+				newLocation.getY());
 
 		final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(location);
 		if (provider != null) {
@@ -160,17 +161,16 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 			moveCommand.add(provider.getEditCommand(setXRequest));
 			moveCommand.add(provider.getEditCommand(setYRequest));
 
-			AdapterFactoryEditingDomain.getEditingDomainFor(location).getCommandStack().execute(new GMFtoEMFCommandWrapper(moveCommand));
+			AdapterFactoryEditingDomain.getEditingDomainFor(location).getCommandStack()
+					.execute(new GMFtoEMFCommandWrapper(moveCommand));
 		}
 
 		try {
 			boundsModel.removeManagedElement(getPrimaryHost());
 		} catch (final Exception ex) {
-			Activator.error(ex);
+			logger.error(ex.getMessage(), ex);
 		}
 	}
-
-
 
 	@Override
 	public void abortDrag() {
@@ -185,10 +185,8 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 	/**
 	 * Compute new location.
 	 *
-	 * @param currentLocation
-	 *            the current location
-	 * @param delta
-	 *            the delta
+	 * @param currentLocation the current location
+	 * @param delta           the delta
 	 * @return the location
 	 */
 	protected Location computeNewLocation(final Location currentLocation, final Dimension delta) {
@@ -207,7 +205,6 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 
 		newLocation.setX(currentLocation.getX() + xOffset);
 		newLocation.setY(currentLocation.getY() + yOffset);
-
 
 		return newLocation;
 	}
@@ -246,21 +243,15 @@ public class AffixedLabelMoveOnDragHandler extends AbstractMultiSelectionDragHan
 
 	}
 
-
-
 	@Override
 	public void hideIndicationCursor() {
 		// Nothing
 	}
 
-
-
 	@Override
 	public boolean showIndicationCursor(KeyEvent event) {
 		return false;
 	}
-
-
 
 	@Override
 	public boolean showIndicationCursor(MouseEvent event) {

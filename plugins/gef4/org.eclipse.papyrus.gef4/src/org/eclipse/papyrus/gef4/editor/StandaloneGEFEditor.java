@@ -12,8 +12,6 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.editor;
 
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.papyrus.gef4.module.GEFFxModule;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -22,8 +20,6 @@ import org.eclipse.ui.PartInitException;
 import com.google.inject.Module;
 
 public abstract class StandaloneGEFEditor<MODEL> extends GEFEditor<MODEL> {
-
-	private ResourceSet resourceSet;
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
@@ -40,17 +36,5 @@ public abstract class StandaloneGEFEditor<MODEL> extends GEFEditor<MODEL> {
 	}
 
 	protected abstract MODEL getDiagramRoot(IEditorInput input);
-
-	protected ResourceSet createResourceSet() {
-		TransactionalEditingDomain editingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
-		return editingDomain.getResourceSet();
-	}
-
-	protected ResourceSet getResourceSet() {
-		if (resourceSet == null) {
-			resourceSet = createResourceSet();
-		}
-		return resourceSet;
-	}
 
 }

@@ -10,10 +10,13 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
 
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.fx.core.log.Logger;
+import org.eclipse.fx.core.log.LoggerCreator;
 import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
@@ -21,10 +24,8 @@ import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
-import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.Activator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
@@ -40,6 +41,8 @@ import javafx.scene.input.MouseEvent;
 
 public class MoveOnDragHandler extends AbstractMultiSelectionDragHandler implements IOnDragHandler {
 
+	static final Logger logger = LoggerCreator.createLogger(MoveOnDragHandler.class);
+
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
 
@@ -50,7 +53,7 @@ public class MoveOnDragHandler extends AbstractMultiSelectionDragHandler impleme
 		propagate(e, delta, policy -> policy.drag(e, delta));
 
 		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
-		final Bounds newBounds = computeNewBounds(getBounds(), delta);
+		final Rectangle newBounds = computeNewBounds(getBounds(), delta);
 
 		if (null != newBounds) {
 			boundsModel.addManagedElement(getPrimaryHost(), newBounds);
@@ -82,7 +85,7 @@ public class MoveOnDragHandler extends AbstractMultiSelectionDragHandler impleme
 
 		final Bounds bounds = getBounds();
 
-		final Bounds newBounds = computeNewBounds(bounds, delta);
+		final Rectangle newBounds = computeNewBounds(bounds, delta);
 		if (bounds == null || newBounds == null) {
 			IVisualPart<? extends Node> primaryHost = getPrimaryHost();
 			if (boundsModel.getManagedElements().containsKey(primaryHost)) {
@@ -91,8 +94,10 @@ public class MoveOnDragHandler extends AbstractMultiSelectionDragHandler impleme
 			return;
 		}
 
-		final SetRequest setXRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__X, newBounds.getX());
-		final SetRequest setYRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__Y, newBounds.getY());
+		final SetRequest setXRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__X,
+				(int) newBounds.getX());
+		final SetRequest setYRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__Y,
+				(int) newBounds.getY());
 
 		final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(bounds);
 		if (provider != null) {
@@ -100,13 +105,14 @@ public class MoveOnDragHandler extends AbstractMultiSelectionDragHandler impleme
 			moveCommand.add(provider.getEditCommand(setXRequest));
 			moveCommand.add(provider.getEditCommand(setYRequest));
 
-			AdapterFactoryEditingDomain.getEditingDomainFor(bounds).getCommandStack().execute(new GMFtoEMFCommandWrapper(moveCommand));
+			AdapterFactoryEditingDomain.getEditingDomainFor(bounds).getCommandStack()
+					.execute(new GMFtoEMFCommandWrapper(moveCommand));
 		}
 
 		try {
 			boundsModel.removeManagedElement(getPrimaryHost());
 		} catch (final Exception ex) {
-			Activator.error(ex);
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -119,17 +125,18 @@ public class MoveOnDragHandler extends AbstractMultiSelectionDragHandler impleme
 	}
 
 	protected boolean isSelected() {
-		// Since Bug 484690, the entire hierarchy of parts will receive the event. Filter on selected elements
+		// Since Bug 484690, the entire hierarchy of parts will receive the event.
+		// Filter on selected elements
 		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 		return selectionModel.getSelectionUnmodifiable().contains(getHost());
 	}
 
-	protected Bounds computeNewBounds(final Bounds currentBounds, final Dimension delta) {
+	protected Rectangle computeNewBounds(final Bounds currentBounds, final Dimension delta) {
 		if (currentBounds == null || delta == null) {
 			return null;
 		}
 
-		final Bounds newBounds = NotationFactory.eINSTANCE.createBounds();
+		final Rectangle newBounds = new Rectangle();
 
 		final int xOffset = toPixels(delta.getWidth());
 		final int yOffset = toPixels(delta.getHeight());

@@ -19,7 +19,7 @@ import org.eclipse.gef.geometry.planar.IGeometry;
 import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.geometry.planar.Polyline;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.papyrus.gef4.layout.BorderItemLocator;
+import org.eclipse.papyrus.gef4.gmf.locators.BorderItemLocator;
 
 import javafx.geometry.Bounds;
 

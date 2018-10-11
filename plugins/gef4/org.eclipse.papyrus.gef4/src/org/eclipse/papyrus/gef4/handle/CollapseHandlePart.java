@@ -14,11 +14,8 @@ package org.eclipse.papyrus.gef4.handle;
 
 import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gmf.runtime.notation.DrawerStyle;
-import org.eclipse.gmf.runtime.notation.NotationPackage;
-import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.utils.CompartmentUtils;
-import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 
 import com.google.common.collect.SetMultimap;
 
@@ -83,18 +80,13 @@ public class CollapseHandlePart extends AbstractHandlePart<StackPane> {
 		// Get the parent compartment
 		final IVisualPart<?> compartment = CompartmentUtils.getCollapsablePart(anchorage);
 
-		// FIXME: Use the notation model rather than the ContentPart
-		if (null != compartment) {
-			View view = NotationHelper.findView(compartment);
-			DrawerStyle style = (DrawerStyle) view.getStyle(NotationPackage.eINSTANCE.getDrawerStyle());
+		if (compartment instanceof CompartmentContentPart) {
+
+			boolean isCollapsed = ((CompartmentContentPart<?, ?>) compartment).isCollapsed();
 
 			getVisual().getChildren().clear();
 
-			if (style == null) {
-				return;
-			}
-
-			if (style.isCollapsed()) {
+			if (isCollapsed) {
 				Group group = new Group();
 				group.getChildren().add(new Line(0, 2, 4, 2)); // Horizontal
 				Line e = new Line(2, 0, 2, 4); // Vertical
