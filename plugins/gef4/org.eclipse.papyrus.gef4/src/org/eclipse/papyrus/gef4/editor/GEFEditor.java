@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
+import org.eclipse.papyrus.gef4.style.GEFStyle;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -178,6 +179,7 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 		diagramSplitPane.getItems().add(viewer.getCanvas());
 
 		scene = new Scene(rootPane);
+		scene.getStylesheets().add(GEFStyle.class.getResource("gefx.css").toExternalForm());
 
 		// Set contents
 		viewer.getContents().setAll(getContents());

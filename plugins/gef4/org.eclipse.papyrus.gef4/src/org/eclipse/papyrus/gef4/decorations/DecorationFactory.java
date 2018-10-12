@@ -12,8 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.decorations;
 
+import javafx.scene.Node;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Shape;
 
 
 public interface DecorationFactory {
@@ -34,18 +34,18 @@ public interface DecorationFactory {
 
 	DecorationFactory instance = new DecorationFactoryImpl();
 
-	Shape createOpenArrow();
+	Node createOpenArrow();
 
-	Shape createClosedArrow();
+	Node createClosedArrow();
 
-	Shape createEmptyDiamond();
+	Node createEmptyDiamond();
 
-	Shape createFullDiamond();
+	Node createFullDiamond();
 
-	Shape createDiamond(Paint stroke, Paint fill);
+	Node createDiamond(Paint stroke, Paint fill);
 
-	Shape createCircle();
+	Node createCircle();
 
-	Shape createCrossCircle();
+	Node createCrossCircle();
 
 }

@@ -30,6 +30,7 @@ import org.eclipse.papyrus.gef4.services.LabelService;
 import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
 import org.eclipse.papyrus.uml.gefdiag.common.services.UMLImageService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.CommentLabelService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.GeneralizationLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.NamedElementLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.OperationLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.PropertyLabelService;
@@ -90,8 +91,11 @@ public abstract class UMLDiagramModule extends GMFModule {
 		// Named element
 		labelProviders.addBinding().toInstance(new NamedElementLabelService(DEFAULT_UML_PRIORITY));
 
-		// Comments
+		// Comment
 		labelProviders.addBinding().toInstance(new CommentLabelService(DEFAULT_UML_PRIORITY));
+
+		// Generalization
+		labelProviders.addBinding().toInstance(new GeneralizationLabelService(DEFAULT_UML_PRIORITY));
 
 
 		//
@@ -108,6 +112,7 @@ public abstract class UMLDiagramModule extends GMFModule {
 
 		// Operation
 		labelProviders.addBinding().toInstance(new OperationLabelService(SPECIFIC_NAMED_ELEMENTS_PRIORITY));
+
 	}
 
 	protected void bindLabelPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {

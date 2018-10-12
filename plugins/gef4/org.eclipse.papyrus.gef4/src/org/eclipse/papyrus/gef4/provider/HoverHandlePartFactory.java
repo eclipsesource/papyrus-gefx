@@ -26,12 +26,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
-import javafx.scene.Node;
-
-/**
- * @author camille
- *
- */
 @Singleton
 public class HoverHandlePartFactory implements IHandlePartFactory {
 
@@ -41,14 +35,13 @@ public class HoverHandlePartFactory implements IHandlePartFactory {
 	private Injector injector;
 
 	@Override
-	public List<IHandlePart<?>> createHandleParts(List<? extends IVisualPart<? extends Node>> targets, Map<Object, Object> contextMap) {
+	public List<IHandlePart<?>> createHandleParts(List<? extends IVisualPart<?>> targets, Map<Object, Object> contextMap) {
 		if (targets.isEmpty()) {
 			return Collections.emptyList();
 		}
 
 		IVisualPart<?> target = targets.get(0);
-		IHandlePartProvider handleProvider = target.getAdapter(
-				AdapterKey.get(IHandlePartProvider.class, ROLE));
+		IHandlePartProvider handleProvider = target.getAdapter(AdapterKey.get(IHandlePartProvider.class, ROLE));
 
 		if (handleProvider == null) {
 			return Collections.emptyList();

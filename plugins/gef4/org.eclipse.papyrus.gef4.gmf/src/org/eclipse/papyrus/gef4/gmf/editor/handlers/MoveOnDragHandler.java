@@ -10,7 +10,7 @@
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.handlers;
 
 import java.util.List;
 
@@ -25,7 +25,6 @@ import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
-import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveHandler;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 
@@ -42,6 +41,10 @@ public class MoveOnDragHandler extends AbstractHandler implements IOnDragHandler
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
+		// FIXME Take host transformations into account (esp. scale)
+		if (e.isStillSincePress()) {
+			return;
+		}
 		if (!isSelected()) {
 			return;
 		}
@@ -64,6 +67,10 @@ public class MoveOnDragHandler extends AbstractHandler implements IOnDragHandler
 
 	@Override
 	public void endDrag(final MouseEvent e, final Dimension delta) {
+		// FIXME Take host transformations into account (esp. scale)
+		if (e.isStillSincePress()) {
+			return;
+		}
 		final SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		List<IContentPart<? extends Node>> selection = selectionModel.getSelectionUnmodifiable();

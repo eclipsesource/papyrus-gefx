@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
+ * Copyright (c) 2018 EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,10 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  EclipseSource - Initial API and implementation
  *
  *****************************************************************************/
-package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.handlers;
 
 import java.util.List;
 
@@ -26,7 +26,8 @@ import org.eclipse.gef.mvc.fx.parts.AbstractSegmentHandlePart;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
-import org.eclipse.papyrus.gef4.gmf.editor.handlers.ResizeHandler;
+import org.eclipse.papyrus.gef4.handle.Direction;
+import org.eclipse.papyrus.gef4.handle.ResizeHandlePart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 
@@ -44,6 +45,9 @@ public class ResizeOnDragHandler extends AbstractHandler implements IOnDragHandl
 
 	@Override
 	public void drag(final MouseEvent e, final Dimension delta) {
+		if (e.isStillSincePress()) {
+			return;
+		}
 		final SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		List<IContentPart<? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
@@ -55,13 +59,23 @@ public class ResizeOnDragHandler extends AbstractHandler implements IOnDragHandl
 		}
 	}
 
-	protected int getAnchorDirection() {
+	protected Direction getAnchorDirection() {
 		if (getHost() instanceof AbstractSegmentHandlePart) {
-			// FIXME Direction should be more explicit than the handler index
-			return ((AbstractSegmentHandlePart<?>) getHost()).getSegmentIndex();
+			switch (((AbstractSegmentHandlePart<?>) getHost()).getSegmentIndex()) {
+			case 0:
+				return Direction.NORTH_WEST;
+			case 1:
+				return Direction.NORTH_EAST;
+			case 2:
+				return Direction.SOUTH_EAST;
+			case 3:
+				return Direction.SOUTH_WEST;
+			}
+		} else if (getHost() instanceof ResizeHandlePart) {
+			return ((ResizeHandlePart) getHost()).getResizeDirection();
 		}
 
-		return -1;
+		return null;
 	}
 
 	@Override
@@ -71,6 +85,9 @@ public class ResizeOnDragHandler extends AbstractHandler implements IOnDragHandl
 
 	@Override
 	public void endDrag(final MouseEvent e, final Dimension delta) {
+		if (e.isStillSincePress()) {
+			return;
+		}
 		final SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
 		List<IContentPart<? extends Node>> selection = selectionModel.getSelectionUnmodifiable();
@@ -147,14 +164,22 @@ public class ResizeOnDragHandler extends AbstractHandler implements IOnDragHandl
 
 	private Cursor getCursor() {
 		switch (getAnchorDirection()) {
-		case ResizeHandler.NORTH_EAST:
-			return Cursor.NE_RESIZE;
-		case ResizeHandler.NORTH_WEST:
+		case NORTH:
+			return Cursor.N_RESIZE;
+		case SOUTH:
+			return Cursor.S_RESIZE;
+		case EAST:
+			return Cursor.E_RESIZE;
+		case WEST:
+			return Cursor.W_RESIZE;
+		case NORTH_WEST:
 			return Cursor.NW_RESIZE;
-		case ResizeHandler.SOUTH_EAST:
-			return Cursor.SE_RESIZE;
-		case ResizeHandler.SOUTH_WEST:
+		case NORTH_EAST:
+			return Cursor.NE_RESIZE;
+		case SOUTH_WEST:
 			return Cursor.SW_RESIZE;
+		case SOUTH_EAST:
+			return Cursor.SE_RESIZE;
 		default:
 			return Cursor.DEFAULT;
 		}

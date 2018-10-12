@@ -97,10 +97,6 @@ public abstract class AbstractNotationStyleService extends AbstractActivatable {
 					// FIXME move to Content Adapter
 					getPart().updateContentChildren();
 				}
-				// FIXME: Do not refresh immediately. If we use a ThreadSafeDiagramEventBroker,
-				// this will happen synchronously
-				// (The command execution will not complete until the view is fully refreshed)
-				// Rather mark the view as "needing refresh" and schedule a refresh runnable
 				getPart().refreshVisual();
 			}
 		};

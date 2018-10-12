@@ -121,11 +121,11 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 
 	protected void refreshDecorations() {
 		String sourceDecorationName = getEdgeStyleService().getSourceDecoration();
-		Shape sourceDecoration = getDecoration(sourceDecorationName);
+		Node sourceDecoration = getDecoration(sourceDecorationName);
 		connection.setStartDecoration(sourceDecoration);
 
 		String targetDecorationName = getEdgeStyleService().getTargetDecoration();
-		Shape targetDecoration = getDecoration(targetDecorationName);
+		Node targetDecoration = getDecoration(targetDecorationName);
 		connection.setEndDecoration(targetDecoration);
 
 		// connection.getCurveNode().setStrokeWidth(1);
@@ -134,15 +134,23 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 		// TODO Implement IFXDecoration (Arrow, Circle, ...)
 	}
 
-	protected Shape getDecoration(String name) {
+	protected Node getDecoration(String name) {
 		switch (name) {
 		case DecorationFactory.BLACK_ARROW:
-			Shape blackArrow = DecorationFactory.instance.createClosedArrow();
-			blackArrow.setFill(Color.BLACK);
+			// FIXME Since we now use Node instead of Shapes, it's harder to customize colors
+			// We should pass the colors to the DecorationFactory directly
+			Node blackArrow = DecorationFactory.instance.createClosedArrow();
+			if (blackArrow instanceof Shape) {
+				((Shape) blackArrow).setFill(Color.BLACK);
+			}
 			return blackArrow;
 		case DecorationFactory.WHITE_ARROW:
-			Shape whiteArrow = DecorationFactory.instance.createClosedArrow();
-			whiteArrow.setFill(Color.WHITE);
+			// FIXME Since we now use Node instead of Shapes, it's harder to customize colors
+			// We should pass the colors to the DecorationFactory directly
+			Node whiteArrow = DecorationFactory.instance.createClosedArrow();
+			if (whiteArrow instanceof Shape) {
+				((Shape) whiteArrow).setFill(Color.WHITE);
+			}
 			return whiteArrow;
 		case DecorationFactory.OPEN_ARROW:
 			return DecorationFactory.instance.createOpenArrow();

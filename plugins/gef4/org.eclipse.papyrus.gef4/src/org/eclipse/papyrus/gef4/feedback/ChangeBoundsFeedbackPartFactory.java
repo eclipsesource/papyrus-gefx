@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
+ * Copyright (c) 2018 EclipseSource.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  EclipseSource - Initial API and implementation
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.feedback;
@@ -24,20 +24,19 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
-import javafx.scene.Node;
-
-public class BoundsFeedbackPartFactory implements IFeedbackPartFactory {
+public class ChangeBoundsFeedbackPartFactory implements IFeedbackPartFactory {
 
 	@Inject
 	private Injector injector;
 
 	@Override
-	public List<IFeedbackPart<? extends Node>> createFeedbackParts(List<? extends IVisualPart<? extends Node>> targets, Map<Object, Object> contextMap) {
-		List<IFeedbackPart<? extends Node>> result = new ArrayList<>(targets.size());
+	public List<IFeedbackPart<?>> createFeedbackParts(List<? extends IVisualPart<?>> targets, Map<Object, Object> contextMap) {
+		assert targets.size() == 1 : "ChangeBounds Feedback must be installed separately on each part";
 
-		for (IVisualPart<? extends Node> target : targets) {
+		List<IFeedbackPart<?>> result = new ArrayList<>(targets.size());
+		for (IVisualPart<?> target : targets) {
 			Rectangle newBounds = (Rectangle) contextMap.get(target);
-			BoundsFeedbackPart boundsFeedbackPart = new BoundsFeedbackPart(target, newBounds);
+			ChangeBoundsFeedbackPart boundsFeedbackPart = new ChangeBoundsFeedbackPart(newBounds);
 			injector.injectMembers(boundsFeedbackPart);
 			result.add(boundsFeedbackPart);
 		}

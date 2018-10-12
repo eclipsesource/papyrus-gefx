@@ -1,8 +1,26 @@
+/**
+ * Base Papyrus/UML Stylesheet
+ * 
+ * FIXME: Remove UML-specific rules
+ */
+
 /* ==== Default values ==== */
 Compartment{
 	borderWidth: 1 0 0 0;
 	borderColor: black;
 	padding : 3 5 3 5;
+}
+
+[kind=FloatingLabel]{
+    visible:false;
+    textOverflow:visible;
+}
+
+/*==== TODO put on a umlBase.css in uml.gefdiag==== */
+
+Port{
+	minWidth:20;
+	minHeight:20;
 }
 
 Package,
@@ -33,17 +51,8 @@ Comment{
 	shapeType:cornerBendRectangle;
 }
 
-[kind=FloatingLabel]{
-    visible:false;
-    textOverflow:visible;
-}
+/** TODO Move to ClassDiagram  */
 
-Port{
-	minWidth:20;
-	minHeight:20;
-}
-
-/*==== TODO put on a umlBase.css ====*/
 ClassDiagram [isActive=true]{
 	borderStyle: solid double solid double;
 	doubleBorderWidth: 5;
@@ -74,4 +83,3 @@ ClassDiagram RedefinableTemplateSignature{
    minWidth:20;
    minHeight:20;
 }
-

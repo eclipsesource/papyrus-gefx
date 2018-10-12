@@ -1,136 +1,147 @@
+/*****************************************************************************
+ * Copyright (c) 2018 EclipseSource and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *  EclipseSource - Initial API and implementation
+ *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.editor.handlers;
 
+import javax.inject.Inject;
+
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.fx.core.log.Logger;
 import org.eclipse.fx.core.log.LoggerCreator;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
+import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
-import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
+import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
-import org.eclipse.gmf.runtime.notation.NotationPackage;
+import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.handle.Direction;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
-import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
-import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
 
+import javafx.geometry.BoundingBox;
 import javafx.scene.Node;
 
 public class ResizeNodeHandler extends AbstractHandler implements ResizeHandler {
 
 	private static Logger logger = LoggerCreator.createLogger(ResizeNodeHandler.class);
 
+	@Inject
+	TransactionalEditingDomain editingDomain;
+
 	@Override
-	public ICommand resize(Dimension delta, int direction) {
-		final Bounds bounds = getBounds();
-		if (bounds == null) {
-			return null;
-		}
+	public ICommand resize(Dimension delta, Direction direction) {
+		Rectangle boundsInParent = computeNewBoundsInParent(delta, direction);
 
-		final Rectangle newBounds = computeNewBounds(bounds, delta, direction);
+		// FIXME GMF's SetBoundsCommand can't be reused here because it depends on GEF
+		// Legacy. We should add a JavaFX equivalent command
+		AbstractTransactionalCommand setBoundsCommand = new AbstractTransactionalCommand(editingDomain, "Resize node",
+				null) {
 
-		final SetRequest setXRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__X,
-				(int) newBounds.getX());
-		final SetRequest setYRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__Y,
-				(int) newBounds.getY());
-		final SetRequest setWidthRequest = new SetRequest(bounds, NotationPackage.Literals.SIZE__WIDTH,
-				(int) newBounds.getWidth());
-		final SetRequest setHeightRequest = new SetRequest(bounds, NotationPackage.Literals.SIZE__HEIGHT,
-				(int) newBounds.getHeight());
+			@Override
+			protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
+					throws ExecutionException {
+				Bounds bounds = getBounds();
+				if (bounds == null && getHostView() != null) {
+					bounds = NotationFactory.eINSTANCE.createBounds();
+					getHostView().setLayoutConstraint(bounds);
+				}
+				bounds.setX((int) boundsInParent.getX());
+				bounds.setY((int) boundsInParent.getY());
+				bounds.setWidth((int) boundsInParent.getWidth());
+				bounds.setHeight((int) boundsInParent.getHeight());
+				return CommandResult.newOKCommandResult();
+			}
+		};
 
-		final IElementEditService provider = ElementEditServiceUtils.getCommandProvider(bounds);
-		if (provider != null) {
-			final CompositeCommand resizeCommand = new CompositeCommand("Resize element");
-			resizeCommand.add(provider.getEditCommand(setXRequest));
-			resizeCommand.add(provider.getEditCommand(setYRequest));
-			resizeCommand.add(provider.getEditCommand(setWidthRequest));
-			resizeCommand.add(provider.getEditCommand(setHeightRequest));
-
-			return resizeCommand;
-		}
-
-		return null;
+		return setBoundsCommand;
 	}
 
 	@Override
-	public void showFeedback(Dimension delta, int direction) {
+	public void showFeedback(Dimension delta, Direction direction) {
 		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
-		final Rectangle newBounds = computeNewBounds(getBounds(), delta, direction);
+		final Rectangle newBounds = computeNewBoundsInParent(delta, direction);
 		if (newBounds == null) { // If the host element doesn't have bounds (e.g. Connections)
 			return;
 		}
-		boundsModel.addManagedElement(getPrimaryHost(), newBounds);
+		boundsModel.addManagedElement(getHost(), newBounds);
 	}
 
 	@Override
 	public void removeFeedback() {
 		try {
 			final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
-			boundsModel.removeManagedElement(getPrimaryHost());
+			boundsModel.removeManagedElement(getHost());
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
 	}
 
-	protected Rectangle computeNewBounds(final Bounds bounds, final Dimension delta, int direction) {
-		if (bounds == null) {
-			return null;
+	protected Rectangle computeNewBoundsInParent(final Dimension delta, Direction direction) {
+		Node hostVisual = getHost().getVisual();
+		Node parentVisual = hostVisual.getParent();
+		javafx.geometry.Bounds visualBounds = hostVisual.getBoundsInParent();
+		javafx.geometry.Bounds sceneBounds = parentVisual.localToScene(visualBounds);
+
+		final double xOffset = delta.getWidth();
+		final double yOffset = delta.getHeight();
+
+		double x, y, width, height;
+
+		int directionConstant = direction.getPositionConstant();
+		if ((directionConstant & Direction.NORTH_VALUE) == Direction.NORTH_VALUE) {
+			// Resize to North
+			y = sceneBounds.getMinY() + yOffset;
+			height = sceneBounds.getHeight() - yOffset;
+		} else if ((directionConstant & Direction.SOUTH_VALUE) == Direction.SOUTH_VALUE) {
+			// Resize to South
+			y = sceneBounds.getMinY();
+			height = sceneBounds.getHeight() + yOffset;
+		} else {
+			// Horizontal resize
+			y = sceneBounds.getMinY();
+			height = sceneBounds.getHeight();
 		}
+
+		if ((directionConstant & Direction.EAST_VALUE) == Direction.EAST_VALUE) {
+			// Resize to East
+			x = sceneBounds.getMinX();
+			width = sceneBounds.getWidth() + xOffset;
+		} else if ((directionConstant & Direction.WEST_VALUE) == Direction.WEST_VALUE) {
+			// Resize to West
+			x = sceneBounds.getMinX() + xOffset;
+			width = sceneBounds.getWidth() - xOffset;
+		} else {
+			// Vertical resize
+			x = sceneBounds.getMinX();
+			width = sceneBounds.getWidth();
+		}
+
+		javafx.geometry.Bounds deltaBoundsInScene = new BoundingBox(x, y, width, height);
+		javafx.geometry.Bounds deltaBoundsInParent = parentVisual.sceneToLocal(deltaBoundsInScene);
 
 		final Rectangle newBounds = new Rectangle();
 
-		final int xOffset = toPixels(delta.getWidth());
-		final int yOffset = toPixels(delta.getHeight());
-
-		if (xOffset == 0 && yOffset == 0) {
-			return null;
-		}
-
-		int x, y, width, height;
-
-		switch (direction) {
-		case NORTH_WEST: // Change all
-			x = bounds.getX() + xOffset;
-			y = bounds.getY() + yOffset;
-
-			width = getCurrentWidth() - xOffset;
-			height = getCurrentHeight() - yOffset;
-			break;
-		case NORTH_EAST: // Only change Y position and size
-			x = bounds.getX();
-			y = bounds.getY() + yOffset;
-
-			width = getCurrentWidth() + xOffset;
-			height = getCurrentHeight() - yOffset;
-			break;
-		case SOUTH_EAST: // Only change size
-			x = bounds.getX();
-			y = bounds.getY();
-
-			width = getCurrentWidth() + xOffset;
-			height = getCurrentHeight() + yOffset;
-			break;
-		case SOUTH_WEST: // Only change X position and size
-			x = bounds.getX() + xOffset;
-			y = bounds.getY();
-
-			width = getCurrentWidth() - xOffset;
-			height = getCurrentHeight() + yOffset;
-			break;
-		default:
-			return null;
-		}
-
-		newBounds.setX(x);
-		newBounds.setY(y);
-		newBounds.setWidth(Math.max(getHostMinWidth(), width));
-		newBounds.setHeight(Math.max(getHostMinHeight(), height));
+		newBounds.setX(deltaBoundsInParent.getMinX());
+		newBounds.setY(deltaBoundsInParent.getMinY());
+		newBounds.setWidth(Math.max(getHostMinWidth(), deltaBoundsInParent.getWidth()));
+		newBounds.setHeight(Math.max(getHostMinHeight(), deltaBoundsInParent.getHeight()));
 
 		return newBounds;
 	}
@@ -150,48 +161,23 @@ public class ResizeNodeHandler extends AbstractHandler implements ResizeHandler 
 		return -1;
 	}
 
-	protected int getCurrentWidth() {
-		final Node visual = getPrimaryHost().getVisual();
-		final javafx.geometry.Bounds local = visual.getLayoutBounds();
-
-		return toPixels(local.getWidth());
-	}
-
-	protected int getCurrentHeight() {
-		final Node visual = getPrimaryHost().getVisual();
-		final javafx.geometry.Bounds local = visual.getLayoutBounds();
-
-		return toPixels(local.getHeight());
-	}
-
-	protected IVisualPart<? extends Node> getPrimaryHost() {
-		IVisualPart<? extends Node> host = getHost();
-		if (host instanceof BaseContentPart) {
-			host = ((BaseContentPart<?, ?>) host).getPrimaryContentPart();
+	protected org.eclipse.gmf.runtime.notation.Node getHostView() {
+		final IVisualPart<?> host = getHost();
+		final View hostView = NotationHelper.findView(host);
+		if (hostView instanceof org.eclipse.gmf.runtime.notation.Node) {
+			return (org.eclipse.gmf.runtime.notation.Node) hostView;
 		}
-		return host;
-	}
-
-	protected final int toPixels(final double pos) {
-		return (int) Math.round(pos);
+		return null;
 	}
 
 	protected Bounds getBounds() {
-		final IVisualPart<?> host = getPrimaryHost();
-
-		if (host == null) {
+		org.eclipse.gmf.runtime.notation.Node hostView = getHostView();
+		if (hostView == null) {
 			return null;
 		}
 
-		final View hostView = NotationHelper.findView(host);
-		if (hostView instanceof org.eclipse.gmf.runtime.notation.Node) {
-			final LayoutConstraint layout = ((org.eclipse.gmf.runtime.notation.Node) hostView).getLayoutConstraint();
-			if (layout instanceof Bounds) {
-				return (Bounds) layout;
-			}
-		}
-
-		return null;
+		final LayoutConstraint layout = hostView.getLayoutConstraint();
+		return layout instanceof Bounds ? (Bounds) layout : null;
 	}
 
 }

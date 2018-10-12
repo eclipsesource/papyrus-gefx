@@ -25,6 +25,7 @@ import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.behaviors.ContentBehavior;
 import org.eclipse.gef.mvc.fx.behaviors.GridBehavior;
 import org.eclipse.gef.mvc.fx.behaviors.HoverBehavior;
+import org.eclipse.gef.mvc.fx.behaviors.SelectionBehavior;
 import org.eclipse.gef.mvc.fx.domain.HistoricizingDomain;
 import org.eclipse.gef.mvc.fx.domain.IDomain;
 import org.eclipse.gef.mvc.fx.gestures.IHandlerResolver;
@@ -38,8 +39,10 @@ import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
-import org.eclipse.papyrus.gef4.feedback.BoundsFeedbackPartFactory;
+import org.eclipse.papyrus.gef4.feedback.ChangeBoundsFeedbackPartFactory;
+import org.eclipse.papyrus.gef4.feedback.SelectionFeedbackFactory;
 import org.eclipse.papyrus.gef4.gestures.ToolHandlerResolver;
+import org.eclipse.papyrus.gef4.handle.SelectionHandleFactory;
 import org.eclipse.papyrus.gef4.handlers.MarqueeOnDragHandler;
 import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
@@ -119,18 +122,29 @@ public class GEFFxModule extends MvcFxModule {
 		bindLabelStyleServices();
 		bindConnectionService();
 		bindAnchorageService();
+	}
 
-		bindCreateNodeGesture();
+	@Override
+	protected void bindSelectionHandlePartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(SelectionBehavior.SELECTION_HANDLE_PART_FACTORY))
+				.to(SelectionHandleFactory.class);
+	}
+
+	@Override
+	protected void bindSelectionFeedbackPartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(SelectionBehavior.SELECTION_FEEDBACK_PART_FACTORY))
+				.to(SelectionFeedbackFactory.class);
 	}
 
 	@Override
 	protected void bindIHandlerResolver() {
 		binder().bind(IHandlerResolver.class).to(ToolHandlerResolver.class);
-	}
-
-
-	protected void bindCreateNodeGesture() {
-		// binder().bind(CreateNodeGesture.class);
 	}
 
 	/*
@@ -272,7 +286,7 @@ public class GEFFxModule extends MvcFxModule {
 		adapterMapBinder
 				.addBinding(AdapterKey
 						.role(ChangeBoundsBehavior.BOUNDS_ROLE))
-				.to(BoundsFeedbackPartFactory.class);
+				.to(ChangeBoundsFeedbackPartFactory.class);
 
 	}
 

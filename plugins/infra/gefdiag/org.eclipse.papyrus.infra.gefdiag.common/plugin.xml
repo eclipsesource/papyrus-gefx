@@ -9,5 +9,11 @@
             order="10">
       </editorDiagram>
    </extension>
+      <extension
+         point="org.eclipse.papyrus.infra.gmfdiag.css.userAgentStyleSheet">
+      <stylesheet
+            stylesheetPath="resources/base.css">
+      </stylesheet>
+   </extension>
 
 </plugin>

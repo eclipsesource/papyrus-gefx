@@ -41,6 +41,9 @@ public abstract class AbstractUMLLabelServiceParticipant<T extends Element> exte
 	public static final String UNNAMED = "<Unnamed>";
 	public static final String UNDEFINED = "<Undefined>";
 
+	public static final char OPEN_GUILLEMET = '«';
+	public static final char CLOSE_GUILLEMET = '»';
+
 	private final Class<T> supportedType;
 
 	/**
