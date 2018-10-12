@@ -33,7 +33,9 @@ import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.AffixedLabelMoveOnDragHandler;
+import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveAffixedLabelHandler;
+import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveNodeHandler;
+import org.eclipse.papyrus.gef4.gmf.editor.handlers.ResizeNodeHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.CollapseOnClickHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.MoveOnDragHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers.ResizeOnDragHandler;
@@ -411,11 +413,14 @@ public abstract class GMFModule extends AbstractModule {
 
 	protected void bindPrimaryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveOnDragHandler.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveNodeHandler.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ResizeNodeHandler.class);
 	}
 
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
-				.to(AffixedLabelMoveOnDragHandler.class);
+				.to(MoveAffixedLabelHandler.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveOnDragHandler.class);
 	}
 
 	protected void bindCollapseHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -423,14 +428,9 @@ public abstract class GMFModule extends AbstractModule {
 	}
 
 	protected void bindFXHandlePartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragHandler.class); // FIXME this shouldn't be
-																								// installed on all
-																								// handle parts (e.g.
-																								// this will be
-																								// installed on
-																								// connection's
-																								// bendpoints and
-																								// anchors)
+		// FIXME this shouldn't be installed on all handle parts (e.g. this will be
+		// installed on connection's bendpoints and anchors)
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ResizeOnDragHandler.class);
 	}
 
 	protected abstract void bindIContentPartProvider();

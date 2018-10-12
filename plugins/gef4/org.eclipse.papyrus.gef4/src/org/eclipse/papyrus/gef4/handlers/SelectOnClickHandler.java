@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015, 2017 CEA LIST, EclipseSource and others.
+ * Copyright (c) 2015, 2018 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,6 @@ import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.HandlerUtil;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
@@ -55,16 +54,10 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 
 		IVisualPart<? extends Node> host = getHost();
 
-		IViewer viewer = host.getRoot().getViewer();
-		BaseContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
-
-		if (targetPrimaryPart == host) {
-			select(targetPrimaryPart, e);
-		} else if (host instanceof IRootPart) { // Root or Unknown target: select the root
-			IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
-			if (targetPart == host || targetPart == null || targetPart instanceof DiagramContentPart) { // Target part is null when clicking outside the root
-				select((IRootPart<? extends Node>) host, e);
-			}
+		if (host instanceof IRootPart) {
+			select((IRootPart<?>) host, e);
+		} else if (host instanceof BaseContentPart<?, ?>) {
+			select((BaseContentPart<?, ?>) host, e);
 		}
 	}
 
@@ -90,7 +83,7 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 		}
 	}
 
-	protected void select(IRootPart<? extends Node> target, MouseEvent e) {
+	protected void select(IRootPart<?> target, MouseEvent e) {
 		FocusModel focusModel = ModelUtil.getFocusModel(target);
 		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 

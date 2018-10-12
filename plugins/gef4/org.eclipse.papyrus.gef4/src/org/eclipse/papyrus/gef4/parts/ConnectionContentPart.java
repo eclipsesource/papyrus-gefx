@@ -57,6 +57,14 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 	}
 
 	@Override
+	public boolean isSelectable() {
+		// FIXME Connections should be selectable. However, we don't have a proper
+		// selection feedback for Connections yet, so trying to select them would
+		// crash the diagram. We don't want that :)
+		return false;
+	}
+
+	@Override
 	protected Group doCreateVisual() {
 		this.connection = new Connection();
 		return new Group(connection);
@@ -121,7 +129,7 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 		connection.setEndDecoration(targetDecoration);
 
 		// connection.getCurveNode().setStrokeWidth(1);
-		// TODO parse bendpoints and corner radius and jumps and...
+		// TODO parse corner radius and jumps and routers...
 
 		// TODO Implement IFXDecoration (Arrow, Circle, ...)
 	}

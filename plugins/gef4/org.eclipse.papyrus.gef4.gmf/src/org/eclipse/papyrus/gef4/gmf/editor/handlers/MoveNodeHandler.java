@@ -1,96 +1,54 @@
-/*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
- *
- *****************************************************************************/
-package org.eclipse.papyrus.gef4.gmf.editor.provisional.handlers;
+package org.eclipse.papyrus.gef4.gmf.editor.handlers;
 
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.fx.core.log.Logger;
 import org.eclipse.fx.core.log.LoggerCreator;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.Rectangle;
+import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
+import org.eclipse.gmf.runtime.common.core.command.ICommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
-import org.eclipse.papyrus.infra.emf.gmf.command.GMFtoEMFCommandWrapper;
 import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import org.eclipse.papyrus.infra.services.edit.service.ElementEditServiceUtils;
 import org.eclipse.papyrus.infra.services.edit.service.IElementEditService;
 
 import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
-public class AffixedNodeMoveOnDragHandler extends AbstractMultiSelectionDragHandler {
+public class MoveNodeHandler extends AbstractHandler implements MoveHandler {
 
-	static final Logger logger = LoggerCreator.createLogger(AffixedNodeMoveOnDragHandler.class);
+	private static Logger logger = LoggerCreator.createLogger(MoveNodeHandler.class);
 
 	@Override
-	public void drag(final MouseEvent e, final Dimension delta) {
-
-		propagate(e, delta, policy -> policy.drag(e, delta));
-
-		// Nothing
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+	public void showFeedback(Dimension delta) {
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 		final Rectangle newBounds = computeNewBounds(getBounds(), delta);
 
 		if (null != newBounds) {
-			boundsModel.addManagedElement(getPrimaryHost(), newBounds);
+			boundsModel.addManagedElement(getHost(), newBounds);
 		}
 	}
 
 	@Override
-	public void startDrag(final MouseEvent e) {
-		// Nothing
-	}
-
-	protected final int toPixels(final double pos) {
-		return (int) Math.round(pos);
-	}
-
-	@Override
-	public void abortDrag() {
-		// Propagation, in case of multi-selection
-		propagate(handler -> handler.abortDrag());
-
-		// Own behavior
+	public ICommand move(Dimension delta) {
 		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
-		boundsModel.removeManagedElement(getPrimaryHost());
-	}
-
-	@Override
-	public void endDrag(final MouseEvent e, final Dimension delta) {
-
-		// Propagation, in case of multi-selection
-
-		propagate(e, delta, policy -> policy.endDrag(e, delta));
-
-		// Own behavior
-
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
 
 		final Bounds bounds = getBounds();
 
 		final Rectangle newBounds = computeNewBounds(bounds, delta);
 		if (bounds == null || newBounds == null) {
-			boundsModel.removeManagedElement(getPrimaryHost());
-			return;
+			IVisualPart<? extends Node> primaryHost = getHost();
+			if (boundsModel.getManagedElements().containsKey(primaryHost)) {
+				boundsModel.removeManagedElement(getHost());
+			}
+			return null;
 		}
 
 		final SetRequest setXRequest = new SetRequest(bounds, NotationPackage.Literals.LOCATION__X,
@@ -103,13 +61,17 @@ public class AffixedNodeMoveOnDragHandler extends AbstractMultiSelectionDragHand
 			final CompositeCommand moveCommand = new CompositeCommand("Move element");
 			moveCommand.add(provider.getEditCommand(setXRequest));
 			moveCommand.add(provider.getEditCommand(setYRequest));
-
-			AdapterFactoryEditingDomain.getEditingDomainFor(bounds).getCommandStack()
-					.execute(new GMFtoEMFCommandWrapper(moveCommand));
+			return moveCommand;
 		}
 
+		return null;
+	}
+
+	@Override
+	public void removeFeedback() {
+		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
 		try {
-			boundsModel.removeManagedElement(getPrimaryHost());
+			boundsModel.removeManagedElement(getHost());
 		} catch (final Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
@@ -132,7 +94,7 @@ public class AffixedNodeMoveOnDragHandler extends AbstractMultiSelectionDragHand
 		newBounds.setX(currentBounds.getX() + xOffset);
 		newBounds.setY(currentBounds.getY() + yOffset);
 
-		final Node visual = getPrimaryHost().getVisual();
+		final Node visual = getHost().getVisual();
 
 		newBounds.setWidth(BoundsUtil.getWidth(visual));
 		newBounds.setHeight(BoundsUtil.getHeight(visual));
@@ -140,17 +102,12 @@ public class AffixedNodeMoveOnDragHandler extends AbstractMultiSelectionDragHand
 		return newBounds;
 	}
 
-	@Override
-	protected IVisualPart<? extends Node> getPrimaryHost() {
-		IVisualPart<? extends Node> host = getHost();
-		if (host instanceof BaseContentPart) {
-			host = ((BaseContentPart<?, ?>) host).getPrimaryContentPart();
-		}
-		return host;
+	protected final int toPixels(final double pos) {
+		return (int) Math.round(pos);
 	}
 
 	protected Bounds getBounds() {
-		final IVisualPart<?> host = getPrimaryHost();
+		final IVisualPart<?> host = getHost();
 
 		if (host == null) {
 			return null;
@@ -165,21 +122,6 @@ public class AffixedNodeMoveOnDragHandler extends AbstractMultiSelectionDragHand
 		}
 
 		return null;
-	}
-
-	@Override
-	public void hideIndicationCursor() {
-		// Nothing
-	}
-
-	@Override
-	public boolean showIndicationCursor(KeyEvent event) {
-		return false;
-	}
-
-	@Override
-	public boolean showIndicationCursor(MouseEvent event) {
-		return false;
 	}
 
 }

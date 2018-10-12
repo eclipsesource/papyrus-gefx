@@ -107,9 +107,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 		return visual;
 	}
 
-	@Override
-	protected abstract N doCreateVisual();
-
 	static int childIterations;
 	static long childrenTime;
 
@@ -253,8 +250,14 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	}
 
 	protected void refreshVisualInTransaction(final N visual) {
-		SynchronizedLogger.log("RefreshVisualInTransaction");
-		// Nothing
+		refreshPick();
+	}
+
+	protected void refreshPick() {
+		// We need to set pickOnBounds = false, because border items expand the bounds
+		// of their parent (Without affecting their geometry). We e.g. don't want to pick
+		// a Node when clicking in the empty area between it and its Floating Label
+		getVisual().setPickOnBounds(false);
 	}
 
 	@Override

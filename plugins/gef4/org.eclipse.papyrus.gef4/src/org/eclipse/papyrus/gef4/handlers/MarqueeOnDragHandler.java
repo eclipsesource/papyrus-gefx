@@ -12,54 +12,54 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.handlers;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
+import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 
 import javafx.scene.Node;
 
 public class MarqueeOnDragHandler extends org.eclipse.gef.mvc.fx.handlers.MarqueeOnDragHandler {
 	@Override
 	protected List<IContentPart<? extends Node>> getParts(List<Node> nodes) {
-		List<IContentPart<? extends Node>> allParts = super.getParts(nodes);
+		List<IContentPart<?>> allSelectedParts = super.getParts(nodes);
 
-		List<IContentPart<? extends Node>> result = new LinkedList<IContentPart<? extends Node>>();
+		// Filter the results: only keep selectable parts
+		List<IContentPart<?>> allSelectableParts = new ArrayList<>();
 
-		for (IContentPart<? extends Node> part : allParts) {
-			if (part instanceof IPrimaryContentPart) {
-				result.add(part);
+		for (IContentPart<?> part : allSelectedParts) {
+			if (part instanceof DiagramContentPart) {
+				continue;
+			}
+
+			if (part instanceof IPrimaryContentPart || part instanceof AffixedLabelContentPart) {
+				allSelectableParts.add(part);
 			}
 		}
 
-		Iterator<IContentPart<? extends Node>> iterator = result.iterator();
-		while (iterator.hasNext()) {
-			IContentPart<? extends Node> part = iterator.next();
-			if (result.contains(getPrimary(part.getParent()))) {
-				iterator.remove();
-			}
-		}
-
-		if (result.size() > 1) {
-			result.remove(getHost().getRoot().getChildrenUnmodifiable().get(0)); // Remove the diagram edit part, if it is selected and is not the only selected element
-		}
+		// Filter the results again: only keep the top-most part when several parts belong to the same hierarchy
+		List<IContentPart<?>> result = allSelectableParts.stream().filter(part -> allSelectableParts.stream().noneMatch(otherPart -> isParent(otherPart, part))).collect(Collectors.toList());
 
 		return result;
 	}
 
-	private IContentPart<? extends Node> getPrimary(IVisualPart<? extends Node> parent) {
-		if (parent instanceof BaseContentPart) {
-			return ((BaseContentPart<?, ?>) parent).getPrimaryContentPart();
+	private boolean isParent(IVisualPart<?> parentPart, IVisualPart<?> childPart) {
+		if (parentPart == childPart) {
+			return false;
 		}
-		if (parent instanceof IContentPart) {
-			return (IContentPart<? extends Node>) parent;
+		IVisualPart<?> parent = childPart.getParent();
+		while (parent != null) {
+			if (parent == parentPart) {
+				return true;
+			}
+			parent = parent.getParent();
 		}
-		return null;
+		return false;
 	}
-
 
 }
