@@ -33,7 +33,6 @@ import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveAffixedLabelHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveNodeHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveOnDragHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.ResizeNodeHandler;
@@ -419,7 +418,7 @@ public abstract class GMFModule extends AbstractModule {
 
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
-				.to(MoveAffixedLabelHandler.class);
+				.to(MoveNodeHandler.class);
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveOnDragHandler.class);
 	}
 

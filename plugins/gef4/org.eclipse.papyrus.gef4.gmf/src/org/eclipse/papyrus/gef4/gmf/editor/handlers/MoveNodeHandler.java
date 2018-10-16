@@ -100,17 +100,17 @@ public class MoveNodeHandler extends AbstractHandler implements MoveHandler {
 		assert delta != null;
 
 		Node hostVisual = getHost().getVisual();
-		Node parentVisual = hostVisual.getParent();
 
 		final double xOffset = delta.getWidth();
 		final double yOffset = delta.getHeight();
 
-		javafx.geometry.Bounds visualBounds = hostVisual.getBoundsInParent();
-		javafx.geometry.Bounds sceneBounds = parentVisual.localToScene(visualBounds);
+		javafx.geometry.Bounds visualBounds = hostVisual.getLayoutBounds();
+		javafx.geometry.Bounds sceneBounds = hostVisual.localToScene(visualBounds);
 
 		double x = sceneBounds.getMinX() + xOffset;
 		double y = sceneBounds.getMinY() + yOffset;
 
+		Node parentVisual = hostVisual.getParent();
 		javafx.geometry.Bounds deltaBoundsInScene = new BoundingBox(x, y, sceneBounds.getWidth(),
 				sceneBounds.getHeight());
 		javafx.geometry.Bounds deltaBoundsInParent = parentVisual.sceneToLocal(deltaBoundsInScene);
