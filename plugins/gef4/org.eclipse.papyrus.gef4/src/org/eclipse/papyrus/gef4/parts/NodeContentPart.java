@@ -13,6 +13,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import org.eclipse.fx.core.Subscription;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.layout.Locator;
@@ -354,8 +357,8 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	}
 
 	@Override
-	protected String getStyleClass() {
-		return "genericNode";//$NON-NLS-1$
+	protected Collection<String> getStyleClasses() {
+		return Collections.singletonList("genericNode"); //$NON-NLS-1$
 	}
 
 }

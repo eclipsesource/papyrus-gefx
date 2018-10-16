@@ -39,7 +39,6 @@ import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.feedback.ChangeBoundsFeedbackPartFactory;
-import org.eclipse.papyrus.gef4.feedback.SelectionFeedbackFactory;
 import org.eclipse.papyrus.gef4.gestures.ToolHandlerResolver;
 import org.eclipse.papyrus.gef4.handle.SelectionHandleFactory;
 import org.eclipse.papyrus.gef4.handlers.MarqueeOnDragHandler;
@@ -58,6 +57,7 @@ import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.provider.ConnectionOutlineProvider;
 import org.eclipse.papyrus.gef4.provider.HoverHandlePartFactory;
+import org.eclipse.papyrus.gef4.provider.LabelOutlineProvider;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ConnectionService;
 import org.eclipse.papyrus.gef4.services.HelperProvider;
@@ -139,7 +139,7 @@ public class GEFFxModule extends MvcFxModule {
 		adapterMapBinder
 				.addBinding(AdapterKey
 						.role(SelectionBehavior.SELECTION_FEEDBACK_PART_FACTORY))
-				.to(SelectionFeedbackFactory.class);
+				.to(DefaultSelectionFeedbackPartFactory.class);
 	}
 
 	@Override
@@ -397,6 +397,11 @@ public class GEFFxModule extends MvcFxModule {
 		adapterMapBinder.addBinding(
 				AdapterRoles.fallbackRole())
 				.to(EmptyImageService.class);
+
+		adapterMapBinder
+				.addBinding(
+						AdapterKey.role(DefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
+				.to(LabelOutlineProvider.class);
 	}
 
 	protected void bindDiagramPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {

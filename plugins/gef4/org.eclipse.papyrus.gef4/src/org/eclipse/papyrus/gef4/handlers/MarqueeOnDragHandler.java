@@ -25,6 +25,8 @@ import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 
 import javafx.scene.Node;
 
+// FIXME Because we don't support empty selection, we're not 100% compatible with GEF's SelectOperation:
+// If we don't patch it, we always end up with selecting the diagram part, in addition to all Marquee parts
 public class MarqueeOnDragHandler extends org.eclipse.gef.mvc.fx.handlers.MarqueeOnDragHandler {
 	@Override
 	protected List<IContentPart<? extends Node>> getParts(List<Node> nodes) {

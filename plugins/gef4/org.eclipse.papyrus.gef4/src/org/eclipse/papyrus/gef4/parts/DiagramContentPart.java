@@ -12,6 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import javafx.geometry.Insets;
@@ -131,8 +134,8 @@ public class DiagramContentPart<MODEL> extends BaseContentPart<MODEL, Pane> {
 	}
 
 	@Override
-	protected String getStyleClass() {
-		return "diagram";
+	protected Collection<String> getStyleClasses() {
+		return Collections.singletonList("diagram");
 	}
 
 }

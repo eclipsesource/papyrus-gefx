@@ -23,6 +23,8 @@ import org.eclipse.gef.fx.nodes.Connection;
 import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.PartUtils;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 
@@ -32,10 +34,9 @@ import javafx.scene.Node;
 
 public abstract class AbstractConnectionReconnectHandler extends AbstractHandler {
 
-
 	/**
-	 * FIXME: It would be better to use IPolicy<Connection> but we cannot do
-	 * it, because IPolicy must be <V, VR> and not <VR>
+	 * FIXME: It would be better to use IPolicy<Connection> but we cannot do it,
+	 * because IPolicy must be <V, VR> and not <VR>
 	 */
 	protected Connection getConnection() {
 		return (Connection) getHost().getVisual();
@@ -43,8 +44,8 @@ public abstract class AbstractConnectionReconnectHandler extends AbstractHandler
 
 	/**
 	 * @param anchor
-	 * @return model of the node which given anchor is connected to,
-	 *         which is expected to be a {@link View} for all notation-based connections
+	 * @return model of the node which given anchor is connected to, which is
+	 *         expected to be a {@link View} for all notation-based connections
 	 */
 	protected View getAnchorageView(IAnchor anchor) {
 		return (View) getAnchorageContent(anchor);
@@ -57,8 +58,9 @@ public abstract class AbstractConnectionReconnectHandler extends AbstractHandler
 	protected Object getAnchorageContent(IAnchor anchor) {
 		Node anchorageNode = anchor.getAnchorage();
 		if (anchorageNode != getConnection()) {
-			IVisualPart<? extends Node> part = getHost().getRoot()
-					.getViewer().getVisualPartMap().get(anchorageNode);
+			IViewer viewer = getHost().getRoot().getViewer();
+
+			IVisualPart<? extends Node> part = PartUtils.retrieveVisualPart(viewer, anchorageNode);
 
 			if (part instanceof IContentPart) {
 				return ((IContentPart<? extends Node>) part).getContent();
@@ -68,8 +70,8 @@ public abstract class AbstractConnectionReconnectHandler extends AbstractHandler
 	}
 
 	/**
-	 * Safe assumption, it does not makes sense to attach notation- or
-	 * semantic- policies to not-content parts.
+	 * Safe assumption, it does not makes sense to attach notation- or semantic-
+	 * policies to not-content parts.
 	 */
 	@Override
 	public IContentPart<? extends Node> getHost() {
@@ -99,8 +101,7 @@ public abstract class AbstractConnectionReconnectHandler extends AbstractHandler
 	protected static <K, V> Optional<K> firstKeyForValue(SetMultimap<K, V> setMultimap, V value) {
 		return setMultimap.entries().stream() //
 				.filter(e -> e.getValue().equals(value)) //
-				.map(e -> e.getKey())
-				.findFirst();
+				.map(e -> e.getKey()).findFirst();
 	}
 
 	protected static View asView(Object eobject) {

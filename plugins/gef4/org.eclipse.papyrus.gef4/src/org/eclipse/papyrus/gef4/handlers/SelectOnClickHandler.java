@@ -21,9 +21,11 @@ import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.PartUtils;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
+import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
-import org.eclipse.papyrus.gef4.utils.HandlerUtil;
+import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 
 import javafx.scene.Node;
@@ -52,7 +54,7 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 
 		wasSelected = false;
 
-		IVisualPart<? extends Node> host = getHost();
+		IVisualPart<?> host = getHost();
 
 		if (host instanceof IRootPart) {
 			select((IRootPart<?>) host, e);
@@ -68,18 +70,21 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 			return;
 		}
 
-		IVisualPart<? extends Node> host = getHost();
+		IVisualPart<?> host = getHost();
 
 		IViewer viewer = host.getRoot().getViewer();
-		BaseContentPart<?, ?> targetPrimaryPart = HandlerUtil.getTargetPrimaryPart(this, e);
 
-		if (targetPrimaryPart == host) {
-			unselect(targetPrimaryPart, e);
-		} else if (host instanceof IRootPart) { // Root or Unknown target: select the root
-			IVisualPart<? extends Node> targetPart = viewer.getVisualPartMap().get(e.getTarget());
+		// XXX a few debug asserts to make sure the handler is only installed on selectable elements
+		assert host instanceof IContentPart || host instanceof IRootPart;
+		assert host instanceof IPrimaryContentPart || host instanceof AffixedLabelContentPart || host instanceof IRootPart;
+
+		if (host instanceof IRootPart) { // Root or Unknown target: select the root
+			IVisualPart<?> targetPart = PartUtils.retrieveVisualPart(viewer, (Node) e.getTarget());
 			if (targetPart == host || targetPart == null) { // Target part is null when clicking outside the root
-				select((IRootPart<? extends Node>) host, e);
+				select((IRootPart<?>) host, e);
 			}
+		} else {
+			unselect((IContentPart<?>) host, e);
 		}
 	}
 
@@ -87,18 +92,17 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 		FocusModel focusModel = ModelUtil.getFocusModel(target);
 		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
 
-		IContentPart<? extends Node> firstChild = (IContentPart<? extends Node>) target.getChildrenUnmodifiable().get(0);
+		IContentPart<?> firstChild = (IContentPart<?>) target.getChildrenUnmodifiable().get(0);
 
 		focusModel.setFocus(firstChild);
 		if (e.isControlDown()) {
-			// TODO append
-			// focusModel.set
+			// Do nothing
 		} else {
 			selectionModel.setSelection(firstChild);
 		}
 	}
 
-	protected void select(IContentPart<? extends Node> target, MouseEvent e) {
+	protected void select(IContentPart<?> target, MouseEvent e) {
 
 		FocusModel focusModel = ModelUtil.getFocusModel(target);
 		SelectionModel selectionModel = ModelUtil.getSelectionModel(getHost());
@@ -120,7 +124,7 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 		}
 	}
 
-	protected void unselect(IContentPart<? extends Node> target, MouseEvent e) {
+	protected void unselect(IContentPart<?> target, MouseEvent e) {
 		// The host has been selected during the mouse pressed event. Do not unselect it when releasing...
 		if (wasSelected) {
 			return;
@@ -138,6 +142,9 @@ public class SelectOnClickHandler extends AbstractHandler implements IOnDragHand
 				// deselect the target edit part (ensure we get a new
 				// primary selection)
 				selectionModel.removeFromSelection(target);
+				if (selectionModel.getSelectionUnmodifiable().isEmpty()) {
+					selectionModel.setSelection(target.getRoot().getContentPartChildren().get(0));
+				}
 			} else {
 				// select only the target
 				selectionModel.setSelection(target);

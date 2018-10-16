@@ -12,6 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -246,8 +247,8 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 	}
 
 	@Override
-	protected String getStyleClass() {
-		return "genericConnection";
+	protected Collection<String> getStyleClasses() {
+		return Collections.singletonList("genericConnection");
 	}
 
 	public Connection getConnection() {

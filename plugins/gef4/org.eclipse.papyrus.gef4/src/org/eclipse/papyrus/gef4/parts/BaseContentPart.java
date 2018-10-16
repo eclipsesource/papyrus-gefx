@@ -14,6 +14,7 @@
 package org.eclipse.papyrus.gef4.parts;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.mvc.fx.parts.AbstractContentPart;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
-import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
@@ -37,10 +37,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.inject.Inject;
 
-import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 
 /**
  * Parent class for all GEF4 ContentParts based on GMF Runtime/Notation. The Content is a {@link View}
@@ -61,12 +58,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	private ContentChildrenProvider<MODEL> contentChildrenProvider;
 
 	private boolean visualCreated = false;
-
-	/**
-	 * Some changes may happen outside the doCreateVisual/doRefreshVisual methods (e.g. during JavaFX rendering)
-	 * Since it is not possible to catch these changes directly, we use a listener to refresh the visualPartMap
-	 */
-	protected final ListChangeListener<? super Node> nodeChildrenListener = (change) -> updateOnChange(change);
 
 	// The list of contentChildren, as known by GEFx. It may be different from View#getChildren during updates, as items will be added/removed 1 by 1
 	protected final List<MODEL> contentChildren = new ArrayList<>();
@@ -101,7 +92,10 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	public final N getVisual() {
 		final N visual = super.getVisual();
 		if (!visualCreated && visual != null) {
-			visual.getStyleClass().add(getStyleClass());
+			Collection<String> classes = getStyleClasses();
+			if (classes != null) {
+				visual.getStyleClass().addAll(classes);
+			}
 			visualCreated = true;
 		}
 		return visual;
@@ -190,65 +184,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 		this.transactionService.refreshPart(() -> refreshVisualInTransaction(visual));
 	}
 
-	protected void updateOnChange(Change<? extends Node> change) {
-		IViewer viewer = getRoot().getViewer();
-		while (change.next()) {
-			for (Node removedNode : change.getRemoved()) {
-				unregisterVisuals(viewer, removedNode);
-			}
-
-			for (Node addedNode : change.getAddedSubList()) {
-				registerVisuals(viewer, addedNode);
-			}
-		}
-	}
-
-	@Override
-	protected void registerAtVisualPartMap(IViewer viewer, N visual) {
-		// Override the parent behavior to ensure that listeners are properly installed when required
-		registerVisuals(viewer, visual);
-	}
-
-	@Override
-	protected void unregisterFromVisualPartMap(IViewer viewer, N visual) {
-		// Override the parent behavior to ensure that listeners are properly uninstalled
-		unregisterVisuals(viewer, visual);
-	}
-
-	protected void unregisterVisuals(IViewer viewer, Node visual) {
-		Map<Node, IVisualPart<? extends Node>> visualPartMap = viewer.getVisualPartMap();
-
-		// Do not unregister child content parts; only child figures for this content part
-		if (visualPartMap.get(visual) == this) {
-			visualPartMap.remove(visual);
-
-			if (visual instanceof Parent) {
-				Parent parentVisual = (Parent) visual;
-				for (Node childNode : parentVisual.getChildrenUnmodifiable()) {
-					unregisterVisuals(viewer, childNode);
-				}
-				parentVisual.getChildrenUnmodifiable().removeListener(nodeChildrenListener);
-			}
-		}
-	}
-
-	protected void registerVisuals(IViewer viewer, Node visual) {
-		Map<Node, IVisualPart<? extends Node>> visualPartMap = viewer.getVisualPartMap();
-
-		IVisualPart<? extends Node> currentPart = visualPartMap.get(visual);
-		if (currentPart == null) { // Not yet registered
-			visualPartMap.put(visual, this);
-		}
-
-		if (visual instanceof Parent && (currentPart == null || currentPart == this)) { // Do not register nested visuals if they are associated with a child part
-			Parent parentVisual = (Parent) visual;
-			parentVisual.getChildrenUnmodifiable().addListener(nodeChildrenListener);
-			for (Node child : parentVisual.getChildrenUnmodifiable()) {
-				registerVisuals(viewer, child);
-			}
-		}
-	}
-
 	protected void refreshVisualInTransaction(final N visual) {
 		refreshPick();
 	}
@@ -271,7 +206,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 		refreshContentAnchorages();
 
 		super.doActivate();
-		// updateContentChildren();
 		updateAnchorages();
 
 		// FIXME: AbstractVisualPart refreshes the child before activating it
@@ -292,7 +226,7 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 		return (MODEL) super.getContent();
 	}
 
-	protected abstract String getStyleClass();// TODO support mutli styleClass named label should match on .genericLabel and .namedLabel
+	protected abstract Collection<String> getStyleClasses();
 
 	@Override
 	protected List<? extends Object> doGetContentChildren() {

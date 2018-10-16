@@ -13,6 +13,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IStatus;
@@ -262,8 +265,8 @@ abstract public class CompartmentContentPart<MODEL, P extends Pane> extends Cont
 	// }
 
 	@Override
-	protected String getStyleClass() {
-		return "genericListCompartment";
+	protected Collection<String> getStyleClasses() {
+		return Collections.singletonList("genericCompartment");
 	}
 
 	private Timeline collapseAnimation;

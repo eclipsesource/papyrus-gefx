@@ -35,6 +35,7 @@ import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.handlers.IOnHoverHandler;
 import org.eclipse.gef.mvc.fx.handlers.IOnStrokeHandler;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.PartUtils;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
@@ -110,7 +111,9 @@ public class CreateNodeTool extends AbstracTool {
 			if (target == viewer.getCanvas()) {
 				iVisualPart = viewer.getRootPart();
 			} else {
-				iVisualPart = viewer.getVisualPartMap().get(target);
+				iVisualPart = PartUtils.retrieveVisualPart(viewer, target);
+
+				assert iVisualPart != null : "Unable to find a part for node " + target + " (" + target.getStyleClass() + ")";
 
 				// FIXME: In which case can this be null? It seems we may find a Pane
 				// that is neither the Diagram Part nor the RootPart

@@ -48,6 +48,8 @@ public class ResizeNodeHandler extends AbstractHandler implements ResizeHandler 
 	@Override
 	public ICommand resize(Dimension delta, Direction direction) {
 		Rectangle boundsInParent = computeNewBoundsInParent(delta, direction);
+		assert boundsInParent != null : //
+		"Unable to find bounds in parent; this Handler shouldn't be installed on this part";
 
 		// FIXME GMF's SetBoundsCommand can't be reused here because it depends on GEF
 		// Legacy. We should add a JavaFX equivalent command

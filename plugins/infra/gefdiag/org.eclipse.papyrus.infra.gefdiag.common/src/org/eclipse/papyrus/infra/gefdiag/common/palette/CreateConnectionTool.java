@@ -35,6 +35,7 @@ import org.eclipse.gef.mvc.fx.handlers.IOnDragHandler;
 import org.eclipse.gef.mvc.fx.handlers.IOnHoverHandler;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.PartUtils;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
@@ -101,26 +102,28 @@ public class CreateConnectionTool extends AbstracTool {
 		}
 
 		if (handlerType.isAssignableFrom(CreateConnectionHandler.class)) {
-			IVisualPart<? extends Node> iVisualPart;
+			IVisualPart<?> visualPart;
 			if (target == viewer.getCanvas()) {
-				iVisualPart = viewer.getRootPart();
+				visualPart = viewer.getRootPart();
 			} else {
-				iVisualPart = viewer.getVisualPartMap().get(target);
+				visualPart = PartUtils.retrieveVisualPart(viewer, target);
+
+				assert visualPart != null : "Unable to find a part for node " + target + " (" + target.getStyleClass() + ")";
 
 				// FIXME: In which case can this be null? It seems we may find a Pane
 				// that is neither the Diagram Part nor the RootPart
-				if (iVisualPart == null) {
-					iVisualPart = viewer.getRootPart();
+				if (visualPart == null) {
+					visualPart = viewer.getRootPart();
 				}
 			}
 
 
-			if (iVisualPart != null) {
+			if (visualPart != null) {
 				CreateConnectionHandler handler;
-				if (activeHandler != null && iVisualPart == activeHandler.getHost()) {
+				if (activeHandler != null && visualPart == activeHandler.getHost()) {
 					handler = activeHandler;
 				} else {
-					handler = new CreateConnectionHandler(iVisualPart, elementIds);
+					handler = new CreateConnectionHandler(visualPart, elementIds);
 				}
 
 				if (handlerType.isInstance(handler)) {
@@ -147,7 +150,7 @@ public class CreateConnectionTool extends AbstracTool {
 
 		private Collection<String> elementIds;
 
-		public CreateConnectionHandler(IVisualPart<? extends Node> iVisualPart, Collection<String> elementIds) {
+		public CreateConnectionHandler(IVisualPart<?> iVisualPart, Collection<String> elementIds) {
 			setAdaptable(iVisualPart);
 			this.elementIds = elementIds;
 		}
@@ -223,7 +226,7 @@ public class CreateConnectionTool extends AbstracTool {
 		protected IVisualPart<?> getDragTarget(MouseEvent e) {
 			Node node = e.getPickResult().getIntersectedNode();
 			if (node != null) {
-				return getHost().getViewer().getVisualPartMap().get(node);
+				return PartUtils.retrieveVisualPart(getHost().getViewer(), node);
 			}
 			return null;
 		}

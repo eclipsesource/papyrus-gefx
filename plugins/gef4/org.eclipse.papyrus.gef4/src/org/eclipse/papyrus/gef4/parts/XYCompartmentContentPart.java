@@ -13,12 +13,17 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.papyrus.gef4.utils.FXUtils;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 //FIXME: Doesn't properly handle negative coordinates
+//It should either add scrollbars or translate everything to make sure all coordinates are >= (0; 0)
 public class XYCompartmentContentPart<MODEL> extends CompartmentContentPart<MODEL, Pane> {
 
 	public XYCompartmentContentPart(final MODEL model) {
@@ -42,7 +47,9 @@ public class XYCompartmentContentPart<MODEL> extends CompartmentContentPart<MODE
 	}
 
 	@Override
-	protected String getStyleClass() {
-		return "genericXYCompartment";//$NON-NLS-1$
+	protected Collection<String> getStyleClasses() {
+		List<String> result = new ArrayList<>(super.getStyleClasses());
+		result.add("genericXYCompartment"); //$NON-NLS-1$
+		return result;
 	}
 }

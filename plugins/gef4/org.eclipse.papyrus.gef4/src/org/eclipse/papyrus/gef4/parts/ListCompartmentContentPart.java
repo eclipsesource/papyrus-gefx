@@ -12,6 +12,10 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.papyrus.gef4.utils.FXUtils;
 
 import javafx.scene.layout.VBox;
@@ -28,8 +32,10 @@ public class ListCompartmentContentPart<MODEL> extends CompartmentContentPart<MO
 	}
 
 	@Override
-	protected String getStyleClass() {
-		return "genericListCompartment";
+	protected Collection<String> getStyleClasses() {
+		List<String> result = new ArrayList<>(super.getStyleClasses());
+		result.add("genericListCompartment"); //$NON-NLS-1$
+		return result;
 	}
 
 	@Override

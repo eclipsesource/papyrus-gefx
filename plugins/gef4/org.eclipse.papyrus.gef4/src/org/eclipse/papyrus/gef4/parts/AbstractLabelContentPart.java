@@ -13,6 +13,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.inject.Inject;
 
 import org.eclipse.papyrus.gef4.image.ImageRegistry;
@@ -132,7 +135,7 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 	}
 
 	@Override
-	protected String getStyleClass() {
-		return "genericLabel";
+	protected Collection<String> getStyleClasses() {
+		return Collections.singletonList("genericLabel");
 	}
 }

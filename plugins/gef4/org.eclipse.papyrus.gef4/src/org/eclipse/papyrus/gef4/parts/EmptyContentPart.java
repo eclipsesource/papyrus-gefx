@@ -12,6 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import javafx.scene.Node;
 
 public class EmptyContentPart<MODEL> extends BaseContentPart<MODEL, Node> {
@@ -26,8 +29,8 @@ public class EmptyContentPart<MODEL> extends BaseContentPart<MODEL, Node> {
 	}
 
 	@Override
-	protected String getStyleClass() {
-		return null;
+	protected Collection<String> getStyleClasses() {
+		return Collections.emptyList();
 	}
 
 }

@@ -12,6 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 
@@ -67,15 +70,11 @@ public class AffixedLabelContentPart<MODEL> extends LabelContentPart<MODEL> {
 		label.setBorder(border);
 	}
 
-	/**
-	 * Gets the style class.
-	 *
-	 * @return the style class
-	 * @see org.eclipse.papyrus.gef4.parts.LabelContentPart#getStyleClass()
-	 */
 	@Override
-	protected String getStyleClass() {
-		return "genericAffixedLabel";
+	protected Collection<String> getStyleClasses() {
+		Collection<String> result = new ArrayList<>(super.getStyleClasses());
+		result.add("genericAffixedLabel"); //$NON-NLS-1$
+		return result;
 	}
 
 }
