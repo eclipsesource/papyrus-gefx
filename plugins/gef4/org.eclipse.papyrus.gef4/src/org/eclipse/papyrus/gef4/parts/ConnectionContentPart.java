@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
+ * Copyright (c) 2015 - 2018 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,11 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
- *
+ *	EclipseSource - Support Bendpoints, Floating Labels & Line Attributes
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 
 import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.nodes.Connection;
+import org.eclipse.gef.fx.nodes.GeometryNode;
 import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.mvc.fx.parts.IBendableContentPart.BendPoint;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
@@ -31,7 +33,6 @@ import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 
 public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> implements IPrimaryContentPart {
 
@@ -57,15 +58,9 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 	}
 
 	@Override
-	public boolean isSelectable() {
-		// FIXME Connections should be selectable. However, we don't have a proper
-		// selection feedback for Connections yet, so trying to select them would
-		// crash the diagram. We don't want that :)
-		return false;
-	}
-
-	@Override
 	protected Group doCreateVisual() {
+		// Wrap the Connection in a Group, so we can add floating labels around it
+		// Note: this breaks GEF Connection Policies
 		this.connection = new Connection();
 		return new Group(connection);
 	}
@@ -83,12 +78,42 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 	protected void refreshVisualInTransaction(Group group) {
 		super.refreshVisualInTransaction(group);
 
+		// TODO parse corner radius and jumps and routers...
+
 		refreshDecorations();
 		refreshBendpoints();
+		refreshLineStyle();
+	}
+
+	/**
+	 * Refresh the line visual appearance: width, style, color
+	 */
+	protected void refreshLineStyle() {
+		Node curve = connection.getCurve();
+		if (curve instanceof GeometryNode) {
+			int lineWidth = getEdgeStyleService().getLineWidth();
+			if (lineWidth < 1) {
+				lineWidth = 1;
+			}
+			Color lineColor = getEdgeStyleService().getLineColor();
+			if (lineColor == null) {
+				lineColor = Color.BLACK;
+			}
+
+			List<Double> strokeDashArray = getEdgeStyleService().getDashStyle();
+			if (strokeDashArray == null) {
+				strokeDashArray = Collections.emptyList();
+			}
+
+			((GeometryNode<?>) curve).setStroke(lineColor);
+			((GeometryNode<?>) curve).setStrokeWidth(lineWidth);
+			((GeometryNode<?>) curve).getStrokeDashArray().setAll(strokeDashArray);
+		}
+		// Else: Custom Connection Node; we can't style it.
 	}
 
 	// TODO: Currently we only focus on visuals. For interactions, to rely on GEFx's BendConnectionPolicy,
-	// we may need to implement IBendableContentPart later on.
+	// we may need to implement IBendableContentPart later on. Alternatively, we may use custom handles, independent from the part
 	protected void refreshBendpoints() {
 		connection.removeAllControlPoints();
 		int i = 0;
@@ -127,41 +152,32 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 		String targetDecorationName = getEdgeStyleService().getTargetDecoration();
 		Node targetDecoration = getDecoration(targetDecorationName);
 		connection.setEndDecoration(targetDecoration);
-
-		// connection.getCurveNode().setStrokeWidth(1);
-		// TODO parse corner radius and jumps and routers...
-
-		// TODO Implement IFXDecoration (Arrow, Circle, ...)
 	}
 
 	protected Node getDecoration(String name) {
+		if (name == null) {
+			return null;
+		}
+		Color lineColor = getEdgeStyleService().getLineColor();
+		int lineWidth = getEdgeStyleService().getLineWidth();
+
 		switch (name) {
 		case DecorationFactory.BLACK_ARROW:
-			// FIXME Since we now use Node instead of Shapes, it's harder to customize colors
-			// We should pass the colors to the DecorationFactory directly
-			Node blackArrow = DecorationFactory.instance.createClosedArrow();
-			if (blackArrow instanceof Shape) {
-				((Shape) blackArrow).setFill(Color.BLACK);
-			}
-			return blackArrow;
+			return DecorationFactory.instance.createFullArrow(lineColor, lineWidth);
 		case DecorationFactory.WHITE_ARROW:
-			// FIXME Since we now use Node instead of Shapes, it's harder to customize colors
-			// We should pass the colors to the DecorationFactory directly
-			Node whiteArrow = DecorationFactory.instance.createClosedArrow();
-			if (whiteArrow instanceof Shape) {
-				((Shape) whiteArrow).setFill(Color.WHITE);
-			}
-			return whiteArrow;
+			return DecorationFactory.instance.createEmptyArrow(lineColor, lineWidth);
 		case DecorationFactory.OPEN_ARROW:
-			return DecorationFactory.instance.createOpenArrow();
+			return DecorationFactory.instance.createOpenArrow(lineColor, lineWidth);
 		case DecorationFactory.CIRCLE:
-			return DecorationFactory.instance.createCircle();
+			return DecorationFactory.instance.createCircle(lineColor, lineWidth);
 		case DecorationFactory.CROSS_CIRCLE:
-			return DecorationFactory.instance.createCrossCircle();
+			return DecorationFactory.instance.createCrossCircle(lineColor, lineWidth);
 		case DecorationFactory.WHITE_DIAMOND:
-			return DecorationFactory.instance.createEmptyDiamond();
+		case DecorationFactory.SOLID_DIAMOND_EMPTY:
+			return DecorationFactory.instance.createEmptyDiamond(lineColor, lineWidth);
 		case DecorationFactory.BLACK_DIAMOND:
-			return DecorationFactory.instance.createFullDiamond();
+		case DecorationFactory.SOLID_DIAMOND_FILLED:
+			return DecorationFactory.instance.createFullDiamond(lineColor, lineWidth);
 		default:
 			return null;
 		}
@@ -232,6 +248,10 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 	@Override
 	protected String getStyleClass() {
 		return "genericConnection";
+	}
+
+	public Connection getConnection() {
+		return connection;
 	}
 
 }

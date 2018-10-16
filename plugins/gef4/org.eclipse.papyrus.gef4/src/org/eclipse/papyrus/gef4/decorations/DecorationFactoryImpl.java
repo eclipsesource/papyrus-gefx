@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2016 CEA LIST and others.
+ * Copyright (c) 2016, 2018 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
- *
+ *	EclipseSource - Add support for line attributes (Color, width)
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.decorations;
 
@@ -37,99 +37,91 @@ public class DecorationFactoryImpl implements DecorationFactory {
 		// Nothing
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.papyrus.gef4.decorations.DecorationFactory#createOpenArrow()
-	 */
 	@Override
-	public Node createOpenArrow() {
-		return new Polyline(getArrowPoints());
+	public Node createOpenArrow(Color lineColor, int lineWidth) {
+		Polyline polyline = new Polyline(getArrowPoints(lineWidth));
+		polyline.setStroke(lineColor);
+		return polyline;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.papyrus.gef4.decorations.DecorationFactory#createClosedArrow()
-	 */
 	@Override
-	public Node createClosedArrow() {
-		Polygon arrow = new Polygon(getArrowPoints());
+	public Node createEmptyArrow(Color lineColor, int lineWidth) {
+		Polygon arrow = new Polygon(getArrowPoints(lineWidth));
+		// XXX Use plain white because we don't want to see the line
+		// under the decoration. Ideally, we should clip the line
+		// after the decoration starts, and use a transparent background
 		arrow.setFill(Color.WHITE);
-		arrow.setStroke(Color.BLACK);
+		arrow.setStroke(lineColor);
 		return arrow;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.papyrus.gef4.decorations.DecorationFactory#createEmptyDiamond()
-	 */
 	@Override
-	public Node createEmptyDiamond() {
-		return createDiamond(Color.BLACK, Color.WHITE);
+	public Node createFullArrow(Color lineColor, int lineWidth) {
+		Polygon arrow = new Polygon(getArrowPoints(lineWidth));
+		arrow.setFill(lineColor);
+		arrow.setStroke(lineColor);
+		return arrow;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.papyrus.gef4.decorations.DecorationFactory#createFullDiamond()
-	 */
 	@Override
-	public Node createFullDiamond() {
-		return createDiamond(Color.BLACK, Color.BLACK);
+	public Node createEmptyDiamond(Color lineColor, int lineWidth) {
+		// XXX Use plain white because we don't want to see the line
+		// under the decoration. Ideally, we should clip the line
+		// after the decoration starts, and use a transparent background
+		return createDiamond(lineColor, Color.WHITE, lineWidth);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.papyrus.gef4.decorations.DecorationFactory#createDiamond(javafx.scene.paint.Paint, javafx.scene.paint.Paint)
-	 */
 	@Override
-	public Node createDiamond(Paint stroke, Paint fill) {
-		Polygon diamond = new Polygon(getDiamondPoints());
+	public Node createFullDiamond(Color lineColor, int lineWidth) {
+		return createDiamond(lineColor, lineColor, lineWidth);
+	}
+
+	protected Node createDiamond(Paint stroke, Paint fill, int lineWidth) {
+		Polygon diamond = new Polygon(getDiamondPoints(lineWidth));
 		diamond.setStroke(stroke);
 		diamond.setFill(fill);
 		return diamond;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.papyrus.gef4.decorations.DecorationFactory#createCircle()
-	 */
 	@Override
-	public Node createCircle() {
+	public Node createCircle(Color lineColor, int lineWidth) {
 		double radius = 3;
-		return new Circle(-radius, 0, radius);
+		Circle circle = new Circle(-radius, 0, radius);
+		circle.setStroke(lineColor);
+		return circle;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.papyrus.gef4.decorations.DecorationFactory#createCrossCircle()
-	 */
 	@Override
-	public Node createCrossCircle() {
+	public Node createCrossCircle(Color lineColor, int lineWidth) {
 		double radius = 10;
 		Circle containmentCircle = new Circle(-radius, 0, radius);
-		containmentCircle.setFill(Color.WHITE);
-		containmentCircle.setStroke(Color.BLACK);
+		// XXX In this case, we can use Transparent, because the horizontal line
+		// directly overlaps the connection line, so the connection won't be visible
+		// under the decoration (Or, we expect it to be)
+		containmentCircle.setFill(Color.TRANSPARENT);
+		containmentCircle.setStroke(lineColor);
 
 		Line verticalLine = new Line(-radius, -radius + 1, -radius, radius - 1); // +1/-1 to avoid overlap with the circle
 		Line horizontalLine = new Line(-radius * 2 + 1, 0, -1, 0); // +1/-1 to avoid overlap with the circle
-		Group containmentLink = new Group(containmentCircle, verticalLine, horizontalLine);
+		verticalLine.setStroke(lineColor);
+		horizontalLine.setStroke(lineColor);
+
+		// XXX We currently hide the horizontal line, because it directly overlaps with the connection line
+		// Since we use a transparent background, the connection is visible and we don't need to draw that
+		// line on top of it. Once we support clipping for the connection below the decoration, we can (and should) restore
+		// the horizontal line.
+		Group containmentLink = new Group(containmentCircle, verticalLine/* , horizontalLine */);
 
 		return containmentLink;
 	}
 
-	protected double[] getArrowPoints() {
+	protected double[] getArrowPoints(int lineWidth) {
 		double width = 8;
 		double height = 5;
 		return new double[] { width, height, 0, 0, width, -height };
 	}
 
-	protected double[] getDiamondPoints() {
+	protected double[] getDiamondPoints(int lineWidth) {
 		int height = 10;
 		int width = 15;
 

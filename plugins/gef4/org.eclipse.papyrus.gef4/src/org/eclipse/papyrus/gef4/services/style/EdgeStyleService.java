@@ -12,10 +12,31 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.services.style;
 
+import java.util.Collections;
+import java.util.List;
+
+import javafx.scene.paint.Color;
+
 //TODO support multiple decorations
 public interface EdgeStyleService {
 
-	String getSourceDecoration();
+	default String getSourceDecoration() {
+		return null;
+	}
 
-	String getTargetDecoration();
+	default String getTargetDecoration() {
+		return null;
+	}
+
+	default int getLineWidth() {
+		return 1;
+	}
+
+	default Color getLineColor() {
+		return Color.BLACK;
+	}
+
+	default List<Double> getDashStyle() {
+		return Collections.emptyList();
+	}
 }

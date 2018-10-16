@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST.
+ * Copyright (c) 2015 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
+ * EclipseSource - Add line style
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.utils;
@@ -23,6 +24,8 @@ import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.FillStyle;
 import org.eclipse.gmf.runtime.notation.GradientStyle;
 import org.eclipse.gmf.runtime.notation.LineStyle;
+import org.eclipse.gmf.runtime.notation.LineType;
+import org.eclipse.gmf.runtime.notation.LineTypeStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
@@ -58,7 +61,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 /**
- * The Class NotationUtil.
+ * Helper class to convert from GMF Notation/CSS Values to JavaFX
  */
 // TODO add default value as attribute of methods ??
 public class NotationUtil {
@@ -107,6 +110,12 @@ public class NotationUtil {
 
 	public static final String LINE_DASH_LENGTH = "lineDashLength";
 
+	/**
+	 * This CSS Property is a little bit specific: GMF's Connector doesn't implement
+	 * {@link LineTypeStyle}.
+	 */
+	public static final String LINE_TYPE = "lineType";
+
 	public static final String BORDER_COLOR = "borderColor";
 
 	private static final int[] DEFAULT_CUSTOM_DASH_ARRAY = new int[] { 5, 5 };
@@ -126,13 +135,13 @@ public class NotationUtil {
 
 	public static final String ELEMENT_ICON = "elementIcon";
 
+	public static final String LINE_WIDTH = "lineWidth";
+
 	/**
 	 * Apply hsl color lightness to a color.
 	 *
-	 * @param view
-	 *            the view
-	 * @param color
-	 *            the color
+	 * @param view  the view
+	 * @param color the color
 	 * @return the color
 	 */
 	protected static Color applyLightness(final View view, final Color color) {
@@ -150,8 +159,7 @@ public class NotationUtil {
 	 * Gets the background paint apply to the view. see
 	 * {@link Paint#valueOf(String)}
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the background color
 	 */
 	public static Paint getBackgroundPaint(final View view) {
@@ -166,8 +174,7 @@ public class NotationUtil {
 	/**
 	 * Gets the background gradient end position.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the background gradient end position
 	 */
 	public static Point2D getBackgroundGradientEndPosition(final View view) {
@@ -194,8 +201,7 @@ public class NotationUtil {
 	/**
 	 * Gets the background gradient start position.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the background gradient start position
 	 */
 	public static Point2D getBackgroundGradientStartPosition(final View view) {
@@ -224,8 +230,7 @@ public class NotationUtil {
 	/**
 	 * Gets the border color with attributes lineColor and borderColor.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the border color
 	 */
 	public static BorderColors getBorderColor(final View view) {
@@ -256,10 +261,8 @@ public class NotationUtil {
 	/**
 	 * Gets the border style.
 	 *
-	 * @param view
-	 *            the view
-	 * @param defaultCustomDash
-	 *            the default custom dash
+	 * @param view              the view
+	 * @param defaultCustomDash the default custom dash
 	 * @return the border style
 	 */
 	public static BorderStrokeStyles getBorderStyle(final View view) {
@@ -367,8 +370,7 @@ public class NotationUtil {
 	/**
 	 * Gets the border widths.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the border widths
 	 */
 	public static BorderWidths getBorderWidths(final View view, int defaultBorderWidth) {
@@ -399,8 +401,7 @@ public class NotationUtil {
 	/**
 	 * Gets the color lightness. return -1 if not set.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the color lightness
 	 */
 	public static int getColorLightness(final View view) {
@@ -410,8 +411,7 @@ public class NotationUtil {
 	/**
 	 * Gets the corner bend color.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the corner bend color
 	 */
 	public static Paint getCornerBendColor(final View view) {
@@ -422,8 +422,7 @@ public class NotationUtil {
 	/**
 	 * Gets the corner bend width.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the corner bend width
 	 */
 	public static double getCornerBendWidth(final View view) {
@@ -435,8 +434,7 @@ public class NotationUtil {
 	/**
 	 * Gets the corner radii.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the corner radii
 	 */
 	public static CornerRadii getCornerRadii(final View view) {
@@ -464,8 +462,7 @@ public class NotationUtil {
 	/**
 	 * Gets the double border widths.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the double border widths
 	 */
 	public static Insets getDoubleBorderWidths(final View view) {
@@ -513,8 +510,7 @@ public class NotationUtil {
 	/**
 	 * Gets the effect.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the effect
 	 */
 	public static Effect getEffect(final View view) {
@@ -551,8 +547,7 @@ public class NotationUtil {
 	/**
 	 * Gets the fill color.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the fill color
 	 */
 	public static Color getFillColor(final View view) {
@@ -581,8 +576,7 @@ public class NotationUtil {
 	/**
 	 * Gets the gradient color1.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the gradient color1
 	 */
 	public static Color getGradientColor(final View view) {
@@ -609,8 +603,7 @@ public class NotationUtil {
 	/**
 	 * Gets the margin.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the margin
 	 */
 	public static Insets getMargin(final View view) {
@@ -631,8 +624,7 @@ public class NotationUtil {
 	/**
 	 * Gets the opacity.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the opacity
 	 */
 	public static double getOpacity(final View view) {
@@ -651,8 +643,7 @@ public class NotationUtil {
 	/**
 	 * Gets the padding.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the padding
 	 */
 	public static Insets getPadding(final View view) {
@@ -680,8 +671,7 @@ public class NotationUtil {
 	/**
 	 * Gets the rotate.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the rotate
 	 */
 	public static double getRotate(final View view) {
@@ -692,8 +682,7 @@ public class NotationUtil {
 	/**
 	 * Gets the shadow.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the shadow
 	 */
 	public static DropShadow getShadow(final View view) {
@@ -709,8 +698,7 @@ public class NotationUtil {
 	/**
 	 * Gets the shadow color.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the shadow color
 	 */
 	public static Color getShadowColor(final View view) {
@@ -721,8 +709,7 @@ public class NotationUtil {
 	/**
 	 * Gets the shadow width.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the shadow width
 	 */
 	public static int getShadowWidth(final View view) {
@@ -735,14 +722,13 @@ public class NotationUtil {
 	/**
 	 * Gets the shape type.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the shape type
 	 */
 	public static ShapeTypeEnum getShapeType(final View view) {
 		ShapeTypeEnum shapeTypeEnum = ShapeTypeEnum.NONE;
 
-		// priority: shapeTye>package>CornerBend>Oval
+		// priority: shapeType > package > CornerBend > Oval
 		// Get shape type
 		final String shapetype = NotationUtils.getStringValue(view, SHAPE_TYPE, null);
 		if (null != shapetype) {
@@ -771,8 +757,7 @@ public class NotationUtil {
 	/**
 	 * Gets the spacing.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the spacing
 	 */
 	public static double getSpacing(final View view) {
@@ -783,8 +768,7 @@ public class NotationUtil {
 	 * Gets the text alignment. TOP_CENTER, TOP_LEFT and TOP_RIGHT are return for
 	 * center, left and right.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return the text alignment
 	 */
 	public static Pos getTextAlignment(final View view) {
@@ -807,8 +791,7 @@ public class NotationUtil {
 	/**
 	 * Checks for double border.
 	 *
-	 * @param view
-	 *            the view
+	 * @param view the view
 	 * @return true, if successful
 	 */
 	public static boolean hasDoubleBorder(final View view) {
@@ -864,13 +847,11 @@ public class NotationUtil {
 
 	public static String getSourceDecoration(final View view) {
 		final String sourceDecoration = NotationUtils.getStringValue(view, SOURCE_DECORATION, "none"); //$NON-NLS-1$
-
 		return sourceDecoration;
 	}
 
 	public static String getTargetDecoration(final View view) {
 		final String targetDecoration = NotationUtils.getStringValue(view, TARGET_DECORATION, "none"); //$NON-NLS-1$
-
 		return targetDecoration;
 	}
 
@@ -916,16 +897,60 @@ public class NotationUtil {
 		return NotationUtils.getBooleanValue(view, ELEMENT_ICON, false);
 	}
 
-	//
-	//
-	// public static int getNotationMinHeight(final View view) {
-	// return NotationUtils.getIntValue(view, "minHeight", -1);// TODO MIA
-	// DEFAULT_VALUE;
-	// }
-	//
-	//
-	// public static int getNotationMinWidth(final View view) {
-	// return NotationUtils.getIntValue(view, "minWidth", -1);// TODO MIA
-	// DEFAULT_VALUE;
-	// }
+	public static int getLineWidth(View view) {
+		return NotationUtils.getIntValue(view, LINE_WIDTH, -1);
+	}
+
+	public static Color getLineColor(View view) {
+		final LineStyle style = (LineStyle) view.getStyle(NotationPackage.Literals.LINE_STYLE);
+		Color color = Color.BLACK;
+		final double opacity = getOpacity(view);
+
+		if (null != style) {
+			final int linecolor = style.getLineColor();
+			color = ColorUtil.getColor(linecolor, opacity);
+		}
+
+		// apply lightness with hsl color
+		color = applyLightness(view, color);
+
+		return color;
+	}
+
+	public static List<Double> getLineDashStyle(View view) {
+		LineTypeStyle style = (LineTypeStyle) view.getStyle(NotationPackage.Literals.LINE_TYPE_STYLE);
+
+		final int lineTypeValue;
+		if (style != null && style.getLineType() != null) {
+			lineTypeValue = style.getLineType().getValue();
+		} else {
+			String lineType = NotationUtils.getStringValue(view, LINE_TYPE, "Solid");
+			LineType literal = LineType.getByName(lineType);
+			if ("Custom".equals(lineType)) {
+				return getCustomDash(view);
+			} else if (literal == null) {
+				lineTypeValue = LineType.SOLID;
+			} else {
+				lineTypeValue = literal.getValue();
+			}
+		}
+
+		switch (lineTypeValue) { // XXX GMF Notation Enums aren't Enums; we can only switch by value
+		case LineType.DOT:
+			return Arrays.asList(1., 5.);
+		case LineType.DASH:
+			return Arrays.asList(5., 7.);
+		case LineType.DASH_DOT:
+			return Arrays.asList(7., 5., 1., 5.);
+		case LineType.DASH_DOT_DOT:
+			return Arrays.asList(7., 5., 1., 5., 1., 5.);
+		case LineType.DOUBLE:
+			// XXX What is Double? It doesn't match anything in SWT and is never used in GMF
+		case LineType.SOLID:
+			return Collections.emptyList();
+		default:
+			throw new IllegalStateException("Unknown line type: " + style.getLineType());
+		}
+	}
+
 }
