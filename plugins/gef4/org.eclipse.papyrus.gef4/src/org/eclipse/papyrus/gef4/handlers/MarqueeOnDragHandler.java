@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
+import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
 
@@ -52,6 +53,14 @@ public class MarqueeOnDragHandler extends org.eclipse.gef.mvc.fx.handlers.Marque
 		if (parentPart == childPart) {
 			return false;
 		}
+
+		// XXX Special case for 'Border Items' and Affixed Labels. That shouldn't be done here...
+		if (childPart instanceof BaseContentPart && !(childPart instanceof AffixedLabelContentPart)) {
+			if (((BaseContentPart<?, ?>) childPart).getLocator() != null) {
+				return false;
+			}
+		}
+
 		IVisualPart<?> parent = childPart.getParent();
 		while (parent != null) {
 			if (parent == parentPart) {

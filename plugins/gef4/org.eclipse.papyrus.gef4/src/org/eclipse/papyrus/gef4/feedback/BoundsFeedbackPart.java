@@ -19,7 +19,6 @@ import org.eclipse.papyrus.gef4.utils.BoundsUtil;
 import org.eclipse.papyrus.gef4.utils.EffectsUtil;
 
 import javafx.scene.Node;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -89,21 +88,11 @@ public class BoundsFeedbackPart extends AbstractFeedbackPart<Rectangle> {
 		visual.setEffect(EffectsUtil.BOUNDS_FEEDBACK_EFFECT);
 
 		if (newBounds.getHeight() > 0) {
-			if (host.getVisual() instanceof Region) {
-				// FIXME There should be a better way to take layout constraints into account
-				visual.setHeight(Math.max(newBounds.getHeight(), ((Region) host.getVisual()).getMinHeight()));
-			} else {
-				visual.setHeight(newBounds.getHeight());
-			}
+			visual.setHeight(newBounds.getHeight());
 		}
 
 		if (newBounds.getWidth() > 0) {
-			if (host.getVisual() instanceof Region) {
-				// FIXME There should be a better way to take layout constraints into account
-				visual.setWidth(Math.max(newBounds.getWidth(), ((Region) host.getVisual()).getMinWidth()));
-			} else {
-				visual.setWidth(newBounds.getWidth());
-			}
+			visual.setWidth(newBounds.getWidth());
 		}
 
 		// refresh rotate
