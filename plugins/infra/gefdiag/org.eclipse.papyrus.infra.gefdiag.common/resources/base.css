@@ -27,8 +27,6 @@ Package,
 Model{
 	isPackage:true;
 	textAlignment:left;
-	fillColor: deepskyblue;
-	gradient: grey horizontal;
 }
 
 Package > Label,
