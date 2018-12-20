@@ -58,7 +58,7 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 
 	private StyleService styleService;
 
-	private ContentChildrenProvider<MODEL> contentChildrenAdapter;
+	private ContentChildrenProvider<MODEL> contentChildrenProvider;
 
 	private boolean visualCreated = false;
 
@@ -110,9 +110,11 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	@Override
 	protected abstract N doCreateVisual();
 
+	static int childIterations;
+	static long childrenTime;
+
 	public void updateContentChildren() {
 		// TODO Update order?
-
 
 		// FIXME: This operation will have a high complexity:
 		// - n = number of children, c = number of changes (Addition/Removal)
@@ -132,7 +134,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 				removeContentChild(contentChild);
 			}
 		}
-
 	}
 
 	protected void installDefaultPolicies() {
@@ -260,9 +261,14 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	protected void doActivate() {
 		installDefaultPolicies();
 
-		super.doActivate();
+		this.contentChildren.addAll(getContentChildren());
+		doGetContentAnchorages().putAll(getAnchorageService().getModelAnchorages());
 
-		updateContentChildren();
+		refreshContentChildren();
+		refreshContentAnchorages();
+
+		super.doActivate();
+		// updateContentChildren();
 		updateAnchorages();
 
 		// FIXME: AbstractVisualPart refreshes the child before activating it
@@ -350,12 +356,12 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	 * @return the (never null) content children provider for this content part. Defaults to NotationContentChildrenProvider.getInstance()
 	 */
 	protected final ContentChildrenProvider<MODEL> getContentChildrenAdapter() {
-		return this.contentChildrenAdapter;
+		return this.contentChildrenProvider;
 	}
 
 	@Inject
 	protected void setContentChildrenAdapter(HelperProvider<ContentChildrenProvider<MODEL>> provider) {
-		this.contentChildrenAdapter = provider.get(this);
+		this.contentChildrenProvider = provider.get(this);
 	}
 
 	@Inject
@@ -365,9 +371,9 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	}
 
 	@Override
-	public SetMultimap<? extends Object, String> doGetContentAnchorages() {
-		if (contentAnchorages == null) { // Cannot initialize earlier, as this may be (indirectly) called from my
-											// parent's constructor. I may not be fully initialized yet...
+	public SetMultimap<Object, String> doGetContentAnchorages() {
+		if (contentAnchorages == null) { // Cannot initialize earlier, as this may be (indirectly) called from the
+											// parent's constructor. This instance may not be fully initialized yet...
 			contentAnchorages = HashMultimap.create();
 		}
 		return contentAnchorages;

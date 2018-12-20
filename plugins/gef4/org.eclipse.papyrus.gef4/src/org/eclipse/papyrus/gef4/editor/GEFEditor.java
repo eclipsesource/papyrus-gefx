@@ -14,9 +14,11 @@ package org.eclipse.papyrus.gef4.editor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.fx.core.ThreadSynchronize;
+import org.eclipse.fx.core.observable.FXObservableUtil;
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.fx.swt.canvas.FXCanvasEx;
 import org.eclipse.gef.mvc.fx.domain.IDomain;
@@ -46,7 +48,9 @@ import com.google.inject.Module;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 
 public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
@@ -75,7 +79,13 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
 	private Scene scene;
 
+	private BorderPane rootPane;
+
 	private final ListChangeListener<IContentPart<? extends Node>> selectionListener;
+
+	private final AtomicBoolean isReady = new AtomicBoolean(false);
+
+	private final AtomicBoolean isInitialized = new AtomicBoolean(false);
 
 	public GEFEditor(final Module module) {
 		this();
@@ -148,28 +158,29 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 		// Canvas and SceneContainer
 		canvas = new FXCanvasEx(parent, SWT.NONE);
 
-		SplitPane diagramSplitPane = new SplitPane();
+		BorderPane splashPane = new BorderPane();
+		splashPane.setCenter(new Label("Initializing diagram viewer. This may take a few seconds for larger diagrams..."));
 
-		diagramSplitPane.getItems().add(viewer.getCanvas());
-
-		Node paletteNode = palette.createPaletteControl();
-		if (paletteNode != null) {
-			diagramSplitPane.getItems().add(paletteNode);
-			// Do it a little bit later, since the initial layout pass may overwrite our values
-			threadSync.asyncExec(() -> this.optimizePalettePosition(diagramSplitPane));
-		}
-
-		scene = new Scene(diagramSplitPane);
-		canvas.setScene(scene);
-
-		// Activate
-		domain.activate();
-
-		// Set contents
-		viewer.getContents().setAll(getContents());
+		canvas.setScene(new Scene(splashPane));
+		// XXX Because of the async nature of JavaFX in SWT, it's difficult to
+		// know then the splash is actually visible to the user. Add a paint listener
+		// to make sure we display a message *before* freezing the screen for a few seconds.
+		canvas.addPaintListener(e -> isReady.set(true));
 
 		final GridModel gridModel = viewer.getAdapter(GridModel.class);
 		gridModel.setShowGrid(false);
+
+		rootPane = new BorderPane();
+		SplitPane diagramSplitPane = new SplitPane();
+		rootPane.setCenter(diagramSplitPane);
+
+		FXObservableUtil.onChange(diagramSplitPane.getChildrenUnmodifiable(), change -> threadSync.asyncExec(() -> optimizePalettePosition(diagramSplitPane)));
+		diagramSplitPane.getItems().add(viewer.getCanvas());
+
+		scene = new Scene(rootPane);
+
+		// Set contents
+		viewer.getContents().setAll(getContents());
 
 		getSelectionModel().getSelectionUnmodifiable().addListener(selectionListener);
 
@@ -179,6 +190,24 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 			selectionProvider.setSelection(new StructuredSelection(viewer.getRootPart().getChildrenUnmodifiable().get(0)));
 		}
 		getSite().setSelectionProvider(selectionProvider);
+
+		Node paletteNode = palette.createPaletteControl();
+		if (paletteNode != null) {
+			((SplitPane) (rootPane.getCenter())).getItems().add(paletteNode);
+		}
+	}
+
+	protected void initViewerContents() {
+		threadSync.asyncExec(() -> {
+			canvas.setScene(scene);
+			// Activate
+			domain.activate();
+		});
+
+		// XXX Once everything is in place, we still need to render the initial JavaFX Frame. The first one
+		// takes time, because the first layout/css pass is expensive. It may still take a few seconds after
+		// this point until the diagram is visible (Depending on how big the diagram is). After the first
+		// frame, the diagram editor becomes much more responsive, since all further layout updates are incremental.
 	}
 
 	protected void optimizePalettePosition(SplitPane diagramSplitPane) {
@@ -199,7 +228,7 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 			// of the palette Region to provide appropriate pref width.
 			double scrollbarExtra = 40;
 			double paletteWidth = palette.prefWidth(diagramSplitPane.getHeight()) + scrollbarExtra;
-			diagramSplitPane.setDividerPositions(1 - paletteWidth / totalWidth);
+			diagramSplitPane.setDividerPositions(Math.max(0.7, 1 - paletteWidth / totalWidth));
 		}
 	}
 
@@ -213,9 +242,24 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 
 	@Override
 	public void setFocus() {
-		// if (canvas != null && !canvas.isDisposed()) {
-		// canvas.setFocus();
-		// }
+		asyncInit();
+	}
+
+	private void asyncInit() {
+		if (!isInitialized.get()) {
+			if (isReady.get()) {
+				initViewerContents();
+				// threadSync.asyncExec(this::initViewerContents);
+				// Job job = Job.create("Init viewer contents", monitor -> {
+				// initViewerContents();
+				// return Status.OK_STATUS;
+				// });
+				// job.schedule();
+			} else {
+				// Try again later
+				threadSync.asyncExec(this::asyncInit);
+			}
+		}
 	}
 
 	@Override

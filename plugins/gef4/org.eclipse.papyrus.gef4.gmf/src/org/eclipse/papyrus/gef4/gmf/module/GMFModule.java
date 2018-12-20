@@ -298,15 +298,28 @@ public abstract class GMFModule extends AbstractModule {
 		return diagram; // Scoped value; See PartScope
 	}
 
+	private int partsNumber;
+	private long totalPartsCreationTime;
+
 	@Provides
 	@PartScoped
 	IContentPart<?> createPart(View view, IContentPartProvider<View> provider, Injector injector) {
+		long begin = System.nanoTime();
 		IContentPart<?> contentPart = provider.createContentPart(view);
 		if (contentPart == null) {
 			System.err.println("Unable to create a part for View: " + view.getType());
 			return null;
 		}
 		injector.injectMembers(contentPart);
+		long end = System.nanoTime();
+		partsNumber++;
+		totalPartsCreationTime += end - begin;
+
+//		System.out.println("---");
+//		System.out.println("Parts: " + partsNumber);
+//		System.out.println("Time: " + TimeUnit.NANOSECONDS.toMicros(end - begin) + " µs");
+//		System.out.println("AvgTime: " + TimeUnit.NANOSECONDS.toMicros(totalPartsCreationTime / partsNumber) + " µs");
+//		System.out.println("Total time: " + TimeUnit.NANOSECONDS.toMillis(totalPartsCreationTime) + "ms");
 		return contentPart;
 	}
 
