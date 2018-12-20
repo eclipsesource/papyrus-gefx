@@ -27,5 +27,5 @@ location "http://download.eclipse.org/releases/2018-09" {
 }
 
 location "http://download.eclipse.org/efxclipse/runtime-released/3.4.0/site/" {
-	org.eclipse.fx.ui.di.interopt [3.3.0,4.0.0) //FIXME: Is this available in the Release train?
+	org.eclipse.fx.ui.di.interopt [3.3.0, 4.0.0)
 }
