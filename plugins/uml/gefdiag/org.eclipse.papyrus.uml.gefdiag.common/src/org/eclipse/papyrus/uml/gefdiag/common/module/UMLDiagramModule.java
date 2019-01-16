@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2016 CEA LIST and others.
+ * Copyright (c) 2016 - 2019 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  EclipseSource
  *
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.module;
@@ -27,8 +28,10 @@ import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.gef4.services.LabelService;
+import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
 import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
 import org.eclipse.papyrus.uml.gefdiag.common.services.UMLImageService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.edges.SimpleAssociationEdgeService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.CommentLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.GeneralizationLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.NamedElementLabelService;
@@ -85,6 +88,12 @@ public abstract class UMLDiagramModule extends GMFModule {
 				});
 
 		configureLabelProviders(labelProviders);
+
+		Multibinder<HelperProviderParticipant<EdgeStyleService>> edgeStyleProviders = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<EdgeStyleService>>() {
+					// Type literal
+				});
+		configureStyleProviders(edgeStyleProviders);
 	}
 
 	protected void configureLabelProviders(Multibinder<HelperProviderParticipant<LabelService>> labelProviders) {
@@ -112,14 +121,17 @@ public abstract class UMLDiagramModule extends GMFModule {
 
 		// Operation
 		labelProviders.addBinding().toInstance(new OperationLabelService(SPECIFIC_NAMED_ELEMENTS_PRIORITY));
+	}
 
+	protected void configureStyleProviders(Multibinder<HelperProviderParticipant<EdgeStyleService>> edgeStyleProviders) {
+		// Associations
+		edgeStyleProviders.addBinding().toInstance(new SimpleAssociationEdgeService(DEFAULT_UML_PRIORITY));
 	}
 
 	protected void bindLabelPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(
 				AdapterKey.defaultRole())
 				.to(UMLImageService.class);
-
 	}
 
 	protected void bindElementTypesRegistry() {

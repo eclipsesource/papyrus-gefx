@@ -44,9 +44,23 @@ Message[messageSort=asyncSignal] {
 	/*TODO*/
 }
 
-Connector[type="4023"] { /* TODO Selector */
+Connector[type="Element_ContainmentEdge"] { /* TODO Selector (Shouldn't use internal ID) */
 	sourceDecoration: crossCircle;
 	rotateWithLink: false; /* The decoration is a circle, there is no need to adjust it to match the link orientation */
 }
 
+Dependency,
+Abstraction,
+Realization,
+InterfaceRealization {
+	lineType: Dash;
+}
 
+ContextLink,
+CommentLink,
+ConstraintLink {
+	/* Use higher density dash for these links */
+	lineType: Custom;
+	lineDashLength: 5;
+	lineDashGap: 3;
+}
