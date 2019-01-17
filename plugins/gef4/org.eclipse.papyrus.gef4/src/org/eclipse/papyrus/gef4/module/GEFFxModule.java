@@ -32,13 +32,16 @@ import org.eclipse.gef.mvc.fx.gestures.IHandlerResolver;
 import org.eclipse.gef.mvc.fx.handlers.HoverOnHoverHandler;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
+import org.eclipse.papyrus.gef4.behavior.CreationBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.feedback.ChangeBoundsFeedbackPartFactory;
+import org.eclipse.papyrus.gef4.feedback.CreationFeedbackPartFactory;
 import org.eclipse.papyrus.gef4.gestures.ToolHandlerResolver;
 import org.eclipse.papyrus.gef4.handle.SelectionHandleFactory;
 import org.eclipse.papyrus.gef4.handlers.MarqueeOnDragHandler;
@@ -46,6 +49,7 @@ import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
+import org.eclipse.papyrus.gef4.model.CreationModel;
 import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
@@ -91,14 +95,18 @@ public class GEFFxModule extends MvcFxModule {
 		bindCompartmentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CompartmentContentPart.class));
 		bindLabelPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), LabelContentPart.class));
 		bindAffixedLabelPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
+		bindContentAndRootPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class));
+		bindContentAndRootPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IRootPart.class));
 
 		bindDiagramPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), DiagramContentPart.class));
 
 		bindSelectionProviderFactory();
 
 		bindBoundsBehavior();
-
 		bindBoundsModel();
+
+		bindCreationModel();
+		bindCreationBehavior();
 
 		bindPalette();
 
@@ -122,6 +130,11 @@ public class GEFFxModule extends MvcFxModule {
 		bindLabelStyleServices();
 		bindConnectionService();
 		bindAnchorageService();
+	}
+
+	protected void bindContentAndRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
+				.to(CreationBehavior.class);
 	}
 
 	@Override
@@ -277,8 +290,18 @@ public class GEFFxModule extends MvcFxModule {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(ChangeBoundsModel.class);
 
-		bindBoundsFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
+				.to(CreationModel.class);
 
+		bindBoundsFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
+		bindCreationFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
+	}
+
+	protected void bindCreationFeedbackPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(CreationBehavior.CREATION_ROLE))
+				.to(CreationFeedbackPartFactory.class);
 	}
 
 	protected void bindBoundsFeedbackPartFactoryAsContentViewerAdapter(
@@ -455,6 +478,14 @@ public class GEFFxModule extends MvcFxModule {
 
 	protected void bindBoundsModel() {
 		binder().bind(ChangeBoundsModel.class);
+	}
+
+	protected void bindCreationModel() {
+		binder().bind(CreationModel.class);
+	}
+
+	protected void bindCreationBehavior() {
+		binder().bind(CreationBehavior.class);
 	}
 
 	@Override

@@ -38,6 +38,12 @@ import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import javafx.geometry.BoundingBox;
 import javafx.scene.Node;
 
+/**
+ * <p>
+ * Simple implementation of a {@link ResizeHandler}, that changes the
+ * {@link Bounds} of a {@link org.eclipse.gmf.runtime.notation.Node}
+ * </p>
+ */
 public class ResizeNodeHandler extends AbstractHandler implements ResizeHandler {
 
 	private static Logger logger = LoggerCreator.createLogger(ResizeNodeHandler.class);
@@ -76,7 +82,7 @@ public class ResizeNodeHandler extends AbstractHandler implements ResizeHandler 
 
 	@Override
 	public void showFeedback(Dimension delta, Direction direction) {
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 		final Rectangle newBounds = computeNewBoundsInParent(delta, direction);
 		if (newBounds == null) { // If the host element doesn't have bounds (e.g. Connections)
 			return;

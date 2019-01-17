@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2018 EclipseSource and others.
+ * Copyright (c) 2019 EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,15 +12,18 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.editor.handlers;
 
+import java.util.Collection;
+
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
-import org.eclipse.papyrus.gef4.handle.Direction;
 
-public interface ResizeHandler {
+import javafx.geometry.Point2D;
 
-	ICommand resize(Dimension delta, Direction direction);
+public interface CreateNodeHandler {
 
-	void showFeedback(Dimension delta, Direction direction);
+	ICommand create(Point2D location, Dimension size, Collection<String> elementTypes);
+
+	void showFeedback(Point2D location, Dimension size, Collection<String> elementType);
 
 	void removeFeedback();
 

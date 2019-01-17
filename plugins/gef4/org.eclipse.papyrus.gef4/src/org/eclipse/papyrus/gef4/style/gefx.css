@@ -6,6 +6,7 @@
 	/* -fx-effect: dropshadow(gaussian, rgb(125, 173, 217), 5, 0.6, 0, 0); */
 }
 
+/** FIXME: Is this actually used? */
 .selection-feedback {
 	-fx-fill: transparent;
 	-fx-stroke: black;
@@ -19,5 +20,11 @@
 	-fx-stroke: rgb(100, 100, 100);
 	-fx-stroke-width: 1;
 	-fx-stroke-type: outside;
-	
+}
+
+.creation-feedback {
+	-fx-fill: rgba(166, 202, 227, 0.5);
+	-fx-stroke: rgb(112, 100, 227);
+	-fx-stroke-width: 1;
+	-fx-stroke-type: outside;
 }

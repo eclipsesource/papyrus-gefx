@@ -12,6 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.style;
 
+import java.net.URL;
+
 /**
  * <p>
  * This class declares some CSS Constants and gives access to the default stylesheet
@@ -33,5 +35,20 @@ public final class GEFStyle {
 	 * The CSS Class applied on bounds feedback
 	 */
 	public static final String BOUNDS_FEEDBACK = "bounds-feedback";
+
+	/**
+	 * The CSS Class applied on creation feedback
+	 */
+	public static final String CREATION_FEEDBACK = "creation-feedback";
+
+	/**
+	 * @return
+	 * 		The URL to the gefx CSS Stylesheet, to be installed on the Scene.
+	 *         This CSS configures some generic (model-independent) UI styles, like
+	 *         feedback colors...
+	 */
+	public static URL getGEFxCSS() {
+		return GEFStyle.class.getResource("gefx.css");
+	}
 
 }

@@ -18,6 +18,7 @@ import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
+import org.eclipse.papyrus.gef4.model.CreationModel;
 
 import com.google.common.reflect.TypeToken;
 
@@ -84,5 +85,14 @@ public class ModelUtil {
 			// Nothing
 		});
 		return selectionModel;
+	}
+
+	public static CreationModel getCreationModel(IVisualPart<? extends Node> host) {
+		IViewer viewer = getViewer(host);
+		if (viewer == null) {
+			return null;
+		}
+
+		return viewer.getAdapter(CreationModel.class);
 	}
 }

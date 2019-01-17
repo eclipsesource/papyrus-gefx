@@ -10,7 +10,6 @@
  *   EclipseSource - Initial API and implementation
  *
  *****************************************************************************/
-
 package org.eclipse.papyrus.infra.gefdiag.common.palette;
 
 import java.io.IOException;

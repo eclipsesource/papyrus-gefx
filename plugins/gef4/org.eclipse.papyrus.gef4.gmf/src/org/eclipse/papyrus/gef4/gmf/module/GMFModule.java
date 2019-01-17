@@ -33,6 +33,7 @@ import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.editor.handlers.CreateElementAndViewHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveNodeHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveOnDragHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.ResizeNodeHandler;
@@ -68,6 +69,7 @@ import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
+import org.eclipse.papyrus.gef4.parts.NodeContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.gef4.scopes.PartScope;
 import org.eclipse.papyrus.gef4.scopes.PartScoped;
@@ -111,17 +113,25 @@ public abstract class GMFModule extends AbstractModule {
 		bind(TransactionService.class).to(EditingDomainTransactionService.class);
 
 		bindIContentPartFactory();
+		bindIContentPartProvider();
 		bindDefaultContentChildrenProvider();
 
 		bindScope();
 
-		bindStyleServices();
 		bindContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), BaseContentPart.class));
 		bindConnectionAdapters(AdapterMaps.getAdapterMapBinder(binder(), ConnectionContentPart.class));
-
-		bindIContentPartProvider();
+		bindNodeAdapters(AdapterMaps.getAdapterMapBinder(binder(), NodeContentPart.class));
+		bindRootPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IRootPart.class));
+		bindPrimaryPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IPrimaryContentPart.class));
+		// define specific policy for affixed Label
+		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
+		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractHandlePart.class));
+		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
 
 		binder().bind(IRootPart.class).to(NotationDiagramRootPart.class);
+
+		// Customizations
+		bindStyleServices();
 
 		bindAnchorageService();
 
@@ -130,12 +140,6 @@ public abstract class GMFModule extends AbstractModule {
 		bindContentChildrenProvider();
 
 		configureLocators();
-
-		bindPrimaryPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), IPrimaryContentPart.class));
-		// define specific policy for affixed Label
-		bindAffixedLabelContentPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AffixedLabelContentPart.class));
-		bindFXHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), AbstractHandlePart.class));
-		bindCollapseHandlePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CollapseHandlePart.class));
 	}
 
 	private void bindContentChildrenProvider() {
@@ -159,6 +163,11 @@ public abstract class GMFModule extends AbstractModule {
 
 	protected void bindContentPartAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
 		bindModelAdapters(mapBinder);
+		mapBinder.addBinding(AdapterKey.defaultRole()).to(CreateElementAndViewHandler.class);
+	}
+
+	protected void bindRootPartAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
+		mapBinder.addBinding(AdapterKey.defaultRole()).to(CreateElementAndViewHandler.class);
 	}
 
 	protected void bindConnectionAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
@@ -410,10 +419,14 @@ public abstract class GMFModule extends AbstractModule {
 		};
 	}
 
-	protected void bindPrimaryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindNodeAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveOnDragHandler.class);
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveNodeHandler.class);
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ResizeNodeHandler.class);
+	}
+
+	protected void bindPrimaryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		// Nothing (yet)
 	}
 
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {

@@ -37,6 +37,12 @@ import org.eclipse.papyrus.infra.gmfdiag.common.helper.NotationHelper;
 import javafx.geometry.BoundingBox;
 import javafx.scene.Node;
 
+/**
+ * <p>
+ * Simple implementation of {@link MoveHandler} that changes the
+ * {@link Location} of a Node.
+ * </p>
+ */
 public class MoveNodeHandler extends AbstractHandler implements MoveHandler {
 
 	private static Logger logger = LoggerCreator.createLogger(MoveNodeHandler.class);
@@ -88,7 +94,7 @@ public class MoveNodeHandler extends AbstractHandler implements MoveHandler {
 
 	@Override
 	public void removeFeedback() {
-		final ChangeBoundsModel boundsModel = getHost().getRoot().getViewer().getAdapter(ChangeBoundsModel.class);
+		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 		try {
 			boundsModel.removeManagedElement(getHost());
 		} catch (final Exception ex) {

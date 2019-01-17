@@ -179,7 +179,7 @@ public abstract class GEFEditor<MODEL_ROOT> extends EditorPart {
 		diagramSplitPane.getItems().add(viewer.getCanvas());
 
 		scene = new Scene(rootPane);
-		scene.getStylesheets().add(GEFStyle.class.getResource("gefx.css").toExternalForm());
+		scene.getStylesheets().add(GEFStyle.getGEFxCSS().toExternalForm());
 
 		// Set contents
 		viewer.getContents().setAll(getContents());
