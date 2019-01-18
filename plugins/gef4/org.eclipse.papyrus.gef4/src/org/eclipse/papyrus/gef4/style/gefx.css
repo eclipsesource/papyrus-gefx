@@ -28,3 +28,7 @@
 	-fx-stroke-width: 1;
 	-fx-stroke-type: outside;
 }
+
+.creation-feedback-area {
+	-fx-background-color: rgba(166, 202, 227, 0.5);
+}

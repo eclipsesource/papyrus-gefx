@@ -57,9 +57,7 @@ public class CreationFeedbackPartFactory implements IFeedbackPartFactory {
 			if (target instanceof XYCompartmentContentPart || target instanceof IRootPart || target instanceof DiagramContentPart) {
 				feedbackPart = new NodeCreationFeedbackPart(creationBounds);
 			} else if (target instanceof ListCompartmentContentPart) {
-				// TODO feedbackPart = new ListItemCreationFeedbackPart(creationBounds);
-				feedbackPart = null;
-				logger.info("TODO feedback in list compartments");
+				feedbackPart = new ListItemCreationFeedbackPart(creationBounds);
 			} else {
 				feedbackPart = null;
 				logger.warning("Unsupported creation feedback: " + target.getClass().getName());

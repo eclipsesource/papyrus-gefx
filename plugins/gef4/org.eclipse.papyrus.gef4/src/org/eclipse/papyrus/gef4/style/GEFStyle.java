@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2018 EclipseSource and others.
+ * Copyright (c) 2018 - 2019 EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,22 +24,28 @@ public final class GEFStyle {
 	/**
 	 * The CSS Class applied on resize handles
 	 */
-	public static final String RESIZE_HANDLE = "resize-handle";
+	public static final String RESIZE_HANDLE = "resize-handle"; //$NON-NLS-1$
 
 	/**
 	 * The CSS Class applied on selection feedback
 	 */
-	public static final String SELECTION_FEEDBACK = "selection-feedback";
+	public static final String SELECTION_FEEDBACK = "selection-feedback"; //$NON-NLS-1$
 
 	/**
 	 * The CSS Class applied on bounds feedback
 	 */
-	public static final String BOUNDS_FEEDBACK = "bounds-feedback";
+	public static final String BOUNDS_FEEDBACK = "bounds-feedback"; //$NON-NLS-1$
 
 	/**
 	 * The CSS Class applied on creation feedback
 	 */
-	public static final String CREATION_FEEDBACK = "creation-feedback";
+	public static final String CREATION_FEEDBACK = "creation-feedback"; //$NON-NLS-1$
+
+	/**
+	 * The CSS Class applied on target list compartments for feedback during creation of list items
+	 */
+	// TODO Generalize this? For now it's only used for ListCompartments
+	public static final String CREATION_FEEDBACK_AREA = "creation-feedback-area"; //$NON-NLS-1$
 
 	/**
 	 * @return

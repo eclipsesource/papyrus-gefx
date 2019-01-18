@@ -11,38 +11,58 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.feedback;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.fx.core.Subscription;
+import org.eclipse.papyrus.gef4.style.GEFStyle;
+
+import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 
-// TODO
-// This feedback is a little bit specific, as it changes the background of a ListCompartment,
-// rather than adding a new FeedbackElement on top of the diagram. How can we support this?
-public class ListItemCreationFeedbackPart extends AbstractCreationFeedbackPart<Rectangle> {
+/**
+ * <p>
+ * A special feedback part that simply highlights the target node.
+ * This feedback part's visual is never actually used.
+ * </p>
+ */
+public class ListItemCreationFeedbackPart extends AbstractCreationFeedbackPart<Node> {
+
+	private static final List<Subscription> disposeList = new ArrayList<>();
 
 	public ListItemCreationFeedbackPart(org.eclipse.gef.geometry.planar.Rectangle creationBounds) {
 		super(creationBounds);
-		throw new UnsupportedOperationException("TODO ListItemCreationFeedbackPart is not implemented yet; please do not use it");
+		// XXX Creation bounds aren't useful for a ListItem insertion. We should use different
+		// feedback factories, or at least different parameters (e.g. including the element type/id,
+		// or even a complete GEF3-style CreateRequest)
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.mvc.fx.parts.AbstractVisualPart#doCreateVisual()
-	 */
 	@Override
-	protected Rectangle doCreateVisual() {
-		// TODO Auto-generated method stub
-		return null;
+	protected Node doCreateVisual() {
+		// TODO Add an actual visual node in the target compartment? (e.g. a line at the end of the list?)
+		// Currently this is not too useful, because we always create list items at the end; but if we
+		// support item insertion (Between two existing items), such feedback would be very useful
+		return new Rectangle(); // Unused for now, but still required for IVisualPart API
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.mvc.fx.parts.AbstractVisualPart#doRefreshVisual(javafx.scene.Node)
-	 */
-	@Override
-	protected void doRefreshVisual(Rectangle visual) {
-		// TODO Auto-generated method stub
+	protected Node getTargetNode() {
+		return getAnchorage().getVisual();
+	}
 
+	@Override
+	protected void doRefreshVisual(Node visual) {
+		Node targetNode = getTargetNode();
+		if (targetNode != null && !targetNode.getStyleClass().contains(GEFStyle.CREATION_FEEDBACK_AREA)) {
+			targetNode.getStyleClass().add(GEFStyle.CREATION_FEEDBACK_AREA);
+			disposeList.add(() -> targetNode.getStyleClass().remove(GEFStyle.CREATION_FEEDBACK_AREA));
+		}
+	}
+
+	@Override
+	protected void doDeactivate() {
+		disposeList.forEach(Subscription::disposeIfExists);
+		disposeList.clear();
+		super.doDeactivate();
 	}
 
 }
