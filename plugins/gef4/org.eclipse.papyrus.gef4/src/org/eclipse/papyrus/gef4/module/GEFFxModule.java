@@ -37,10 +37,12 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.ui.parts.ISelectionProviderFactory;
 import org.eclipse.papyrus.gef4.behavior.ChangeBoundsBehavior;
+import org.eclipse.papyrus.gef4.behavior.ConnectionCreationBehavior;
 import org.eclipse.papyrus.gef4.behavior.CreationBehavior;
 import org.eclipse.papyrus.gef4.behavior.ElementSelectionBehavior;
 import org.eclipse.papyrus.gef4.editor.SelectionProviderFactory;
 import org.eclipse.papyrus.gef4.feedback.ChangeBoundsFeedbackPartFactory;
+import org.eclipse.papyrus.gef4.feedback.ConnectionCreationFeedbackPartFactory;
 import org.eclipse.papyrus.gef4.feedback.CreationFeedbackPartFactory;
 import org.eclipse.papyrus.gef4.gestures.ToolHandlerResolver;
 import org.eclipse.papyrus.gef4.handle.SelectionHandleFactory;
@@ -290,6 +292,7 @@ public class GEFFxModule extends MvcFxModule {
 
 		bindBoundsFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
 		bindCreationFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
+		bindConnectionCreationFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
 	}
 
 	protected void bindCreationFeedbackPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -297,6 +300,13 @@ public class GEFFxModule extends MvcFxModule {
 				.addBinding(AdapterKey
 						.role(CreationBehavior.CREATION_ROLE))
 				.to(CreationFeedbackPartFactory.class);
+	}
+
+	protected void bindConnectionCreationFeedbackPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder
+				.addBinding(AdapterKey
+						.role(ConnectionCreationBehavior.CONNECTION_CREATION_ROLE))
+				.to(ConnectionCreationFeedbackPartFactory.class);
 	}
 
 	protected void bindBoundsFeedbackPartFactoryAsContentViewerAdapter(
@@ -368,7 +378,8 @@ public class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		// Most binding moved to PrimaryPartAdapter due to the new propagation mechanism of policies in GEF4
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
+				.to(ConnectionCreationBehavior.class);
 	}
 
 	@Override

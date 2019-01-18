@@ -48,6 +48,11 @@ public final class GEFStyle {
 	public static final String CREATION_FEEDBACK_AREA = "creation-feedback-area"; //$NON-NLS-1$
 
 	/**
+	 * The CSS Class applied on the connection feedback figure during creation
+	 */
+	public static final String CONNECTION_CREATION_FEEDBACK = "connection-creation-feedback"; //$NON-NLS-1$
+
+	/**
 	 * @return
 	 * 		The URL to the gefx CSS Stylesheet, to be installed on the Scene.
 	 *         This CSS configures some generic (model-independent) UI styles, like

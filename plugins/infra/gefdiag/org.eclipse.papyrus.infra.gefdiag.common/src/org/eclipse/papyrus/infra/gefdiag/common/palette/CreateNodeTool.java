@@ -99,7 +99,7 @@ public class CreateNodeTool extends AbstracTool {
 				if (activeHandler != null && (activeHandler.isDragInProgress() || iVisualPart == activeHandler.getHost())) {
 					handler = activeHandler;
 				} else {
-					handler = new CreateNodeToolHandler(iVisualPart, elementIds);
+					handler = new CreateNodeToolHandler(iVisualPart);
 				}
 
 				if (handlerType.isInstance(handler)) {
@@ -144,17 +144,14 @@ public class CreateNodeTool extends AbstracTool {
 	 */
 	class CreateNodeToolHandler extends AbstractHandler implements IOnClickHandler, IOnDragHandler, IOnStrokeHandler, IOnHoverHandler {
 
-		private Collection<String> elementIds;
-
 		// XXX: Since CreateNodeToolHandler is already associated to a single VisualPart,
 		// do we need to store the partHandler that was used to display feedback?
 		private CreateNodeHandler partHandler;
 
 		private boolean dragInProgress;
 
-		public CreateNodeToolHandler(IVisualPart<? extends Node> iVisualPart, Collection<String> elementIds) {
+		public CreateNodeToolHandler(IVisualPart<? extends Node> iVisualPart) {
 			setAdaptable(iVisualPart);
-			this.elementIds = elementIds;
 		}
 
 		/**
@@ -256,7 +253,6 @@ public class CreateNodeTool extends AbstracTool {
 		}
 
 		private void reset() {
-			System.out.println("Do reset");
 			dragInProgress = false;
 			if (partHandler != null) {
 				partHandler.removeFeedback();

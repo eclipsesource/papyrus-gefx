@@ -17,6 +17,7 @@ import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
+import org.eclipse.papyrus.gef4.behavior.ConnectionCreationBehavior;
 import org.eclipse.papyrus.gef4.behavior.CreationBehavior;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
 
@@ -89,5 +90,9 @@ public class ModelUtil {
 
 	public static CreationBehavior getCreationBehavior(IVisualPart<?> host) {
 		return host.getAdapter(CreationBehavior.class);
+	}
+
+	public static ConnectionCreationBehavior getConnectionCreationBehavior(IVisualPart<?> host) {
+		return host.getAdapter(ConnectionCreationBehavior.class);
 	}
 }

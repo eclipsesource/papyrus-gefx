@@ -17,27 +17,31 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.gef.geometry.planar.Rectangle;
+import org.eclipse.fx.core.log.Logger;
+import org.eclipse.fx.core.log.LoggerCreator;
 import org.eclipse.gef.mvc.fx.behaviors.AbstractBehavior;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.fx.parts.IFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
-import org.eclipse.papyrus.gef4.feedback.CreationFeedbackPart;
+import org.eclipse.papyrus.gef4.feedback.Anchors;
+import org.eclipse.papyrus.gef4.feedback.ConnectionCreationFeedbackPart;
 
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 
-public class CreationBehavior extends AbstractBehavior {
+public class ConnectionCreationBehavior extends AbstractBehavior {
 
-	public static final String CREATION_ROLE = "elementCreation";
+	public static final String CONNECTION_CREATION_ROLE = "connectionCreation";
+
+	private static final Logger logger = LoggerCreator.createLogger(ConnectionCreationBehavior.class);
 
 	private final Map<IVisualPart<?>, IFeedbackPart<?>> currentFeedbackParts = new HashMap<>();
 
-	private final ObservableMap<IVisualPart<?>, Rectangle> feedbackRequests = FXCollections.observableHashMap();
+	private final ObservableMap<IVisualPart<?>, Anchors> feedbackRequests = FXCollections.observableHashMap();
 
-	private final MapChangeListener<IVisualPart<?>, Rectangle> feedbackListener = this::creationModelChanged;
+	private final MapChangeListener<IVisualPart<?>, Anchors> feedbackListener = this::creationModelChanged;
 
 	@Override
 	protected void doActivate() {
@@ -52,18 +56,19 @@ public class CreationBehavior extends AbstractBehavior {
 		super.doDeactivate();
 	}
 
-	public void addFeedback(IVisualPart<?> host, Rectangle creationBounds) {
-		feedbackRequests.put(host, creationBounds);
+	public void addFeedback(IVisualPart<?> host, Anchors anchors) {
+		feedbackRequests.put(host, anchors);
 	}
 
 	public void deleteFeedback(IVisualPart<?> host) {
 		feedbackRequests.remove(host);
 	}
 
-	private void creationModelChanged(MapChangeListener.Change<? extends IVisualPart<?>, ? extends Rectangle> change) {
+	private void creationModelChanged(MapChangeListener.Change<? extends IVisualPart<?>, ? extends Anchors> change) {
 		IVisualPart<?> modifiedPart = change.getKey();
 		IFeedbackPartFactory feedbackPartFactory = getFeedbackPartFactory(modifiedPart.getViewer());
 		if (feedbackPartFactory == null) {
+			logger.debug("No feedback factory installed for " + CONNECTION_CREATION_ROLE);
 			return;
 		}
 		if (change.getValueAdded() != null) { // Addition or Update
@@ -80,9 +85,9 @@ public class CreationBehavior extends AbstractBehavior {
 		}
 	}
 
-	protected void updateFeedback(IFeedbackPart<?> feedbackPart, Rectangle creationBounds) {
-		if (feedbackPart instanceof CreationFeedbackPart) {
-			((CreationFeedbackPart) feedbackPart).updateBounds(creationBounds);
+	protected void updateFeedback(IFeedbackPart<?> feedbackPart, Anchors anchors) {
+		if (feedbackPart instanceof ConnectionCreationFeedbackPart) {
+			((ConnectionCreationFeedbackPart) feedbackPart).updateAnchors(anchors);
 		}
 	}
 
@@ -90,8 +95,8 @@ public class CreationBehavior extends AbstractBehavior {
 		super.addAnchoreds(targets, feedbackParts);
 		if (feedbackParts != null) {
 			for (IFeedbackPart<?> f : feedbackParts) {
-				if (f instanceof CreationFeedbackPart) {
-					currentFeedbackParts.put(((CreationFeedbackPart) f).getAnchorage(), f);
+				if (f instanceof ConnectionCreationFeedbackPart) {
+					currentFeedbackParts.put(((ConnectionCreationFeedbackPart) f).getAnchorage(), f);
 				}
 			}
 		}
@@ -116,7 +121,7 @@ public class CreationBehavior extends AbstractBehavior {
 
 	@Override
 	protected IFeedbackPartFactory getFeedbackPartFactory(IViewer viewer) {
-		return getFeedbackPartFactory(viewer, CREATION_ROLE);
+		return getFeedbackPartFactory(viewer, CONNECTION_CREATION_ROLE);
 	}
 
 }

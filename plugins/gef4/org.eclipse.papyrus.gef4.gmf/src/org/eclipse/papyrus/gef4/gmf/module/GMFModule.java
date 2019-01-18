@@ -33,6 +33,7 @@ import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.editor.handlers.CreateConnectionAndViewHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.CreateElementAndViewHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveNodeHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveOnDragHandler;
@@ -164,6 +165,7 @@ public abstract class GMFModule extends AbstractModule {
 	protected void bindContentPartAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {
 		bindModelAdapters(mapBinder);
 		mapBinder.addBinding(AdapterKey.defaultRole()).to(CreateElementAndViewHandler.class);
+		mapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionAndViewHandler.class);
 	}
 
 	protected void bindRootPartAdapters(MapBinder<AdapterKey<?>, Object> mapBinder) {

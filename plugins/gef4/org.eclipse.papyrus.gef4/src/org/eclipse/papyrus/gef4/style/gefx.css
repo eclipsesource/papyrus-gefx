@@ -32,3 +32,8 @@
 .creation-feedback-area {
 	-fx-background-color: rgba(166, 202, 227, 0.5);
 }
+
+.connection-creation-feedback * /* The Connection is a wrapper around a JavaFX figure and doesn't support direct styling */{
+	-fx-stroke: #5392bd;
+	-fx-stroke-dash-array: 8 6;
+}
