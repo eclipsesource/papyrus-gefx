@@ -43,6 +43,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -171,6 +172,9 @@ public class CreateNodeTool extends AbstracTool {
 
 		@Override
 		public void startDrag(MouseEvent e) {
+			if (e.getButton() != MouseButton.PRIMARY) {
+				return;
+			}
 			// Mouse press
 			CreateNodeHandler newPartHandler = getPartHandler();
 			updateFeedback(newPartHandler, e, null);
@@ -210,6 +214,9 @@ public class CreateNodeTool extends AbstracTool {
 			if (!dragInProgress) {
 				return;
 			}
+			if (e.getButton() != MouseButton.PRIMARY) {
+				return;
+			}
 			doCreate(e, delta);
 			dragInProgress = false;
 			reset();
@@ -237,7 +244,6 @@ public class CreateNodeTool extends AbstracTool {
 		@Override
 		public void release(KeyEvent event) {
 			if (event.getCode() == KeyCode.ESCAPE) {
-				System.out.println("Escape; deactivate");
 				deactivate();
 			}
 		}
@@ -250,6 +256,7 @@ public class CreateNodeTool extends AbstracTool {
 		}
 
 		private void reset() {
+			System.out.println("Do reset");
 			dragInProgress = false;
 			if (partHandler != null) {
 				partHandler.removeFeedback();

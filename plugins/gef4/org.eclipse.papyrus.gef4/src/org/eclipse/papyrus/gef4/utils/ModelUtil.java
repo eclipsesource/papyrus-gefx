@@ -17,8 +17,8 @@ import org.eclipse.gef.mvc.fx.models.SelectionModel;
 import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
+import org.eclipse.papyrus.gef4.behavior.CreationBehavior;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.model.CreationModel;
 
 import com.google.common.reflect.TypeToken;
 
@@ -36,7 +36,7 @@ public class ModelUtil {
 	 * @param host
 	 * @return
 	 */
-	public static SelectionModel getSelectionModel(IVisualPart<? extends Node> host) {
+	public static SelectionModel getSelectionModel(IVisualPart<?> host) {
 		IViewer viewer = getViewer(host);
 
 		if (viewer == null) {
@@ -62,7 +62,7 @@ public class ModelUtil {
 		return host.getRoot();
 	}
 
-	public static IViewer getViewer(IVisualPart<? extends Node> host) {
+	public static IViewer getViewer(IVisualPart<?> host) {
 		IRootPart<?> rootPart = getRoot(host);
 		if (rootPart == null) {
 			return null;
@@ -70,7 +70,7 @@ public class ModelUtil {
 		return rootPart.getViewer();
 	}
 
-	public static FocusModel getFocusModel(IVisualPart<? extends Node> host) {
+	public static FocusModel getFocusModel(IVisualPart<?> host) {
 		IViewer viewer = getViewer(host);
 		if (viewer == null) {
 			return null;
@@ -87,12 +87,7 @@ public class ModelUtil {
 		return selectionModel;
 	}
 
-	public static CreationModel getCreationModel(IVisualPart<? extends Node> host) {
-		IViewer viewer = getViewer(host);
-		if (viewer == null) {
-			return null;
-		}
-
-		return viewer.getAdapter(CreationModel.class);
+	public static CreationBehavior getCreationBehavior(IVisualPart<?> host) {
+		return host.getAdapter(CreationBehavior.class);
 	}
 }

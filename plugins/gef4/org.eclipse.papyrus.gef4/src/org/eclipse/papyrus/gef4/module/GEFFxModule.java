@@ -49,7 +49,6 @@ import org.eclipse.papyrus.gef4.handlers.SelectOnClickHandler;
 import org.eclipse.papyrus.gef4.history.EmptyOperationHistory;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.model.ChangeBoundsModel;
-import org.eclipse.papyrus.gef4.model.CreationModel;
 import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
 import org.eclipse.papyrus.gef4.parts.AffixedLabelContentPart;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
@@ -105,7 +104,6 @@ public class GEFFxModule extends MvcFxModule {
 		bindBoundsBehavior();
 		bindBoundsModel();
 
-		bindCreationModel();
 		bindCreationBehavior();
 
 		bindPalette();
@@ -289,9 +287,6 @@ public class GEFFxModule extends MvcFxModule {
 
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(ChangeBoundsModel.class);
-
-		adapterMapBinder.addBinding(AdapterKey.defaultRole())
-				.to(CreationModel.class);
 
 		bindBoundsFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
 		bindCreationFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
@@ -478,10 +473,6 @@ public class GEFFxModule extends MvcFxModule {
 
 	protected void bindBoundsModel() {
 		binder().bind(ChangeBoundsModel.class);
-	}
-
-	protected void bindCreationModel() {
-		binder().bind(CreationModel.class);
 	}
 
 	protected void bindCreationBehavior() {

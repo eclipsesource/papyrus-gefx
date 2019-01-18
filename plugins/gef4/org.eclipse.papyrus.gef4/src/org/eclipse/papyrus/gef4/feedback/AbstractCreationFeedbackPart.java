@@ -17,7 +17,7 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import javafx.scene.Node;
 
-public abstract class AbstractCreationFeedbackPart<T extends Node> extends AbstractFeedbackPart<T> {
+public abstract class AbstractCreationFeedbackPart<T extends Node> extends AbstractFeedbackPart<T> implements CreationFeedbackPart {
 
 	protected Rectangle creationBoundsInLocal;
 
@@ -25,11 +25,13 @@ public abstract class AbstractCreationFeedbackPart<T extends Node> extends Abstr
 		this.creationBoundsInLocal = creationBoundsInLocal;
 	}
 
+	@Override
 	public final void updateBounds(final Rectangle creationBounds) {
 		this.creationBoundsInLocal = creationBounds;
 		refreshVisual();
 	}
 
+	@Override
 	public final IVisualPart<? extends Node> getAnchorage() {
 		return getAnchoragesUnmodifiable().keySet().iterator().next();
 	}

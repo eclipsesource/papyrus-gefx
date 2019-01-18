@@ -43,8 +43,8 @@ import org.eclipse.gmf.runtime.notation.Bounds;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.behavior.CreationBehavior;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramRootPart;
-import org.eclipse.papyrus.gef4.model.CreationModel;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.utils.ModelUtil;
 import org.eclipse.papyrus.infra.gmfdiag.common.commands.SemanticElementAdapter;
@@ -191,20 +191,21 @@ public class CreateElementAndViewHandler extends AbstractHandler implements Crea
 	public void showFeedback(Point2D location, Dimension size, Collection<String> elementTypes) {
 		ICommand command = create(location, size, elementTypes);
 		if (command != null && command.canExecute()) {
-			final CreationModel creation = ModelUtil.getCreationModel(getHost());
+
+			final CreationBehavior creationBehavior = ModelUtil.getCreationBehavior(getHost());
 
 			final Rectangle creationBounds = new Rectangle(location.getX(), location.getY(),
 					size == null ? 0 : size.getWidth(), size == null ? 0 : size.getHeight());
 
-			creation.addManagedElement(getHost(), creationBounds);
+			creationBehavior.addFeedback(getHost(), creationBounds);
 		}
 	}
 
 	@Override
 	public void removeFeedback() {
-		final CreationModel creationModel = ModelUtil.getCreationModel(getHost());
+		final CreationBehavior creationBehavior = ModelUtil.getCreationBehavior(getHost());
 		try {
-			creationModel.removeManagedElement(getHost());
+			creationBehavior.deleteFeedback(getHost());
 		} catch (final Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}
