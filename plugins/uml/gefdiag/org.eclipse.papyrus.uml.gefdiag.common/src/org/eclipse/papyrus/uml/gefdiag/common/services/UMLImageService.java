@@ -19,9 +19,20 @@ import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.services.ImageService;
 
+/**
+ * <p>
+ * Simple implementation of {@link ImageService} for UML Elements,
+ * based on the org.eclipse.uml2.uml.edit icon folder. This image
+ * service doesn't support stereotypes or overlays.
+ * </p>
+ */
 public class UMLImageService extends IAdaptable.Bound.Impl<LabelContentPart<View>> implements ImageService {
 
-	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16";
+	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16"; //$NON-NLS-1$
+
+	public UMLImageService(LabelContentPart<View> labelPart) {
+		setAdaptable(labelPart);
+	}
 
 	/**
 	 * @see org.eclipse.papyrus.gef4.services.ImageService#getImagePath()

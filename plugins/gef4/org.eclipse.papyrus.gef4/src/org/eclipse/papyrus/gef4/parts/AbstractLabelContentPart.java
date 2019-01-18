@@ -39,6 +39,8 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 
 	private LabelService labelService;
 
+	private ImageService imageService;
+
 	public AbstractLabelContentPart(final MODEL model) {
 		super(model);
 	}
@@ -70,8 +72,13 @@ public abstract class AbstractLabelContentPart<MODEL, N extends Node> extends Ba
 		return labelStyleService;
 	}
 
+	@Inject
+	public void setImageService(HelperProvider<ImageService> provider) {
+		this.imageService = provider.get(this);
+	}
+
 	protected ImageService getImageService() {
-		return getAdapter(ImageService.class);
+		return imageService;
 	}
 
 	protected Label getLabelVisual() {

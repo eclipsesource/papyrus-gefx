@@ -14,6 +14,11 @@ package org.eclipse.papyrus.gef4.services;
 
 public interface ImageService {
 
+	/**
+	 * Return the path to the image, for the element managed by this service
+	 */
+	// XXX: We should probably return an Image or a Node rather than a Path,
+	// to support more formats & allow for decorations/overlays.
 	String getImagePath();
 
 }

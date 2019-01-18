@@ -67,6 +67,7 @@ import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ConnectionService;
 import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
+import org.eclipse.papyrus.gef4.services.ImageService;
 import org.eclipse.papyrus.gef4.services.LabelService;
 import org.eclipse.papyrus.gef4.services.impl.EmptyImageService;
 import org.eclipse.papyrus.gef4.services.impl.HelperProviderImpl;
@@ -124,6 +125,7 @@ public class GEFFxModule extends MvcFxModule {
 
 		bindLocators();
 		bindLabelService();
+		bindImageService();
 		bindStyleServices();
 		bindEdgeStyleServices();
 		bindCompartmentStyleServices();
@@ -176,6 +178,34 @@ public class GEFFxModule extends MvcFxModule {
 
 	protected void bindToolManager() {
 		binder().bind(ToolManager.class).to(DefaultToolManager.class).in(Singleton.class);
+	}
+
+	protected void bindImageService() {
+		binder().bind(new TypeLiteral<HelperProvider<ImageService>>() {
+			// Type Literal
+		}).to(new TypeLiteral<HelperProviderImpl<ImageService>>() {
+			// Type Literal
+		}).in(Singleton.class);
+
+		Multibinder<HelperProviderParticipant<ImageService>> imageProviders = Multibinder.newSetBinder(binder(),
+				new TypeLiteral<HelperProviderParticipant<ImageService>>() {
+					// Type literal
+				});
+
+		imageProviders.addBinding().toInstance(new HelperProviderParticipant<ImageService>() {
+
+			private ImageService noImageProvider = new EmptyImageService();
+
+			@Override
+			public ImageService get(IVisualPart<?> part) {
+				return noImageProvider;
+			}
+
+			@Override
+			public double getPriority(IVisualPart<?> part) {
+				return DEFAULT_GEFX_PRIORITY;
+			}
+		});
 	}
 
 	protected void bindLabelService() {
@@ -423,10 +453,6 @@ public class GEFFxModule extends MvcFxModule {
 	}
 
 	protected void bindLabelPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(
-				AdapterRoles.fallbackRole())
-				.to(EmptyImageService.class);
-
 		adapterMapBinder
 				.addBinding(
 						AdapterKey.role(DefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
