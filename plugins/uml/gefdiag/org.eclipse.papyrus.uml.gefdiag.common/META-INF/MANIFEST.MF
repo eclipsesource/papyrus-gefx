@@ -19,5 +19,6 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.papyrus.uml.gefdiag.common.locator,
  org.eclipse.papyrus.uml.gefdiag.common.module,
  org.eclipse.papyrus.uml.gefdiag.common.parts,
- org.eclipse.papyrus.uml.gefdiag.common.provider
+ org.eclipse.papyrus.uml.gefdiag.common.provider,
+ org.eclipse.papyrus.uml.gefdiag.common.services.label
 Automatic-Module-Name: org.eclipse.papyrus.uml.gefdiag.common

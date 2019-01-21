@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2016 CEA LIST and others.
+ * Copyright (c) 2016 - 2019 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
+ *  EclipseSource
  *
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.clazz.module;
@@ -20,8 +21,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.papyrus.gef4.gmf.locators.ConnectionLabelLocator;
+import org.eclipse.papyrus.gef4.gmf.locators.ConnectionLabelLocator.Reference;
 import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.palette.DefaultPaletteRenderer;
@@ -30,12 +34,20 @@ import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
+import org.eclipse.papyrus.gef4.services.LabelService;
 import org.eclipse.papyrus.infra.gefdiag.common.palette.PapyrusPaletteDescriptor;
 import org.eclipse.papyrus.infra.gmfdiag.paletteconfiguration.PaletteConfiguration;
 import org.eclipse.papyrus.uml.diagram.clazz.edit.parts.ModelEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.ClassConstants;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationFloatingNameEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicitySourceEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicityTargetEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationSourceNameEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationTargetNameEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.RedefinableTemplateSignatureEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.TemplateSignatureEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.providers.ContentPartProvider;
+import org.eclipse.papyrus.uml.gefdiag.clazz.service.label.AssociationLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.locator.TemplateLocator;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
 
@@ -72,6 +84,53 @@ public class ClassDiagramModule extends UMLDiagramModule {
 				return Optional.of(new TemplateLocator(basePart));
 			}
 		});
+
+		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(
+				DEFAULT_CLASS_PRIORITY, AssociationFloatingNameEditPart.class, AssociationMultiplicitySourceEditPart.class, AssociationMultiplicityTargetEditPart.class, AssociationSourceNameEditPart.class, AssociationTargetNameEditPart.class) {
+			@Override
+			protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
+				ConnectionLabelLocator locator = new ConnectionLabelLocator(basePart);
+				View view = basePart.getContent();
+				switch (view.getType()) {
+				// Source and Target are reversed: the sourceRoleLabel is closer to the association target end
+				case ClassConstants.ASSOCIATION_SOURCE_ROLE:
+					locator.setReferencePoint(Reference.TARGET, new Point(0, 0));
+					break;
+				case ClassConstants.ASSOCIATION_TARGET_ROLE:
+					locator.setReferencePoint(Reference.SOURCE, new Point(0, 0));
+					break;
+				case ClassConstants.ASSOCIATION_SOURCE_MULTIPLICITY:
+					locator.setReferencePoint(Reference.TARGET, new Point(0, 0));
+					break;
+				case ClassConstants.ASSOCIATION_TARGET_MULTIPLICITY:
+					locator.setReferencePoint(Reference.SOURCE, new Point(0, 0));
+					break;
+				case ClassConstants.ASSOCIATION_NAME:
+					locator.setReferencePoint(Reference.CENTER, new Point(0, 0));
+					break;
+				case ClassConstants.ASSOCIATION_STEREOTYPE:
+					locator.setReferencePoint(Reference.CENTER, new Point(0, 0));
+					break;
+				default:
+					System.err.println("Unknown type: " + view.getType());
+				}
+				return Optional.of(locator);
+			}
+		});
+	}
+
+	/**
+	 * @see org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule#configureLabelProviders(com.google.inject.multibindings.Multibinder)
+	 *
+	 * @param labelProviders
+	 */
+	@Override
+	protected void configureLabelProviders(Multibinder<HelperProviderParticipant<LabelService>> labelProviders) {
+		super.configureLabelProviders(labelProviders);
+
+
+		// Association (+ Role labels)
+		labelProviders.addBinding().toInstance(new AssociationLabelService(DEFAULT_CLASS_PRIORITY));
 	}
 
 	protected void bindPalette() {

@@ -17,15 +17,18 @@ import org.eclipse.uml2.uml.MultiplicityElement;
 public class MultiplicityHelper {
 
 	public String getMultiplicity(MultiplicityElement element) {
+		return getMultiplicity(element, true);
+	}
+
+	public String getMultiplicity(MultiplicityElement element, boolean withBrackets) {
 		StringBuilder builder = new StringBuilder();
 
 		int upper = element.getUpper();
 		int lower = element.getLower();
 		if (upper != 1 || lower != 1) {
 			if (lower < 0 || upper == 0) {
-				builder.append("[Invalid]");
+				builder.append("Invalid");
 			} else {
-				builder.append('[');
 				if (upper == lower) {
 					builder.append(upper);
 				} else if (lower == 0 && upper < 0) {
@@ -39,11 +42,12 @@ public class MultiplicityHelper {
 						builder.append(upper);
 					}
 				}
-
-				builder.append(']');
 			}
 		}
 
+		if (withBrackets && builder.length() > 0) {
+			return '[' + builder.toString() + ']';
+		}
 		return builder.toString();
 	}
 
