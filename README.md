@@ -8,6 +8,8 @@ The idea is to provide an editor based on GEFx and JavaFX, while retaining the c
 
 The project depends on GEFx (Currently, 5.0.2 / Photon.0 or 2018-09), Papyrus 4.x (Currently, [4.0.0, 4.1.0], Photon.0 or 2018-09) and E(fx)clipse ([3.3.0, 3.4.0], Photon.0 or 2018-09)
 
+Note: Papyrus GEFx does NOT work with Eclipse 2018-12, due to SWT dropping support for GTK2 in 4.10 (2018-12), while the version of JavaFX we currently use doesn't support GTK3: https://www.eclipse.org/eclipse/news/4.10/platform.php#gtk2-removal
+
 ## Project status
 
 This project is still work-in-progress, and some parts of the code have been implemented a long time ago, while GEFx APIs were still moving a lot. Thus, these parts of the code may be disabled (Typically commented out) or broken. This is e.g. the case for Connections, as well as most interactions.
