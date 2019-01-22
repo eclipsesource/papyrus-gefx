@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import plugin="org.eclipse.fx.ui.di.interopt"/>
+   </requires>
+
    <plugin
          id="org.eclipse.papyrus.gef4"
          download-size="0"
