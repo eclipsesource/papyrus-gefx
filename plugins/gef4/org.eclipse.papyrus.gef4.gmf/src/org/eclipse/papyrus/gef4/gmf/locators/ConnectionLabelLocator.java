@@ -88,10 +88,22 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 	 * reference point for each label (e.g. above source, below target, above
 	 * center...)
 	 */
-	public void setReferencePoint(Reference reference, Point offset) {
+	public void setReference(Reference reference) {
 		Assert.isNotNull(reference);
-		Assert.isNotNull(offset);
 		this.reference = reference;
+	}
+	
+	public Reference getReference() {
+		return this.reference;
+	}
+	
+	public Point getReferencePoint() {
+		Location location = getLocation();
+		Connection connection = findParentConnection();
+		if (connection == null) {
+			return null;
+		}
+		return getReferencePoint(connection, new Point(0, 0), useLinkLF(location));
 	}
 
 	/**
@@ -240,6 +252,10 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 			}
 		}
 		return segments.get(segments.size() - 1);
+	}
+	
+	public Connection getConnection() {
+		return findParentConnection();
 	}
 
 	private Connection findParentConnection() {

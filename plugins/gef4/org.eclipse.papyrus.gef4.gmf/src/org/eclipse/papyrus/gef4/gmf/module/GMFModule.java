@@ -35,6 +35,7 @@ import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.CreateConnectionAndViewHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.CreateElementAndViewHandler;
+import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveConnectionLabelHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveNodeHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.MoveOnDragHandler;
 import org.eclipse.papyrus.gef4.gmf.editor.handlers.ResizeNodeHandler;
@@ -432,8 +433,11 @@ public abstract class GMFModule extends AbstractModule {
 	}
 
 	protected void bindAffixedLabelContentPartAdapters(final MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		 // For now we use the same MoveHandler for all AffixedLabels; 
+		// we should configure that after https://github.com/eclipsesource/papyrus-gefx/issues/31 is fixed
 		adapterMapBinder.addBinding(AdapterKey.role("AffixedLabel"))// $NON-NLS-1$
-				.to(MoveNodeHandler.class);
+				.to(MoveConnectionLabelHandler.class);
+		
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MoveOnDragHandler.class);
 	}
 

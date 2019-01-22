@@ -148,7 +148,7 @@ public class BorderItemLocator implements Locator {
 		Point nearestPoint = null;
 
 		for (Line outline : polyline.getCurves()) {
-			Point nearestLinePoint = findNearestPoint(outline, point);
+			Point nearestLinePoint = outline.getProjection(point);
 
 			double distanceSquared = getDistanceSquared(nearestLinePoint, point);
 			if (distanceSquared < minDistance) {
@@ -164,49 +164,6 @@ public class BorderItemLocator implements Locator {
 		double i = p1.x - p2.x;
 		double j = p1.y - p2.y;
 		return i * i + j * j;
-	}
-
-	protected static final Point findNearestPoint(Line line, Point point /* C */) {
-
-		Point lineA = line.getP1();
-		Point lineB = line.getP2();
-
-		if (lineA.equals(lineB)) {
-			return lineA; // One-point segment
-		}
-
-		double xAB = lineB.x - lineA.x; // x(AB)
-		double yAB = lineB.y - lineA.y; // y(AB)
-
-		double xAC = point.x - lineA.x; // x(AC)
-		double yAC = point.y - lineA.y; // y(AC)
-
-		double segmentSizeSquared = getDistanceSquared(lineA, lineB); // AB x AB
-
-		// Dot product: AB.AC
-		// =
-		// +/- (AB x AH)
-		// Where H is the orthogonal projection of C on (AB)
-		double dotProduct = xAC * xAB + yAC * yAB;
-
-		// +/- (AB x AH) / (AB x AB)
-		// =
-		// +/- AH/AB
-		double projectionRatio = dotProduct / segmentSizeSquared;
-
-		final Point result;
-
-		if (projectionRatio < 0) { // Outside the segment, further than A. A is the closest point
-			result = lineA;
-		} else if (projectionRatio > 1) { // Outside the segment, further than B. B is the closest point
-			result = lineB;
-		} else { // The projection is between A and B, on the segment
-			result = new Point();
-			result.x = lineA.x + projectionRatio * xAB;
-			result.y = lineA.y + projectionRatio * yAB;
-		}
-
-		return result;
 	}
 
 	@Override

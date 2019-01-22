@@ -45,6 +45,7 @@ import org.eclipse.papyrus.uml.gefdiag.common.services.label.NamedElementLabelSe
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.OperationLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.PropertyLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.SlotLabelService;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.StereotypeLabelService;
 
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
@@ -134,6 +135,12 @@ public abstract class UMLDiagramModule extends GMFModule {
 
 		// Operation
 		labelProviders.addBinding().toInstance(new OperationLabelService(SPECIFIC_NAMED_ELEMENTS_PRIORITY));
+		
+		//
+		// Stereotype labels
+		//
+		
+		labelProviders.addBinding().toInstance(new StereotypeLabelService(MAX_UML_PRIORITY));
 	}
 
 	protected void configureImageProviders(Multibinder<HelperProviderParticipant<ImageService>> imageProviders) {

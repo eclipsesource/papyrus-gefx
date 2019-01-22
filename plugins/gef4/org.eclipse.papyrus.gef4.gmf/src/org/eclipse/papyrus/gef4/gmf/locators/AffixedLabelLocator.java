@@ -53,16 +53,8 @@ public class AffixedLabelLocator implements Locator {
 	public void applyLayout(Node node) {
 		installChildrenListener(node);
 
-		Location location;
-		if (view instanceof org.eclipse.gmf.runtime.notation.Node) {
-			org.eclipse.gmf.runtime.notation.Node nodeView = (org.eclipse.gmf.runtime.notation.Node) view;
-			LayoutConstraint constraint = nodeView.getLayoutConstraint();
-			if (constraint instanceof Location) {
-				location = (Location) constraint;
-			} else {
-				return;
-			}
-		} else {
+		Location location = getLocation();
+		if (location == null) {
 			return;
 		}
 
@@ -73,6 +65,17 @@ public class AffixedLabelLocator implements Locator {
 
 		node.setLayoutX(position.getX());
 		node.setLayoutY(position.getY());
+	}
+
+	protected Location getLocation() {
+		if (view instanceof org.eclipse.gmf.runtime.notation.Node) {
+			org.eclipse.gmf.runtime.notation.Node nodeView = (org.eclipse.gmf.runtime.notation.Node) view;
+			LayoutConstraint constraint = nodeView.getLayoutConstraint();
+			if (constraint instanceof Location) {
+				return (Location) constraint;
+			}
+		}
+		return null;
 	}
 
 	protected Point2D getLocationInParent(Location location) {

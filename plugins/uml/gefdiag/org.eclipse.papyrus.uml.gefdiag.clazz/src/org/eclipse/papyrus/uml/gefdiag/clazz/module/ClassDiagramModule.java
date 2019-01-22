@@ -21,7 +21,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.locators.ConnectionLabelLocator;
@@ -50,6 +49,7 @@ import org.eclipse.papyrus.uml.gefdiag.clazz.providers.ContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.clazz.service.label.AssociationLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.locator.TemplateLocator;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.StereotypeLabelService;
 
 import com.google.inject.Injector;
 import com.google.inject.Provides;
@@ -94,22 +94,22 @@ public class ClassDiagramModule extends UMLDiagramModule {
 				switch (view.getType()) {
 				// Source and Target are reversed: the sourceRoleLabel is closer to the association target end
 				case ClassConstants.ASSOCIATION_SOURCE_ROLE:
-					locator.setReferencePoint(Reference.TARGET, new Point(0, 0));
+					locator.setReference(Reference.TARGET);
 					break;
 				case ClassConstants.ASSOCIATION_TARGET_ROLE:
-					locator.setReferencePoint(Reference.SOURCE, new Point(0, 0));
+					locator.setReference(Reference.SOURCE);
 					break;
 				case ClassConstants.ASSOCIATION_SOURCE_MULTIPLICITY:
-					locator.setReferencePoint(Reference.TARGET, new Point(0, 0));
+					locator.setReference(Reference.TARGET);
 					break;
 				case ClassConstants.ASSOCIATION_TARGET_MULTIPLICITY:
-					locator.setReferencePoint(Reference.SOURCE, new Point(0, 0));
+					locator.setReference(Reference.SOURCE);
 					break;
 				case ClassConstants.ASSOCIATION_NAME:
-					locator.setReferencePoint(Reference.CENTER, new Point(0, 0));
+					locator.setReference(Reference.CENTER);
 					break;
 				case ClassConstants.ASSOCIATION_STEREOTYPE:
-					locator.setReferencePoint(Reference.CENTER, new Point(0, 0));
+					locator.setReference(Reference.CENTER);
 					break;
 				default:
 					System.err.println("Unknown type: " + view.getType());
@@ -131,6 +131,10 @@ public class ClassDiagramModule extends UMLDiagramModule {
 
 		// Association (+ Role labels)
 		labelProviders.addBinding().toInstance(new AssociationLabelService(DEFAULT_CLASS_PRIORITY));
+		
+		// Register the StereotypeLabelService with a higher priority than specific elements,
+		// since it only applies to StereotypeLabels (Other label providers are only filtered by semantic element)
+		labelProviders.addBinding().toInstance(new StereotypeLabelService(MAX_CLASS_PRIORITY));
 	}
 
 	protected void bindPalette() {

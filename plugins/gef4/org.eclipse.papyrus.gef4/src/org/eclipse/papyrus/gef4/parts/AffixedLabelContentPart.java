@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST.
+ * Copyright (c) 2015, 2019 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Initial API and Implementation
+ *  EclipseSource
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
@@ -24,7 +25,8 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderWidths;
 
 /**
- * The Class AffixedLabelContentPart.
+ * {@link LabelContentPart} for floating labels, that are not visually owned
+ * by their parent (e.g. small node labels, connection labels...)
  */
 public class AffixedLabelContentPart<MODEL> extends LabelContentPart<MODEL> {
 
@@ -39,6 +41,13 @@ public class AffixedLabelContentPart<MODEL> extends LabelContentPart<MODEL> {
 		// Locator is required; for now it is handled by the GMF subclass
 	}
 
+	@Override
+	public boolean isSelectable() {
+		// Avoid selecting invisible (empty) labels during marquee selection 
+		String text = getText();
+		return text != null && ! text.isEmpty();
+	}
+	
 	@Override
 	protected void refreshVisualInTransaction(Label visual) {
 		super.refreshVisualInTransaction(visual);
