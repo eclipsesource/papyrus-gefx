@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Papyrus GEFx GMF Eclipse3 Integration
+Bundle-SymbolicName: org.eclipse.papyrus.gefx.gmf.e3
+Bundle-Version: 0.2.0.qualifier
+Bundle-Vendor: Eclipse Modeling Project
+Automatic-Module-Name: org.eclipse.papyrus.gefx.gmf.e3
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.eclipse.papyrus.gef4.gmf;bundle-version="0.2.0";visibility:=reexport,
+ org.eclipse.papyrus.gefx.e3;bundle-version="0.2.0";visibility:=reexport,
+ org.eclipse.emf.ecore,
+ org.eclipse.gmf.runtime.notation,
+ org.eclipse.ui.workbench,
+ org.eclipse.papyrus.infra.ui
+Export-Package: org.eclipse.papyrus.gefx.gmf.e3

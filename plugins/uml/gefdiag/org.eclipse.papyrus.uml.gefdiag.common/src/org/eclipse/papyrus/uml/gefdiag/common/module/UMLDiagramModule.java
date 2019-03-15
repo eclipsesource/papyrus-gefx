@@ -20,6 +20,7 @@ import javax.inject.Singleton;
 
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.emf.type.core.ClientContextManager;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
 import org.eclipse.gmf.runtime.emf.type.core.IClientContext;
@@ -30,6 +31,7 @@ import org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationListItemContentPart;
 import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
 import org.eclipse.papyrus.gef4.layout.Locator;
+import org.eclipse.papyrus.gef4.palette.PaletteDescriptor;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
@@ -108,6 +110,12 @@ public abstract class UMLDiagramModule extends GMFModule {
 					// Type literal
 				});
 		configureImageProviders(imageProviders);
+		
+		bindPaletteDescriptorAsViewerAdapter();
+	}
+
+	protected void bindPaletteDescriptorAsViewerAdapter() {
+		AdapterMaps.getAdapterMapBinder(binder(), IViewer.class).addBinding(AdapterKey.defaultRole()).to(PaletteDescriptor.class);
 	}
 
 	protected void configureLabelProviders(Multibinder<HelperProviderParticipant<LabelService>> labelProviders) {

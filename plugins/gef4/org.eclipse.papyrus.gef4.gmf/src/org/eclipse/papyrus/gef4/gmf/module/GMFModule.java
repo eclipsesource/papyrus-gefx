@@ -12,6 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.module;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -92,6 +94,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
+import com.google.inject.MembersInjector;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
@@ -105,6 +108,9 @@ import javafx.scene.Node;
  * GMF/Notation.
  * </p>
  */
+// TODO Split the module between base GMF and full GMF
+// Base should only contain Part Factories and Notation-related services
+// Full should contain the Element Types and Client Context
 public abstract class GMFModule extends AbstractModule {
 
 	public static final double DEFAULT_GMF_PRIORITY = 1;
@@ -332,8 +338,25 @@ public abstract class GMFModule extends AbstractModule {
 			return null;
 		}
 		// TODO Initialize part scope before injecting the part
-		injector.injectMembers(contentPart);
+		// injector.injectMembers(contentPart);
+		
+		// WIP Experiments with MembersInjector
+		MembersInjector<IContentPart<?>> membersInjector = (MembersInjector<IContentPart<?>>)injectors.get(contentPart.getClass());
+		if (membersInjector != null) {
+			// Better way: Bindings have been statically checked (startup errors)
+			membersInjector.injectMembers(contentPart);
+		} else {
+			// Fallback way: dynamically find the required bindings (runtime errors)
+			injector.injectMembers(contentPart);
+		}
+		
 		return contentPart;
+	}
+	
+	private Map<Class<? extends IContentPart<?>>, MembersInjector<? extends IContentPart<?>>> injectors = new HashMap<>();
+	
+	protected <T extends IContentPart<?>> void registerPartClass(Class<T> partClass) {
+		injectors.computeIfAbsent(partClass, binder()::getMembersInjector);
 	}
 
 	@Provides

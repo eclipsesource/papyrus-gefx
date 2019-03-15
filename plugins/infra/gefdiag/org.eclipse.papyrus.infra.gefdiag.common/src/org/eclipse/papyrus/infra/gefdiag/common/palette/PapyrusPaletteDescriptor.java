@@ -15,6 +15,7 @@ package org.eclipse.papyrus.infra.gefdiag.common.palette;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ import org.eclipse.fx.core.Subscription;
 import org.eclipse.fx.core.command.Command;
 import org.eclipse.fx.core.observable.FXObservableUtil;
 import org.eclipse.papyrus.gef4.palette.PaletteDescriptor;
+import org.eclipse.papyrus.gef4.palette.declarative.IdCreationTool;
 import org.eclipse.papyrus.gef4.tools.Tool;
 import org.eclipse.papyrus.gef4.tools.ToolManager;
 import org.eclipse.papyrus.infra.gmfdiag.paletteconfiguration.ChildConfiguration;
@@ -227,7 +229,7 @@ public class PapyrusPaletteDescriptor implements PaletteDescriptor {
 		}
 	}
 
-	private class NodeToolEntry extends AbstractToolEntry {
+	private class NodeToolEntry extends AbstractToolEntry implements IdCreationTool {
 
 		private Collection<String> elementTypeIds;
 
@@ -242,13 +244,23 @@ public class PapyrusPaletteDescriptor implements PaletteDescriptor {
 				activatePaletteTool(new CreateNodeTool(elementTypeIds));
 			});
 		}
+		
+		@Override
+		public Collection<String> getElementTypeIds(){
+			return Collections.unmodifiableCollection(elementTypeIds);
+		}
+
+		@Override
+		public CreationKind getCreationKind() {
+			return CreationKind.CREATE_NODE;
+		}
 	}
 
 	private class SeparatorImpl implements Separator {
 		// Nothing
 	}
 
-	private class EdgeToolEntry extends AbstractToolEntry {
+	private class EdgeToolEntry extends AbstractToolEntry implements IdCreationTool {
 
 		private Collection<String> elementTypeIds;
 
@@ -262,6 +274,16 @@ public class PapyrusPaletteDescriptor implements PaletteDescriptor {
 			return Command.createCommand(() -> {
 				activatePaletteTool(new CreateConnectionTool(elementTypeIds));
 			});
+		}
+		
+		@Override
+		public Collection<String> getElementTypeIds(){
+			return Collections.unmodifiableCollection(elementTypeIds);
+		}
+		
+		@Override
+		public CreationKind getCreationKind() {
+			return CreationKind.CREATE_EDGE;
 		}
 	}
 

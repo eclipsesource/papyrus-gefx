@@ -31,7 +31,6 @@ import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
 import org.eclipse.papyrus.gef4.services.HelperProvider;
 import org.eclipse.papyrus.gef4.services.TransactionService;
 import org.eclipse.papyrus.gef4.services.style.StyleService;
-import org.eclipse.papyrus.gef4.utils.SynchronizedLogger;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
@@ -178,9 +177,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	 */
 	@Override
 	protected final void doRefreshVisual(final N visual) {
-
-		SynchronizedLogger.log("RefreshVisual");
-
 		this.transactionService.refreshPart(() -> refreshVisualInTransaction(visual));
 	}
 
@@ -297,12 +293,12 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	}
 
 	@Inject
-	protected void setContentChildrenAdapter(HelperProvider<ContentChildrenProvider<MODEL>> provider) {
+	public void setContentChildrenAdapter(HelperProvider<ContentChildrenProvider<MODEL>> provider) {
 		this.contentChildrenProvider = provider.get(this);
 	}
 
 	@Inject
-	protected void setTransactionService(TransactionService transactionService) {
+	public void setTransactionService(TransactionService transactionService) {
 		assert transactionService != null;
 		this.transactionService = transactionService;
 	}
@@ -317,12 +313,12 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	}
 
 	@Override
-	public void doAttachToContentAnchorage(Object contentAnchorage, String role) {
+	protected void doAttachToContentAnchorage(Object contentAnchorage, String role) {
 		contentAnchorages.put(contentAnchorage, role);
 	}
 
 	@Override
-	public void doDetachFromContentAnchorage(Object contentAnchorage, String role) {
+	protected void doDetachFromContentAnchorage(Object contentAnchorage, String role) {
 		contentAnchorages.remove(contentAnchorage, role);
 	}
 

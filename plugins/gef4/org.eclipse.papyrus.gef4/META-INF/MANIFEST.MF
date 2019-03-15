@@ -5,19 +5,17 @@ Bundle-SymbolicName: org.eclipse.papyrus.gef4;singleton:=true
 Bundle-Version: 0.2.0.qualifier
 Bundle-Activator: org.eclipse.papyrus.gef4.Activator
 Bundle-Vendor: Eclipse Modeling Project
-Require-Bundle: org.eclipse.ui;bundle-version="[3.107.0,4.0.0)";visibility:=reexport,
- com.google.guava;bundle-version="21.0.0";visibility:=reexport,
+Require-Bundle: com.google.guava;bundle-version="21.0.0";visibility:=reexport,
  com.google.inject;bundle-version="3.0.0";visibility:=reexport,
  org.eclipse.gef.common;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
  org.eclipse.gef.fx;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
  org.eclipse.gef.mvc.fx;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
  org.eclipse.gef.geometry;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
  org.eclipse.gef.geometry.convert.fx;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- org.eclipse.gef.mvc.fx.ui;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
- org.eclipse.gef.fx.swt;bundle-version="[5.0.0,6.0.0)";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="[3.15.0,4.0.0)",
  org.eclipse.jface.databinding;bundle-version="1.8.300",
- org.eclipse.fx.core;bundle-version="[3.5.0,4.0.0)";visibility:=reexport
+ org.eclipse.fx.core;bundle-version="[3.5.0,4.0.0)";visibility:=reexport,
+ org.eclipse.core.commands;bundle-version="3.9.200"
 Export-Package: org.eclipse.papyrus.gef4.anchors;
   uses:="javafx.scene,
    org.eclipse.gef.geometry.planar,
@@ -30,19 +28,6 @@ Export-Package: org.eclipse.papyrus.gef4.anchors;
    org.eclipse.gef.mvc.fx.viewer,
    org.eclipse.gef.mvc.fx.behaviors",
  org.eclipse.papyrus.gef4.decorations;uses:="javafx.scene.shape,javafx.scene.paint",
- org.eclipse.papyrus.gef4.editor;
-  uses:="javafx.scene.control,
-   org.eclipse.swt.widgets,
-   org.eclipse.gef.mvc.fx.domain,
-   org.eclipse.gef.mvc.fx.models,
-   org.eclipse.jface.viewers,
-   org.eclipse.ui,
-   com.google.inject,
-   org.eclipse.core.runtime,
-   org.eclipse.gef.mvc.fx.ui.parts,
-   org.eclipse.gef.mvc.fx.viewer,
-   org.eclipse.gef.common.dispose,
-   org.eclipse.ui.part",
  org.eclipse.papyrus.gef4.feedback;uses:="org.eclipse.gef.mvc.fx.parts,javafx.scene.shape,org.eclipse.gef.geometry.planar",
  org.eclipse.papyrus.gef4.gestures;uses:="javafx.scene,org.eclipse.gef.mvc.fx.gestures,org.eclipse.gef.mvc.fx.viewer",
  org.eclipse.papyrus.gef4.handle;uses:="org.eclipse.gef.mvc.fx.parts,javafx.scene.layout",
@@ -68,6 +53,7 @@ Export-Package: org.eclipse.papyrus.gef4.anchors;
    javafx.beans.binding,
    javafx.scene,
    org.eclipse.fx.core.command",
+ org.eclipse.papyrus.gef4.palette.declarative,
  org.eclipse.papyrus.gef4.parts;
   uses:="javafx.collections,
    javafx.beans.property,
@@ -101,7 +87,9 @@ Export-Package: org.eclipse.papyrus.gef4.anchors;
    javafx.scene.control,
    javafx.scene.paint,
    org.eclipse.papyrus.gef4.utils",
+ org.eclipse.papyrus.gef4.services.style.impl,
  org.eclipse.papyrus.gef4.shapes;uses:="javafx.scene.shape,javafx.beans.binding",
+ org.eclipse.papyrus.gef4.style,
  org.eclipse.papyrus.gef4.tools;
   uses:="javafx.beans.binding,
    org.eclipse.gef.common.activate,
@@ -126,8 +114,8 @@ Export-Package: org.eclipse.papyrus.gef4.anchors;
    javafx.scene,
    org.eclipse.gef.common.activate,
    org.eclipse.gef.mvc.fx.viewer,
-   org.eclipse.papyrus.gef4.parts"
+   org.eclipse.papyrus.gef4.parts",
+ org.eclipse.papyrus.gef4.viewer
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.papyrus.gef4
-Import-Package: org.eclipse.jdt.annotation;resolution:=optional

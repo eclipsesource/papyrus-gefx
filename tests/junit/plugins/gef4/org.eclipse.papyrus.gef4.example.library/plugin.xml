@@ -21,29 +21,10 @@
             class="org.eclipse.papyrus.gef4.example.library.util.LibraryResourceFactoryImpl"/>
    </extension>
    <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="org.eclipse.papyrus.gef4.example.library.editor.LibraryEditor"
-            default="false"
-            extensions="librarydiagram"
-            id="org.eclipse.papyrus.gef4.example.library.editor"
-            name="Library Example GEF4 Editor">
-      </editor>
-   </extension>
-   <extension
          point="org.eclipse.papyrus.infra.gmfdiag.css.userAgentStyleSheet">
       <stylesheet
             stylesheetPath="style/style.css">
       </stylesheet>
-   </extension>
-   <extension
-         point="org.eclipse.gmf.runtime.common.ui.services.parserProviders">
-      <ParserProvider
-            class="org.eclipse.papyrus.gef4.example.library.parsers.LibraryParserProvider">
-         <Priority
-               name="Medium">
-         </Priority>
-      </ParserProvider>
    </extension>
 
 </plugin>

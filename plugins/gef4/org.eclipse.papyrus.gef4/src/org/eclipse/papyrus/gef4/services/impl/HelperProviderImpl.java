@@ -35,6 +35,9 @@ public class HelperProviderImpl<T> implements HelperProvider<T> {
 		assert bestMatch != null;
 		T result = bestMatch == null ? null : bestMatch.get(part);
 		assert result != null;
+		if (part.getAdapter(result.getClass()) == null) {
+			part.setAdapter(result);
+		}
 		return result;
 	}
 

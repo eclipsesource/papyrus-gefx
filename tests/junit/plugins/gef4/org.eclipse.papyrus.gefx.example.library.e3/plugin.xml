@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+ <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.papyrus.gefx.example.library.e3.LibraryEditor"
+            default="false"
+            extensions="librarydiagram"
+            id="org.eclipse.papyrus.gef4.example.library.editor"
+            name="Library Example GEF4 Editor">
+      </editor>
+   </extension>
+</plugin>

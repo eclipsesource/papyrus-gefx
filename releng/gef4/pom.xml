@@ -8,11 +8,11 @@
 
 	<properties>
 		<test.argLine>-Dosgi.framework.extensions=org.eclipse.fx.osgi</test.argLine>
-		<target.platform>org.eclipse.papyrus.gef4.${target.suffix}.target</target.platform>
 		<useUIThread>false</useUIThread>
 		<tycho-version>1.3.0</tycho-version>
 		<tychoExtrasVersion>1.3.0</tychoExtrasVersion>
 		<findbugs.version>3.0.5</findbugs.version> <!-- FIXME Maven/FindBugs is not maintained and won't work with Java 11 -->
+		<java.version>11</java.version>
 	</properties>
 
 	<modules>
@@ -20,6 +20,9 @@
 		<module>../../features/papyrus-main-features/org.eclipse.papyrus.gef4.feature</module>
 		<module>../../plugins/gef4/org.eclipse.papyrus.gef4</module>
 		<module>../../plugins/gef4/org.eclipse.papyrus.gef4.gmf</module>
+		<module>../../plugins/gef4/org.eclipse.papyrus.gefx.e3</module>
+		<module>../../plugins/gef4/org.eclipse.papyrus.gefx.gmf.e3</module>
+		<module>../../plugins/gef4/org.eclipse.papyrus.gefx.swt</module>
 		<module>../../plugins/infra/gefdiag/org.eclipse.papyrus.infra.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.clazz</module>
@@ -28,8 +31,13 @@
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.composite</module>
 
 		<!-- Test Plug-ins -->
+		<module>../../tests/junit/plugins/org.testfx</module>
+
 		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gef4.example.library</module>
-		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gef4.tests</module>
+		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.example.library.e3</module>
+		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.tests</module>
+		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.gmf.tests</module>
+		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.example.library.tests</module>
 		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.uml.gefdiag.clazz.tests</module>
 
 		<!-- Update site -->
@@ -56,21 +64,65 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.2</version>
+					<version>3.8</version>
 					<configuration>
-						<source>${java.source.version}</source>
-						<target>${java.target.version}</target>
+						<release>${java.version}</release>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>1.9.1</version>
+					<version>3.0.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.2.1</version>
+					<version>1.6.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>target-platform-configuration</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<environments>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
+						<configuration>
+							<dependency-resolution>
+								<extraRequirements>
+									<requirement>
+										<type>eclipse-feature</type>
+										<id>openjfx.standard.feature</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+									<requirement>
+										<type>eclipse-feature</type>
+										<id>org.eclipse.fx.runtime.min.feature</id>
+										<versionRange>0.0.0</versionRange>
+									</requirement>
+								</extraRequirements>
+							</dependency-resolution>
+						</configuration>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
@@ -83,21 +135,33 @@
 						<useProjectSettings>true</useProjectSettings>
 						<extraClasspathElements>
 							<extraClasspathElement>
-								<groupId>com.oracle</groupId>
-								<artifactId>javafx</artifactId>
-								<version>2.2.0-SNAPSHOT</version>
-								<systemPath>${java.home}/lib/jfxrt.jar</systemPath>
-								<scope>system</scope>
+								<groupId>org.openjfx</groupId>
+								<artifactId>javafx-graphics</artifactId>
+								<version>11.0.2</version>
 							</extraClasspathElement>
 							<extraClasspathElement>
-								<groupId>com.oracle</groupId>
-								<artifactId>javafxswt</artifactId>
-								<version>2.2.0-SNAPSHOT</version>
-								<systemPath>${java.home}/lib/jfxswt.jar</systemPath>
-								<scope>system</scope>
+								<groupId>org.openjfx</groupId>
+								<artifactId>javafx-controls</artifactId>
+								<version>11.0.1</version>
+							</extraClasspathElement>
+							<extraClasspathElement>
+								<groupId>org.openjfx</groupId>
+								<artifactId>javafx-swing</artifactId>
+								<version>11.0.1</version>
 							</extraClasspathElement>
 						</extraClasspathElements>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-p2-repository-plugin</artifactId>
+					<version>${tycho-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-maven-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<extensions>true</extensions>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
@@ -111,27 +175,8 @@
 						<!-- ${tycho.testArgLine} is populated by JaCoCo and is required to 
 							enable code coverage -->
 						<argLine>${test.argLine}</argLine>
-						<systemProperties>
-							<SWT_GTK3>0</SWT_GTK3>
-						</systemProperties>
 						<useSystemClassLoader>true</useSystemClassLoader>
 						<includes>**/*Test.java,**/*Tests.java</includes>
-						<frameworkExtensions>
-							<frameworkExtension>
-								<groupId>org.eclipse.fx.shared</groupId>
-								<artifactId>org.eclipse.fx.osgi</artifactId>
-								<scope>system</scope>
-								<systemPath>${project.parent.basedir}/libs/org.eclipse.fx.osgi_2.0.0.201504180501.jar</systemPath>
-								<version>1.0.0</version>
-							</frameworkExtension>
-							<frameworkExtension>
-								<groupId>org.eclipse.fx.runtime</groupId>
-								<artifactId>org.eclipse.fx.osgi.util</artifactId>
-								<scope>system</scope>
-								<systemPath>${project.parent.basedir}/libs/org.eclipse.fx.osgi.util_2.0.0.201504180602.jar</systemPath>
-								<version>1.0.0</version>
-							</frameworkExtension>
-						</frameworkExtensions>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -140,7 +185,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -149,45 +193,24 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<extensions>true</extensions>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
 				<configuration>
 					<target>
 						<artifact>
 							<groupId>org.eclipse.papyrus</groupId>
 							<artifactId>org.eclipse.papyrus.gef4.releng</artifactId>
-							<classifier>targetPlatform/release</classifier>
+							<classifier>targetPlatform/release-dev</classifier>
 							<version>0.0.1-SNAPSHOT</version>
 						</artifact>
 					</target>
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-repository-plugin</artifactId>
-				<version>${tycho-version}</version>
 			</plugin>
 			<!-- Sources -->
 			<plugin>
@@ -256,44 +279,44 @@
 			</activation>
 		</profile>
 
-<!-- 		<profile> -->
-<!-- 			<id>findBugs</id> Analysis profile -->
-<!-- 			<build> -->
-<!-- 				<plugins> -->
-<!-- 					<plugin> -->
-<!-- 						<groupId>org.codehaus.mojo</groupId> -->
-<!-- 						<artifactId>findbugs-maven-plugin</artifactId> -->
-<!-- 						<version>${findbugs.version}</version> -->
-<!-- 						<configuration> -->
-<!-- 							<findbugsXmlOutput>true</findbugsXmlOutput> -->
-<!-- 							<failOnError>false</failOnError> -->
-<!-- 							<maxHeap>1024</maxHeap> -->
-<!-- 						</configuration> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<goals> -->
-<!-- 									<goal>check</goal> -->
-<!-- 								</goals> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 					</plugin> -->
-<!-- 					<plugin> -->
-<!-- 						<groupId>org.eclipse.tycho</groupId> -->
-<!-- 						<artifactId>tycho-p2-plugin</artifactId> -->
-<!-- 						<version>${tycho-version}</version> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<id>attach-p2-metadata</id> -->
-<!-- 								<phase>package</phase> -->
-<!-- 								<goals> -->
-<!-- 									<goal>p2-metadata</goal> -->
-<!-- 								</goals> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 					</plugin> -->
-<!-- 				</plugins> -->
-<!-- 			</build> -->
-<!-- 		</profile> -->
+		<!-- <profile> -->
+		<!-- <id>findBugs</id> Analysis profile -->
+		<!-- <build> -->
+		<!-- <plugins> -->
+		<!-- <plugin> -->
+		<!-- <groupId>org.codehaus.mojo</groupId> -->
+		<!-- <artifactId>findbugs-maven-plugin</artifactId> -->
+		<!-- <version>${findbugs.version}</version> -->
+		<!-- <configuration> -->
+		<!-- <findbugsXmlOutput>true</findbugsXmlOutput> -->
+		<!-- <failOnError>false</failOnError> -->
+		<!-- <maxHeap>1024</maxHeap> -->
+		<!-- </configuration> -->
+		<!-- <executions> -->
+		<!-- <execution> -->
+		<!-- <goals> -->
+		<!-- <goal>check</goal> -->
+		<!-- </goals> -->
+		<!-- </execution> -->
+		<!-- </executions> -->
+		<!-- </plugin> -->
+		<!-- <plugin> -->
+		<!-- <groupId>org.eclipse.tycho</groupId> -->
+		<!-- <artifactId>tycho-p2-plugin</artifactId> -->
+		<!-- <version>${tycho-version}</version> -->
+		<!-- <executions> -->
+		<!-- <execution> -->
+		<!-- <id>attach-p2-metadata</id> -->
+		<!-- <phase>package</phase> -->
+		<!-- <goals> -->
+		<!-- <goal>p2-metadata</goal> -->
+		<!-- </goals> -->
+		<!-- </execution> -->
+		<!-- </executions> -->
+		<!-- </plugin> -->
+		<!-- </plugins> -->
+		<!-- </build> -->
+		<!-- </profile> -->
 
 
 		<profile>

@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  org.eclipse.papyrus.gmfgenextension;bundle-version="2.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Eclipse Modeling Project
+Automatic-Module-Name: org.eclipse.papyrus.gef4.codegen
 

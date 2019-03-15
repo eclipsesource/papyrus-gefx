@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.infra.core.sasheditor.contentprovider.IPageModel;
 import org.eclipse.papyrus.infra.gefdiag.common.Activator;
-import org.eclipse.papyrus.infra.gefdiag.common.editor.GEF4DiagramEditor;
+import org.eclipse.papyrus.infra.gefdiag.common.editor.PapyrusGEFxEditor;
 import org.eclipse.papyrus.infra.ui.extension.diagrameditor.AbstractEditorFactory;
 import org.eclipse.swt.graphics.Image;
 
@@ -38,7 +38,7 @@ public class GEFEditorFactory extends AbstractEditorFactory {
 	private final Map<String, DiagramEditorDescriptor> supportedDiagramTypes;
 
 	public GEFEditorFactory() {
-		super(GEF4DiagramEditor.class, EDITOR_TYPE);
+		super(PapyrusGEFxEditor.class, EDITOR_TYPE);
 		supportedDiagramTypes = getSupportedDiagramTypes();
 	}
 

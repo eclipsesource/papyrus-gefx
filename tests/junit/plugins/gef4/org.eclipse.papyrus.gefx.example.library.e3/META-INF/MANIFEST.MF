@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Papyrus GEFx Library Example - Eclipse3 Integration
+Bundle-SymbolicName: org.eclipse.papyrus.gefx.example.library.e3;singleton:=true
+Bundle-Version: 0.2.0.qualifier
+Bundle-Vendor: Eclipse Modeling Project
+Automatic-Module-Name: org.eclipse.papyrus.gefx.example.library.e3
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.eclipse.papyrus.gefx.gmf.e3;visibility:=reexport,
+ org.eclipse.gmf.runtime.notation,
+ org.eclipse.papyrus.gef4.example.library;visibility:=reexport
+Export-Package: org.eclipse.papyrus.gefx.example.library.e3

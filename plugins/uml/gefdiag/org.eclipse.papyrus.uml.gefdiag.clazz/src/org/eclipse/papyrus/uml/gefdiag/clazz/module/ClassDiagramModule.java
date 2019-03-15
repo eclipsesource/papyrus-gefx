@@ -43,7 +43,10 @@ import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicityS
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicityTargetEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationSourceNameEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationTargetNameEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ClassEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.PackageNameEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.RedefinableTemplateSignatureEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.TemplateParameterEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.TemplateSignatureEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.providers.ContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.clazz.service.label.AssociationLabelService;
@@ -71,6 +74,10 @@ public class ClassDiagramModule extends UMLDiagramModule {
 	protected void bindIContentPartProvider() {
 		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
 		}).to(ContentPartProvider.class);
+		
+		registerPartClass(ClassEditPart.class);
+		registerPartClass(TemplateParameterEditPart.class);
+		registerPartClass(PackageNameEditPart.class);
 	}
 
 	@Override

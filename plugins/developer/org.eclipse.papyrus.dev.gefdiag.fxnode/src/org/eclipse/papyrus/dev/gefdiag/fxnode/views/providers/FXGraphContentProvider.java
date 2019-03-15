@@ -40,7 +40,7 @@ public class FXGraphContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 		if (inputElement instanceof DiagramContentPart) {
-			return new Object[] { ((DiagramContentPart) inputElement).getVisual().getScene() };
+			return new Object[] { ((DiagramContentPart<?>) inputElement).getVisual().getScene() };
 		}
 
 		if (inputElement instanceof BaseContentPart) {

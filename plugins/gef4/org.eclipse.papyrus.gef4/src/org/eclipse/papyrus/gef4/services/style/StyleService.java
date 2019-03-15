@@ -28,6 +28,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
+// TODO Clean up; keep only the methods that are meant to be
+// supported by Notation/CSS
 public interface StyleService {
 
 	double getWidth();

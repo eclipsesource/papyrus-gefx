@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="E(fx)clipse with JFX" sequenceNumber="1552640240">
+<target name="E(fx)clipse with JFX" sequenceNumber="1552992590">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.platform.feature.group" version="4.10.0.v20181206-0815"/>
@@ -12,6 +12,7 @@
       <unit id="org.eclipse.fx.ui.di.interopt" version="3.5.0.201902252257"/>
       <unit id="org.eclipse.fx.runtime.min.feature.feature.group" version="3.5.0.201902220600"/>
       <unit id="org.eclipse.fx.core" version="3.5.0.201902252257"/>
+      <unit id="org.eclipse.fx.ui.controls" version="3.5.0.201902252257"/>
       <repository location="https://download.eclipse.org/efxclipse/runtime-released/3.5.0/site/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
