@@ -21,19 +21,13 @@ import org.eclipse.gmf.runtime.diagram.core.listener.NotificationListener;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
-import org.eclipse.papyrus.gef4.utils.AbstractActivatable;
+import org.eclipse.papyrus.gef4.utils.ActivatableBound;
 
-public abstract class AbstractNotationStyleService extends AbstractActivatable {
+public abstract class AbstractNotationStyleService extends ActivatableBound<BaseContentPart<? extends View, ?>> {
 
 	private TransactionalEditingDomain editingDomain;
 	private DiagramEventBroker eventBroker;
 	private NotificationListener notificationListener;
-	private final BaseContentPart<? extends View, ?> part;
-
-	@Inject
-	public AbstractNotationStyleService(BaseContentPart<? extends View, ?> part) {
-		this.part = part;
-	}
 
 	@Inject
 	protected void initializeEditingDomain(TransactionalEditingDomain editingDomain, DiagramEventBroker eventBroker) {
@@ -41,15 +35,11 @@ public abstract class AbstractNotationStyleService extends AbstractActivatable {
 		this.editingDomain = editingDomain;
 	}
 
-	protected BaseContentPart<? extends View, ?> getPart() {
-		return this.part;
-	}
-
 	private View view;
 
 	protected View getView() {
 		if (this.view == null) {
-			this.view = getPart().getContent();
+			this.view = getAdaptable().getContent();
 		}
 		return this.view;
 	}
@@ -88,16 +78,16 @@ public abstract class AbstractNotationStyleService extends AbstractActivatable {
 
 		// FIXME: This listener is difficult to extend in subclasses
 		return msg -> {
-			if (!isActive() || !getPart().isActive()) {
+			if (!isActive() || !getAdaptable().isActive()) {
 				return;
 			}
 
 			if (!(msg.isTouch())) {
 				if (childrenChanged(msg)) {
 					// FIXME move to Content Adapter
-					getPart().updateContentChildren();
+					getAdaptable().updateContentChildren();
 				}
-				getPart().refreshVisual();
+				getAdaptable().refreshVisual();
 			}
 		};
 	}

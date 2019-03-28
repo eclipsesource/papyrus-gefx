@@ -24,15 +24,13 @@ import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.emf.type.core.ClientContextManager;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
 import org.eclipse.gmf.runtime.emf.type.core.IClientContext;
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.module.GMFModule;
 import org.eclipse.papyrus.gef4.gmf.parts.FloatingLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationListItemContentPart;
-import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
+import org.eclipse.papyrus.gef4.gmf.services.GMFProviderParticipant;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.palette.PaletteDescriptor;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.gef4.services.ImageService;
@@ -110,7 +108,7 @@ public abstract class UMLDiagramModule extends GMFModule {
 					// Type literal
 				});
 		configureImageProviders(imageProviders);
-		
+
 		bindPaletteDescriptorAsViewerAdapter();
 	}
 
@@ -143,25 +141,17 @@ public abstract class UMLDiagramModule extends GMFModule {
 
 		// Operation
 		labelProviders.addBinding().toInstance(new OperationLabelService(SPECIFIC_NAMED_ELEMENTS_PRIORITY));
-		
+
 		//
 		// Stereotype labels
 		//
-		
+
 		labelProviders.addBinding().toInstance(new StereotypeLabelService(MAX_UML_PRIORITY));
 	}
 
 	protected void configureImageProviders(Multibinder<HelperProviderParticipant<ImageService>> imageProviders) {
-		imageProviders.addBinding().toInstance(new AbstractGMFProviderParticipant<ImageService>(DEFAULT_UML_PRIORITY, FloatingLabelContentPart.class, NotationLabelContentPart.class, NotationListItemContentPart.class) {
-
-			@Override
-			protected ImageService doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
-				@SuppressWarnings("unchecked") // All 3 types supported by this participant extend LabelContentPart<View>
-				LabelContentPart<View> labelPart = (LabelContentPart<View>) basePart;
-				return new UMLImageService(labelPart);
-			}
-
-		});
+		imageProviders.addBinding().toInstance(new GMFProviderParticipant<>(DEFAULT_UML_PRIORITY,
+				getProvider(UMLImageService.class), FloatingLabelContentPart.class, NotationLabelContentPart.class, NotationListItemContentPart.class));
 	}
 
 	protected void configureStyleProviders(Multibinder<HelperProviderParticipant<EdgeStyleService>> edgeStyleProviders) {

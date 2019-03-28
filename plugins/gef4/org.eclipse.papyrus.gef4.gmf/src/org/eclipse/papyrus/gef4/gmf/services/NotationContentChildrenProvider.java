@@ -28,24 +28,16 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
-import org.eclipse.papyrus.gef4.utils.AbstractActivatable;
+import org.eclipse.papyrus.gef4.utils.ActivatableBound;
 
-public class NotationContentChildrenProvider extends AbstractActivatable implements ContentChildrenProvider<View> {
-
-	private final BaseContentPart<? extends View, ?> part;
-
-	private final View view;
+public class NotationContentChildrenProvider extends ActivatableBound<BaseContentPart<? extends View, ?>>
+		implements ContentChildrenProvider<View> {
 
 	private DiagramEventBroker eventBroker;
 
 	private NotificationListener listener;
 
-	@Inject
-	public NotationContentChildrenProvider(BaseContentPart<? extends View, ?> part) {
-		assert part != null && part.getContent() != null;
-		this.part = part;
-		this.view = part.getContent();
-	}
+	private View view;
 
 	@Inject
 	protected void setEventBroker(DiagramEventBroker eventBroker) {
@@ -53,12 +45,19 @@ public class NotationContentChildrenProvider extends AbstractActivatable impleme
 		this.eventBroker = eventBroker;
 	}
 
+	protected View getView() {
+		if (view == null) {
+			view = getAdaptable().getContent();
+		}
+		return view;
+	}
+
 	@Override
 	public List<? extends View> getContentChildren() {
-		Stream<Node> nodes = NotationUtil.getChildren(view).stream().filter(View::isVisible);
+		Stream<Node> nodes = NotationUtil.getChildren(getView()).stream().filter(View::isVisible);
 		Stream<? extends View> nodesAndEdges;
 
-		if (view instanceof Diagram) {
+		if (getView() instanceof Diagram) {
 			// XXX It seems that Edges in Papyrus are created in two-steps. Initially,
 			// the Edge is present but no connected to source/target.
 			// We have two ways around this issue: 1) Let this provider install a listener
@@ -69,7 +68,7 @@ public class NotationContentChildrenProvider extends AbstractActivatable impleme
 			// and probably more flexible (But may result in an EditPart with a hidden
 			// Figure; it's unclear whether this would be an issue)
 			nodesAndEdges = Stream.concat(nodes,
-					NotationUtil.getEdges(view).stream()
+					NotationUtil.getEdges(getView()).stream()
 							.filter((e) -> (e.getSource() == null || e.getSource().isVisible())
 									&& (e.getTarget() == null || e.getTarget().isVisible())));
 		} else {
@@ -80,11 +79,11 @@ public class NotationContentChildrenProvider extends AbstractActivatable impleme
 	}
 
 	protected boolean childrenChanged(Notification msg) {
-		if (msg.getNotifier() != view) {
+		if (msg.getNotifier() != getView()) {
 			return false;
 		}
 
-		if (view instanceof Diagram) {
+		if (getView() instanceof Diagram) {
 			if (msg.getFeature() == NotationPackage.Literals.DIAGRAM__PERSISTED_EDGES
 					|| msg.getFeature() == NotationPackage.Literals.DIAGRAM__TRANSIENT_EDGES) {
 				return true;
@@ -101,17 +100,18 @@ public class NotationContentChildrenProvider extends AbstractActivatable impleme
 
 	@Override
 	protected void doActivate() {
+		assert getView() != null;
 		listener = msg -> {
 			if (childrenChanged(msg)) {
-				part.updateContentChildren();
+				getAdaptable().updateContentChildren();
 			}
 		};
-		eventBroker.addNotificationListener(view, listener);
+		eventBroker.addNotificationListener(getView(), listener);
 	}
 
 	@Override
 	protected void doDeactivate() {
-		eventBroker.removeNotificationListener(view, listener);
+		eventBroker.removeNotificationListener(getView(), listener);
 	}
 
 }

@@ -30,7 +30,6 @@ import org.eclipse.gef.mvc.fx.parts.PartUtils;
 import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
 
@@ -52,17 +51,17 @@ import javafx.scene.Parent;
 // including LinkLF support. When LinkLF has not been applied to links,
 // Labels use a reference point defined as a % of the connection length.
 // Once LinkLF is activated, the reference point is always 0% or 100%,
-// so the labels stick to their closest connection end, regardless of 
+// so the labels stick to their closest connection end, regardless of
 // what happens on the opposite end (This causes labels to be more stable,
 // but then we have to support 2 different cases)
 public class ConnectionLabelLocator extends AffixedLabelLocator {
 
-	private final BaseContentPart<? extends View, ?> host;
 	private Reference reference = Reference.CENTER;
-	
+
 	private static final double CENTER_RATIO = 0.5;
-	
-	private static final String IS_UPDATED_POSITION = "IS_UPDATED_POSITION"; // LinkLF Constant; see org.eclipse.papyrus.infra.gmfdiag.common.locator.PapyrusLabelLocator#IS_UPDATED_POSITION
+
+	private static final String IS_UPDATED_POSITION = "IS_UPDATED_POSITION"; // LinkLF Constant; see
+																				// org.eclipse.papyrus.infra.gmfdiag.common.locator.PapyrusLabelLocator#IS_UPDATED_POSITION
 
 	/**
 	 * <p>
@@ -78,11 +77,6 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 	 */
 	private static final double OPP_RATIO = 1 - REF_RATIO;
 
-	public ConnectionLabelLocator(BaseContentPart<? extends View, ?> basePart) {
-		super(basePart);
-		this.host = basePart;
-	}
-
 	/**
 	 * For Connections that can have different labels, it is useful to specify a
 	 * reference point for each label (e.g. above source, below target, above
@@ -92,11 +86,11 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 		Assert.isNotNull(reference);
 		this.reference = reference;
 	}
-	
+
 	public Reference getReference() {
 		return this.reference;
 	}
-	
+
 	public Point getReferencePoint() {
 		Location location = getLocation();
 		Connection connection = findParentConnection();
@@ -115,7 +109,7 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 		boolean useLinkLF = useLinkLF(location);
 		Connection connection = findParentConnection();
 		if (connection == null) {
-			System.err.println("Unable to retrieve the connection owning this label:" + host.getVisual());
+			System.err.println("Unable to retrieve the connection owning this label:" + getAdaptable().getVisual());
 			return offset;
 		}
 
@@ -126,7 +120,7 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 
 		// Move the reference point so that the center of the text overlaps it (Instead
 		// of the Top-Left point)
-		Bounds textBounds = host.getVisual().getLayoutBounds();
+		Bounds textBounds = getAdaptable().getVisual().getLayoutBounds();
 		double width = textBounds.getWidth();
 		double height = textBounds.getHeight();
 		Point delta = new Point(width / 2, height / 2).negate();
@@ -139,11 +133,11 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 			return false;
 		}
 		EObject parent = location.eContainer();
-		if (! (parent instanceof View)) {
+		if (!(parent instanceof View)) {
 			return false;
 		}
-		
-		View parentView = (View)parent;
+
+		View parentView = (View) parent;
 		boolean useLinkLF = NotationUtils.getBooleanValue(parentView, IS_UPDATED_POSITION, false);
 		return useLinkLF;
 	}
@@ -156,20 +150,21 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 		// Normalize the angle in (-PI/2; PI/2)
 		Angle angle = segment.getDirectionCCW();
 		double theta = Math.atan(Math.tan(angle.rad()));
-		
-		// Calculate the offset based on the theta angle, 
+
+		// Calculate the offset based on the theta angle,
 		// according to the GMF algorithm
 		Point calculatedOffset = getCalculatedOffset(theta, segment, offset);
 
 		return pointOnSegment.getTranslated(calculatedOffset);
 	}
-	
+
 	private static class PointAndSegmentOnConnection {
 		public Point pointOnLine;
 		public Line segment;
 	}
-	
-	private PointAndSegmentOnConnection getPointOnConnection(Connection connection, Reference reference, boolean useLinkLF) {
+
+	private PointAndSegmentOnConnection getPointOnConnection(Connection connection, Reference reference,
+			boolean useLinkLF) {
 		ObservableList<Point> pointsUnmodifiable = connection.getPointsUnmodifiable();
 		int pointsSize = pointsUnmodifiable.size();
 
@@ -221,14 +216,15 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 			// Should never happen; we cover all enum cases
 			throw new IllegalStateException("Reference point not specified");
 		}
-		
+
 		PointAndSegmentOnConnection result = new PointAndSegmentOnConnection();
 		result.segment = segment;
 		result.pointOnLine = segment.get(ratioOnSegment);
 		return result;
 	}
 
-	// Partial implementation from org.eclipse.gmf.runtime.diagram.ui.internal.figures.LabelHelper#calculatePointRelativeToPointOnLine
+	// Partial implementation from
+	// org.eclipse.gmf.runtime.diagram.ui.internal.figures.LabelHelper#calculatePointRelativeToPointOnLine
 	private Point getCalculatedOffset(double theta, Line segment, Point offset) {
 		Point normalizedOffset = offset;
 		if (segment.getP1().x > segment.getP2().x) {
@@ -236,9 +232,11 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 		}
 
 		Point calculatedOffset = new Point(normalizedOffset.x //
-				* Math.cos(theta) - normalizedOffset.y //
-				* Math.sin(theta), normalizedOffset.x * Math.sin(theta) // 
-				+ normalizedOffset.y * Math.cos(theta));
+				* Math.cos(theta)
+				- normalizedOffset.y //
+						* Math.sin(theta),
+				normalizedOffset.x * Math.sin(theta) //
+						+ normalizedOffset.y * Math.cos(theta));
 
 		return calculatedOffset;
 	}
@@ -253,18 +251,18 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 		}
 		return segments.get(segments.size() - 1);
 	}
-	
+
 	public Connection getConnection() {
 		return findParentConnection();
 	}
 
 	private Connection findParentConnection() {
-		IVisualPart<?> parent = host.getParent();
+		IVisualPart<?> parent = getAdaptable().getParent();
 		if (parent == null) {
 			return null;
 		}
 
-		IViewer viewer = host.getViewer();
+		IViewer viewer = getAdaptable().getViewer();
 
 		Node parentVisual = parent.getVisual();
 		LinkedList<Node> hierarchy = new LinkedList<>();
@@ -292,7 +290,7 @@ public class ConnectionLabelLocator extends AffixedLabelLocator {
 	/**
 	 * Identify the reference point, when placing a Label on a Connection
 	 */
-	public static enum Reference {
+	public enum Reference {
 		/** Location is Relative to the Center of the line */
 		CENTER,
 		/** Location is relative to the source anchor of the line */

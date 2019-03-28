@@ -12,17 +12,11 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.style;
 
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
 
 import javafx.scene.paint.Color;
 
 public class DiagramStyleProvider extends NotationStyleService {
-
-	public DiagramStyleProvider(BaseContentPart<? extends View, ?> part) {
-		super(part);
-	}
 
 	@Override
 	public Color getBackgroundColor1() {

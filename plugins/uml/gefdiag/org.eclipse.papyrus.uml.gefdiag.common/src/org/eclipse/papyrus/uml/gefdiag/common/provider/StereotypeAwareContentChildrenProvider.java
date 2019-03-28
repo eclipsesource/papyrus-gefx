@@ -21,9 +21,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.services.NotationContentChildrenProvider;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
-
-import com.google.inject.Inject;
 
 /**
  * Filters the child views of this element, removing the Stereotype Views that shouldn't be associated to ContentParts
@@ -32,19 +29,6 @@ import com.google.inject.Inject;
  *
  */
 public class StereotypeAwareContentChildrenProvider extends NotationContentChildrenProvider {
-
-	private final View view;
-
-	@Inject
-	protected StereotypeAwareContentChildrenProvider(BaseContentPart<? extends View, ?> part) {
-		super(part);
-		this.view = part.getContent();
-	}
-
-	protected StereotypeAwareContentChildrenProvider() {
-		super(null);
-		throw new IllegalStateException();
-	}
 
 	private static Collection<String> excludedTypes = new HashSet<>();
 	{
@@ -61,8 +45,8 @@ public class StereotypeAwareContentChildrenProvider extends NotationContentChild
 						(view) -> !excludedTypes.contains(view.getType()))
 				.collect(Collectors.toList());
 
-		if (isPrimaryView(view)) {
-			addDynamicStereotypeLabelView(view, filteredChildren);
+		if (isPrimaryView(getView())) {
+			addDynamicStereotypeLabelView(getView(), filteredChildren);
 		}
 
 		return filteredChildren;

@@ -12,11 +12,14 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.locators;
 
+import javax.inject.Inject;
+
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
+import org.eclipse.papyrus.gef4.utils.ActivatableBound;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
@@ -26,27 +29,25 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
-public class AffixedLabelLocator implements Locator {
-
-	private final BaseContentPart<?, ?> host;
+public class AffixedLabelLocator extends ActivatableBound<BaseContentPart<? extends View, ?>> implements Locator {
 
 	private final ListChangeListener<? super Node> childrenListener;
 	protected final ChangeListener<Bounds> boundsListener;
-
 	private View view;
 
-	public AffixedLabelLocator(BaseContentPart<? extends View, ?> host) {
-		this.host = host;
-		setView(host.getContent());
-
+	@Inject
+	public AffixedLabelLocator() {
 		childrenListener = (change) -> refreshChildren(change);
 		boundsListener = (bounds, oldValue, newValue) -> {
-			applyLayout(host.getVisual());
+			applyLayout(getAdaptable().getVisual());
 		};
 	}
 
-	private void setView(View view) {
-		this.view = view;
+	protected View getView() {
+		if (view == null) {
+			view = getAdaptable().getContent();
+		}
+		return view;
 	}
 
 	@Override
@@ -61,14 +62,14 @@ public class AffixedLabelLocator implements Locator {
 		Point2D position = getLocationInParent(location);
 
 		node.setManaged(false);
-		host.getVisual().autosize();
+		getAdaptable().getVisual().autosize();
 
 		node.setLayoutX(position.getX());
 		node.setLayoutY(position.getY());
 	}
 
 	protected Location getLocation() {
-		if (view instanceof org.eclipse.gmf.runtime.notation.Node) {
+		if (getView() instanceof org.eclipse.gmf.runtime.notation.Node) {
 			org.eclipse.gmf.runtime.notation.Node nodeView = (org.eclipse.gmf.runtime.notation.Node) view;
 			LayoutConstraint constraint = nodeView.getLayoutConstraint();
 			if (constraint instanceof Location) {
@@ -82,7 +83,8 @@ public class AffixedLabelLocator implements Locator {
 		return new Point2D(location.getX(), location.getY());
 	}
 
-	// We need a specific listener for Labels, because Labels are modified during rendering
+	// We need a specific listener for Labels, because Labels are modified during
+	// rendering
 	protected void refreshChildren(Change<? extends Node> listChange) {
 		while (listChange.next()) {
 			for (Node newChild : listChange.getAddedSubList()) {
@@ -110,6 +112,15 @@ public class AffixedLabelLocator implements Locator {
 				installChildrenListener(childNode);
 			}
 		}
+	}
+
+	@Override
+	protected void doActivate() {
+		assert getView() != null;
+	}
+
+	@Override
+	protected void doDeactivate() {
 	}
 
 }

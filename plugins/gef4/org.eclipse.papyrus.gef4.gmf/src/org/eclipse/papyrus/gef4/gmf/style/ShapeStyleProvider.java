@@ -12,9 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.style;
 
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.services.style.StyleService;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
@@ -25,10 +23,6 @@ import javafx.scene.layout.BorderWidths;
 //TODO: How to override the StyleProvider only for Nodes?
 //=> Check module config
 public class ShapeStyleProvider extends NotationStyleService implements StyleService {
-
-	public ShapeStyleProvider(BaseContentPart<? extends View, ?> part) {
-		super(part);
-	}
 
 	/**
 	 * take into account of the double border on padding.

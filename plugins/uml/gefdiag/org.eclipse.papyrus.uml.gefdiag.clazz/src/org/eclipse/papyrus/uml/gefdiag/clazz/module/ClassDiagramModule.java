@@ -26,6 +26,7 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.locators.ConnectionLabelLocator;
 import org.eclipse.papyrus.gef4.gmf.locators.ConnectionLabelLocator.Reference;
 import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
+import org.eclipse.papyrus.gef4.gmf.services.GMFProviderParticipant;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.palette.DefaultPaletteRenderer;
 import org.eclipse.papyrus.gef4.palette.PaletteDescriptor;
@@ -43,10 +44,7 @@ import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicityS
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicityTargetEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationSourceNameEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationTargetNameEditPart;
-import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ClassEditPart;
-import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.PackageNameEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.RedefinableTemplateSignatureEditPart;
-import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.TemplateParameterEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.TemplateSignatureEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.providers.ContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.clazz.service.label.AssociationLabelService;
@@ -55,6 +53,7 @@ import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.StereotypeLabelService;
 
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.Multibinder;
@@ -74,29 +73,21 @@ public class ClassDiagramModule extends UMLDiagramModule {
 	protected void bindIContentPartProvider() {
 		binder().bind(new TypeLiteral<IContentPartProvider<View>>() {
 		}).to(ContentPartProvider.class);
-		
-		registerPartClass(ClassEditPart.class);
-		registerPartClass(TemplateParameterEditPart.class);
-		registerPartClass(PackageNameEditPart.class);
 	}
 
 	@Override
 	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
 		super.bindLocators(locators);
-		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_CLASS_PRIORITY,
-				TemplateSignatureEditPart.class, RedefinableTemplateSignatureEditPart.class) {
 
-			@Override
-			protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
-				return Optional.of(new TemplateLocator(basePart));
-			}
-		});
+		Provider<Optional<Locator>> templateLocator = required(getProvider(TemplateLocator.class));
+		locators.addBinding().toInstance(new GMFProviderParticipant<>(DEFAULT_CLASS_PRIORITY, templateLocator,
+				TemplateSignatureEditPart.class, RedefinableTemplateSignatureEditPart.class));
 
 		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(
 				DEFAULT_CLASS_PRIORITY, AssociationFloatingNameEditPart.class, AssociationMultiplicitySourceEditPart.class, AssociationMultiplicityTargetEditPart.class, AssociationSourceNameEditPart.class, AssociationTargetNameEditPart.class) {
 			@Override
 			protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
-				ConnectionLabelLocator locator = new ConnectionLabelLocator(basePart);
+				ConnectionLabelLocator locator = new ConnectionLabelLocator();
 				View view = basePart.getContent();
 				switch (view.getType()) {
 				// Source and Target are reversed: the sourceRoleLabel is closer to the association target end
@@ -138,7 +129,7 @@ public class ClassDiagramModule extends UMLDiagramModule {
 
 		// Association (+ Role labels)
 		labelProviders.addBinding().toInstance(new AssociationLabelService(DEFAULT_CLASS_PRIORITY));
-		
+
 		// Register the StereotypeLabelService with a higher priority than specific elements,
 		// since it only applies to StereotypeLabels (Other label providers are only filtered by semantic element)
 		labelProviders.addBinding().toInstance(new StereotypeLabelService(MAX_CLASS_PRIORITY));

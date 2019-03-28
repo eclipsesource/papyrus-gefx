@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.eclipse.fx.core.observable.FXObservableUtil;
-import org.eclipse.gef.common.activate.IActivatable;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.utils.GMFPartUtil;
@@ -26,8 +24,12 @@ import org.eclipse.papyrus.gef4.services.AbstractProviderParticipant;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 
 /**
+ * <p>
  * An abstract {@link HelperProviderParticipant} for GMF implementation of
- * {@link BaseContentPart}
+ * {@link BaseContentPart}. Subclasses should provide a new instance via
+ * {@link #doCreateInstance(BaseContentPart)}; these instances will then
+ * be automatically injected.
+ * </p>
  */
 public abstract class AbstractGMFProviderParticipant<T> extends AbstractProviderParticipant<T> {
 
@@ -66,18 +68,7 @@ public abstract class AbstractGMFProviderParticipant<T> extends AbstractProvider
 
 	@Override
 	protected T createInstance(IVisualPart<?> part) {
-		T instance = doCreateInstance(GMFPartUtil.getBasePart(part));
-		if (instance instanceof IActivatable) {
-			IActivatable activatable = (IActivatable) instance;
-			FXObservableUtil.onChange(part.activeProperty(), isActive -> {
-				if (isActive) {
-					activatable.activate();
-				} else {
-					activatable.deactivate();
-				}
-			});
-		}
-		return instance;
+		return doCreateInstance(GMFPartUtil.getBasePart(part));
 	}
 
 	protected abstract T doCreateInstance(BaseContentPart<? extends View, ?> basePart);

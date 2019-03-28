@@ -57,7 +57,7 @@ public abstract class AbstractUMLEdgeStyleServiceParticipant<T extends Element> 
 
 	@Override
 	protected final EdgeStyleService doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
-		return new ConnectorStyleProvider(basePart) {
+		return new ConnectorStyleProvider() {
 
 			@Override
 			public List<Double> getDashStyle() {

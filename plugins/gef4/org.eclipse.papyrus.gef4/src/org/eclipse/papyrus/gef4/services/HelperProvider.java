@@ -12,6 +12,7 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.services;
 
+import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 /**
@@ -21,6 +22,12 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
  */
 public interface HelperProvider<T> {
 
+	/**
+	 * The {@link AdapterKey#role(String) role} used to register the provided value
+	 * as an adapter of the given visual part
+	 */
+	String ROLE = "HelperProviderRole"; //$NON-NLS-1$
+	
 	/**
 	 * <p>
 	 * Return an instance of T for this VisualPart.

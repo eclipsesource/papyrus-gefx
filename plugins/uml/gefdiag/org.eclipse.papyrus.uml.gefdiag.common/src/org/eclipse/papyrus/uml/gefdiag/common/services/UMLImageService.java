@@ -30,10 +30,6 @@ public class UMLImageService extends IAdaptable.Bound.Impl<LabelContentPart<View
 
 	private static final String imagePath = "platform:/plugin/org.eclipse.uml2.uml.edit/icons/full/obj16"; //$NON-NLS-1$
 
-	public UMLImageService(LabelContentPart<View> labelPart) {
-		setAdaptable(labelPart);
-	}
-
 	/**
 	 * @see org.eclipse.papyrus.gef4.services.ImageService#getImagePath()
 	 *

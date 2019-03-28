@@ -12,17 +12,11 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.style;
 
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.services.style.LabelStyleService;
 import org.eclipse.papyrus.gef4.utils.TextOverflowEnum;
 
 public class NotationLabelStyleProvider extends AbstractNotationStyleService implements LabelStyleService {
-
-	public NotationLabelStyleProvider(BaseContentPart<? extends View, ?> part) {
-		super(part);
-	}
 
 	@Override
 	public TextOverflowEnum getTextOverflow() {

@@ -47,10 +47,6 @@ import javafx.scene.text.Font;
 
 public class NotationStyleService extends AbstractNotationStyleService implements StyleService {
 
-	public NotationStyleService(BaseContentPart<? extends View, ?> part) {
-		super(part);
-	}
-
 	protected EObject findSemanticElement() {
 		final EObject element = getView().getElement();
 		if (element == null) {
@@ -58,7 +54,7 @@ public class NotationStyleService extends AbstractNotationStyleService implement
 				return null; // Do not go beyond the Primary part
 			}
 
-			final BaseContentPart<? extends View, ? extends Node> parent = getPart().getParentBaseContentPart();
+			final BaseContentPart<? extends View, ? extends Node> parent = getAdaptable().getParentBaseContentPart();
 			if (parent != null) {
 				return parent.getContent().getElement();
 			}
@@ -307,8 +303,7 @@ public class NotationStyleService extends AbstractNotationStyleService implement
 
 	/**
 	 *
-	 * @param fontSize
-	 *            The font size (In pixels)
+	 * @param fontSize The font size (In pixels)
 	 * @return The FX Font, corresponding to this View's fontName and specified
 	 *         fontSize (in pixels)
 	 */

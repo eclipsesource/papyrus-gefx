@@ -23,12 +23,11 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.locators.BorderItemLocator;
-import org.eclipse.papyrus.gef4.gmf.services.AbstractGMFProviderParticipant;
+import org.eclipse.papyrus.gef4.gmf.services.GMFProviderParticipant;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.palette.DefaultPaletteRenderer;
 import org.eclipse.papyrus.gef4.palette.PaletteDescriptor;
 import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.infra.gefdiag.common.palette.PapyrusPaletteDescriptor;
@@ -39,6 +38,7 @@ import org.eclipse.papyrus.uml.gefdiag.component.edit.parts.PortEditPart;
 import org.eclipse.papyrus.uml.gefdiag.component.providers.ContentPartProvider;
 
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.Multibinder;
@@ -63,14 +63,10 @@ public class ComponentDiagramModule extends UMLDiagramModule {
 	@Override
 	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
 		super.bindLocators(locators);
-		locators.addBinding().toInstance(new AbstractGMFProviderParticipant<Optional<Locator>>(DEFAULT_COMPONENT_PRIORITY,
-				PortEditPart.class) {
 
-			@Override
-			protected Optional<Locator> doCreateInstance(BaseContentPart<? extends View, ?> basePart) {
-				return Optional.of(new BorderItemLocator(basePart));
-			}
-		});
+		Provider<Optional<Locator>> borderItemLocator = required(getProvider(BorderItemLocator.class));
+		locators.addBinding().toInstance(new GMFProviderParticipant<>(DEFAULT_COMPONENT_PRIORITY, borderItemLocator,
+				PortEditPart.class));
 	}
 
 	protected void bindPalette() {

@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.mvc.fx.parts.AbstractContentPart;
 import org.eclipse.gef.mvc.fx.parts.IContentPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.papyrus.gef4.adapt.AdapterHelper;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.services.AnchorageService;
 import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
@@ -34,17 +35,18 @@ import org.eclipse.papyrus.gef4.services.style.StyleService;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 
 import javafx.scene.Node;
 
 /**
- * Parent class for all GEF4 ContentParts based on GMF Runtime/Notation. The Content is a {@link View}
+ * Parent class for all GEFx ContentParts.
  *
  * @author Camille Letavernier
  *
- * @param <V>
- *            The {@link View} represented by this ContentPart
+ * @param <MODEL>
+ *            The Model type represented by this ContentPart
  * @param <N>
  *            The FX {@link Node} used to display this ContentPart
  */
@@ -67,6 +69,9 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	private TransactionService transactionService;
 
 	private AnchorageService anchorageService;
+	
+	@Inject
+	private AdapterHelper adapterHelper;
 
 	public BaseContentPart(MODEL content) {
 		Assert.isNotNull(content);
@@ -220,6 +225,16 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	@SuppressWarnings("unchecked")
 	public MODEL getContent() {
 		return (MODEL) super.getContent();
+	}
+	
+	@Override
+	public <T> T getAdapter(Class<T> classKey) {
+		return adapterHelper.getAdapter(this, classKey);
+	}
+	
+	@Override
+	public <T> T getAdapter(TypeToken<T> key) {
+		return adapterHelper.getAdapter(this, key);
 	}
 
 	protected abstract Collection<String> getStyleClasses();

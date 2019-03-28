@@ -18,6 +18,15 @@ import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.inject.Injector;
 
+/**
+ * <p>
+ * Base implementation of {@link HelperProviderParticipant}.
+ * Subclasses should provide a simple instance via {@link #createInstance(IVisualPart)},
+ * which will then be injected automatically
+ * </p>
+ *
+ * @param <T>
+ */
 public abstract class AbstractProviderParticipant<T> implements HelperProviderParticipant<T> {
 
 	private Injector injector;

@@ -21,7 +21,6 @@ import org.eclipse.fx.core.log.Logger;
 import org.eclipse.fx.core.log.LoggerCreator;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.Rectangle;
-import org.eclipse.gef.mvc.fx.handlers.AbstractHandler;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
@@ -43,7 +42,8 @@ import javafx.scene.Node;
  * {@link Location} of a Node.
  * </p>
  */
-public class MoveNodeHandler extends AbstractHandler implements MoveHandler {
+public class MoveNodeHandler extends org.eclipse.gef.common.adapt.IAdaptable.Bound.Impl<IVisualPart<? extends Node>>
+		implements MoveHandler {
 
 	private static Logger logger = LoggerCreator.createLogger(MoveNodeHandler.class);
 

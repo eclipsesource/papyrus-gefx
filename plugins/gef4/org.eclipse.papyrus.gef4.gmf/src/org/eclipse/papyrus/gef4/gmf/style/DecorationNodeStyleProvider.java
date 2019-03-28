@@ -15,15 +15,9 @@ package org.eclipse.papyrus.gef4.gmf.style;
 import org.eclipse.gmf.runtime.notation.DrawerStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.TitleStyle;
-import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.services.style.CompartmentStyleService;
 
 public class DecorationNodeStyleProvider extends AbstractNotationStyleService implements CompartmentStyleService {
-
-	public DecorationNodeStyleProvider(BaseContentPart<? extends View, ?> part) {
-		super(part);
-	}
 
 	/**
 	 * Whether the title of the compartment should be displayed

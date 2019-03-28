@@ -14,18 +14,12 @@ package org.eclipse.papyrus.gef4.gmf.style;
 
 import java.util.List;
 
-import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.utils.NotationUtil;
-import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
 
 import javafx.scene.paint.Color;
 
 public class ConnectorStyleProvider extends AbstractNotationStyleService implements EdgeStyleService {
-
-	public ConnectorStyleProvider(BaseContentPart<? extends View, ?> part) {
-		super(part);
-	}
 
 	@Override
 	public String getSourceDecoration() {

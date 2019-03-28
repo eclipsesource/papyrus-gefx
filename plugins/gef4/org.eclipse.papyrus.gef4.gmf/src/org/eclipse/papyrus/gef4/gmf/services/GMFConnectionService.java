@@ -47,7 +47,7 @@ import javafx.scene.Node;
 /**
  * An {@link AnchorageService} implementation for GMF {@link Edge} Anchors
  */
-public class GMFConnectionService extends ActivatableBound<IVisualPart<?>>
+public class GMFConnectionService extends ActivatableBound<BaseContentPart<? extends View, ?>>
 		implements AnchorageService, ConnectionService {
 
 	/**
@@ -59,11 +59,13 @@ public class GMFConnectionService extends ActivatableBound<IVisualPart<?>>
 	private DiagramEventBroker eventBroker;
 	private NotificationListener notificationListener;
 	private Edge edge;
-
+	
 	@Override
 	protected void doActivate() {
-		this.edge = getEdge();
+		Edge edge = getEdge();
 		if (edge == null) {
+			// Edge may be null because we implement both AnchorageService and ConnectionService
+			// AnchorageService may be used for Nodes as well
 			return;
 		}
 		notificationListener = msg -> {
@@ -89,11 +91,13 @@ public class GMFConnectionService extends ActivatableBound<IVisualPart<?>>
 
 		eventBroker.addNotificationListener(edge, notificationListener);
 		eventBroker.addNotificationListener(edge.getBendpoints(), notificationListener);
+		
+		updateBendpoints();
 	}
 
 	private void updateBendpoints() {
 		BaseContentPart<?, ?> host = getHost();
-		host.refreshVisual(); // XXX This shouldn't be done synchronously
+		host.refreshVisual();
 	}
 
 	private void updateAnchorages() {
@@ -104,17 +108,11 @@ public class GMFConnectionService extends ActivatableBound<IVisualPart<?>>
 	}
 
 	private void updateAnchors() {
-		BaseContentPart<?, ?> host = getHost();
-		if (host != null) {
-			host.updateAnchors();
-		}
+		getHost().updateAnchors();
 	}
 
-	private BaseContentPart<?, ?> getHost() {
-		if (getAdaptable() instanceof BaseContentPart) {
-			return (BaseContentPart<?, ?>) getAdaptable();
-		}
-		return null;
+	private BaseContentPart<? extends View, ?> getHost() {
+		return getAdaptable();
 	}
 
 	@Inject
@@ -123,11 +121,13 @@ public class GMFConnectionService extends ActivatableBound<IVisualPart<?>>
 	}
 
 	protected Edge getEdge() {
-		BaseContentPart<?, ?> host = getHost();
-		if (host != null && host.getContent() instanceof Edge) {
-			return (Edge) host.getContent();
+		if (edge == null) {
+			BaseContentPart<?, ?> host = getHost();
+			if (host != null && host.getContent() instanceof Edge) {
+				edge = (Edge) host.getContent();
+			}
 		}
-		return null;
+		return edge;
 	}
 
 	protected IVisualPart<? extends Node> getAnchorage(String role) {
@@ -177,16 +177,16 @@ public class GMFConnectionService extends ActivatableBound<IVisualPart<?>>
 	}
 
 	private boolean isBendpointChanged(Notification msg) {
-		return edge != null && msg.getNotifier() == edge.getBendpoints();
+		return getEdge() != null && msg.getNotifier() == getEdge().getBendpoints();
 	}
 
 	@Override
 	public List<BendPoint> getModelBendpoints() {
-		if (edge == null) {
+		if (getEdge() == null) {
 			return Collections.emptyList();
 		}
 
-		return getBendpoints(edge).stream() //
+		return getBendpoints(getEdge()).stream() //
 				.map(this::toGeometryPoint) //
 				.filter(Predicates.notNull()) //
 				.map(BendPoint::new) //
