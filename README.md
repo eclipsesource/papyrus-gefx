@@ -39,3 +39,8 @@ Basic interactions are supported, including:
 - Creation of (Most) Edges
 - ~~Collapse/Expand compartment~~ To be restored
 
+## How to install
+
+There is no official release for this project yet. Some integration builds are triggered on Papyrus' Jenkins instance. You can install the Papyrus-GEFx Connector from this update site: https://ci.eclipse.org/papyrus/job/Papyrus-GEFx-Integration/lastSuccessfulBuild/artifact/repository/
+
+Note that you will need Eclipse 2019-03 running on Java 11. If you want to use the Papyrus GEFx Diagrams inside of the Papyrus Editor, you need to explicitly install the Papyrus Feature ("Papyrus for UML") from http://download.eclipse.org/releases/2019-03
