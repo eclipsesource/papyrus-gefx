@@ -30,16 +30,6 @@
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.component</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.composite</module>
 
-		<!-- Test Plug-ins -->
-		<module>../../tests/junit/plugins/org.testfx</module>
-
-		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gef4.example.library</module>
-		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.example.library.e3</module>
-		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.tests</module>
-		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.gmf.tests</module>
-		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.example.library.tests</module>
-		<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.uml.gefdiag.clazz.tests</module>
-
 		<!-- Update site -->
 		<module>site</module>
 	</modules>
@@ -256,6 +246,17 @@
 
 		<profile>
 			<id>defaultProfile</id>
+			<modules>
+				<!-- Test Plug-ins -->
+				<module>../../tests/junit/plugins/org.testfx</module>
+				
+				<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gef4.example.library</module>
+				<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.example.library.e3</module>
+				<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.tests</module>
+				<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.gmf.tests</module>
+				<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.gefx.example.library.tests</module>
+				<module>../../tests/junit/plugins/gef4/org.eclipse.papyrus.uml.gefdiag.clazz.tests</module>
+			</modules>
 			<build>
 				<plugins>
 					<plugin>
