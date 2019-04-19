@@ -6,17 +6,15 @@ The idea is to provide an editor based on GEFx and JavaFX, while retaining the c
 
 ## Dependencies
 
-The project depends on GEFx (Currently, 5.0.2 / Photon.0 or 2018-09), Papyrus 4.x (Currently, [4.0.0, 4.1.0], Photon.0 or 2018-09) and E(fx)clipse ([3.3.0, 3.4.0], Photon.0 or 2018-09)
-
-Note: Papyrus GEFx does NOT work with Eclipse 2018-12, due to SWT dropping support for GTK2 in 4.10 (2018-12), while the version of JavaFX we currently use doesn't support GTK3: https://www.eclipse.org/eclipse/news/4.10/platform.php#gtk2-removal
+The project depends on Eclipse 2019-03 & Java 11, GEFx (Currently, 5.0.2 / 2019-03), Papyrus 4.x (Currently, [4.0.0, 4.3.0], any version between Photon.0 and 2019-03) and E(fx)clipse (3.5.0, not available from the Eclipse release train anymore)
 
 ## Project status
 
-This project is still work-in-progress, and some parts of the code have been implemented a long time ago, while GEFx APIs were still moving a lot. Thus, these parts of the code may be disabled (Typically commented out) or broken. This is e.g. the case for Connections, as well as most interactions.
+This project is still work-in-progress, and some parts of the code have been implemented a long time ago, while GEFx APIs were still moving a lot. Thus, these parts of the code may be disabled (Typically commented out) or broken, although most of them have now been properly migrated.
 
-When everything is setup properly, you may open a Class Diagram from an existing Papyrus Model, via the Model Explorer: Right click > Open With > Diagram Editor (GEF4). If the Diagram only contains supported elements, here's what it might look like:
+When everything is setup properly, you may open a Class, Component or Composite Diagram from an existing Papyrus Model, via the Model Explorer: Right click > Open With > Diagram Editor (GEF4). If the Diagram only contains supported elements, here's what it might look like:
 
-![GEF Legacy vs GEFx-GMF](images/GEF3-GMF%20vs%20GEFx-GMF.png)
+![GEF Legacy vs GEFx-GMF](images/GEF3-GMF%20vs%20GEFx-GMF%202019-03.png)
 
 Side-by-Side in the same Papyrus Editor: GEF Legacy (Left), GEFx (Right)
 
@@ -24,17 +22,20 @@ Side-by-Side in the same Papyrus Editor: GEF Legacy (Left), GEFx (Right)
 
 The editor is able to render the following elements:
 
-- Nodes
+- Nodes (Including Border Items)
 - Compartments (Structure or List)
 - Labels
+- Connectors
+- Palettes
 
-Connectors and Border Items are being refactored and may be broken.
+Currently, only a few Papyrus Diagram are supported (Mostly the Class Diagram). Simple versions of Composite Structure and Component Diagrams are provided, although with very little diagram customization. State Machine Diagrams exist, but don't provide any customization at all. 
 
-Currently, only the Papyrus Class Diagram is supported, although older versions used to support StateMachines, Composite Structures and Components.
-
-Most interactions have been disabled or broken (Or are simply missing), due to the (not so) recent GEFx changes related to Policies and Handlers. Partially supported interactions are:
+Basic interactions are supported, including:
 
 - Select/Multiselect/Deselect
 - Move (But not reparent)
 - Resize
-- Collapse/Expand compartment
+- Creation of (Most) Nodes and List Items
+- Creation of (Most) Edges
+- ~~Collapse/Expand compartment~~ To be restored
+

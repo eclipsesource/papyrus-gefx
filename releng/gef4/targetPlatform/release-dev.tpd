@@ -3,19 +3,19 @@ target "GEFx for Papyrus - Developers Platform" with requirements source
 include "release.tpd"
 
 
-location "http://download.eclipse.org/releases/2018-12" {
+location "https://download.eclipse.org/releases/2019-03" {
 	org.junit [4.12.0,5.0.0)
 }
 
-location "http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/2018-12" {
+location "https://download.eclipse.org/modeling/mdt/papyrus/updates/releases/2019-03" {
 	org.eclipse.papyrus.gmfgenextension lazy
 }
 
-location "http://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases-3.3.1a" {
+location "https://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases-3.3.1a" {
 	org.eclipse.gmf.codegen [2.11.0,3.0.0)
 }
 
-location "http://download.eclipse.org/tools/orbit/downloads/drops/R20190226160451/repository" {
+location "https://download.eclipse.org/tools/orbit/downloads/drops/R20190226160451/repository" {
 	org.hamcrest [1.1.0,2.0.0)
 }
 
