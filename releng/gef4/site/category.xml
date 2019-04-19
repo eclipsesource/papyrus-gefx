@@ -6,9 +6,32 @@
    <feature url="features/org.eclipse.papyrus.gef4.feature.source_0.2.0.qualifier.jar" id="org.eclipse.papyrus.gef4.feature.source" version="0.2.0.qualifier">
       <category name="org.eclipse.papyrus.category"/>
    </feature>
-   <category-def name="org.eclipse.papyrus.category" label="Papyrus">
+   <feature id="openjfx.standard.feature" version="0.0.0">
+      <category name="fx-dependencies"/>
+   </feature>
+   <feature id="openjfx.swing.feature" version="0.0.0">
+      <category name="fx-dependencies"/>
+   </feature>
+   <feature id="openjfx.swt.feature" version="0.0.0">
+      <category name="fx-dependencies"/>
+   </feature>
+   <bundle id="org.eclipse.fx.ui.di.interopt" version="0.0.0">
+      <category name="fx-dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.fx.core" version="0.0.0">
+      <category name="fx-dependencies"/>
+   </bundle>
+   <bundle id="org.eclipse.fx.ui.controls" version="0.0.0">
+      <category name="fx-dependencies"/>
+   </bundle>
+   <category-def name="org.eclipse.papyrus.category" label="Papyrus GEFx">
       <description>
-         Papyrus Category
+         All required plug-ins to use GEF5/JavaFX Diagrams in Papyrus
+      </description>
+   </category-def>
+   <category-def name="fx-dependencies" label="E(fx) Dependencies">
+      <description>
+         Required dependencies from e(fx)clipse
       </description>
    </category-def>
 </site>

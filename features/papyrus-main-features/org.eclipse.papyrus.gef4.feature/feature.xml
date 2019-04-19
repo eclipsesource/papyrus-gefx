@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.papyrus.gef4.feature"
-      label="Papyrus GEF4 Connector Feature"
+      label="Papyrus GEFx Connector Feature"
       version="0.2.0.qualifier"
       provider-name="Eclipse Modeling Project">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="https://github.com/eclipsesource/papyrus-gefx">
+      Papyrus Diagram Editors based on GEF5 &amp; JavaFX
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright>
+      %copyright
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="%licenseURL">
+      %license
    </license>
 
    <requires>
       <import plugin="org.eclipse.fx.ui.di.interopt"/>
+      <import feature="openjfx.standard.feature" version="0.0.0"/>
+      <import feature="openjfx.swing.feature" version="0.0.0"/>
+      <import feature="openjfx.swt.feature" version="0.0.0"/>
+      <import plugin="org.eclipse.fx.core"/>
+      <import feature="org.eclipse.fx.runtime.min.feature" version="0.0.0"/>
+      <import feature="org.eclipse.gef.mvc.fx" version="0.0.0"/>
    </requires>
 
    <plugin
