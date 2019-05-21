@@ -16,6 +16,9 @@ package org.eclipse.papyrus.gef4.decorations;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 
+/**
+ * Decoration factory for connections
+ */
 public interface DecorationFactory {
 
 	String OPEN_ARROW = "openArrow";

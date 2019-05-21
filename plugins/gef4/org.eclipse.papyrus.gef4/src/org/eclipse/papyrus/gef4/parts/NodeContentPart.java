@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST and others.
+ * Copyright (c) 2015, 2019 CEA LIST, EclipseSource and others.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  *  Camille Letavernier (CEA LIST) camille.letavernier@cea.fr - Initial API and implementation
  *  Mickael ADAM (ALL4TEC) mickael.adam@all4tec.net - Layout and visualization API and Implementation
+ *  EclipseSource - Issue 16
  *
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
@@ -19,22 +20,14 @@ import java.util.Collections;
 import org.eclipse.fx.core.Subscription;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.layout.Locator;
-import org.eclipse.papyrus.gef4.nodes.DoubleBorderPane;
-import org.eclipse.papyrus.gef4.shapes.CornerBendPath;
-import org.eclipse.papyrus.gef4.shapes.CornerBendRectanglePath;
-import org.eclipse.papyrus.gef4.shapes.PackagePath;
+import org.eclipse.papyrus.gef4.shapes.CornerBentShapeDecoration;
+import org.eclipse.papyrus.gef4.shapes.PackageShapeDecoration;
+import org.eclipse.papyrus.gef4.shapes.ShapeDecoration;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
 import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.NumberExpression;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Reflection;
@@ -56,13 +49,8 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	public static final int DEFAULT_MIN_WIDTH = 100;
 	public static final int DEFAULT_MIN_HEIGHT = 100;
 
-	/**
-	 * Listener to refresh the shape when layout bounds change.
-	 * This is especially useful if scaling == false (If scale == true, this is already handled by JavaFX)
-	 *
-	 * Asymmetric shapes (Package, comment) need to be maintained manually
-	 */
-	private ChangeListener<Bounds> boundsShapeListener = (a, b, c) -> refreshShape();
+	private ShapeTypeEnum currentShapeType;
+	private ShapeDecoration.Decoration currentDecoration;
 
 	public NodeContentPart(final MODEL view) {
 		super(view);
@@ -165,65 +153,34 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 		}
 	}
 
-	private ShapeTypeEnum currentShapeType;
-	private Subscription currentShapeSubscription;
-
 	protected void refreshShape() {
 		final VBox region = getVisual();
 
 		final ShapeTypeEnum shapeType = getStyleProvider().getShapeType();
 		if (shapeType != currentShapeType) {
-			Subscription.disposeIfExists(currentShapeSubscription);
-			currentShapeSubscription = null;
+			Subscription.disposeIfExists(currentDecoration);
+			currentDecoration = null;
 			this.currentShapeType = shapeType;
 
 			boolean labelsUseAllWidth = true;
 
 			switch (shapeType) {
 			case CORNER_BEND_RECTANGLE:
-				final NumberExpression width = region.widthProperty();
-				final NumberExpression height = region.heightProperty();
-
-				final double cornerBendWidth = getStyleProvider().getCornerBendWidth();
-				setShape(new CornerBendRectanglePath(width, height, cornerBendWidth), false);
+				ShapeDecoration decoration = new CornerBentShapeDecoration();
+				this.currentDecoration = decoration.applyShape(this, region.getChildren());
 				break;
-
 			case OVAL:
 				// Check if ellipse is aldready instanciate.
 				if (!(region.getShape() instanceof Ellipse)) {
 					Ellipse ellipse = new Ellipse(10, 10); // Size doesn't matter, it will be resized to match the region's. We still need a size, otherwise the Ellipse is not drawn at all
 					ellipse.setFill(region.getBackground().getFills().get(0).getFill());
 					ellipse.setStroke(region.getBorder().getStrokes().get(0).getBottomStroke());
-					setShape(ellipse, true);
+					region.setShape(ellipse);
 				}
 				break;
 			case PACKAGE:
-				// get the tab dimension of the package (As an Observable value, see Issue #9)
-
-				NumberExpression tabHeight = new SimpleDoubleProperty(0);
-				NumberExpression tabWidth = new SimpleDoubleProperty(60); // TODO CSS minTabWidth
-
-				for (final IVisualPart<? extends Node> child : getChildrenUnmodifiable()) {
-					if (child instanceof LabelContentPart) {
-						LabelContentPart<?> childPart = (LabelContentPart<?>) child;
-
-						// get the margin
-						final Insets childMargin = childPart.getStyleProvider().getPadding();
-						// get the Label child
-						final Label label = childPart.getVisual();
-						tabWidth = Bindings.max(tabWidth, label.widthProperty().add(childMargin.getLeft()).add(childMargin.getRight()));
-						tabHeight = Bindings.add(tabHeight, label.heightProperty().add(childMargin.getBottom()).add(childMargin.getTop()));
-					} else {
-						break; // The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name). Labels below other children are ignored (e.g. Label, Compartment, Label)
-					}
-				}
-
-				tabHeight = Bindings.max(10, tabHeight);
-
-				// create package shape
-				final PackagePath packageShape = new PackagePath(region.widthProperty(), region.heightProperty(), tabWidth, tabHeight, 35, 35);
-				setShape(packageShape, false);
-
+				ShapeDecoration pkgDecoration = new PackageShapeDecoration();
+				this.currentDecoration = pkgDecoration.applyShape(this, region.getChildren());
 				labelsUseAllWidth = false;
 				break;
 			default:
@@ -246,60 +203,6 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 
 		// Rotate the figure.
 		region.setRotate(getStyleProvider().getRotate());
-	}
-
-	protected void setShape(javafx.scene.shape.Shape shape, boolean scale) {
-		Region region = getVisual();
-		if (shape == null && region.getShape() != null) {
-			// Removing
-			region.setShape(null);
-			region.layoutBoundsProperty().removeListener(boundsShapeListener);
-		} else if (shape != null) {
-			if (region.getShape() == null) {
-				// Adding
-				region.layoutBoundsProperty().addListener(boundsShapeListener);
-			}
-			// Adding or Modifying
-			region.setShape(shape);
-			region.setScaleShape(scale);
-			region.setCenterShape(true);
-		}
-	}
-
-	// TODO: Store figures directly rather than re-creating them
-	@Override
-	protected void refreshDecoration() {
-		final VBox region = getVisual();
-		final double width = getStyleProvider().getWidth();
-		final double height = getStyleProvider().getHeight();
-
-
-		// Delete cornerBend if exist
-		for (int i = 0; i < region.getChildren().size(); i++) {
-			if (region.getChildren().get(i) instanceof CornerBendPath) {
-				region.getChildren().remove(i);
-			}
-		}
-
-		// Delete ActiveLine if exist
-		for (int i = 0; i < region.getChildren().size(); i++) {
-			if (region.getChildren().get(i) instanceof DoubleBorderPane) {
-				region.getChildren().remove(i);
-			}
-		}
-		// If have double Line. For active Class for example
-		if (getStyleProvider().hasDoubleBorder() && null == region.getShape()) {
-			// If double line are not already drawn
-			for (int i = 0; i < region.getChildren().size(); i++) {
-				if (region.getChildren().get(i) instanceof DoubleBorderPane) {
-					region.getChildren().remove(i);
-				}
-			}
-
-			// Create the decoration
-			final DoubleBorderPane pane = new DoubleBorderPane(region, width, height, getStyleProvider().getBorderWidths(), getStyleProvider().getBorderStyles(), getStyleProvider().getBorderColors(), getStyleProvider().getDoubleBorderWidths());
-			region.getChildren().add(pane);
-		}
 	}
 
 	@Override
@@ -329,6 +232,15 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	}
 
 	@Override
+	protected void refreshDecoration() {
+		if (currentDecoration != null) {
+			currentDecoration.refresh();
+		}
+
+		super.refreshDecoration();
+	}
+
+	@Override
 	protected void doAddChildVisual(final IVisualPart<? extends Node> child, final int index) {
 		if (child.getVisual() != null) {
 			this.currentShapeType = null; // Force a shape refresh XXX Find a better way to do that, e.g. listening on the children
@@ -352,7 +264,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 	 */
 	@Override
 	public void dispose() {
-		getVisual().layoutBoundsProperty().removeListener(boundsShapeListener);
+		Subscription.disposeIfExists(currentDecoration);
 		super.dispose();
 	}
 
