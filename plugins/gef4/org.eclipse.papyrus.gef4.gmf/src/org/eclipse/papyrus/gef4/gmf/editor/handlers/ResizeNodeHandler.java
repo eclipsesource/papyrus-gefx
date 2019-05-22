@@ -65,9 +65,13 @@ public class ResizeNodeHandler extends AbstractHandler implements ResizeHandler 
 			protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
 					throws ExecutionException {
 				Bounds bounds = getBounds();
-				if (bounds == null && getHostView() != null) {
-					bounds = NotationFactory.eINSTANCE.createBounds();
-					getHostView().setLayoutConstraint(bounds);
+				if (bounds == null) {
+					if (getHostView() != null) {
+						bounds = NotationFactory.eINSTANCE.createBounds();
+						getHostView().setLayoutConstraint(bounds);
+					} else {
+						return CommandResult.newErrorCommandResult("Unable to resize the selected part: " + getHost());
+					}
 				}
 				bounds.setX((int) boundsInParent.getX());
 				bounds.setY((int) boundsInParent.getY());

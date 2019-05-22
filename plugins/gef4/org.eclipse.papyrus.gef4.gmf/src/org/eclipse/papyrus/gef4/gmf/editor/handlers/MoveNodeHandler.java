@@ -79,9 +79,13 @@ public class MoveNodeHandler extends org.eclipse.gef.common.adapt.IAdaptable.Bou
 			protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
 					throws ExecutionException {
 				Location location = getLocation();
-				if (location == null && getHostView() != null) {
-					location = NotationFactory.eINSTANCE.createLocation();
-					getHostView().setLayoutConstraint(location);
+				if (location == null) {
+					if (getHostView() != null) {
+						location = NotationFactory.eINSTANCE.createLocation();
+						getHostView().setLayoutConstraint(location);
+					} else {
+						return CommandResult.newErrorCommandResult("Unable to move the selected part: " + getHost());
+					}
 				}
 				location.setX((int) newBoundsInParent.getX());
 				location.setY((int) newBoundsInParent.getY());

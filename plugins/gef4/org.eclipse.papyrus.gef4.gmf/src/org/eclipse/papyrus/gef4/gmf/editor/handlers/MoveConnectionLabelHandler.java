@@ -36,12 +36,12 @@ import javafx.scene.Node;
  * <p>
  * MoveHandler for Connection labels using the {@link ConnectionLabelLocator}.
  * </p>
- * 
+ *
  * <p>
- * This Locator rotates the Labels' reference point to follow the connection segment, and
- * the persisted X/Y coordinates have to take this rotation into account. For example,
- * when moving the label of a Vertical link to the left, we actually need to change
- * its Y coordinate, because it will be rotated 90°.
+ * This Locator rotates the Labels' reference point to follow the connection
+ * segment, and the persisted X/Y coordinates have to take this rotation into
+ * account. For example, when moving the label of a Vertical link to the left,
+ * we actually need to change its Y coordinate, because it will be rotated 90°.
  * </p>
  */
 
@@ -49,9 +49,12 @@ public class MoveConnectionLabelHandler extends MoveNodeHandler implements MoveH
 
 	@Override
 	public ICommand move(Dimension delta) {
-		// Note: until https://github.com/eclipsesource/papyrus-gefx/issues/31, we can only
-		// use one MoveHandler for all affixed labels (That includes Port labels and Connection Labels).
-		// Later on, they should probably be separate handlers; but for now we need to support both cases.
+		// Note: until https://github.com/eclipsesource/papyrus-gefx/issues/31, we can
+		// only
+		// use one MoveHandler for all affixed labels (That includes Port labels and
+		// Connection Labels).
+		// Later on, they should probably be separate handlers; but for now we need to
+		// support both cases.
 		if (isConnectionLabel()) {
 			// Connection floating label (With ConnectionLabelLocator)
 			return moveConnectionLabel(delta);
@@ -60,7 +63,7 @@ public class MoveConnectionLabelHandler extends MoveNodeHandler implements MoveH
 			return super.move(delta);
 		}
 	}
-	
+
 	protected ICommand moveConnectionLabel(Dimension delta) {
 		final ChangeBoundsModel boundsModel = ModelUtil.getChangeBoundsModel(getHost());
 
@@ -72,16 +75,20 @@ public class MoveConnectionLabelHandler extends MoveNodeHandler implements MoveH
 			}
 			return null;
 		}
-		
+
 		AbstractTransactionalCommand moveCommand = new AbstractTransactionalCommand(editingDomain, "Move label", null) {
 
 			@Override
 			protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
 					throws ExecutionException {
 				Location location = getLocation();
-				if (location == null && getHostView() != null) {
-					location = NotationFactory.eINSTANCE.createLocation();
-					getHostView().setLayoutConstraint(location);
+				if (location == null) {
+					if (getHostView() != null) {
+						location = NotationFactory.eINSTANCE.createLocation();
+						getHostView().setLayoutConstraint(location);
+					} else {
+						return CommandResult.newErrorCommandResult("Unable to move the selected part: " + getHost());
+					}
 				}
 				location.setX((int) newLocationInConnection.x());
 				location.setY((int) newLocationInConnection.y());
@@ -91,7 +98,7 @@ public class MoveConnectionLabelHandler extends MoveNodeHandler implements MoveH
 
 		return moveCommand;
 	}
-	
+
 	protected Point computeNewLocationInConnection(final Dimension delta) {
 		assert delta != null;
 
@@ -112,22 +119,24 @@ public class MoveConnectionLabelHandler extends MoveNodeHandler implements MoveH
 		javafx.geometry.Bounds updatedBoundsInParent = parentVisual.sceneToLocal(updatedBoundsInScene);
 
 		Connection connection = getLabelLocator().getConnection();
-		Point normalPoint = LabelUtil.offsetFromRelativeCoordinate(hostVisual, connection, updatedBoundsInParent, getReferencePoint());
+		Point normalPoint = LabelUtil.offsetFromRelativeCoordinate(hostVisual, connection, updatedBoundsInParent,
+				getReferencePoint());
 
 		return normalPoint;
 	}
-	
+
 	protected Point getReferencePoint() {
 		ConnectionLabelLocator labelLocator = getLabelLocator();
 		return labelLocator.getReferencePoint();
 	}
-	
+
 	protected boolean isConnectionLabel() {
 		return getLabelLocator() != null;
 	}
-	
+
 	protected ConnectionLabelLocator getLabelLocator() {
-		if (getHost() instanceof BaseContentPart && ((BaseContentPart<?, ?>)getHost()).getLocator() instanceof ConnectionLabelLocator) {
+		if (getHost() instanceof BaseContentPart
+				&& ((BaseContentPart<?, ?>) getHost()).getLocator() instanceof ConnectionLabelLocator) {
 			return (ConnectionLabelLocator) ((BaseContentPart<?, ?>) getHost()).getLocator();
 		}
 		return null;
