@@ -44,8 +44,6 @@ public class PapyrusGEFxEditor extends GEFEditor<Diagram> implements IRevealSema
 
 	protected boolean disposed = false;
 
-	protected Module module;
-
 	public PapyrusGEFxEditor(Module module) {
 		super(module);
 	}

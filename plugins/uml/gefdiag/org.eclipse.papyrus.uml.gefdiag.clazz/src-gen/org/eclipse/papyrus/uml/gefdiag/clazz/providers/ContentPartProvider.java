@@ -1,6 +1,8 @@
 package org.eclipse.papyrus.uml.gefdiag.clazz.providers;
 
 import org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart;
+import org.eclipse.papyrus.gef4.gmf.parts.NotationListCompartmentContentPart;
+import org.eclipse.papyrus.gef4.gmf.parts.ShapeContentPart;
 
 public class ContentPartProvider
 		extends org.eclipse.papyrus.uml.gefdiag.common.provider.AbstractUMLContentPartProvider {
@@ -728,13 +730,12 @@ public class ContentPartProvider
 
 				@Override
 				public Object caseShape(org.eclipse.gmf.runtime.notation.Shape object) {
-					return new org.eclipse.papyrus.gef4.parts.NodeContentPart<>(object);
+					return new ShapeContentPart(object);
 				}
 
 				@Override
 				public Object caseBasicCompartment(org.eclipse.gmf.runtime.notation.BasicCompartment object) {
-					return new org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart<org.eclipse.gmf.runtime.notation.DecorationNode>(
-							object);
+					return new NotationListCompartmentContentPart(object);
 				}
 			}.doSwitch(view);
 		// return new EmptyContentPart(view);

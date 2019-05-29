@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Papyrus GEFx SWT Integration
-Bundle-SymbolicName: org.eclipse.papyrus.gefx.swt
-Bundle-Version: 0.2.0.qualifier
-Bundle-Vendor: Eclipse Modeling Project
-Automatic-Module-Name: org.eclipse.papyrus.gefx.swt
-Bundle-RequiredExecutionEnvironment: JavaSE-11

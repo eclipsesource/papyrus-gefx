@@ -22,7 +22,6 @@
 		<module>../../plugins/gef4/org.eclipse.papyrus.gef4.gmf</module>
 		<module>../../plugins/gef4/org.eclipse.papyrus.gefx.e3</module>
 		<module>../../plugins/gef4/org.eclipse.papyrus.gefx.gmf.e3</module>
-		<module>../../plugins/gef4/org.eclipse.papyrus.gefx.swt</module>
 		<module>../../plugins/infra/gefdiag/org.eclipse.papyrus.infra.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.common</module>
 		<module>../../plugins/uml/gefdiag/org.eclipse.papyrus.uml.gefdiag.clazz</module>
