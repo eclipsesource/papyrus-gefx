@@ -28,7 +28,7 @@ import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.XYCompartmentContentPart;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.google.inject.Injector;
 
 /**

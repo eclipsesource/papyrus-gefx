@@ -19,7 +19,7 @@ import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 
 public class SelectionProviderFactory implements ISelectionProviderFactory {
 

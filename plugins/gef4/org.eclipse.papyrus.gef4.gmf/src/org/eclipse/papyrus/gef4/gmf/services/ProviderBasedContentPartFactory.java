@@ -19,7 +19,7 @@ import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.scopes.PartScope;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;

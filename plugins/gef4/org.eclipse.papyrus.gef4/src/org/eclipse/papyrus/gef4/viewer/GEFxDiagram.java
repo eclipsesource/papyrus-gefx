@@ -47,52 +47,54 @@ import javafx.scene.layout.Region;
  * instantiated; then the diagram needs to be {@link #initialize() initialized}.
  * </p>
  * <p>
- * Once the {@link GEFxDiagram} has been created, it's root node can be attached 
- * to a scene graph (see {@link #getCanvas()})  
+ * Once the {@link GEFxDiagram} has been created, it's root node can be attached
+ * to a scene graph (see {@link #getCanvas()})
  * </p>
  * <p>
- * In order for the diagram to display its contents, it needs to be 
+ * In order for the diagram to display its contents, it needs to be
  * {@link #initialize() initialized}. Initialization can take a few seconds, so it will
  * run in background (Which is why it has to be invoked separately).
  * </p>
- * 
+ *
  * <p>
  * Typicaly usage:
+ *
  * <pre>
  * &#64;Inject
  * private GEFxDiagram&lt;MyModelType&gt; gefxDiagram;
- * 
- * public void display(BorderPane parent){
+ *
+ * public void display(BorderPane parent) {
  * 	parent.setCenter(gefxDiagram.getCanvas());
  * 	gefxDiagram.initialize(); // Async
  * }
  * </pre>
  * </p>
- * 
+ *
  * <p>
  * The {@link GEFxDiagram} needs to be {@link #dispose() disposed} when it is no longer
  * needed.
  * </p>
  *
- * @param <MODEL_ROOT> The type of the diagram's root content element
+ * @param <MODEL_ROOT>
+ *            The type of the diagram's root content element
  */
 public class GEFxDiagram<MODEL_ROOT> implements IDisposable {
 
 	// TODO Get the diagram root asynchronously as well, via a Provider
-	// While this doesn't matter in the Papyrus Multi-Editor (Because the 
-	// entire model is pre-loaded), loading the diagram model in background 
+	// While this doesn't matter in the Papyrus Multi-Editor (Because the
+	// entire model is pre-loaded), loading the diagram model in background
 	// can help improving UI fluidity in standalone editors.
 	private final MODEL_ROOT diagramRoot;
 	private final IDomain domain;
 	private final ThreadSynchronize threadSync;
-	
+
 	private final AtomicBoolean isDisposed = new AtomicBoolean(false);
 	private CompletableFuture<Void> initialization;
-	
+
 	private IViewer viewer;
 
 	private BorderPane rootPane;
-	
+
 	private SplitPane diagramSplitPane;
 
 	@Inject
@@ -102,7 +104,7 @@ public class GEFxDiagram<MODEL_ROOT> implements IDisposable {
 		this.threadSync = threadSync;
 		createControl();
 	}
-	
+
 	public Parent getCanvas() {
 		return rootPane;
 	}
@@ -128,7 +130,7 @@ public class GEFxDiagram<MODEL_ROOT> implements IDisposable {
 		// Set contents
 		viewer.getContents().setAll(getContents());
 	}
-	
+
 	@Inject(optional = true)
 	public void setPaletteRenderer(PaletteRenderer paletteRenderer) {
 		Node palette = paletteRenderer.createPaletteControl();
@@ -148,7 +150,7 @@ public class GEFxDiagram<MODEL_ROOT> implements IDisposable {
 			rootPane.setCenter(diagramSplitPane);
 			activateDomain();
 		});
-		
+
 		return initialized;
 
 		// XXX Once everything is in place, we still need to render the initial JavaFX Frame. The first one
@@ -156,14 +158,14 @@ public class GEFxDiagram<MODEL_ROOT> implements IDisposable {
 		// this point until the diagram is visible (Depending on how big the diagram is). After the first
 		// frame, the diagram editor becomes much more responsive, since all further layout updates are incremental.
 	}
-	
+
 	private void activateDomain() {
 		if (viewer.getCanvas().getScene() != null) {
 			domain.activate();
 			initialization.complete(null);
 		} else {
 			// Until GEF 5.1 is released (2019-06), we can't activate the domain
-			// until the canvas is attached to the scene graph 
+			// until the canvas is attached to the scene graph
 			threadSync.asyncExec(this::activateDomain);
 		}
 	}
@@ -227,5 +229,5 @@ public class GEFxDiagram<MODEL_ROOT> implements IDisposable {
 	public IViewer getViewer() {
 		return viewer;
 	}
-	
+
 }

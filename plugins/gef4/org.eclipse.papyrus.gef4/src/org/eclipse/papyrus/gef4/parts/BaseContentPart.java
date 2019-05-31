@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.mvc.fx.parts.AbstractContentPart;
@@ -36,7 +38,6 @@ import org.eclipse.papyrus.gef4.services.style.StyleService;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.common.reflect.TypeToken;
-import com.google.inject.Inject;
 
 import javafx.scene.Node;
 
@@ -69,7 +70,7 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	private TransactionService transactionService;
 
 	private AnchorageService anchorageService;
-	
+
 	@Inject
 	private AdapterHelper adapterHelper;
 
@@ -226,12 +227,12 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 	public MODEL getContent() {
 		return (MODEL) super.getContent();
 	}
-	
+
 	@Override
 	public <T> T getAdapter(Class<T> classKey) {
 		return adapterHelper.getAdapter(this, classKey);
 	}
-	
+
 	@Override
 	public <T> T getAdapter(TypeToken<T> key) {
 		return adapterHelper.getAdapter(this, key);
@@ -246,7 +247,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 
 	@Override
 	protected void doAddContentChild(Object contentChild, int index) {
-		// Assert.isTrue(contentChild instanceof View);
 		contentChildren.add(index, (MODEL) contentChild);
 	}
 
@@ -257,7 +257,6 @@ public abstract class BaseContentPart<MODEL, N extends Node> extends AbstractCon
 
 	@Override
 	protected void doReorderContentChild(Object contentChild, int newIndex) {
-		// Assert.isTrue(contentChild instanceof View);
 		contentChildren.remove(contentChild);
 		contentChildren.add(newIndex, (MODEL) contentChild);
 	}

@@ -22,7 +22,7 @@ import org.eclipse.gef.mvc.fx.parts.IHandlePart;
 import org.eclipse.gef.mvc.fx.parts.IHandlePartFactory;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
