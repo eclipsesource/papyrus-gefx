@@ -19,7 +19,6 @@ import org.eclipse.gef.geometry.planar.Point;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 
 public class RatioAnchor extends AbstractAnchor {
 
@@ -34,16 +33,12 @@ public class RatioAnchor extends AbstractAnchor {
 
 	@Override
 	protected Point computePosition(AnchorKey key) {
-		Bounds hostBoundsInParent = getAnchorage().getBoundsInParent();
-
+		Bounds hostBoundsInLocal = getAnchorage().getLayoutBounds();
+		
 		// Target, relative to the Host's top-left corner
-		Point target = new Point(hostBoundsInParent.getWidth() * ratioX, hostBoundsInParent.getHeight() * ratioY);
+		Point target = new Point(hostBoundsInLocal.getWidth() * ratioX, hostBoundsInLocal.getHeight() * ratioY);
 
-		Parent parent = getAnchorage().getParent();
-		Bounds hostBoundsInScene = hostBoundsInParent;
-		if (parent != null) {
-			hostBoundsInScene = parent.localToScene(hostBoundsInParent);
-		}
+		Bounds hostBoundsInScene = getAnchorage().localToScene(hostBoundsInLocal);
 
 		// The location of the host in the anchored's local coordinates
 		Point2D hostLocationInAnchored = key.getAnchored().sceneToLocal(hostBoundsInScene.getMinX(),

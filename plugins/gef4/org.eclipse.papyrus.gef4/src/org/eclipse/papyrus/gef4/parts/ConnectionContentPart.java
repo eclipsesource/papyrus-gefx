@@ -81,6 +81,7 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 
 		// TODO parse corner radius and jumps and routers...
 
+		refreshAnchors();
 		refreshDecorations();
 		refreshBendpoints();
 		refreshLineStyle();
@@ -204,14 +205,16 @@ public class ConnectionContentPart<MODEL> extends BaseContentPart<MODEL, Group> 
 		}
 	}
 
-	@Override
-	public void updateAnchors() {
+	protected void refreshAnchors() {
 		for (Map.Entry<IVisualPart<?>, String> entry : getAnchoragesUnmodifiable().entries()) {
 			IVisualPart<?> anchorage = entry.getKey();
 			String role = entry.getValue();
 			doAttachToAnchorageVisual(anchorage, role);
 		}
+	}
 
+	@Override
+	public void updateAnchors() {
 		refreshVisual();
 	}
 

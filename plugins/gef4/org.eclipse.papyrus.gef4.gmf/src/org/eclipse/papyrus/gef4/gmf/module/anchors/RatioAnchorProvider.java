@@ -40,6 +40,9 @@ public class RatioAnchorProvider extends DefaultAnchorProvider {
 	@Override
 	public IAnchor get(IVisualPart<? extends Node> anchoredPart, String role) {
 		if (anchoredPart instanceof IContentPart) {
+			// FIXME: This method is called during activation, but at this point the View
+			// Adapter may not be activated yet (Depending on the order in which adapters
+			// are activated). As a result, the connectionElement is initially null
 			View connectionElement = AdapterUtil.getView((IContentPart<?>) anchoredPart);
 			if (connectionElement instanceof Edge) {
 				String anchorTerminal = getAnchorTerminal((Edge) connectionElement,
