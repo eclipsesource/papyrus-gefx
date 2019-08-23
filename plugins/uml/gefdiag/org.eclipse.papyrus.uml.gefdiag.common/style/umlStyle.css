@@ -70,3 +70,8 @@ StateMachine {
 	radiusHeight: 5px;
 	radiusWidth: 5px;
 }*/
+
+OpaqueAction {
+	radiusHeight: 10px;
+	radiusWidth: 10px;
+}

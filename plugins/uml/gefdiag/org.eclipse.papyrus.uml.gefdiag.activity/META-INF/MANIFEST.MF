@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GEFx Activity Diagram
+Bundle-SymbolicName: org.eclipse.papyrus.uml.gefdiag.activity;singleton:=true
+Bundle-Version: 0.2.0.qualifier
+Bundle-Vendor: Eclipse Modeling Project
+Automatic-Module-Name: org.eclipse.papyrus.uml.gefdiag.activity
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.eclipse.papyrus.gef4.gmf,
+ org.eclipse.gmf.runtime.notation,
+ org.eclipse.papyrus.infra.gefdiag.common;bundle-version="0.2.0",
+ org.eclipse.papyrus.uml.gefdiag.common;bundle-version="0.2.0",
+ org.eclipse.uml2.uml
+Export-Package: org.eclipse.papyrus.uml.gefdiag.activity,
+ org.eclipse.papyrus.uml.gefdiag.activity.edit.parts,
+ org.eclipse.papyrus.uml.gefdiag.activity.providers
