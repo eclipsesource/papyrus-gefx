@@ -5,7 +5,7 @@
          point="org.eclipse.papyrus.infra.gefdiag.common.diagram">
       <diagramEditor
             image="icons/Diagram_StateMachine.gif"
-            label="StateMachine (GEF4)"
+            label="StateMachine (GEFx)"
             module="org.eclipse.papyrus.uml.gefdiag.statemachine.module.StateMachineDiagramModule"
             type="PapyrusUMLStateMachineDiagram">
       </diagramEditor>

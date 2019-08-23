@@ -10,7 +10,7 @@
              commandId="org.eclipse.papyrus.gef4.codegen.commands.generateCode"
              icon="resources/papyrus16.png"
              id="org.eclipse.papyrus.gef4.codegen.menus.generateCode"
-             label="Generate GEF4 diagram"
+             label="Generate GEFx diagram"
              mnemonic="G"
              style="push">
           <visibleWhen
@@ -35,7 +35,7 @@
     <command
         defaultHandler="org.eclipse.papyrus.gef4.codegen.handlers.GenerateCode"
         id="org.eclipse.papyrus.gef4.codegen.commands.generateCode"
-        name="Generate GEF4 diagram">
+        name="Generate GEFx diagram">
   </command>
 	</extension>
 </plugin>

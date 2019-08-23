@@ -5,7 +5,7 @@
          point="org.eclipse.papyrus.infra.gefdiag.common.diagram">
       <diagramEditor
             image="icons/ComponentDiagram.gif"
-            label="Component Diagram (GEF4)"
+            label="Component Diagram (GEFx)"
             module="org.eclipse.papyrus.uml.gefdiag.component.module.ComponentDiagramModule"
             type="PapyrusUMLComponentDiagram">
       </diagramEditor>

@@ -121,6 +121,6 @@ public class GEFEditorFactory extends AbstractEditorFactory {
 
 	@Override
 	public String getLabel() {
-		return "Diagram Editor (GEF4)";
+		return "Diagram Editor (GEFx)";
 	}
 }
