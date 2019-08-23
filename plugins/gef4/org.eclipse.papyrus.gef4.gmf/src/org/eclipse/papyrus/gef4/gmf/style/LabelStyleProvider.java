@@ -15,6 +15,7 @@ package org.eclipse.papyrus.gef4.gmf.style;
 import org.eclipse.papyrus.gef4.services.style.StyleService;
 import org.eclipse.papyrus.infra.gmfdiag.common.model.NotationUtils;
 
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
 
@@ -40,6 +41,14 @@ public class LabelStyleProvider extends NotationStyleService {
 			}
 		}
 		return paint;
+	}
+	
+	@Override
+	public CornerRadii getCornerRadii() {
+		// For label backgrounds, only round the top corners
+		CornerRadii cornerRadii = super.getCornerRadii();
+		CornerRadii labelRadii = new CornerRadii(cornerRadii.getTopLeftHorizontalRadius(), cornerRadii.getTopRightHorizontalRadius(), 0, 0, false);
+		return labelRadii;
 	}
 	
 }

@@ -80,6 +80,10 @@ Pseudostate[kind=choice]{
 	shapeType: emptyDiamond;
 }
 
+FinalState {
+	shapeType: dotCircle;
+}
+
 Activity,
 OpaqueAction,
 CallOperationAction,
@@ -113,3 +117,8 @@ FlowFinalNode {
 	shapeType: crossCircle;
 }
 
+StateMachineDiagram Region,
+StateMachineDiagram Region > Compartment {
+	lineColor: transparent;
+	borderColor: transparent;	
+}
