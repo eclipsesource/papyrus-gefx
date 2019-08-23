@@ -65,13 +65,51 @@ ConstraintLink {
 	lineDashGap: 3;
 }
 
-/*State,
+State,
 StateMachine {
-	radiusHeight: 5px;
-	radiusWidth: 5px;
-}*/
-
-OpaqueAction {
 	radiusHeight: 10px;
 	radiusWidth: 10px;
 }
+
+Pseudostate[kind=initial],
+Pseudostate[kind=junction]{
+	shapeType: fullCircle;
+}
+
+Pseudostate[kind=choice]{
+	shapeType: emptyDiamond;
+}
+
+Activity,
+OpaqueAction,
+CallOperationAction,
+CallBehaviorAction {
+	radiusHeight: 10px;
+	radiusWidth: 10px;
+}
+
+Activity > Compartment {
+	visible: false;
+}
+
+Activity > Compartment[kind=content] {
+	visible: true;
+}
+
+InitialNode {
+	shapeType: fullCircle; 
+}
+
+DecisionNode,
+MergeNode {
+	shapeType: emptyDiamond;
+}
+
+ActivityFinalNode {
+	shapeType: dotCircle;
+}
+
+FlowFinalNode {
+	shapeType: crossCircle;
+}
+

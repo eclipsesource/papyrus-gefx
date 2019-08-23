@@ -21,7 +21,11 @@ import org.eclipse.fx.core.Subscription;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.services.style.StyleService;
+import org.eclipse.papyrus.gef4.shapes.CircleCrossDecoration;
+import org.eclipse.papyrus.gef4.shapes.CircleDecoration;
+import org.eclipse.papyrus.gef4.shapes.CircleDotDecoration;
 import org.eclipse.papyrus.gef4.shapes.CornerBentShapeDecoration;
+import org.eclipse.papyrus.gef4.shapes.DiamondDecoration;
 import org.eclipse.papyrus.gef4.shapes.PackageShapeDecoration;
 import org.eclipse.papyrus.gef4.shapes.ShapeDecoration;
 import org.eclipse.papyrus.gef4.utils.BorderColors;
@@ -187,7 +191,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 				this.currentDecoration = decoration.applyShape(this, region.getChildren());
 				break;
 			case OVAL:
-				// Check if ellipse is aldready instanciate.
+				// Check if ellipse is already instantiated.
 				if (!(region.getShape() instanceof Ellipse)) {
 					Ellipse ellipse = new Ellipse(10, 10); // Size doesn't matter, it will be resized to match the region's. We still need a size, otherwise the Ellipse is not drawn at all
 					ellipse.setFill(region.getBackground().getFills().get(0).getFill());
@@ -200,6 +204,31 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 				this.currentDecoration = pkgDecoration.applyShape(this, region.getChildren());
 				labelsUseAllWidth = false;
 				break;
+			case EMPTY_CIRCLE:
+				ShapeDecoration emptyCircleDecoration = new CircleDecoration(false);
+				this.currentDecoration = emptyCircleDecoration.applyShape(this, region.getChildren());
+				break;
+			case FULL_CIRCLE:
+				ShapeDecoration fullCircleDecoration = new CircleDecoration(true);
+				this.currentDecoration = fullCircleDecoration.applyShape(this, region.getChildren());
+				break;
+			case EMPTY_DIAMOND:
+				ShapeDecoration emptyDiamondDecoration = new DiamondDecoration(false); 
+				this.currentDecoration = emptyDiamondDecoration.applyShape(this, region.getChildren());
+				break;
+			case FULL_DIAMOND:
+				ShapeDecoration fullDiamondDecoration = new CircleDecoration(true);
+				this.currentDecoration = fullDiamondDecoration.applyShape(this, region.getChildren());
+				break;
+			case DOT_CIRCLE:
+				ShapeDecoration dotCircleDecoration = new CircleDotDecoration();
+				this.currentDecoration = dotCircleDecoration.applyShape(this, region.getChildren());
+				break;
+			case CROSS_CIRCLE:
+				ShapeDecoration crossCircleDecoration = new CircleCrossDecoration();
+				this.currentDecoration = crossCircleDecoration.applyShape(this, region.getChildren());
+				break;
+			case NONE:
 			default:
 				// Rectangle case (Might be rounded)
 				region.setShape(null);

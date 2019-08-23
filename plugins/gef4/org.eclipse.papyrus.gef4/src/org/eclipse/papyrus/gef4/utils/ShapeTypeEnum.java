@@ -19,7 +19,13 @@ public enum ShapeTypeEnum {
 	NONE("none"), //$NON-NLS-1$
 	PACKAGE("package"), //$NON-NLS-1$
 	OVAL("oval"), //$NON-NLS-1$
-	CORNER_BEND_RECTANGLE("cornerBendRectangle");//$NON-NLS-1$
+	CORNER_BEND_RECTANGLE("cornerBendRectangle"), //$NON-NLS-1$
+	EMPTY_CIRCLE("emptyCircle"), //$NON-NLS-1$
+	FULL_CIRCLE("fullCircle"), //$NON-NLS-1$
+	DOT_CIRCLE("dotCircle"), //$NON-NLS-1$
+	CROSS_CIRCLE("crossCircle"), //$NON-NLS-1$
+	EMPTY_DIAMOND("emptyDiamond"), //$NON-NLS-1$
+	FULL_DIAMOND("fullDiamond");//$NON-NLS-1$
 
 
 	/** The literal. */
