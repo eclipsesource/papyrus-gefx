@@ -13,7 +13,6 @@
 package org.eclipse.papyrus.uml.gefdiag.common.provider;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +20,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.services.NotationContentChildrenProvider;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Filters the child views of this element, removing the Stereotype Views that shouldn't be associated to ContentParts
@@ -30,11 +31,7 @@ import org.eclipse.papyrus.gef4.gmf.services.NotationContentChildrenProvider;
  */
 public class StereotypeAwareContentChildrenProvider extends NotationContentChildrenProvider {
 
-	private static Collection<String> excludedTypes = new HashSet<>();
-	{
-		excludedTypes.add("StereotypeLabel");
-		// excludedTypes.add("...");
-	}
+	private static final Collection<String> excludedTypes = ImmutableSet.of("StereotypeLabel", "compartment_shape_display");
 
 	@Override
 	public List<? extends View> getContentChildren() {

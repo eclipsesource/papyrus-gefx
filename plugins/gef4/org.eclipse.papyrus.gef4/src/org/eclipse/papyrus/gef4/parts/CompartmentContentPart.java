@@ -233,37 +233,6 @@ abstract public class CompartmentContentPart<MODEL, P extends Pane> extends Cont
 		wrapper.setBorder(border);
 	}
 
-	// @Override
-	// protected void refreshShape() {
-	// final ScrollPane pane = getVisual();
-	//
-	// // Set the shape
-	// final int relativeX = BoundsUtil.getRelativeX(pane);
-	// final int relativeY = BoundsUtil.getRelativeY(pane);
-	// final int width = BoundsUtil.getWidth(pane);
-	// final int height = BoundsUtil.getHeight(pane);
-	//
-	// // if (ShapeTypeEnum.OVAL.equals(getShapeType())) {
-	// // pane.setShape(new Ellipse(relativeX, relativeY, width, height));
-	// // } else {
-	// // pane.setShape(null);
-	// // }
-	//
-	// // Set the clip to avoid the compartment to be outside of the parent
-	// final Shape parentShape = ((Region) getParent().getVisual()).getShape();
-	// Shape clip = null;
-	//
-	// // set the clip in case of Ellipse/Oval
-	// if (parentShape instanceof Ellipse) {
-	// parentShape.setFill(Color.BLACK);
-	// clip = Shape.union(parentShape, parentShape);// Create a copy of parent shape
-	// clip.setFill(Color.BLACK);
-	// clip.setTranslateX(-relativeX);
-	// clip.setTranslateY(-relativeY);
-	// }
-	// pane.setClip(clip);
-	// }
-
 	@Override
 	protected Collection<String> getStyleClasses() {
 		return Collections.singletonList("genericCompartment");

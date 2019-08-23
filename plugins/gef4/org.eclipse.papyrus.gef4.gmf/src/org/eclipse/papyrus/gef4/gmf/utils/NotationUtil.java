@@ -656,13 +656,17 @@ public class NotationUtil {
 		} else if (null != padding && 4 == padding.length) {
 			insets = new Insets(padding[0], padding[1], padding[2], padding[3]);
 		} else {
-			// old Label margin which actually are padding
-			final int topMaring = NotationUtils.getIntValue(view, NamedStyleProperties.TOP_MARGIN_PROPERTY, 0);
-			final int rightMaring = NotationUtils.getIntValue(view, NamedStyleProperties.RIGHT_MARGIN_PROPERTY, 0);
-			final int bottomMaring = NotationUtils.getIntValue(view, NamedStyleProperties.BOTTOM_MARGIN_PROPERTY, 0);
-			final int leftMaring = NotationUtils.getIntValue(view, NamedStyleProperties.LEFT_MARGIN_PROPERTY, 0);
+			// FIXME: The label margin is "Label Padding"; not "Shape Padding", but the CSS
+			// Rule doesn't distinguish Label vs Shape
 
-			insets = new Insets(topMaring, rightMaring, bottomMaring, leftMaring);
+			// old Label margin which actually are padding
+//			final int topMargin = NotationUtils.getIntValue(view, NamedStyleProperties.TOP_MARGIN_PROPERTY, 0);
+//			final int rightMargin = NotationUtils.getIntValue(view, NamedStyleProperties.RIGHT_MARGIN_PROPERTY, 0);
+//			final int bottomMargin = NotationUtils.getIntValue(view, NamedStyleProperties.BOTTOM_MARGIN_PROPERTY, 0);
+//			final int leftMargin = NotationUtils.getIntValue(view, NamedStyleProperties.LEFT_MARGIN_PROPERTY, 0);
+//
+//			insets = new Insets(topMargin, rightMaring, bottomMargin, leftMargin);
+			insets = new Insets(0);
 		}
 
 		return insets;

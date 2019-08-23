@@ -27,6 +27,7 @@ import org.eclipse.gmf.runtime.emf.type.core.ClientContextManager;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
 import org.eclipse.gmf.runtime.emf.type.core.IClientContext;
 import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.module.GMFModule;
 import org.eclipse.papyrus.gef4.gmf.parts.FloatingLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart;
@@ -35,6 +36,7 @@ import org.eclipse.papyrus.gef4.gmf.services.GMFProviderParticipant;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.palette.PaletteDescriptor;
 import org.eclipse.papyrus.gef4.parts.LabelContentPart;
+import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.gef4.services.ImageService;
 import org.eclipse.papyrus.gef4.services.LabelService;
@@ -48,6 +50,7 @@ import org.eclipse.papyrus.infra.gmfdiag.representation.PapyrusDiagram;
 import org.eclipse.papyrus.infra.gmfdiag.style.PapyrusDiagramStyle;
 import org.eclipse.papyrus.infra.gmfdiag.style.StylePackage;
 import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
+import org.eclipse.papyrus.uml.gefdiag.common.provider.StereotypeAwareContentChildrenProvider;
 import org.eclipse.papyrus.uml.gefdiag.common.services.UMLImageService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.edges.SimpleAssociationEdgeService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.CommentLabelService;
@@ -58,6 +61,7 @@ import org.eclipse.papyrus.uml.gefdiag.common.services.label.PropertyLabelServic
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.SlotLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.StereotypeLabelService;
 
+import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
@@ -121,6 +125,21 @@ public abstract class UMLDiagramModule extends GMFModule {
 		configureImageProviders(imageProviders);
 
 		bindPaletteDescriptorAsViewerAdapter();
+		
+		bindUMLContentChildrenProvider();
+	}
+
+	
+	protected void bindUMLContentChildrenProvider() {
+		Multibinder<HelperProviderParticipant<ContentChildrenProvider<View>>> contentChildrenBinder = Multibinder
+				.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<ContentChildrenProvider<View>>>() {
+					// Type Literal
+				});
+
+		Provider<StereotypeAwareContentChildrenProvider> umlNotationContentChildrenProvider = getProvider(
+				StereotypeAwareContentChildrenProvider.class);
+
+		contentChildrenBinder.addBinding().toInstance(new GMFProviderParticipant<>(DEFAULT_UML_PRIORITY, umlNotationContentChildrenProvider));		
 	}
 
 	protected void bindPaletteDescriptorAsViewerAdapter() {

@@ -26,6 +26,7 @@ import org.eclipse.gef.mvc.fx.parts.IRootPart;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.parts.DiagramContentPart;
 import org.eclipse.papyrus.gef4.parts.ListCompartmentContentPart;
+import org.eclipse.papyrus.gef4.parts.NodeContentPart;
 import org.eclipse.papyrus.gef4.parts.XYCompartmentContentPart;
 
 import javax.inject.Inject;
@@ -58,6 +59,9 @@ public class CreationFeedbackPartFactory implements IFeedbackPartFactory {
 				feedbackPart = new NodeCreationFeedbackPart(creationBounds);
 			} else if (target instanceof ListCompartmentContentPart) {
 				feedbackPart = new ListItemCreationFeedbackPart(creationBounds);
+			} else if (target instanceof NodeContentPart){
+				// XXX Experimental support for BorderItems (But we don't know if the created element is actually a border item, yet)
+				feedbackPart = new NodeCreationFeedbackPart(creationBounds);
 			} else {
 				feedbackPart = null;
 				logger.warning("Unsupported creation feedback: " + target.getClass().getName());
