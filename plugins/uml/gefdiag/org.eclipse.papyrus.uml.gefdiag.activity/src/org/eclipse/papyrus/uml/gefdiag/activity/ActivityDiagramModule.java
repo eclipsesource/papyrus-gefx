@@ -1,3 +1,15 @@
+/*****************************************************************************
+ * Copyright (c) 2019 EclipseSource and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *  EclipseSource - Initial API and implementation
+ *
+ *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.activity;
 
 import java.util.Optional;
@@ -11,8 +23,10 @@ import org.eclipse.papyrus.gef4.palette.PaletteDescriptor;
 import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
+import org.eclipse.papyrus.gef4.services.ContentChildrenProvider;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.infra.gefdiag.common.palette.PapyrusPaletteDescriptor;
+import org.eclipse.papyrus.uml.gefdiag.activity.providers.ActivityContentChildrenProvider;
 import org.eclipse.papyrus.uml.gefdiag.activity.providers.ContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.common.locator.PinLocator;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
@@ -46,6 +60,18 @@ public class ActivityDiagramModule extends UMLDiagramModule {
 
 	protected static boolean isPin(BaseContentPart<? extends View, ?> part) {
 		return part.getContent().getElement() instanceof Pin;
+	}
+	
+	protected void bindUMLContentChildrenProvider() {
+		Multibinder<HelperProviderParticipant<ContentChildrenProvider<View>>> contentChildrenBinder = Multibinder
+				.newSetBinder(binder(), new TypeLiteral<HelperProviderParticipant<ContentChildrenProvider<View>>>() {
+					// Type Literal
+				});
+
+		Provider<ActivityContentChildrenProvider> activityContentChildrenProvider = getProvider(
+				ActivityContentChildrenProvider.class);
+
+		contentChildrenBinder.addBinding().toInstance(new GMFProviderParticipant<>(DEFAULT_ACTIVITY_PRIORITY, activityContentChildrenProvider));		
 	}
 
 	@Override

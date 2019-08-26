@@ -136,10 +136,10 @@ public abstract class UMLDiagramModule extends GMFModule {
 					// Type Literal
 				});
 
-		Provider<StereotypeAwareContentChildrenProvider> umlNotationContentChildrenProvider = getProvider(
+		Provider<StereotypeAwareContentChildrenProvider> stereotypeAwareContentChildrenProvider = getProvider(
 				StereotypeAwareContentChildrenProvider.class);
 
-		contentChildrenBinder.addBinding().toInstance(new GMFProviderParticipant<>(DEFAULT_UML_PRIORITY, umlNotationContentChildrenProvider));		
+		contentChildrenBinder.addBinding().toInstance(new GMFProviderParticipant<>(DEFAULT_UML_PRIORITY, stereotypeAwareContentChildrenProvider));		
 	}
 
 	protected void bindPaletteDescriptorAsViewerAdapter() {
