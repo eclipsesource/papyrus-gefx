@@ -20,5 +20,10 @@ public class ConstraintEditPart extends org.eclipse.papyrus.gef4.gmf.parts.Shape
 	protected boolean isAutoWidth() {
 		return false; // The width is fixed; the height will expand as necessary (Wrapping text)
 	}
+	
+	@Override
+	protected boolean isAutoHeight() {
+		return true;
+	}
 
 }

@@ -20,5 +20,10 @@ public class CommentEditPart extends org.eclipse.papyrus.gef4.gmf.parts.ShapeCon
 	protected boolean isAutoWidth() {
 		return false; // The width is fixed; the height will expand as necessary (Wrapping text)
 	}
+	
+	@Override
+	protected boolean isAutoHeight() {
+		return true;
+	}
 
 }
