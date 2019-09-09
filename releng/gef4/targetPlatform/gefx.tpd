@@ -2,10 +2,10 @@ target "GEFx" with requirements source
 
 include "efx.tpd"
 
-location "https://download.eclipse.org/releases/2019-03" {
+location "https://download.eclipse.org/releases/2019-06" {
 	/** GEFx */
 	org.eclipse.gef.common.sdk.feature.group [5.0.0,6.0.0)
 	org.eclipse.gef.fx.sdk.feature.group [5.0.2,6.0.0)
 	org.eclipse.gef.geometry.sdk.feature.group [5.0.2,6.0.0)
-	org.eclipse.gef.mvc.sdk.feature.group [5.0.2,6.0.0)
+	org.eclipse.gef.mvc.sdk.feature.group [5.1.0,6.0.0)
 }
