@@ -14,7 +14,7 @@ This project is still work-in-progress, and some parts of the code have been imp
 
 When everything is setup properly, you may open a Class, Component or Composite Diagram from an existing Papyrus Model, via the Model Explorer: Right click > Open With > Diagram Editor (GEF4). If the Diagram only contains supported elements, here's what it might look like:
 
-![GEF Legacy vs GEFx-GMF](images/GEF3-GMF%20vs%20GEFx-GMF%202019-03.png)
+![GEF Legacy vs GEFx-GMF](images/GEF3-GMF%20vs%20GEFx-GMF%202019-06.png)
 
 Side-by-Side in the same Papyrus Editor: GEF Legacy (Left), GEFx (Right)
 
@@ -28,7 +28,7 @@ The editor is able to render the following elements:
 - Connectors
 - Palettes
 
-Currently, only a few Papyrus Diagram are supported (Mostly the Class Diagram). Simple versions of Composite Structure and Component Diagrams are provided, although with very little diagram customization. State Machine Diagrams exist, but don't provide any customization at all. 
+A few Papyrus Diagrams are currently supported: Class, Composite, Component, State Machines and Activities. However, support isn't complete, as some of the features used by the standard Papyrus/GMF implementation aren't available in GEFx yet.
 
 Basic interactions are supported, including:
 
