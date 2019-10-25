@@ -41,10 +41,10 @@ import javafx.scene.control.Label;
 public class StereotypeLabelContentPart extends NotationLabelContentPart {
 
 	/** left Stereotype delimiters ('Guillemets francais'). */
-	public static final String ST_LEFT = String.valueOf("\u00AB"); //$NON-NLS-1$
+	public static final String ST_LEFT = "\u00AB"; //$NON-NLS-1$
 
 	/** Right Stereotype delimiters ('Guillemets francais'). */
-	public static final String ST_RIGHT = String.valueOf("\u00BB"); //$NON-NLS-1$
+	public static final String ST_RIGHT = "\u00BB"; //$NON-NLS-1$
 
 	/**
 	 * The separator for UML Qualified Names

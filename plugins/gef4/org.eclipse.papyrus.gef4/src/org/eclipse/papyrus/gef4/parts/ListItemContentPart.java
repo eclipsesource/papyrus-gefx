@@ -12,14 +12,9 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.parts;
 
-import org.eclipse.papyrus.gef4.utils.BorderColors;
-import org.eclipse.papyrus.gef4.utils.BorderStrokeStyles;
 import org.eclipse.papyrus.gef4.utils.FXUtils;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -55,22 +50,27 @@ public abstract class ListItemContentPart<MODEL> extends LabelContentPart<MODEL>
 	protected void refreshPadding() {
 		FXUtils.setPadding(label, 0, 0); // Avoid padding for list items. Better use the parent VBox's spacing & padding
 	}
+	
+	@Override
+	protected void refreshBackground() {
+		// Skip. We don't want a background on list item labels (at least for now)
+	}
 
 	protected void refreshBorder() {
-		BorderStroke stroke = null;
-		final BorderColors borderColors = getStyleProvider().getBorderColors();
-		final BorderStrokeStyles borderStyles = getStyleProvider().getBorderStyles();
-		final BorderWidths borderWidths = getStyleProvider().getBorderWidths();
-
-		Border border = null;
-		if (borderWidths != null) {
-			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
-					borderStyles.getLeft(),
-					getStyleProvider().getCornerRadii(), borderWidths,
-					getStyleProvider().getMargin());
-			border = new Border(stroke);
-		}
-		label.setBorder(border);
+//		BorderStroke stroke = null;
+//		final BorderColors borderColors = getStyleProvider().getBorderColors();
+//		final BorderStrokeStyles borderStyles = getStyleProvider().getBorderStyles();
+//		final BorderWidths borderWidths = getStyleProvider().getBorderWidths();
+//
+//		Border border = null;
+//		if (borderWidths != null) {
+//			stroke = new BorderStroke(borderColors.getTop(), borderColors.getRight(), borderColors.getBottom(), borderColors.getLeft(), borderStyles.getTop(), borderStyles.getRight(), borderStyles.getBottom(),
+//					borderStyles.getLeft(),
+//					getStyleProvider().getCornerRadii(), borderWidths,
+//					getStyleProvider().getMargin());
+//			border = new Border(stroke);
+//		}
+//		label.setBorder(border);
 	}
 
 }

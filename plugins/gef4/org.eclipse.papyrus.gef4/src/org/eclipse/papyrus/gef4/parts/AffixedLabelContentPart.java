@@ -55,6 +55,11 @@ public class AffixedLabelContentPart<MODEL> extends LabelContentPart<MODEL> {
 		refreshPosition();
 		refreshBorder();
 	}
+	
+	@Override
+	protected void refreshBackground() {
+		// Skip. We don't want a background on affixed labels (at least for now)
+	}
 
 	protected void refreshPosition() {
 		if (getLocator() != null) {

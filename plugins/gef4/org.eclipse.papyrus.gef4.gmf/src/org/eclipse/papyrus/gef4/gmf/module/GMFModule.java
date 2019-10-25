@@ -49,6 +49,7 @@ import org.eclipse.papyrus.gef4.gmf.parts.ConnectorContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.FloatingLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationDiagramRootPart;
+import org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.ShapeContentPart;
 import org.eclipse.papyrus.gef4.gmf.scope.ViewPartScope;
 import org.eclipse.papyrus.gef4.gmf.services.EditingDomainTransactionService;
@@ -59,6 +60,7 @@ import org.eclipse.papyrus.gef4.gmf.services.ProviderBasedContentPartFactory;
 import org.eclipse.papyrus.gef4.gmf.style.ConnectorStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.style.DecorationNodeStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.style.DiagramStyleProvider;
+import org.eclipse.papyrus.gef4.gmf.style.LabelStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.style.NotationLabelStyleProvider;
 import org.eclipse.papyrus.gef4.gmf.style.NotationStyleService;
 import org.eclipse.papyrus.gef4.gmf.style.ShapeStyleProvider;
@@ -72,6 +74,7 @@ import org.eclipse.papyrus.gef4.parts.BaseContentPart;
 import org.eclipse.papyrus.gef4.parts.CompartmentContentPart;
 import org.eclipse.papyrus.gef4.parts.ConnectionContentPart;
 import org.eclipse.papyrus.gef4.parts.IPrimaryContentPart;
+import org.eclipse.papyrus.gef4.parts.LabelContentPart;
 import org.eclipse.papyrus.gef4.parts.NodeContentPart;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.gef4.scopes.PartScope;
@@ -201,10 +204,12 @@ public abstract class GMFModule extends AbstractModule {
 		styleBinder.addBinding().toInstance(new GMFProviderParticipant<>(0, getProvider(NotationStyleService.class)));
 
 		// Override the StyleService just for the NodeContentPart
-		styleBinder.addBinding().toInstance(
-				new GMFProviderParticipant<>(1, getProvider(ShapeStyleProvider.class), ShapeContentPart.class));
-		styleBinder.addBinding().toInstance(new GMFProviderParticipant<>(1, getProvider(DiagramStyleProvider.class),
-				NotationDiagramContentPart.class));
+		styleBinder.addBinding().toInstance(new GMFProviderParticipant<StyleService>(1,
+				getProvider(ShapeStyleProvider.class), ShapeContentPart.class));
+		styleBinder.addBinding().toInstance(new GMFProviderParticipant<StyleService>(2,
+				getProvider(LabelStyleProvider.class), NotationLabelContentPart.class));
+		styleBinder.addBinding().toInstance(new GMFProviderParticipant<StyleService>(1,
+				getProvider(DiagramStyleProvider.class), NotationDiagramContentPart.class));
 
 		Multibinder<HelperProviderParticipant<LabelStyleService>> labelStyleBinder = Multibinder.newSetBinder(binder(),
 				new TypeLiteral<HelperProviderParticipant<LabelStyleService>>() {

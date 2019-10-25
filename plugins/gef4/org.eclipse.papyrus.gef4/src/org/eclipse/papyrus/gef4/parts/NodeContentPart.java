@@ -20,6 +20,7 @@ import java.util.Collections;
 import org.eclipse.fx.core.Subscription;
 import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.layout.Locator;
+import org.eclipse.papyrus.gef4.services.style.StyleService;
 import org.eclipse.papyrus.gef4.shapes.CornerBentShapeDecoration;
 import org.eclipse.papyrus.gef4.shapes.PackageShapeDecoration;
 import org.eclipse.papyrus.gef4.shapes.ShapeDecoration;
@@ -94,11 +95,25 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 		refreshLocator();
 	}
 
+	/**
+	 * Indicates if the node should automatically be resized horizontally to match the size
+	 * of its contents. The automatic size computation can only <strong>increase</strong> the size of a node
+	 * (The size specified in the layout is then used as a minimum size).
+	 * 
+	 * @return
+	 */
 	protected boolean isAutoWidth() {
 		// TODO Configure
 		return true;
 	}
 
+	/**
+	 * Indicates if the node should automatically be resized vertically to match the size
+	 * of its contents. The automatic size computation can only <strong>increase</strong> the size of a node
+	 * (The size specified in the layout is then used as a minimum size).
+	 * 
+	 * @return
+	 */
 	protected boolean isAutoHeight() {
 		// TODO Configure
 		return true;
@@ -123,14 +138,15 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 		final VBox region = getVisual();
 		Paint fill = null;
 		// Background to fill a simple gradient
-		if (null != getStyleProvider().getBackgroundPaint()) {
-			fill = getStyleProvider().getBackgroundPaint();
+		StyleService styleProvider = getStyleProvider();
+		if (null != styleProvider.getBackgroundPaint()) {
+			fill = styleProvider.getBackgroundPaint();
 		} else {
-			fill = new LinearGradient(getStyleProvider().getBackgroundGradientStartPosition().getX(), getStyleProvider().getBackgroundGradientStartPosition().getY(), getStyleProvider().getBackgroundGradientEndPosition().getX(),
-					getStyleProvider().getBackgroundGradientEndPosition().getY(),
-					true, CycleMethod.NO_CYCLE, new Stop(0, getStyleProvider().getBackgroundColor2()), new Stop(1, getStyleProvider().getBackgroundColor1()));
+			fill = new LinearGradient(styleProvider.getBackgroundGradientStartPosition().getX(), styleProvider.getBackgroundGradientStartPosition().getY(), styleProvider.getBackgroundGradientEndPosition().getX(),
+					styleProvider.getBackgroundGradientEndPosition().getY(),
+					true, CycleMethod.NO_CYCLE, new Stop(0, styleProvider.getBackgroundColor2()), new Stop(1, styleProvider.getBackgroundColor1()));
 		}
-		final BackgroundFill backgroundFill = new BackgroundFill(fill, getStyleProvider().getCornerRadii(), null);
+		final BackgroundFill backgroundFill = new BackgroundFill(fill, styleProvider.getCornerRadii(), null);
 		final Background background = new Background(backgroundFill);
 		// set the Background
 		region.setBackground(background);
@@ -163,6 +179,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 			this.currentShapeType = shapeType;
 
 			boolean labelsUseAllWidth = true;
+			boolean allowRoundedLabels = false; // Only supported when using the default rounded rectangle shape
 
 			switch (shapeType) {
 			case CORNER_BEND_RECTANGLE:
@@ -186,6 +203,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 			default:
 				// Rectangle case (Might be rounded)
 				region.setShape(null);
+				allowRoundedLabels = true;
 				break;
 			}
 
@@ -193,6 +211,7 @@ public class NodeContentPart<MODEL> extends ContainerContentPart<MODEL, VBox> im
 				if (child instanceof LabelContentPart) {
 					LabelContentPart<?> childPart = (LabelContentPart<?>) child;
 					childPart.setUseAllWidth(labelsUseAllWidth);
+					childPart.setAllowRounded(allowRoundedLabels);
 				} else {
 					// The package tab only depends on the labels at the top of the childrens list (e.g. Stereotype, Name).
 					// Labels below other children are ignored (e.g. Label, Compartment, Label)

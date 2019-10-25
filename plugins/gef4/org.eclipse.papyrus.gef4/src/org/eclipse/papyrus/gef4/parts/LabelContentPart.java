@@ -14,14 +14,23 @@ package org.eclipse.papyrus.gef4.parts;
 
 import org.eclipse.papyrus.gef4.utils.FXUtils;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.TextAlignment;
 
 public class LabelContentPart<MODEL> extends AbstractLabelContentPart<MODEL, Label> {
 
 	protected boolean useAllWidth = true;
+	private boolean allowRounded = false;
 
 	public LabelContentPart(MODEL model) {
 		super(model);
@@ -36,6 +45,28 @@ public class LabelContentPart<MODEL> extends AbstractLabelContentPart<MODEL, Lab
 	protected void refreshVisualInTransaction(Label visual) {
 		super.refreshVisualInTransaction(visual);
 		refreshPadding();
+		refreshBackground();
+	}
+	
+	protected void refreshBackground() {
+		final Label region = getVisual();
+		Paint fill = null;
+		// Background to fill a simple gradient
+		if (null != getStyleProvider().getBackgroundPaint()) {
+			fill = getStyleProvider().getBackgroundPaint();
+		} else {
+			fill = new LinearGradient(getStyleProvider().getBackgroundGradientStartPosition().getX(), getStyleProvider().getBackgroundGradientStartPosition().getY(), getStyleProvider().getBackgroundGradientEndPosition().getX(),
+					getStyleProvider().getBackgroundGradientEndPosition().getY(),
+					true, CycleMethod.NO_CYCLE, new Stop(0, getStyleProvider().getBackgroundColor2()), new Stop(1, getStyleProvider().getBackgroundColor1()));
+		}
+		
+		CornerRadii radii = allowRounded ? getStyleProvider().getCornerRadii() : null;
+		Insets insets = allowRounded ? null : new Insets(1, 1, 0, 1); // FIXME This is a workaround for package labels with a non-transparent background, to avoid drawing the label background over the Package Path. See Issue #39
+		
+		final BackgroundFill backgroundFill = new BackgroundFill(fill, radii, insets);
+		final Background background = new Background(backgroundFill);
+		// set the Background
+		region.setBackground(background);
 	}
 
 	/**
@@ -75,8 +106,14 @@ public class LabelContentPart<MODEL> extends AbstractLabelContentPart<MODEL, Lab
 		refreshTextAlignment();
 	}
 
+	public void setAllowRounded(boolean allowRoundedLabels) {
+		this.allowRounded  = allowRoundedLabels;
+		refreshBackground();
+	}
+
 	protected void refreshPadding() {
 		FXUtils.setPadding(label, 2, 5);
 	}
+
 
 }
