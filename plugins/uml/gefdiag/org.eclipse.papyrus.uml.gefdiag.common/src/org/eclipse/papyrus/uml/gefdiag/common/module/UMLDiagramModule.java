@@ -13,6 +13,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.common.module;
 
+import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Named;
@@ -24,6 +26,7 @@ import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.gmf.runtime.emf.type.core.ClientContextManager;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
 import org.eclipse.gmf.runtime.emf.type.core.IClientContext;
+import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.papyrus.gef4.gmf.module.GMFModule;
 import org.eclipse.papyrus.gef4.gmf.parts.FloatingLabelContentPart;
 import org.eclipse.papyrus.gef4.gmf.parts.NotationLabelContentPart;
@@ -36,6 +39,14 @@ import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.gef4.services.ImageService;
 import org.eclipse.papyrus.gef4.services.LabelService;
 import org.eclipse.papyrus.gef4.services.style.EdgeStyleService;
+import org.eclipse.papyrus.infra.architecture.ArchitectureDescriptionUtils;
+import org.eclipse.papyrus.infra.core.architecture.RepresentationKind;
+import org.eclipse.papyrus.infra.core.architecture.merged.MergedArchitectureViewpoint;
+import org.eclipse.papyrus.infra.core.resource.ModelSet;
+import org.eclipse.papyrus.infra.gmfdiag.paletteconfiguration.PaletteConfiguration;
+import org.eclipse.papyrus.infra.gmfdiag.representation.PapyrusDiagram;
+import org.eclipse.papyrus.infra.gmfdiag.style.PapyrusDiagramStyle;
+import org.eclipse.papyrus.infra.gmfdiag.style.StylePackage;
 import org.eclipse.papyrus.infra.services.edit.context.TypeContext;
 import org.eclipse.papyrus.uml.gefdiag.common.services.UMLImageService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.edges.SimpleAssociationEdgeService;
@@ -188,6 +199,35 @@ public abstract class UMLDiagramModule extends GMFModule {
 
 	protected void bindLocators(Multibinder<HelperProviderParticipant<Optional<Locator>>> locators) {
 		// Subclasses may override
+	}
+	
+	@Provides
+	public Collection<PaletteConfiguration> getPaletteConfigurations(Diagram diagram) {
+		return getPalettesFromArchitecture(diagram);
+	}
+	
+	// XXX This implementation is a little bit brutal... 
+	// At the very least we should use a separate palette provider class
+	protected Collection<PaletteConfiguration> getPalettesFromArchitecture(Diagram diagram) {
+		PapyrusDiagramStyle style = (PapyrusDiagramStyle)diagram.getStyle(StylePackage.Literals.PAPYRUS_DIAGRAM_STYLE);
+		if (style == null) {
+			return null;
+		}
+		String diagramKindId = style.getDiagramKindId();
+		ArchitectureDescriptionUtils util = new ArchitectureDescriptionUtils((ModelSet)diagram.eResource().getResourceSet());
+		Collection<MergedArchitectureViewpoint> viewpoints = util.getArchitectureContext().getViewpoints();
+		for (MergedArchitectureViewpoint vp : viewpoints) {
+			for (RepresentationKind repKind : vp.getRepresentationKinds()) {
+				if (repKind instanceof PapyrusDiagram) {
+					PapyrusDiagram diagramKind = (PapyrusDiagram) repKind;
+					String id = diagramKind.getId();
+					if (Objects.equals(diagramKindId, id)) {
+						return diagramKind.getPalettes();
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }

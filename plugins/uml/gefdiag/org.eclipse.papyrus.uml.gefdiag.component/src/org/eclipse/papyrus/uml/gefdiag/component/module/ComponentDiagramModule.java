@@ -12,14 +12,8 @@
  *****************************************************************************/
 package org.eclipse.papyrus.uml.gefdiag.component.module;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.gmf.locators.BorderItemLocator;
@@ -31,8 +25,6 @@ import org.eclipse.papyrus.gef4.palette.PaletteRenderer;
 import org.eclipse.papyrus.gef4.provider.IContentPartProvider;
 import org.eclipse.papyrus.gef4.services.HelperProviderParticipant;
 import org.eclipse.papyrus.infra.gefdiag.common.palette.PapyrusPaletteDescriptor;
-import org.eclipse.papyrus.infra.gmfdiag.paletteconfiguration.PaletteConfiguration;
-import org.eclipse.papyrus.uml.diagram.component.edit.parts.ModelEditPart;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
 import org.eclipse.papyrus.uml.gefdiag.component.edit.parts.PortEditPart;
 import org.eclipse.papyrus.uml.gefdiag.component.providers.ContentPartProvider;
@@ -79,15 +71,6 @@ public class ComponentDiagramModule extends UMLDiagramModule {
 		PapyrusPaletteDescriptor paletteDescriptor = new PapyrusPaletteDescriptor("org.eclipse.papyrus.uml.gefdiag.component.palette", "Component Diagram Palette");
 		injector.injectMembers(paletteDescriptor);
 		return paletteDescriptor;
-	}
-
-	@Provides
-	public Collection<PaletteConfiguration> getPaletteConfigurations() {
-		assert ModelEditPart.class != null; // Just a compile-time test to make sure we get the diagram dependency; since we get the palette from it.
-
-		ResourceSet resourceSet = new ResourceSetImpl();
-		Resource resource = resourceSet.getResource(URI.createPlatformPluginURI("/org.eclipse.papyrus.uml.diagram.component/model/PapyrusUMLComponentDiagram.paletteconfiguration", true), true);
-		return resource.getContents().stream().filter(PaletteConfiguration.class::isInstance).map(PaletteConfiguration.class::cast).collect(Collectors.toList());
 	}
 
 }

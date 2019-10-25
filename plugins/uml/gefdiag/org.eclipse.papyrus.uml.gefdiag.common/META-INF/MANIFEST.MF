@@ -13,7 +13,13 @@ Require-Bundle: org.eclipse.papyrus.infra.gefdiag.common;bundle-version="0.2.0";
  org.eclipse.papyrus.infra.emf.gmf;bundle-version="1.2.0",
  org.eclipse.papyrus.infra.ui,
  org.eclipse.papyrus.infra.services.openelement,
- com.google.guava;bundle-version="21.0.0"
+ com.google.guava;bundle-version="21.0.0",
+ org.eclipse.papyrus.infra.gmfdiag.paletteconfiguration,
+ org.eclipse.papyrus.infra.gmfdiag.style,
+ org.eclipse.papyrus.infra.architecture,
+ org.eclipse.papyrus.infra.core.architecture,
+ org.eclipse.papyrus.infra.gmfdiag.representation,
+ org.eclipse.papyrus.infra.architecture.representation;bundle-version="2.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.papyrus.uml.gefdiag.common.locator,

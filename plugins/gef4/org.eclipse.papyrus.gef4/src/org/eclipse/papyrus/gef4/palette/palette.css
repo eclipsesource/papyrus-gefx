@@ -6,7 +6,8 @@
 
 .list-view,
 .list-view .list-cell {
-	-fx-background-color: white;	
+	-fx-fixed-cell-size: 24;
+	-fx-background-color: white;
 }
 
 .button {
