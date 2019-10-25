@@ -36,12 +36,14 @@ import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicityS
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationMultiplicityTargetEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationSourceNameEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.AssociationTargetNameEditPart;
+import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.ConstraintBodyEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.RedefinableTemplateSignatureEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.edit.parts.TemplateSignatureEditPart;
 import org.eclipse.papyrus.uml.gefdiag.clazz.providers.ContentPartProvider;
 import org.eclipse.papyrus.uml.gefdiag.clazz.service.label.AssociationLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.locator.TemplateLocator;
 import org.eclipse.papyrus.uml.gefdiag.common.module.UMLDiagramModule;
+import org.eclipse.papyrus.uml.gefdiag.common.services.label.ConstraintBodyLabelService;
 import org.eclipse.papyrus.uml.gefdiag.common.services.label.StereotypeLabelService;
 
 import com.google.inject.Injector;
@@ -125,6 +127,13 @@ public class ClassDiagramModule extends UMLDiagramModule {
 		// Register the StereotypeLabelService with a higher priority than specific elements,
 		// since it only applies to StereotypeLabels (Other label providers are only filtered by semantic element)
 		labelProviders.addBinding().toInstance(new StereotypeLabelService(MAX_CLASS_PRIORITY));
+		
+		// Constraint Body
+		labelProviders.addBinding().toInstance(new ConstraintBodyLabelService(DEFAULT_CLASS_PRIORITY, ClassDiagramModule::isConstraintBody));
+	}
+	
+	protected static boolean isConstraintBody(BaseContentPart<? extends View, ?> part) {
+		return part instanceof ConstraintBodyEditPart;
 	}
 
 	protected void bindPalette() {

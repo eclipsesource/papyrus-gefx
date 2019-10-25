@@ -20,8 +20,6 @@ import org.eclipse.papyrus.gef4.utils.ShapeTypeEnum;
 import javafx.geometry.Insets;
 import javafx.scene.layout.BorderWidths;
 
-//TODO: How to override the StyleProvider only for Nodes?
-//=> Check module config
 public class ShapeStyleProvider extends NotationStyleService implements StyleService {
 
 	/**
