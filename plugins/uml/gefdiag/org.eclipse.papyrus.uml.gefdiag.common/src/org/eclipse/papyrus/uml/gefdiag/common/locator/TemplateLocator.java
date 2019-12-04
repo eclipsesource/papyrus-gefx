@@ -18,7 +18,6 @@ import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.IGeometry;
 import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.geometry.planar.Polyline;
-import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.papyrus.gef4.gmf.locators.BorderItemLocator;
 
 import javafx.geometry.Bounds;
@@ -26,8 +25,8 @@ import javafx.geometry.Bounds;
 public class TemplateLocator extends BorderItemLocator {
 
 	@Inject
-	public TemplateLocator(IVisualPart<?> visualPart) {
-		super(visualPart);
+	public TemplateLocator() {
+		super();
 	}
 
 	@Override

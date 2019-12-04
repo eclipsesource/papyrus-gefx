@@ -12,9 +12,12 @@
  *****************************************************************************/
 package org.eclipse.papyrus.gef4.gmf.locators;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.Assert;
+import org.eclipse.fx.core.Subscription;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.IGeometry;
 import org.eclipse.gef.geometry.planar.Line;
@@ -22,48 +25,73 @@ import org.eclipse.gef.geometry.planar.Point;
 import org.eclipse.gef.geometry.planar.Polygon;
 import org.eclipse.gef.geometry.planar.Polyline;
 import org.eclipse.gef.geometry.planar.Rectangle;
-import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.Location;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.papyrus.gef4.layout.Locator;
 import org.eclipse.papyrus.gef4.parts.BaseContentPart;
+import org.eclipse.papyrus.gef4.utils.ActivatableBound;
 
+import javafx.beans.binding.ObjectExpression;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
-
-
+import javafx.scene.Parent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.Region;
 
 /**
- * Polygon- or Polyline-based Locator. The Polygon/Polyline is used to define the
- * set of acceptable positions for this node
+ * Polygon- or Polyline-based Locator. The Polygon/Polyline is used to define
+ * the set of acceptable positions for this node
  *
  * This is typically used to locate items on the border of a rectangle
  *
- * This locator accepts a vertical and horizontal shift (To move items inside or outside)
+ * This locator accepts a vertical and horizontal shift (To move items inside or
+ * outside)
  *
  * @author Camille Letavernier
  *
  */
-public class BorderItemLocator implements Locator {
+public class BorderItemLocator extends ActivatableBound<BaseContentPart<? extends View, ?>> implements Locator {
 
-	private final ChangeListener<Bounds> boundsListener;
+	private ChangeListener<Bounds> boundsListener = (bounds, oldValue, newValue) -> refreshLayout();
+	private final List<Subscription> onDeactivate = new ArrayList<>();
 	private BaseContentPart<? extends View, ?> part;
+	private Side side = Side.CENTERED;
 
 	@Inject
-	public BorderItemLocator(IVisualPart<?> visualPart) {
-		this.part = getBasePartChecked(visualPart);
-		boundsListener = (bounds, oldValue, newValue) -> refreshLayout();
+	public BorderItemLocator() {
+		// Nothing
 	}
 
-	@SuppressWarnings("unchecked") // Checks are done in the body
-	private static BaseContentPart<? extends View, ?> getBasePartChecked(IVisualPart<?> visualPart) {
-		Assert.isLegal(visualPart instanceof BaseContentPart, "BorderItemLocator can only be used with a BaseContentPart<View, ?>");
-		BaseContentPart<?, ?> basePart = (BaseContentPart<?, ?>) visualPart;
-		Assert.isLegal(basePart.getContent() instanceof View, "BorderItemLocator can only be used with a BaseContentPart<View, ?>");
-		return (BaseContentPart<? extends View, ?>) basePart;
+	@Override
+	public void setAdaptable(BaseContentPart<? extends View, ?> adaptable) {
+		super.setAdaptable(adaptable);
+		this.part = adaptable;
+	}
+
+	@Override
+	protected void doActivate() {
+		ObjectExpression<Bounds> layoutBoundsProperty = part.getVisual().layoutBoundsProperty();
+		ObjectExpression<Bounds> parentBoundsProperty = part.getParent().getVisual().layoutBoundsProperty();
+		layoutBoundsProperty.addListener(boundsListener);
+		parentBoundsProperty.addListener(boundsListener);
+		onDeactivate.add(() -> layoutBoundsProperty.removeListener(boundsListener));
+		onDeactivate.add(() -> parentBoundsProperty.removeListener(boundsListener));
+	}
+
+	public void setSide(Side side) {
+		this.side = side;
+	}
+
+	@Override
+	protected void doDeactivate() {
+		onDeactivate.forEach(Subscription::disposeIfExists);
+		onDeactivate.clear();
 	}
 
 	protected BaseContentPart<? extends View, ?> getPart() {
@@ -71,9 +99,12 @@ public class BorderItemLocator implements Locator {
 	}
 
 	/**
-	 * Returns a Polyline or Poligon representing the valid positions for the element
+	 * Returns a Polyline or Poligon representing the valid positions for the
+	 * element
 	 *
-	 * Other Nodes are not supported yet (But might be in the future). For other kinds of nodes, the algorithm will rely on their bound's outline (Polyline representing the rectangle bounds)
+	 * Other Nodes are not supported yet (But might be in the future). For other
+	 * kinds of nodes, the algorithm will rely on their bound's outline (Polyline
+	 * representing the rectangle bounds)
 	 *
 	 * @return
 	 */
@@ -84,26 +115,20 @@ public class BorderItemLocator implements Locator {
 		}
 
 		ObservableValue<Bounds> boundsProperty = host.getParent().getVisual().layoutBoundsProperty();
-		boundsProperty.removeListener(boundsListener); // addListener will not ensure uniqueness. Remove the listener before re-adding it to ensure it is not reapplied during each refresh
-		boundsProperty.addListener(boundsListener);
 		Bounds parentBounds = boundsProperty.getValue();
 
 		return doGetConstraint(parentBounds, nodeSize);
 	}
 
 	protected IGeometry doGetConstraint(Bounds parentBounds, Dimension nodeSize) {
-		return new Rectangle(0, 0, parentBounds.getWidth(), parentBounds.getHeight()); // Position 0, 0 relative to the parent element
+		return new Rectangle(0, 0, parentBounds.getWidth(), parentBounds.getHeight()); // Position 0, 0 relative to the
+																						// parent element
 	}
 
 	private void refreshLayout() {
 		BaseContentPart<? extends View, ?> host = getPart();
 		if (host.getLocator() == this) {
 			host.refreshVisual();
-		} else { // I'm not active anymore; remove the listener and do nothing
-			if (host.getParent() != null && host.getParent().getVisual() != null) {
-				Node visual = host.getParent().getVisual();
-				visual.layoutBoundsProperty().removeListener(boundsListener);
-			}
 		}
 	}
 
@@ -130,7 +155,8 @@ public class BorderItemLocator implements Locator {
 		Point targetPoint = new Point(x, y);
 
 		node.setManaged(false);
-		node.autosize(); // The node is not managed and will be ignored by the parent layout. We need to call autosize explicitly
+		node.autosize(); // The node is not managed and will be ignored by the parent layout. We need to
+							// call autosize explicitly
 
 		Point nearestPoint = getNearestValidPosition(node, targetPoint);
 
@@ -138,9 +164,113 @@ public class BorderItemLocator implements Locator {
 		double height = node.getLayoutBounds().getHeight();
 
 		if (nearestPoint != null) {
-			node.setLayoutX(nearestPoint.x - width / 2);
-			node.setLayoutY(nearestPoint.y - height / 2);
+			if (side == Side.CENTERED) {
+				node.setLayoutX(nearestPoint.x - width / 2);
+				node.setLayoutY(nearestPoint.y - height / 2);
+			} else {
+				Point2D delta = getLocationDelta(node);
+				SideOnParent sideOnParent = findSideOnParent(nearestPoint, node.getParent());
+
+				boolean inside = side == Side.INSIDE;
+				switch (sideOnParent) {
+				case TOP:
+					if (inside) {
+						delta = new Point2D(0, 0);
+					} else {
+						delta = delta.add(0, -height);
+					}
+					break;
+				case BOTTOM:
+					if (inside) {
+						delta = new Point2D(0, -height);
+					} else {
+						delta = new Point2D(0, -delta.getY());
+					}
+					break;
+				case LEFT:
+					if (inside) {
+						delta = new Point2D(0, 0);
+					} else {
+						delta = delta.add(-width, 0);
+					}
+					break;
+				case RIGHT:
+					if (inside) {
+						delta = new Point2D(-width, 0);
+					} else {
+						delta = new Point2D(-delta.getX(), 0);
+					}
+					break;
+				}
+
+				node.setLayoutX(nearestPoint.x + delta.getX());
+				node.setLayoutY(nearestPoint.y + delta.getY());
+			}
 		}
+	}
+
+	private SideOnParent findSideOnParent(Point nearestPointInParent, Parent parent) {
+		Bounds parentBounds = parent.getLayoutBounds();
+
+		SideOnParent hSide = nearestPointInParent.x() < parentBounds.getCenterX() ? SideOnParent.LEFT
+				: SideOnParent.RIGHT;
+		SideOnParent vSide = nearestPointInParent.y() < parentBounds.getCenterY() ? SideOnParent.TOP
+				: SideOnParent.BOTTOM;
+
+		final Point hp1, hp2;
+		if (hSide == SideOnParent.LEFT) {
+			hp1 = new Point(parentBounds.getMinX(), parentBounds.getMinY());
+			hp2 = new Point(parentBounds.getMinX(), parentBounds.getMaxY());
+		} else {
+			hp1 = new Point(parentBounds.getMaxX(), parentBounds.getMinY());
+			hp2 = new Point(parentBounds.getMaxX(), parentBounds.getMaxY());
+		}
+		Line hLine = new Line(hp1, hp2);
+
+		final Point vp1, vp2;
+		if (vSide == SideOnParent.TOP) {
+			vp1 = new Point(parentBounds.getMinX(), parentBounds.getMinY());
+			vp2 = new Point(parentBounds.getMaxX(), parentBounds.getMinY());
+		} else {
+			vp1 = new Point(parentBounds.getMinX(), parentBounds.getMaxY());
+			vp2 = new Point(parentBounds.getMaxX(), parentBounds.getMaxY());
+		}
+		Line vLine = new Line(vp1, vp2);
+
+		Polyline lines = new Polyline(new Line[] { hLine, vLine });
+
+		Point findNearestPoint = findNearestPoint(lines, nearestPointInParent);
+		if (hLine.contains(findNearestPoint)) {
+			return hSide;
+		} else {
+			return vSide;
+		}
+	}
+
+	/**
+	 *
+	 * @param node the node being placed
+	 * @return A delta to be applied on layout, to account e.g. for borders (When it
+	 *         is necessary to overlap the node's border over the parent's border,
+	 *         especially when side = INSIDE or OUTSIDE)
+	 */
+	protected Point2D getLocationDelta(Node node) {
+		if (node instanceof Region) {
+			Border border = ((Region) node).getBorder();
+			if (border != null) {
+				List<BorderStroke> strokes = border.getStrokes();
+				if (strokes != null && !strokes.isEmpty()) {
+					double x = 0, y = 0;
+					for (BorderStroke s : strokes) {
+						BorderWidths widths = s.getWidths();
+						x = Math.max(Math.max(x, widths.getLeft()), widths.getRight());
+						y = Math.max(Math.max(y, widths.getTop()), widths.getBottom());
+					}
+					return new Point2D(x, y);
+				}
+			}
+		}
+		return new Point2D(0, 0);
 	}
 
 	protected static final Point findNearestPoint(Polyline polyline, Point point) {
@@ -184,8 +314,8 @@ public class BorderItemLocator implements Locator {
 
 		return findNearestPoint(constraintPolyline, targetPoint);
 	}
+
+	public enum SideOnParent {
+		TOP, RIGHT, BOTTOM, LEFT;
+	}
 }
-
-
-
-

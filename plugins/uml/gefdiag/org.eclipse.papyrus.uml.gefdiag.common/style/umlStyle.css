@@ -64,3 +64,9 @@ ConstraintLink {
 	lineDashLength: 5;
 	lineDashGap: 3;
 }
+
+/*State,
+StateMachine {
+	radiusHeight: 5px;
+	radiusWidth: 5px;
+}*/

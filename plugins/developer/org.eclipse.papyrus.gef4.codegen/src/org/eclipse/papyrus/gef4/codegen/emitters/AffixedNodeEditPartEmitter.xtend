@@ -24,7 +24,6 @@ class AffixedNodeEditPartEmitter extends NodeEditPartEmitter {
 	
 	public «(arguments.get(0) as GenCommonBase).editPartClassName»(org.eclipse.gmf.runtime.notation.Shape view) {
 		super(view);
-		setLocator(new org.eclipse.papyrus.gef4.layout.BorderItemLocator(this));
 	}
 	
 	«classFoot()»
