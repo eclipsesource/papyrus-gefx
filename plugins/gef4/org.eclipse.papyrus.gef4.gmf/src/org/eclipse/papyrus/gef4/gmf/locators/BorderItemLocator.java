@@ -210,6 +210,11 @@ public class BorderItemLocator extends ActivatableBound<BaseContentPart<? extend
 	}
 
 	private SideOnParent findSideOnParent(Point nearestPointInParent, Parent parent) {
+		if (parent == null) {
+			// FIXME Investigate when the parent can be null (The Locator probably shouldn't be invoked at all)
+			System.err.println("FIXME Applying layout on a BorderItemLocator, but the node doesn't have a parent");
+			return SideOnParent.LEFT;
+		}
 		Bounds parentBounds = parent.getLayoutBounds();
 
 		SideOnParent hSide = nearestPointInParent.x() < parentBounds.getCenterX() ? SideOnParent.LEFT
